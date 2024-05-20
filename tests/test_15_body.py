@@ -4,11 +4,11 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 # ------------------------------------------------------------------------ #
 #            T E S T   M a r a u B o t M a p : :  B O D Y                  #
 # ------------------------------------------------------------------------ #
-from src.pyConvexMap import Pose2
+from src.pyConvexMap import Body2
 
-def test_Pose2_init():
-    p1= Pose2()
-    assert( type(p1) == Pose2 )
+def test_Body2_init():
+    p1= Body2()
+    assert( type(p1) == Body2 )
     assert( p1.px == 0.0 )
     assert( p1.py == 0.0 )
     assert( p1.oz == 0.0 )
@@ -16,9 +16,9 @@ def test_Pose2_init():
     assert( p1.position() == (0.0, 0.0) )
     assert( p1.orientation() == (0.0) )
 
-def test_Pose2_init2():
-    p1= Pose2( 10.4, 3.3, 1.4 )
-    assert( type(p1) == Pose2 )
+def test_Body2_init2():
+    p1= Body2( 10.4, 3.3, 1.4 )
+    assert( type(p1) == Body2 )
     assert( p1.px == 10.4 )
     assert( p1.py == 3.3 )
     assert( p1.oz == 1.4 )
@@ -26,8 +26,8 @@ def test_Pose2_init2():
     assert( p1.position() == (10.4, 3.3) )
     assert( p1.orientation() == (1.4) )
 
-    p1= Pose2( -0.4, 3.3, -4.28 )
-    assert( type(p1) == Pose2 )
+    p1= Body2( -0.4, 3.3, -4.28 )
+    assert( type(p1) == Body2 )
     assert( p1.px == -0.4 )
     assert( p1.py == 3.3 )
     assert( p1.oz == -4.28 )
@@ -35,8 +35,8 @@ def test_Pose2_init2():
     assert( p1.position() == (-0.4, 3.3) )
     assert( p1.orientation() == (-4.28) )
 
-def test_Pose2_construction():
-    pose= Pose2( 10.4, 3.3, 1.4 )
+def test_Body2_construction():
+    pose= Body2( 10.4, 3.3, 1.4 )
     assert( pose.position() == (10.4, 3.3) )
     assert( pose.orientation() == (1.4) )
 
@@ -48,9 +48,9 @@ def test_Pose2_construction():
     assert( pose.position() == (0.001, -23.1) )
     assert( pose.orientation() == (-0.1) )
 
-def test_Pose2_distance():
-    p1= Pose2( 10.4, 0.0, 3.0 )
-    p2= Pose2( 1.0, 1.0, -1.2 )
+def test_Body2_distance():
+    p1= Body2( 10.4, 0.0, 3.0 )
+    p2= Body2( 1.0, 1.0, -1.2 )
     
     assert( p1.lenghtSquare() == 10.4*10.4 )
     assert( p1.lenght() ==  10.4 )
@@ -64,11 +64,11 @@ def test_Pose2_distance():
     assert( round( p1.distanceSquare( p2 ), 6 ) == 89.36 )
     assert( round( p1.distanceSquare( p1 ), 6 ) == 0.0 )
 
-def test_Pose2_move():
-    pose= Pose2( 10.4, -3.3, 0.0 )
+def test_Body2_move():
+    pose= Body2( 10.4, -3.3, 0.0 )
     assert( pose.position() == (10.4, -3.3) )
     assert( pose.orientation() == (0.0) )
-    transform= Pose2()
+    transform= Body2()
 
     pose.move( transform, dtime=1.0 )
     assert( pose.position() == (10.4, -3.3) )
@@ -92,5 +92,5 @@ def test_Pose2_move():
 
     pose.move( transform, dtime=0.5 )
 
-    assert( pose.distance( Pose2(7.4612, -3.5397) ) < 0.0001 )
+    assert( pose.distance( Body2(7.4612, -3.5397) ) < 0.0001 )
     assert( pose.orientation() == (0.75) )

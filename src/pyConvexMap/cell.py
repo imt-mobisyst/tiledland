@@ -1,5 +1,5 @@
 import math
-from .pose import Pose2
+from .point import Point2
 
 class Cell:
 

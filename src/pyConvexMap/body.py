@@ -1,6 +1,6 @@
 import math
 
-class Pose2:
+class Body2:
 
     # Initialization Destruction:
     def __init__( self, position_x= 0.0, position_y= 0.0, orientation_z= 0.0 ):
@@ -51,11 +51,11 @@ class Pose2:
         
     # Distance:
     def distance( self, aPose ):
-        sa= Pose2( aPose.px-self.px, aPose.py-self.py )
+        sa= Body2( aPose.px-self.px, aPose.py-self.py )
         return sa.lenght()
     
     def distanceSquare( self, aPose ):
-        return Pose2( aPose.px-self.px, aPose.py-self.py ).lenghtSquare()
+        return Body2( aPose.px-self.px, aPose.py-self.py ).lenghtSquare()
     
     # Print:
     def __str__(self):
