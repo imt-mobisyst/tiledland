@@ -31,6 +31,12 @@ class Point2:
     def distanceSquare( self, aPose ):
         return Point2( aPose.x-self.x, aPose.y-self.y ).lenghtSquare()
     
+    # Transform: 
+    def translate( self, vector):
+        self.x= self.x + vector.x
+        self.y= self.y + vector.y
+        return self
+    
     # Print:
     def __str__(self):
         return f"({self.x}, {self.y})"

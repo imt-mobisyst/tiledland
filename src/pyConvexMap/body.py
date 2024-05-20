@@ -1,28 +1,23 @@
 import math
 
+from .point import Point2
+
 class Body2:
 
     # Initialization Destruction:
-    def __init__( self, position_x= 0.0, position_y= 0.0, orientation_z= 0.0 ):
-        self.px= position_x
-        self.py= position_y
-        self.oz= orientation_z
+    def __init__( self, position_x= 0.0, position_y= 0.0, orientation= 0.0, radius= 1.0 ):
+        self.position= Point2(position_x, position_y)
+        self.radius= radius
+        self.orientation= orientation
     
     # Accessor:
     def tuple(self) :
-        return ( self.px, self.py, self.oz )
-    
-    def position(self) :
-        return ( self.px, self.py )
-    
-    def orientation(self) :
-        return ( self.oz )
-
-    def lenghtSquare(self) : 
-        return self.px*self.px + self.py*self.py
-    
-    def lenght(self) : 
-        return math.sqrt( self.px*self.px + self.py*self.py )
+        return ( 
+            self.position.x,
+            self.position.y,
+            self.orientation,
+            self.radius
+        )
 
     # Construction:
     def set( self, position_x= 0.0, position_y= 0.0, orientation_z= 0.0 ):
@@ -32,30 +27,27 @@ class Body2:
         return self
 
     def setPosition( self, position_x= 0.0, position_y= 0.0 ):
-        self.px= position_x
-        self.py= position_y
+        self.position= Point2(position_x, position_y)
         return self
 
     def setOrientation( self, orientation_z= 0.0 ):
-        self.oz= orientation_z
+        self.orientation= orientation_z
         return self
 
     # Transformation:
-    def move(self, transform, dtime=1.0 ):
-        c= math.cos( self.oz )
-        s= math.sin( self.oz )
-        self.oz+= transform.oz*dtime
-        self.px= self.px + c*transform.px*dtime + s*transform.py*dtime
-        self.py= self.py + s*transform.px*dtime + -c*transform.py*dtime
+    def move(self, translation, rotation, dtime=1.0 ):
+        c= math.cos( self.orientation )
+        s= math.sin( self.orientation )
+        self.position.translate( Point2 (
+            c*translation.x*dtime + s*translation.y*dtime,
+            s*translation.x*dtime + -c*translation.y*dtime
+        ))
+        self.orientation+= rotation*dtime
         return self
         
     # Distance:
-    def distance( self, aPose ):
-        sa= Body2( aPose.px-self.px, aPose.py-self.py )
-        return sa.lenght()
-    
-    def distanceSquare( self, aPose ):
-        return Body2( aPose.px-self.px, aPose.py-self.py ).lenghtSquare()
+    def distance( self, aBody ):
+        return self.position.distance( aBody.position )
     
     # Print:
     def __str__(self):
