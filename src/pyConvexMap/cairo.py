@@ -20,6 +20,9 @@ class Color :
 # global colors.
 _backgroundColor= Color(0.9, 0.8, 0.4)
 _drawColor=  Color(0.8, 0.1, 0.1)
+_alt1Color=  Color(0.8, 0.1, 0.1)
+_alt2Color=  Color(0.8, 0.1, 0.1)
+_greyColor=  Color(0.8, 0.1, 0.1)
 
 class Frame :
 
@@ -124,7 +127,31 @@ class Frame :
         ctx.set_source_rgb( aColor.r, aColor.g, aColor.b )
         ctx.stroke()
 
+    def drawCircle(self, aCenter, aRadius, aColor= _drawColor, width= 2):
+        ctx = cairo.Context(self._surface)
+        ctx.set_line_width(width)
+        pixx, pixy= self.toDrawing( aCenter.x, aCenter.y )
+        pixRadius= aRadius * self._scale
+        ctx.arc(pixx, pixy, pixRadius, 0, 2.0*math.pi)
+        ctx.set_source_rgb( aColor.r, aColor.g, aColor.b )
+        ctx.stroke()
+    
+    # Drawing ConvexMap Object:
     def drawBody(self, aBody, aColor= _drawColor):
+        ctx = cairo.Context(self._surface)
+        ctx.set_line_width(4)
+        pixx, pixy= self.toDrawing( aBody.position.x, aBody.position.y )
+        pixRadius= aBody.radius * self._scale
+        ctx.arc(pixx, pixy, pixRadius, 0, 2.0*math.pi)
+        ctx.move_to(pixx, pixy)
+        ctx.line_to(
+            pixx+(math.cos(aBody.orientation))*pixRadius,
+            pixy+(-math.sin(aBody.orientation))*pixRadius
+        )
+        ctx.set_source_rgb( aColor.r, aColor.g, aColor.b )
+        ctx.stroke()
+
+    def drawCell( self, aCell, colors= [_backgroundColor, _drawColor] ):
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(4)
         pixx, pixy= self.toDrawing( aBody.position.x, aBody.position.y )

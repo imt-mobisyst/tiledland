@@ -1,7 +1,7 @@
 #!env python3
 import pyConvexMap as cmap
-#from src.pyConvexMap.cairo import Color, Frame
-from pyConvexMap.cairo import Color, Frame
+from src.pyConvexMap.cairo import Color, Frame
+#from pyConvexMap.cairo import Color, Frame
 
 import sys, pygame
 
@@ -14,9 +14,8 @@ def main():
 
 def process( frame, width=1200, height=800 ):
     pygame.init()
-    pygame.display.set_mode((width, height))
+    screen= pygame.display.set_mode( (width, height), pygame.RESIZABLE )
     pygame.display.set_caption('ConvexCell-NavMap')
-    screen = pygame.display.get_surface()
 
     point= cmap.Point2( 2.5, -0.2)
     pA= cmap.Point2( -2.5, -0.2)
@@ -30,11 +29,14 @@ def process( frame, width=1200, height=800 ):
 
     while True:
         # Create PyGame surface from Cairo Surface
+        width= screen.get_width()
+        height= screen.get_height()
         frame.initializeSurface(width, height)
         frame.drawFrameGrid()
         frame.drawFrameAxes()
         frame.drawBody( body )
         frame.drawPoint( point, Color() )
+        frame.drawCircle(point, 12 )
         frame.drawLine( pA, pB )
 
         #self._surface.write_to_png("MyImage.png")
@@ -56,8 +58,8 @@ def input(events):
     for event in events:
         if event.type == pygame.QUIT:
             sys.exit(0)
-        else:
-            print(event)
+        #else:
+        #    print(event)
 
 if __name__ == "__main__":
     main()
