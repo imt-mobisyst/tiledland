@@ -1,7 +1,7 @@
 #!env python3
 import pyConvexMap as cmap
-from src.pyConvexMap.cairo import Color, Frame
-#from pyConvexMap.cairo import Color, Frame
+#from src.pyConvexMap.cairo import Color, Frame
+from pyConvexMap.cairo import Color, Frame
 
 import sys, pygame
 
