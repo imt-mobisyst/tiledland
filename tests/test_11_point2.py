@@ -33,6 +33,12 @@ def test_Point2_construction():
     pose.set( 0.001, -23.1 )
     assert( pose.tuple() == (0.001, -23.1) )
 
+def test_Point2_Comparison():
+    point= Point2( 10.4, 0.0 )
+    assert( point == Point2( 10.4, 0.0 ) )
+    assert( not point == Point2( 10.2, 0.0 ) )
+    assert( not point == Point2( 10.4, -0.01 ) )
+
 def test_Point2_distance():
     p1= Point2( 10.4, 0.0 )
     p2= Point2( 1.0, 1.0 )

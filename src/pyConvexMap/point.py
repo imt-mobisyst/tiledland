@@ -37,6 +37,10 @@ class Point2:
         self.y= self.y + vector.y
         return self
     
+    # Comparison:
+    def __eq__(self, another):
+        return ( self.x == another.x and self.y == another.y )
+
     # Print:
     def __str__(self):
         return f"({self.x}, {self.y})"

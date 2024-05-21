@@ -153,14 +153,7 @@ class Frame :
 
     def drawCell( self, aCell, colors= [_backgroundColor, _drawColor] ):
         ctx = cairo.Context(self._surface)
-        ctx.set_line_width(4)
-        pixx, pixy= self.toDrawing( aBody.position.x, aBody.position.y )
-        pixRadius= aBody.radius * self._scale
-        ctx.arc(pixx, pixy, pixRadius, 0, 2.0*math.pi)
-        ctx.move_to(pixx, pixy)
-        ctx.line_to(
-            pixx+(math.cos(aBody.orientation))*pixRadius,
-            pixy+(-math.sin(aBody.orientation))*pixRadius
-        )
-        ctx.set_source_rgb( aColor.r, aColor.g, aColor.b )
-        ctx.stroke()
+        last= aCell.vertices()[-1]
+        for v in aCell.vertices() :
+            self.drawLine(last, v)
+            last= v

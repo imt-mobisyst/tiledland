@@ -1,7 +1,6 @@
 #!env python3
-import pyConvexMap as cmap
+import src.pyConvexMap as cmap
 from src.pyConvexMap.cairo import Color, Frame
-#from pyConvexMap.cairo import Color, Frame
 
 import sys, pygame
 
@@ -18,9 +17,10 @@ def process( frame, width=1200, height=800 ):
     pygame.display.set_caption('ConvexCell-NavMap')
 
     point= cmap.Point2( 2.5, -0.2)
-    pA= cmap.Point2( -2.5, -0.2)
-    pB= cmap.Point2( 8.5, 12.2)
-    body= cmap.Body2( 4.5, 2.2, 0.2 )
+    pA= cmap.Point2( 7.5, -3.2)
+    pB= cmap.Point2( 22.5, 12.2)
+    cell= cmap.Cell( [cmap.Point2(1, 2), cmap.Point2(2, 6), cmap.Point2(5, 5), cmap.Point2(4, 0)] )
+    body= cmap.Body2( 7.5, 5.2, 2.2 )
 
     #transform= cmap.Pose2( mbm.Point(4.5, 2.2), mbm.Point(0.4, 0.2), 0.2 )
     #bod.speed= 1.0
@@ -38,6 +38,8 @@ def process( frame, width=1200, height=800 ):
         frame.drawPoint( point, Color() )
         frame.drawCircle(point, 12 )
         frame.drawLine( pA, pB )
+        print( type(cell) )
+        frame.drawCell( cell )
 
         #self._surface.write_to_png("MyImage.png")
         # Create PyGame surface from Cairo Surface
