@@ -1,14 +1,25 @@
 import math
 import sys
 
+from . import Point2
 import cairo
 
 class Color :
-
     def __init__(self, r= 0.0, g= 0.0, b= 0.0) :
         self.r= r
         self.g= g
         self.b= b
+
+    def backgroundColor() :
+        return _backgroundColor
+    
+    def drawColor() :
+        return _drawColor
+
+
+# global colors.
+_backgroundColor= Color(0.9, 0.8, 0.4)
+_drawColor=  Color(0.8, 0.1, 0.1)
 
 class Frame :
 
@@ -27,8 +38,8 @@ class Frame :
     def toWorld(self, pixx, pixy):
         return (0, 0)
 
-    # Drawing:
-    def initializeSurface(self, width, height):
+    # Drawing Frame:
+    def initializeSurface(self, width, height, bgColor= _backgroundColor):
         self._dwidth= width/2
         self._dheight= height/2
         self._surface= cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
@@ -38,42 +49,74 @@ class Frame :
         ctx.line_to(width, height)
         ctx.line_to(width, 0)
         ctx.line_to(0, 0)
-        ctx.set_source_rgba(0.9, 0.8, 0.4, 1.0)
+        ctx.set_source_rgba(bgColor.r, bgColor.g, bgColor.b, 1.0)
         ctx.fill_preserve()
         ctx.set_line_width(8)
-        ctx.set_source_rgba(0.76, 0.67, 0.33, 1.0)
+        ctx.set_source_rgba(0.0, 0.0, 0.0, 0.4)
         ctx.stroke()
         return self._surface
 
-    def drawFrame( self ):
+    def drawFrameAxes( self ):
         pixx0, pixy0= self.toDrawing(0, 0)
         pixx1, pixy1= self.toDrawing(1, 1)
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(4)
         ctx.move_to(pixx0, pixy0)
         ctx.line_to(pixx1, pixy0)
-        ctx.set_source_rgba(1, 0, 0, 0.4)
+        ctx.set_source_rgb(0.8, 0.4, 0.4)
         ctx.stroke()
         ctx.move_to(pixx0, pixy0)
         ctx.line_to(pixx0, pixy1)
-        ctx.set_source_rgba(0, 1, 0, 0.4)
+        ctx.set_source_rgb(0.4, 0.8, 0.4)
         ctx.stroke()
         ctx.arc(pixx0, pixy0, 5, 0, 2.0 * math.pi)
-        ctx.set_source_rgba(0, 0, 4, 1.0)
+        ctx.set_source_rgba(0, 0, 1, 1.0)
         ctx.fill()
     
-    def drawPoint(self, aPoint, aColor= Color(0.8, 0.1, 0.1)):
+    def drawFrameGrid( self, step= 10.0 ):
         ctx = cairo.Context(self._surface)
-        ctx.set_line_width(4)
+        ctx.set_line_width(1)
+        pixX, pixY= self.toDrawing( 0, 0 )
+        pixStep= step*self._scale
+
+        ctx.arc(pixX, pixY, 6, 0, 2.0 * math.pi)
+
+        while pixX > pixStep :
+            pixX-= pixStep
+        
+        while pixY > pixStep :
+            pixY-= pixStep
+        
+        width= self._dwidth*2.0
+        height= self._dheight*2.0
+
+        # Vertical
+        for i in range( (int)(width/pixStep)+1 ) :
+            ctx.move_to( pixX+(pixStep*i), 10)
+            ctx.line_to( pixX+(pixStep*i), height-10)
+
+        # Horizontal
+        for i in range( (int)(height/pixStep)+1 ) :
+            ctx.move_to( 10, pixY+(pixStep*i) )
+            ctx.line_to( width-10, pixY+(pixStep*i) )
+
+        ctx.set_source_rgba(0.0, 0.0, 0.0, 0.1)
+        ctx.stroke()
+        return self
+    
+    # Drawing Primitives:
+    def drawPoint(self, aPoint, aColor= _drawColor, width= 6):
+        ctx = cairo.Context(self._surface)
+        ctx.set_line_width(width)
         pixx, pixy= self.toDrawing( aPoint.x, aPoint.y )
         pixRadius= self._epsilon * self._scale
         ctx.arc(pixx, pixy, pixRadius, 0, 2.0*math.pi)
         ctx.set_source_rgb( aColor.r, aColor.g, aColor.b )
         ctx.stroke()
 
-    def drawLine(self, aPointA, aPointB, aColor= Color(0.8, 0.1, 0.1)):
+    def drawLine(self, aPointA, aPointB, aColor= _drawColor, width= 2):
         ctx = cairo.Context(self._surface)
-        ctx.set_line_width(4)
+        ctx.set_line_width(width)
         xA, yA= self.toDrawing( aPointA.x, aPointA.y )
         xB, yB= self.toDrawing( aPointB.x, aPointB.y )
         ctx.move_to(xA, yA)
@@ -81,7 +124,7 @@ class Frame :
         ctx.set_source_rgb( aColor.r, aColor.g, aColor.b )
         ctx.stroke()
 
-    def drawBody(self, aBody, aColor= Color(0.8, 0.1, 0.1)):
+    def drawBody(self, aBody, aColor= _drawColor):
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(4)
         pixx, pixy= self.toDrawing( aBody.position.x, aBody.position.y )

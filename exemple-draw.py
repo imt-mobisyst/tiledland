@@ -1,6 +1,7 @@
 #!env python3
 import pyConvexMap as cmap
-from pyConvexMap.cairo import Color, Frame
+from src.pyConvexMap.cairo import Color, Frame
+#from pyConvexMap.cairo import Color, Frame
 
 import sys, pygame
 
@@ -18,6 +19,8 @@ def process( frame, width=1200, height=800 ):
     screen = pygame.display.get_surface()
 
     point= cmap.Point2( 2.5, -0.2)
+    pA= cmap.Point2( -2.5, -0.2)
+    pB= cmap.Point2( 8.5, 12.2)
     body= cmap.Body2( 4.5, 2.2, 0.2 )
 
     #transform= cmap.Pose2( mbm.Point(4.5, 2.2), mbm.Point(0.4, 0.2), 0.2 )
@@ -28,9 +31,11 @@ def process( frame, width=1200, height=800 ):
     while True:
         # Create PyGame surface from Cairo Surface
         frame.initializeSurface(width, height)
-        frame.drawFrame()
-        frame.drawBody( body, Color() )
-        frame.drawPoint( point, Color()  )
+        frame.drawFrameGrid()
+        frame.drawFrameAxes()
+        frame.drawBody( body )
+        frame.drawPoint( point, Color() )
+        frame.drawLine( pA, pB )
 
         #self._surface.write_to_png("MyImage.png")
         # Create PyGame surface from Cairo Surface
