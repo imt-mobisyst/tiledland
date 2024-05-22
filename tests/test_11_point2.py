@@ -39,6 +39,10 @@ def test_Point2_Comparison():
     assert( not point == Point2( 10.2, 0.0 ) )
     assert( not point == Point2( 10.4, -0.01 ) )
 
+def test_Point2_Operation():
+    point= Point2( 10.4, 0.0 ) + Point2( 1.4, 8.0 )
+    assert( point == Point2( 11.8, 8.0 ) )
+
 def test_Point2_distance():
     p1= Point2( 10.4, 0.0 )
     p2= Point2( 1.0, 1.0 )

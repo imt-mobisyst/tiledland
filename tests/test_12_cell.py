@@ -15,4 +15,12 @@ def test_Cell_init():
 def test_Cell_init2():
     cell= Cell( [Point2(1, 2), Point2(2, 6), Point2(4, 5), Point2(3, 0)] )
     assert( type(cell) == Cell )
-    assert( cell.limits() == [Point2(1, 2), Point2(2, 6), Point2(4, 5), Point2(3, 0)] )
+    assert( cell.vertices() == [Point2(1, 2), Point2(2, 6), Point2(4, 5), Point2(3, 0)] )
+    assert( cell.tags() == [0, 0, 0, 0] )
+    assert( list(cell.segments()) == [
+        (Point2(1, 2), Point2(2, 6), 0),
+        (Point2(2, 6), Point2(4, 5), 0),
+        (Point2(4, 5), Point2(3, 0), 0),
+        (Point2(3, 0), Point2(1, 2), 0)
+    ] )
+    assert( cell.center().round() == Point2(2.5, 3.1) )

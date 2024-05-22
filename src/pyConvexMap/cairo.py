@@ -19,10 +19,12 @@ class Color :
 
 # global colors.
 _backgroundColor= Color(0.9, 0.8, 0.4)
+_bgBisColor= Color(0.8, 0.7, 0.4)
 _drawColor=  Color(0.8, 0.1, 0.1)
-_alt1Color=  Color(0.8, 0.1, 0.1)
-_alt2Color=  Color(0.8, 0.1, 0.1)
-_greyColor=  Color(0.8, 0.1, 0.1)
+_alt1Color=  Color(0.1, 0.8, 0.1)
+_alt2Color=  Color(0.1, 0.1, 0.8)
+_greyColor=  Color(0.4, 0.4, 0.4)
+_colors= [ _drawColor, _alt1Color, _alt2Color, _greyColor, _bgBisColor ]
 
 class Frame :
 
@@ -151,9 +153,10 @@ class Frame :
         ctx.set_source_rgb( aColor.r, aColor.g, aColor.b )
         ctx.stroke()
 
-    def drawCell( self, aCell, colors= [_backgroundColor, _drawColor] ):
+    def drawCell( self, aCell, colors= _colors ):
         ctx = cairo.Context(self._surface)
-        last= aCell.vertices()[-1]
-        for v in aCell.vertices() :
-            self.drawLine(last, v)
-            last= v
+        maxTag= len( colors )-1
+        for v1, v2, tag in aCell.segments() :
+            color= colors[ min(tag, maxTag) ]
+            self.drawLine( v1, v2, color )
+        self.drawPoint( aCell.center(), colors[-1] )

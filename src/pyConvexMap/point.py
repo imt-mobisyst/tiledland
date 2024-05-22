@@ -22,7 +22,22 @@ class Point2:
         self.x= x
         self.y= y
         return self
-            
+    
+    # Operators: 
+    def __add__( self, another ):
+        return Point2( self.x+another.x, self.y+another.y )
+
+    # Scalaire: 
+    def scale( self, aFloat ):
+        self.x*= aFloat
+        self.y*= aFloat
+        return self
+    
+    def round( self, nb= 1 ):
+        self.x= round( self.x, nb )
+        self.y= round( self.y, nb )
+        return self
+
     # Distance:
     def distance( self, aPose ):
         sa= Point2( aPose.x-self.x, aPose.y-self.y )
