@@ -16,16 +16,17 @@ def process( frame, width=1200, height=800 ):
     screen= pygame.display.set_mode( (width, height), pygame.RESIZABLE )
     pygame.display.set_caption('ConvexCell-NavMap')
 
-    point= cmap.Point2( 2.5, -0.2)
-    seg= cmap.Segment( cmap.Point2( 7.5, -3.2), cmap.Point2( 22.5, 12.2) )
-    cell= cmap.Cell( [cmap.Point2(1, 2), cmap.Point2(2, 6), cmap.Point2(5, 5), cmap.Point2(4, 0)] )
-    cell.setTags( [0, 1, 0, 2] )
-    body= cmap.Body2( 7.5, 5.2, 2.2 )
-
-    #transform= cmap.Pose2( mbm.Point(4.5, 2.2), mbm.Point(0.4, 0.2), 0.2 )
-    #bod.speed= 1.0
-    #bod.drift= 0.4
-    #bod.rotate= 0.2
+    points=[
+        cmap.Point2(1, 2), cmap.Point2(2, 6),
+        cmap.Point2(5, 5), cmap.Point2(4, 0),
+        cmap.Point2(4, 8)
+    ]
+    cells= [
+        cmap.Cell( [ points[0], points[1], points[2], points[3] ] ),
+        cmap.Cell( [ points[1], points[4], points[2] ] )
+    ]
+    
+    cells[1].setTags( [0, 0, 1] )
 
     while True:
         # Create PyGame surface from Cairo Surface
@@ -33,13 +34,8 @@ def process( frame, width=1200, height=800 ):
         height= screen.get_height()
         frame.initializeSurface(width, height)
         frame.drawFrameGrid()
-        frame.drawFrameAxes()
-        frame.drawBody( body )
-        frame.drawPoint( point, Color() )
-        frame.drawCircle(point, 12 )
-        frame.drawSegment( seg )
-        print( type(cell) )
-        frame.drawCell( cell )
+        for c in cells :
+            frame.drawCell(c)
 
         #self._surface.write_to_png("MyImage.png")
         # Create PyGame surface from Cairo Surface
@@ -53,7 +49,6 @@ def process( frame, width=1200, height=800 ):
         pygame.display.flip()
 
         input( pygame.event.get() )
-
         #body.process()
 
 def input(events):

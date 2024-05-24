@@ -26,6 +26,9 @@ class Point2:
     # Operators: 
     def __add__( self, another ):
         return Point2( self.x+another.x, self.y+another.y )
+    
+    def __sub__( self, another ):
+        return Point2( self.x-another.x, self.y-another.y )
 
     # Scalaire: 
     def scale( self, aFloat ):
@@ -55,7 +58,19 @@ class Point2:
     # Comparison:
     def __eq__(self, another):
         return ( self.x == another.x and self.y == another.y )
-
+    
+    def __lt__(self, another):
+        return ( self.x < another.x or (self.x == another.x and self.y < another.y) )
+    
+    def __le__(self, another):
+        return ( self.x < another.x or (self.x == another.x and self.y <= another.y) )
+    
+    def __gt__(self, another):
+        return ( self.x > another.x or (self.x == another.x and self.y > another.y) )
+    
+    def __ge__(self, another):
+        return ( self.x > another.x or (self.x == another.x and self.y >= another.y) )
+    
     # Print:
     def __str__(self):
         return f"({self.x}, {self.y})"

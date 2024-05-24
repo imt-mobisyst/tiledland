@@ -1,7 +1,7 @@
 import math
 import sys
 
-from . import Point2
+from . import Point2, Segment
 import cairo
 
 class Color :
@@ -24,7 +24,7 @@ _drawColor=  Color(0.8, 0.1, 0.1)
 _alt1Color=  Color(0.1, 0.8, 0.1)
 _alt2Color=  Color(0.1, 0.1, 0.8)
 _greyColor=  Color(0.4, 0.4, 0.4)
-_colors= [ _drawColor, _alt1Color, _alt2Color, _greyColor, _bgBisColor ]
+_colors= [ _bgBisColor, _drawColor, _alt1Color, _alt2Color, _greyColor ]
 
 class Frame :
 
@@ -119,11 +119,11 @@ class Frame :
         ctx.set_source_rgb( aColor.r, aColor.g, aColor.b )
         ctx.stroke()
 
-    def drawLine(self, aPointA, aPointB, aColor= _drawColor, width= 2):
+    def drawSegment(self, aSegment, aColor= _drawColor, width= 2):
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(width)
-        xA, yA= self.toDrawing( aPointA.x, aPointA.y )
-        xB, yB= self.toDrawing( aPointB.x, aPointB.y )
+        xA, yA= self.toDrawing( aSegment._a.x, aSegment._a.y )
+        xB, yB= self.toDrawing( aSegment._b.x, aSegment._b.y )
         ctx.move_to(xA, yA)
         ctx.line_to(xB, yB)
         ctx.set_source_rgb( aColor.r, aColor.g, aColor.b )
@@ -154,9 +154,17 @@ class Frame :
         ctx.stroke()
 
     def drawCell( self, aCell, colors= _colors ):
-        ctx = cairo.Context(self._surface)
         maxTag= len( colors )-1
+        center= aCell.center()
         for v1, v2, tag in aCell.segments() :
             color= colors[ min(tag, maxTag) ]
-            self.drawLine( v1, v2, color )
-        self.drawPoint( aCell.center(), colors[-1] )
+            vv1= v1 - center
+            vv2= v2 - center
+            self.drawSegment(
+                Segment(
+                    vv1.scale(0.98)+center,
+                    vv2.scale(0.98)+center
+                ),
+                color
+            )
+        self.drawPoint( aCell.center(), colors[0] )
