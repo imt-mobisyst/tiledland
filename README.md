@@ -1,12 +1,12 @@
-# Convex-cells navigation Map
+# Polygon-based cells maps
 
 This project targets a map of an environement as a 2.5 dimention model structured as a collection of linked cells with convex borders.
 The project aims to be as independant as possible, but it relies on [Cairo](https://pypi.org/project/pycairo/)and [pygame](https://pypi.org/project/pygame/) librairy for rendering example.
 
 Project Components:
 
-- pyConvexMap: a pure _Python_ implementation of ConvexMap
-- ConvexMap: a _C_ implementation of ConvexMap coopled to a python wrap.
+- pyPolyMap: a pure _Python_ implementation of PolyMap
+- PolyMap: a _C_ implementation of PolyMap coopled to a python wrap.
 
 Convex-Map is not what you looking for ? Take a look at: 
 
@@ -14,19 +14,19 @@ Convex-Map is not what you looking for ? Take a look at:
 
 ## Install
 
-The _ConvexMap_ is mainly independant, but its construction is based on `cmake` and `python3-pip`.
+The _PolyMap_ is mainly independant, but its construction is based on `cmake` and `python3-pip`.
 Also the project is based on pytest for testing.
 
 ```sh
-git clone git@github.com:imt-mobisyst/convex-map.git
-cd convex-map
+git clone git@github.com:imt-mobisyst/poly-map.git
+cd poly-map
 pytest
 pip install .
 ```
 
 ### Cairo Examples
 
-ConvexMap need to be installed on your computer using `pip`.
+PolyMap need to be installed on your computer using `pip`.
 
 ```sh
 pip install cairo pygame

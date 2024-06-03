@@ -4,7 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 # ------------------------------------------------------------------------ #
 #            T E S T                     #
 # ------------------------------------------------------------------------ #
-from src.pyConvexMap import Point2, Segment
+from src.pyPolyMap import Point2, Segment
 
 
 def test_Segment_init():

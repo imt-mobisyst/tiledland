@@ -4,7 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 # ------------------------------------------------------------------------ #
 #            T E S T   M a r a u B o t M a p : :  B O D Y                  #
 # ------------------------------------------------------------------------ #
-from src.pyConvexMap import Point2, Segment, Cell
+from src.pyPolyMap import Point2, Segment, Cell
 
 
 def test_Cell_init():

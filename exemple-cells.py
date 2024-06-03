@@ -1,6 +1,6 @@
 #!env python3
-import pyConvexMap as cmap
-from pyConvexMap.cairo import Color, Frame
+import pyPolyMap as cmap
+from pyPolyMap.cairo import Color, Frame
 
 import sys, pygame
 
