@@ -1,20 +1,17 @@
-import math
-import sys
+import math, pygame
+from .. import Point2
 
-from . import Point2, Segment
-import pygame
+#class ColorPanel:
+class colorPanel:
+    background= (230, 204, 102)
+    backgroundBis= (204, 178,  80)
+    draw=  (204,  26,  26)
+    alt1=  ( 26, 204,  26)
+    alt2=  ( 26,  26, 204)
+    grey=  (102, 102, 102)
+    colors= [ backgroundBis, draw, alt1, alt2, grey ]
 
-# global colors.
-_backgroundColor= (230, 204, 102)
-_bgBisColor= (204, 178,  80)
-_drawColor=  (204,  26,  26)
-_alt1Color=  ( 26, 204,  26)
-_alt2Color=  ( 26,  26, 204)
-_greyColor=  (102, 102, 102)
-_colors= [ _bgBisColor, _drawColor, _alt1Color, _alt2Color, _greyColor ]
-
-
-class Frame :
+class AbsFrame :
 
     def __init__(self, width=1200, height=800):
         # Initialize pyGame:
@@ -46,10 +43,14 @@ class Frame :
     def infiniteLoop(self, process= process_void, eventHandler= eventHandler_basic ):
         self._loop= True
         while self._loop :
+            self.initBackground()
             self._loop= process( self )
             for event in pygame.event.get() :
                 eventHandler( self, event )
-            pygame.display.update()
+            self.updateScreen()
+    
+    def updateScreen(self):
+        pygame.display.update()
 
     # Transformation World <-> Screen
     def toDrawing(self, p):
@@ -61,40 +62,36 @@ class Frame :
         return (0, 0)
 
     # Draw primitives: 
-    def initBackground(self, color= _backgroundColor):
+    def initBackground(self, color= colorPanel.background):
         self._dwidth=  self._screen.get_width() /2
         self._dheight= self._screen.get_height()/2
         self._screen.fill(color)
 
-    def drawPoint( self, point, color= _drawColor ):
+    def drawScreenPoint( self, coord, color):
+        pass
+
+    def drawScreenLine( self, coordA, coordB, color):
+        pass
+
+    def drawScreenCircle( self, coord, radius, color):
+        pass
+
+    # Drawing :
+    def drawPoint( self, point, color= colorPanel.draw ):
         coord= self.toDrawing(point)
-        pygame.draw.circle( self._screen, color, coord, 5 )
+        self.drawScreenPoint( coord, color )
 
-    def drawLine( self, pA, pB, color= _drawColor ):
-        coord1= self.toDrawing(pA)
-        coord2= self.toDrawing(pB)
-        pygame.draw.line( self._screen, color, coord1, coord2, 2 )
+    def drawLine( self, pA, pB, color= colorPanel.draw ):
+        coordA= self.toDrawing(pA)
+        coordB= self.toDrawing(pB)
+        self.drawScreenLine( coordA, coordB, color)
 
-    def drawCircle( self, point, radius, color= _drawColor ):
+    def drawCircle( self, point, radius, color= colorPanel.draw ):
         coord= self.toDrawing(point)
-        pygame.draw.circle( self._screen, color, coord, radius*self._scale, 2 )
-
+        self.drawScreenCircle( coord, radius*self._scale, color)
+    
     # Draw Frame:
-    def drawFrameAxes( self ):
-        pixx0, pixy0= self.toDrawing( Point2(0, 0) )
-        pixx1, pixy1= self.toDrawing( Point2(1, 1) )
-
-        pygame.draw.line(
-            self._screen, (204, 102, 102),
-            (pixx0, pixy0), (pixx1, pixy0), 4
-        )
-        pygame.draw.line(
-            self._screen, (102, 204, 102),
-            (pixx0, pixy0), (pixx0, pixy1), 4
-        )
-        pygame.draw.circle( self._screen, (26, 26, 204), (pixx0, pixy0), 5 )
-
-    def drawFrameGrid( self, step= 10.0, color= _bgBisColor ):
+    def drawFrameGrid( self, step= 10.0, color= colorPanel.backgroundBis ):
         pixX, pixY= self.toDrawing( Point2(0, 0) )
         pixStep= step*self._scale
 
@@ -109,23 +106,29 @@ class Frame :
 
         # Vertical
         for i in range( (int)(width/pixStep)+1 ) :
-            pygame.draw.line(
-                self._screen, color,
+            self.drawScreenLine(
                 (pixX+(pixStep*i), 10),
-                (pixX+(pixStep*i), height-10), 4
+                (pixX+(pixStep*i), height-10),
+                color
             )
 
         # Horizontal
         for i in range( (int)(height/pixStep)+1 ) :
-            pygame.draw.line(
-                self._screen, color,
+            self.drawScreenLine(
                 ( 10, pixY+(pixStep*i) ),
-                ( width-10, pixY+(pixStep*i) ), 4
+                ( width-10, pixY+(pixStep*i) ),
+                color
             )
         return self
+
+    def drawFrameAxes( self ):
+        zero= Point2()
+        self.drawLine(  zero, Point2(1, 0), (204, 102, 102) )
+        self.drawLine(  zero, Point2(0, 1), (102, 204, 102) )
+        self.drawPoint( zero, (26, 26, 204) )
     
     # Draw PolyMap Elements:
-    def drawCell( self, aCell, colors= _colors ):
+    def drawCell( self, aCell, colors= colorPanel.colors ):
         maxTag= len( colors )-1
         center= aCell.center()
         for segment in aCell.segments() :
@@ -135,12 +138,14 @@ class Frame :
             self.drawLine( vv1.scale(0.98)+center, vv2.scale(0.98)+center, color )
         self.drawPoint( aCell.center(), colors[0] )
 
-    def drawBody(self, aBody, aColor= _drawColor):
+    def drawBody(self, aBody, aColor= colorPanel.draw):
         pixx, pixy= self.toDrawing( aBody.position )
         pixRadius= aBody.radius * self._scale
-        pygame.draw.circle( self._screen, aColor, (pixx, pixy), pixRadius, 2 )
-        pygame.draw.line( self._screen, aColor, (pixx, pixy),
+        self.drawScreenCircle( (pixx, pixy), pixRadius, aColor )
+        self.drawScreenLine( 
+            (pixx, pixy),
             (pixx+(math.cos(aBody.orientation))*pixRadius,
               pixy+(-math.sin(aBody.orientation))*pixRadius
-            )
+            ),
+            aColor
         )

@@ -1,10 +1,10 @@
 #!env python3
 from src.pyPolyMap import Point2, Cell, Body2
-import src.pyPolyMap.pygame as pmGame
+import src.pyPolyMap.view.pmCairo as pmView
 
 def main():
     # Set-up an IHM
-    ihm= pmGame.Frame()
+    ihm= pmView.Frame()
     game= Scenario()
 
     # Start
