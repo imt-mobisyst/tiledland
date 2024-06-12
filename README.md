@@ -1,7 +1,7 @@
 # Polygon-based cells maps
 
 This project targets a map of an environement as a 2.5 dimention model structured as a collection of linked cells with convex borders.
-The project aims to be as independant as possible, but it relies on [Cairo](https://pypi.org/project/pycairo/)and [pygame](https://pypi.org/project/pygame/) librairy for rendering example.
+The project aims to be as independant as possible, but it relies on [pygame](https://pypi.org/project/pygame/) librairy for rendering example.
 
 Project Components:
 
@@ -29,7 +29,7 @@ pip install .
 PolyMap need to be installed on your computer using `pip`.
 
 ```sh
-pip install cairo pygame
+pip install pygame
 ```
 
 The 'example-simpleSim.py' file provides a simple example for _MarauBotMap_. The command `python3 example-simpleSim.py` should instanciate a simulation and open it on a windows.

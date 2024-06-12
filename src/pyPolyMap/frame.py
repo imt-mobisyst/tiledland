@@ -2,28 +2,15 @@ import math
 import sys
 
 from . import Point2, Segment
-import cairo
-
-class Color :
-    def __init__(self, r= 0.0, g= 0.0, b= 0.0) :
-        self.r= r
-        self.g= g
-        self.b= b
-
-    def backgroundColor() :
-        return _backgroundColor
-    
-    def drawColor() :
-        return _drawColor
-
+import pygame
 
 # global colors.
-_backgroundColor= Color(0.9, 0.8, 0.4)
-_bgBisColor= Color(0.8, 0.7, 0.4)
-_drawColor=  Color(0.8, 0.1, 0.1)
-_alt1Color=  Color(0.1, 0.8, 0.1)
-_alt2Color=  Color(0.1, 0.1, 0.8)
-_greyColor=  Color(0.4, 0.4, 0.4)
+_backgroundColor= (0.9, 0.8, 0.4)
+_bgBisColor= (0.8, 0.7, 0.4)
+_drawColor=  (0.8, 0.1, 0.1)
+_alt1Color=  (0.1, 0.8, 0.1)
+_alt2Color=  (0.1, 0.1, 0.8)
+_greyColor=  (0.4, 0.4, 0.4)
 _colors= [ _bgBisColor, _drawColor, _alt1Color, _alt2Color, _greyColor ]
 
 class Frame :
