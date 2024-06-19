@@ -1,27 +1,26 @@
 #!env python3
-from src.tiledMap import Point2, Segment
-#import src.tiledMap.view.pmPygame as pmView
-import src.tiledMap.view.pmCairo as pmView
+import shapely
+#import src.tiledMap.view.pygameView as timView
+import src.tiledMap.view.cairoView as timView
 
 class Scenario :
     def __init__(self):
-        self.point= Point2( 2.5, -0.2)
-        self.seg= Segment( Point2( 7.5, -3.2), Point2( 22.5, 12.2) )
+        self.point= ( 2.5, -0.2)
+        self.seg= [( 7.5, -3.2), ( 22.5, 12.2) ]
 
     def process( self, frame ):
-        zero= Point2()
-        frame.drawPoint( zero )
+        frame.drawPoint( (0, 0) )
         frame.drawPoint( self.point )
-        frame.drawLine( zero, self.point )
-        frame.drawLine( self.seg.pointA(), self.seg.pointB() )
+        frame.drawLine( (0, 0), self.point )
+        frame.drawLine( self.seg[0], self.seg[1] )
         frame.drawCircle( self.point, 12.0 )
-        frame.drawFrameAxes() 
+        frame.drawFrameAxes()
         
         return True
 
 def main():
     # Set-up an IHM
-    ihm= pmView.Frame()
+    ihm= timView.Frame()
     game= Scenario()
 
     # Start

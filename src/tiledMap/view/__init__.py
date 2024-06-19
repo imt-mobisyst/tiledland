@@ -1,5 +1,4 @@
 import math, pygame
-from .. import Point2
 
 #class ColorPanel:
 class colorPanel:
@@ -53,12 +52,13 @@ class AbsFrame :
         pygame.display.update()
 
     # Transformation World <-> Screen
-    def toDrawing(self, p):
-        dx= (p.x-self._cx)*self._scale
-        dy= (p.y-self._cy)*-self._scale
+    def toDrawing(self, aPoint):
+        x, y= aPoint
+        dx= (x-self._cx)*self._scale
+        dy= (y-self._cy)*-self._scale
         return (dx+self._dwidth, dy+self._dheight)
 
-    def toWorld(self, pixx, pixy):
+    def toWorld(self, aPixel):
         return (0, 0)
 
     # Draw primitives: 
@@ -92,7 +92,7 @@ class AbsFrame :
     
     # Draw Frame:
     def drawFrameGrid( self, step= 10.0, color= colorPanel.backgroundBis ):
-        pixX, pixY= self.toDrawing( Point2(0, 0) )
+        pixX, pixY= self.toDrawing( (0, 0) )
         pixStep= step*self._scale
 
         while pixX > pixStep :
@@ -122,9 +122,9 @@ class AbsFrame :
         return self
 
     def drawFrameAxes( self ):
-        zero= Point2()
-        self.drawLine(  zero, Point2(1, 0), (204, 102, 102) )
-        self.drawLine(  zero, Point2(0, 1), (102, 204, 102) )
+        zero= (0, 0)
+        self.drawLine(  zero, (1, 0), (204, 102, 102) )
+        self.drawLine(  zero, (0, 1), (102, 204, 102) )
         self.drawPoint( zero, (26, 26, 204) )
     
     # Draw PolyMap Elements:

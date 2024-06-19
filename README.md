@@ -1,4 +1,4 @@
-# Polygon-based cells maps
+# Tiled-Map: polygon-based cells map
 
 This project targets a map of an environement as a 2.5 dimention model structured as a collection of linked cells with convex borders.
 The project aims to be as independant as possible, but it relies on [Cairo](https://pypi.org/project/pycairo/)and [pygame](https://pypi.org/project/pygame/) librairy for rendering example.

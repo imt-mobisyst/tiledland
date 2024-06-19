@@ -1,6 +1,6 @@
 #!env python3
-from src.tiledMap import Point2, Tile, Body2
-import src.tiledMap.view.pmCairo as pmView
+from tiledMap import Point2, Tile, Body2
+import tiledMap.view.pmCairo as pmView
 
 def main():
     # Set-up an IHM

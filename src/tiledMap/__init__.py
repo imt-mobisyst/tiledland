@@ -1,7 +1,5 @@
-from . import point, tile, segment, body
+#from . import tile
 
 # Convex-cell Map Components:
-Point2= point.Point2
-Segment= segment.Segment
-Tile= tile.Tile
-Body2= body.Body2
+#Tile= tile.Tile
+#Body2= body.Body2

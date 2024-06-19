@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "pyTiledMap"
+name = "tiledMap"
 version = "0.0.1"
 authors = [
   { name="Guillaume Lozenguez", email="guillaume.lozenguez@imt-nord-europe.fr" },
