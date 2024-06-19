@@ -3,12 +3,12 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "pyPolyMap"
+name = "pyTiledMap"
 version = "0.0.1"
 authors = [
   { name="Guillaume Lozenguez", email="guillaume.lozenguez@imt-nord-europe.fr" },
 ]
-description = "Convex-Cell Navigation Map"
+description = "poligon-based Tile, linked to build a Map of an environment"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [

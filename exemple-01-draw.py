@@ -1,7 +1,7 @@
 #!env python3
-from src.pyPolyMap import Point2, Segment
-#import src.pyPolyMap.view.pmPygame as pmView
-import src.pyPolyMap.view.pmCairo as pmView
+from src.tiledMap import Point2, Segment
+#import src.tiledMap.view.pmPygame as pmView
+import src.tiledMap.view.pmCairo as pmView
 
 class Scenario :
     def __init__(self):

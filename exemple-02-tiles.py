@@ -1,6 +1,6 @@
 #!env python3
-from src.pyPolyMap import Point2, Cell, Body2
-import src.pyPolyMap.view.pmCairo as pmView
+from src.tiledMap import Point2, Tile, Body2
+import src.tiledMap.view.pmCairo as pmView
 
 def main():
     # Set-up an IHM
@@ -14,18 +14,18 @@ def main():
 class Scenario :
     def __init__(self):
         points=[ Point2(1, 2), Point2(2, 6), Point2(5, 5), Point2(4, 0), Point2(4, 8) ]
-        self.cells= [
-            Cell( [ points[0], points[1], points[2], points[3] ] ),
-            Cell( [ points[1], points[4], points[2] ] )
+        self.tiles= [
+            Tile( [ points[0], points[1], points[2], points[3] ] ),
+            Tile( [ points[1], points[4], points[2] ] )
         ]
-        self.cells[1].setTags( [0, 0, 1] )
+        self.tiles[1].setTags( [0, 0, 1] )
         self.body= Body2( 7.5, 5.2, 2.2 )
 
     def process( self, frame ):
         frame.initBackground()
         frame.drawFrameGrid()
-        for cell in self.cells :
-            frame.drawCell( cell )
+        for tile in self.tiles :
+            frame.drawCell( tile )
         frame.drawBody( self.body )
 
         return True

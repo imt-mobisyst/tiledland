@@ -3,7 +3,7 @@ from .point import Point2
 from .segment import Segment
 
 
-class Cell:
+class Tile:
 
     # Initialization Destruction:
     def __init__( self, vertices= []):
