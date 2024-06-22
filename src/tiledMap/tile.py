@@ -1,49 +1,34 @@
-import math
-from .point import Point2
-from .segment import Segment
-
+import math, shapely
 
 class Tile:
 
     # Initialization Destruction:
-    def __init__( self, vertices= []):
-        size= len(vertices)
-        self._segments= []
-        if vertices :
-            self._segments= [
-                Segment( v1, v2 )     
-                for v1, v2 in zip( vertices, vertices[1:]+[vertices[0]] )
-            ]
-        self.updateCenter()
+    def __init__( self, points= []):
+        self._size= len(points)
+        self._shape= shapely.Polygon( points )
+        self._tags= [ 0 for i in range( self._size ) ]
+        self._connexions= []
+        self._connexionMirors= []
+        self._connexionGates= []
 
-    # Construction:
-    def updateCenter(self):
-        self._center= Point2(0.0, 0.0)
-        weights= 0.0
-        for s in self.segments() :
-            v= s.pointA() + s.pointB()
-            dist= s.pointA().distance(s.pointB())
-            v.scale(0.5)
-            self._center.x+= v.x*dist
-            self._center.y+= v.y*dist
-            weights+= dist
-        if weights > 0.0 :
-            self._center.x/= weights
-            self._center.y/= weights
-
-    def add( self, aSegment ):
-        self._segment.append( aSegment )
-    
     def setTags( self, tags ):
-        for s, t in zip( self.segments(), tags ) :
-            s.setTag(t)
+        self._tags= tags
     
     # Accessors:
     def size(self):
-        return len( self._segment )
+        return self._size
     
     def center(self):
-        return self._center
+        point= shapely.centroid(self._shape)
+        return (point.x, point.y)
     
     def segments(self):
-        return self._segments
+        coords= shapely.get_coordinates(self._shape)
+        assert( len(coords)-1 == self._size )
+        return [
+            ( tuple(coords[i]), tuple(coords[i+1]) )
+            for i in range(self._size)
+        ]
+    
+    def segmentTypes(self):
+        return self._tags

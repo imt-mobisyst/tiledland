@@ -90,6 +90,12 @@ class AbsFrame :
         coord= self.toDrawing(point)
         self.drawScreenCircle( coord, radius*self._scale, color)
     
+    def drawPolygon( self, coords, color= colorPanel.draw ):
+        last= coords[0]
+        for point in coords[1:] :
+            self.drawLine( last, point, color )
+            last= point
+
     # Draw Frame:
     def drawFrameGrid( self, step= 10.0, color= colorPanel.backgroundBis ):
         pixX, pixY= self.toDrawing( (0, 0) )
@@ -127,16 +133,14 @@ class AbsFrame :
         self.drawLine(  zero, (0, 1), (102, 204, 102) )
         self.drawPoint( zero, (26, 26, 204) )
     
-    # Draw PolyMap Elements:
-    def drawCell( self, aCell, colors= colorPanel.colors ):
+    # Draw TileMap Elements:
+    def drawTile( self, aTile, colors= colorPanel.colors ):
         maxTag= len( colors )-1
-        center= aCell.center()
-        for segment in aCell.segments() :
-            color= colors[ min( segment.tag(), maxTag) ]
-            vv1= segment.pointA() - center
-            vv2= segment.pointB() - center
-            self.drawLine( vv1.scale(0.98)+center, vv2.scale(0.98)+center, color )
-        self.drawPoint( aCell.center(), colors[0] )
+        center= aTile.center()
+        for seg, sType in zip( aTile.segments(), aTile.segmentTypes() ) :
+            color= colors[ min( sType, maxTag) ]
+            self.drawLine( seg[0], seg[1], color )
+        self.drawPoint( center, colors[0] )
 
     def drawBody(self, aBody, aColor= colorPanel.draw):
         pixx, pixy= self.toDrawing( aBody.position )
