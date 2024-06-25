@@ -15,10 +15,10 @@ class Scenario :
     def __init__(self):
         points=[ (1, 2), (2, 6), (5, 5), (4, 0), (4, 8) ]
         self.tiles= [
-            tim.Tile( [ points[0], points[1], points[2], points[3] ] ),
-            tim.Tile( [ points[1], points[4], points[2] ] )
+            tim.Tile( [ (1, 2), (1.98, 5.9), (4.98, 4.9), (4, 0) ] ),
+            tim.Tile( [ (2, 6), points[4], (5, 5) ] )
         ]
-        self.tiles[1].setTags( [0, 0, 1] )
+        self.tiles[1].setTags( [1, 0, 0] )
         #self.body= Body2( 7.5, 5.2, 2.2 )
 
     def process( self, frame ):

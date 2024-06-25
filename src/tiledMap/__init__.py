@@ -1,7 +1,8 @@
-from . import tile
+from . import tile, joint
 
 # Tiled Map Components:
 Tile= tile.Tile
+Joint= joint.Joint
 #Map= map.Map
 #Body2= body.Body2
 

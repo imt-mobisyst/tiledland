@@ -30,5 +30,9 @@ class Tile:
             for i in range(self._size)
         ]
     
-    def segmentTypes(self):
+    def segment(self, i):
+        coords= shapely.get_coordinates(self._shape)
+        return ( tuple(coords[i]), tuple(coords[i+1]) )
+    
+    def segmentTags(self):
         return self._tags
