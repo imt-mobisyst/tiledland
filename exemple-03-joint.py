@@ -14,21 +14,17 @@ def main():
 
 class Scenario :
     def __init__(self):
-        self.tiles= [
-            tim.Tile( [ (1, 2), (1.98, 5.9), (4.98, 4.9), (4, 0) ] ),
-            tim.Tile( [ (2, 6), (4, 8), (5, 5) ] ),
-            tim.Tile( [(7,1), (9,1), (9,3), (7,3)] ),
-            tim.Tile( [(7,4), (9,5), (7,6)] ),
-        ]
-        self.tiles[1].setTags( [1, 0, 0] )
-        #self.body= Body2( 7.5, 5.2, 2.2 )
+        t1= tim.Tile( [(3,1), (5,1), (5,3), (3,3)] )
+        t2= tim.Tile( [(3,4), (5,4), (4,6)] )
+        self._joint= tim.Joint( t1, t2 )
 
     def process( self, frame ):
         frame.initBackground()
         frame.drawFrameGrid()
-        for tile in self.tiles :
-            frame.drawTile( tile )
-        #frame.drawBody( self.body )
+        
+        frame.drawJoint( self._joint )
+        frame.drawTile( self._joint.tileA() )
+        frame.drawTile( self._joint.tileB() )
 
         return True
 

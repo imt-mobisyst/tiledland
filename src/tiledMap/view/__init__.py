@@ -137,10 +137,14 @@ class AbsFrame :
     def drawTile( self, aTile, colors= colorPanel.colors ):
         maxTag= len( colors )-1
         center= aTile.center()
-        for seg, sType in zip( aTile.segments(), aTile.segmentTypes() ) :
-            color= colors[ min( sType, maxTag) ]
+        for seg, tag in zip( aTile.segments(), aTile.segmentTags() ) :
+            color= colors[ min( tag, maxTag) ]
             self.drawLine( seg[0], seg[1], color )
         self.drawPoint( center, colors[0] )
+
+    def drawJoint( self, aJoint, color= colorPanel.alt1 ):
+        for seg in aJoint.segments() :
+            self.drawLine( seg[0], seg[1], color )
 
     def drawBody(self, aBody, aColor= colorPanel.draw):
         pixx, pixy= self.toDrawing( aBody.position )
