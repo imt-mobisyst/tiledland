@@ -10,7 +10,7 @@ def test_Joint_init():
     joint= tim.Joint()
     assert( type(joint) == tim.Joint )
 
-def test_Joint_init():
+def test_Joint_init2():
     joint= tim.Joint(
         tim.Tile( [(7.0, 1.0), (9.0, 1.0), (9.0, 3.0), (7.0, 3.0)] ),
         tim.Tile( [(7.0, 4.0), (9.0, 5.0), (7.0, 6.0)] ),
@@ -36,3 +36,16 @@ def test_Joint_init():
         ( (7.0, 6.0), (7.0, 4.0) ),
         ( (7.0, 4.0), (7.0, 1.0) )
     ])
+
+def test_joint_autoSegemntSelection():
+    t1= tim.Tile( [(3,1), (5,1), (5,3), (3,3)] )
+    t2= tim.Tile( [(3,4), (5,4), (4,6)] )
+    joint= tim.Joint( t1, t2 )
+
+    assert( joint._segmentA == 0 )
+    assert( joint._segmentB == 0 )
+
+    joint.updateSegments()
+
+    assert( joint._segmentA == 2 )
+    assert( joint._segmentB == 0 )

@@ -18,6 +18,9 @@ class Tile:
     def size(self):
         return self._size
     
+    def shape(self):
+        return self._shape
+    
     def center(self):
         point= shapely.centroid(self._shape)
         return (point.x, point.y)

@@ -16,7 +16,7 @@ class Scenario :
     def __init__(self):
         t1= tim.Tile( [(3,1), (5,1), (5,3), (3,3)] )
         t2= tim.Tile( [(3,4), (5,4), (4,6)] )
-        self._joint= tim.Joint( t1, t2 )
+        self._joint= tim.Joint( t1, t2, 2, 0 )
 
     def process( self, frame ):
         frame.initBackground()

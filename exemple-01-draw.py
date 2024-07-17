@@ -1,8 +1,8 @@
 #!env python3
 import shapely
 import shapely.coordinates
-#import src.tiledMap.view.pygameView as timView
-import src.tiledMap.view.cairoView as timView
+import src.tiledMap.view.pygameView as timView
+#import src.tiledMap.view.cairoView as timView
 
 class Scenario :
     def __init__(self):
