@@ -39,3 +39,16 @@ class Tile:
     
     def segmentTags(self):
         return self._tags
+
+    def findExitSegment( self, aTargetPoint ):
+        lineOut= shapely.LineString( [self.center(), aTargetPoint] )
+        segmentList= self.segments()
+        iSegment= 0
+        for segment in segmentList :
+            inter= shapely.get_coordinates( 
+                shapely.intersection( lineOut, shapely.LineString(segment) )
+            )
+            if len(inter) > 0 :
+                return iSegment
+            iSegment+= 1
+        return False

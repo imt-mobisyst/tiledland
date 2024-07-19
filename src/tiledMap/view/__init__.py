@@ -142,9 +142,11 @@ class AbsFrame :
             self.drawLine( seg[0], seg[1], color )
         self.drawPoint( center, colors[0] )
 
-    def drawJoint( self, aJoint, color= colorPanel.alt1 ):
+    def drawJoint( self, aJoint, color= colorPanel.backgroundBis ):
         for seg in aJoint.segments() :
             self.drawLine( seg[0], seg[1], color )
+        front= aJoint.frontiere()
+        self.drawLine( front[0], front[1], color )
 
     def drawBody(self, aBody, aColor= colorPanel.draw):
         pixx, pixy= self.toDrawing( aBody.position )

@@ -45,7 +45,7 @@ def test_joint_autoSegemntSelection():
     assert( joint._segmentA == 0 )
     assert( joint._segmentB == 0 )
 
-    joint.updateSegments()
-
+    assert( joint.updateSegments() )
+    
     assert( joint._segmentA == 2 )
     assert( joint._segmentB == 0 )

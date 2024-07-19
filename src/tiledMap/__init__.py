@@ -1,4 +1,4 @@
-import math
+import math, shapely
 from . import tile, joint
 
 # Tiled Map Components:
@@ -8,7 +8,6 @@ Joint= joint.Joint
 #Body2= body.Body2
 
 # Point tool box:
-
 def roundPoint( aPoint, precision=1 ):
     x, y= aPoint
     return (
@@ -17,7 +16,6 @@ def roundPoint( aPoint, precision=1 ):
     )
 
 # Point list generators:
-
 def generatePointlist_circumscribe( center, nbFaces=4, diagonal=1.0):
     x, y= center
     points= []
@@ -30,3 +28,11 @@ def generatePointlist_circumscribe( center, nbFaces=4, diagonal=1.0):
         ) )
         angle+= delta
     return points
+
+#Line tools: 
+def intersection( line1, line2 ):
+    line= shapely.intersection( shapely.LineString(line1), shapely.LineString(line2) )
+    coords= shapely.get_coordinates( line )
+    if len(coords) == 0 :
+        return False
+    return tuple(coords[0])
