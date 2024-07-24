@@ -16,18 +16,21 @@ def roundPoint( aPoint, precision=1 ):
     )
 
 # Point list generators:
-def generatePointlist_circumscribe( center, nbFaces=4, diagonal=1.0):
+def pointlist_regularPolygon( center, nbFaces=4, radius=0.5 ):
     x, y= center
     points= []
     angle= math.pi - ((nbFaces-1)*math.pi/nbFaces)
     delta= math.pi/(nbFaces/2)
     for i in range(nbFaces) :
         points.append( (
-            x+math.cos(angle)*diagonal,
-            y+math.sin(angle)*diagonal
+            x+math.cos(angle)*radius,
+            y+math.sin(angle)*radius
         ) )
         angle+= delta
     return points
+
+def pointlist_hexagon( center, radius=0.5 ):
+    return pointlist_regularPolygon( center, 6, radius )
 
 #Line tools: 
 def intersection( line1, line2 ):

@@ -16,7 +16,7 @@ def test_Joint_init2():
         tim.Tile( [(7.0, 4.0), (9.0, 5.0), (7.0, 6.0)] ),
         0, 2
     )
-    assert( 
+    assert(
         joint.tileA().segments() == [
         ( (7.0, 1.0), (9.0, 1.0) ),
         ( (9.0, 1.0), (9.0, 3.0) ),
