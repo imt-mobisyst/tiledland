@@ -1,10 +1,10 @@
 import math, shapely
-from . import tile, joint
+from . import tile, joint, map
 
 # Tiled Map Components:
 Tile= tile.Tile
 Joint= joint.Joint
-#Map= map.Map
+Map= map.Map
 #Body2= body.Body2
 
 # Point tool box:
