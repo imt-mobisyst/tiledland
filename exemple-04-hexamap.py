@@ -1,13 +1,13 @@
 #!env python3
 import math
 
-#import src.tiledMap as tim
-import tiledMap as tim
+#import src.tiledLand as tim
+import tiledLand as tim
 
-#import src.tiledMap.view.pygameView as timView
-#import tiledMap.view.pygameView as timView
-#import src.tiledMap.view.cairoView as timView
-import tiledMap.view.cairoView as timView
+#import src.tiledLand.cutout.pygameView as timView
+#import tiledLand.cutout.pygameView as timView
+#import src.tiledLand.cutout.cairoView as timView
+import tiledLand.cutout.cairoView as timView
 
 import shapely
 

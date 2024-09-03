@@ -1,12 +1,9 @@
 #!env python3
 
-#import src.tiledMap as tim
-import tiledMap as tim
+import src.tiledLand as til
+from src.tiledLand.geometry import Coord2, Segment
 
-#import src.tiledMap.view.pygameView as timView
-#import tiledMap.view.pygameView as timView
-#import src.tiledMap.view.cairoView as timView
-import tiledMap.view.cairoView as timView
+import src.tiledLand.cutout.cairoView as timView
 
 import shapely
 
@@ -21,24 +18,33 @@ def main():
 
 class Scenario :
     def __init__(self):
-        t1= tim.Tile( [(3,1), (5,1), (5,3), (3,3)] )
-        t2= tim.Tile( [(3,4), (5,4), (4,6)] )
-        self._joint= tim.Joint( t1, t2)
-        self._joint.updateSegments()
+        t1= til.Tile().setFromCoordinates( [ Coord2(3, 1), Coord2(5,1), Coord2(5,3), Coord2(3,3) ] )
+        t2= til.Tile().setFromCoordinates( [ Coord2(3,4), Coord2(5,4), Coord2(4,6)] )
+        self._joint1= til.Joint(t1, t2)
+        self._joint1.updateSegments()
+
+        t1= til.Tile().setFromCoordinates( [ Coord2(13,1), Coord2(15,1), Coord2(15,3), Coord2(13,3)] )
+        t2= til.Tile().setFromCoordinates( [ Coord2(13,4), Coord2(15,4), Coord2(14,6)] )
+        self._joint2= til.Joint(t1, t2)
+        self._joint2.updateSegments()
 
     def process( self, frame ):
         frame.initBackground()
         frame.drawFrameGrid()
         
-        frame.drawJoint( self._joint )
-        frame.drawTile( self._joint.tileA() )
-        frame.drawTile( self._joint.tileB() )
+        frame.drawJointShape( self._joint1 )
+        frame.drawTile( self._joint1.tileA() )
+        frame.drawTile( self._joint1.tileB() )
 
-        front= self._joint.frontiere()
-        inter= tim.intersection( front, [ self._joint.tileA().center(), self._joint.tileB().center() ]  )
+        front= self._joint1.frontiere()
+        inter= til.intersection( front, Segment( self._joint1.tileA().center(), self._joint1.tileB().center() ) )
         if( inter ):
             frame.drawPoint( inter )
-        
+
+        frame.drawJoint( self._joint2 )
+        frame.drawTile( self._joint2.tileA() )
+        frame.drawTile( self._joint2.tileB() )
+
         return True
 
 if __name__ == "__main__":

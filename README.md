@@ -3,7 +3,7 @@
 This project targets a map of an environement as a 2.5 dimention model structured as a collection of linked cells with convex borders.
 
 Its is more a sandbox project to test ideas than an optimized, ready-to-use and well documented toolbox.
-Its composed of two module: `tiledMap` and `tiledLand`.
+Its composed of two module: `tiledLand` and `tiledLand`.
 
 The project relies on [Cairo](https://pypi.org/project/pycairo/) and [pygame](https://pypi.org/project/pygame/) librairy for rendering example and [shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives.
 

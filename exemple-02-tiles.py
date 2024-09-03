@@ -1,58 +1,46 @@
 #!env python3
-import math, tiledMap as tim
-#import src.tiledMap.view.pygameView as timView
-import src.tiledMap.view.cairoView as timView
+import math
+from src.tiledLand.tile import Tile
+from src.tiledLand.geometry import Coord2, Segment
 
-def regular1( center, nbFaces=4, ran=1):
-    x, y= center
-    return [
-        (center[0]-ran, center[1]-ran),
-        (x+ran, y-ran),
-        (x+ran, y+ran),
-        (x-ran, y+ran)
-    ]
-
-def regular2( center, nbFaces=4, ran=1):
-    x, y= center
-    points= []
-    angle= math.pi - ((nbFaces-1)*math.pi/nbFaces)
-    for i in range(nbFaces) :
-        points.append( ( x+math.cos(angle)*ran, y+math.sin(angle)*ran ) )
-        angle+= math.pi/(nbFaces/2)
-    return points
+#import src.tiledLand.cutout.pygameView as timView
+import src.tiledLand.cutout.cairoView as timView
 
 def main():
     # Set-up an IHM
     ihm= timView.Frame()
-    shapes= [
-            [ (1, 2), (1.98, 5.9), (4.98, 4.9), (4, 0) ],
-            [ (2, 6), (4, 8), (5, 5) ],
-            [(7,1), (9,1), (9,3), (7,3)],
-            [(7,4), (9,5), (7,6)],
-            tim.generatePointlist_circumscribe( ( 12.5, 4.6) ),
-            tim.generatePointlist_circumscribe( ( 14.5, 0), 9, 2 )
+    tiles= [
+            Tile( Coord2(13.3, 2.8) ),
+            Tile().setFromCoordinates( [ Coord2(1, 2), Coord2(1.98, 5.9), Coord2(4.98, 4.9), Coord2(4, 0) ] ),
+            Tile().setFromCoordinates( [ Coord2(2, 6), Coord2(4, 8), Coord2(5, 5) ] ),
+            Tile().setFromCoordinates( [ Coord2(7,1), Coord2(9,1), Coord2(9,3), Coord2(7,3)] ),
+            Tile().setFromCoordinates( [ Coord2(7,4), Coord2(9,5), Coord2(7,6)] ),
+            Tile().setSquare( Coord2(11.8, 3.4), 1 ),
+            Tile().setSquare( Coord2(10.8, 5.6), 2 ),
+            Tile().setRegular( 3, Coord2(18.7, 0.8), 0.4 ),
+            Tile().setRegular( 9, Coord2(16.7, 4.8), 1.8 )
     ]
-    game= Scenario( shapes )
+
+    tiles[1].setTags( [1, 2, 3, 0] )
+    tiles[8].setTags( [1, 2, 2,
+                        2, 2, 3,
+                        3, 3, 0] )
+
+    game= Scenario( tiles )
 
     # Start
     ihm.infiniteLoop( game.process )
     #process( ihm )
 
 class Scenario :
-    def __init__(self, shapes):
-        self.tiles= [
-            tim.Tile( points  )
-            for points in shapes
-        ]
-        self.tiles[1].setTags( [1, 0, 0] )
-        #self.body= Body2( 7.5, 5.2, 2.2 )
+    def __init__(self, tiles):
+        self._tiles= tiles
 
     def process( self, frame ):
         frame.initBackground()
         frame.drawFrameGrid()
-        for tile in self.tiles :
+        for tile in self._tiles :
             frame.drawTile( tile )
-        #frame.drawBody( self.body )
 
         return True
 

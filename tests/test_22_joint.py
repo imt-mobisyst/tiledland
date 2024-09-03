@@ -4,7 +4,8 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 # ------------------------------------------------------------------------ #
 #               T E S T  T i l e d M a p : :  J O I N T                    #
 # ------------------------------------------------------------------------ #
-import src.tiledMap as tim
+import src.tiledLand as tim
+from src.tiledLand.geometry import Coord2, Segment
 
 def test_Joint_init():
     joint= tim.Joint()
@@ -12,34 +13,39 @@ def test_Joint_init():
 
 def test_Joint_init2():
     joint= tim.Joint(
-        tim.Tile( [(7.0, 1.0), (9.0, 1.0), (9.0, 3.0), (7.0, 3.0)] ),
-        tim.Tile( [(7.0, 4.0), (9.0, 5.0), (7.0, 6.0)] ),
+        tim.Tile().setFromCoordinates( [ Coord2(7.0, 1.0), Coord2(9.0, 1.0), Coord2(9.0, 3.0), Coord2(7.0, 3.0)] ),
+        tim.Tile().setFromCoordinates( [ Coord2(7.0, 4.0), Coord2(9.0, 5.0), Coord2(7.0, 6.0)] ),
         0, 2
     )
     assert(
         joint.tileA().segments() == [
-        ( (7.0, 1.0), (9.0, 1.0) ),
-        ( (9.0, 1.0), (9.0, 3.0) ),
-        ( (9.0, 3.0), (7.0, 3.0) ),
-        ( (7.0, 3.0), (7.0, 1.0) ),
+            Segment( Coord2(7.0, 1.0), Coord2(9.0, 1.0) ),
+            Segment( Coord2(9.0, 1.0), Coord2(9.0, 3.0) ),
+            Segment( Coord2(9.0, 3.0), Coord2(7.0, 3.0) ),
+            Segment( Coord2(7.0, 3.0), Coord2(7.0, 1.0) ),
     ])
     
     assert( joint.tileB().segments() == [
-        ( (7.0, 4.0), (9.0, 5.0) ),
-        ( (9.0, 5.0), (7.0, 6.0) ),
-        ( (7.0, 6.0), (7.0, 4.0) )
+        Segment( Coord2(7.0, 4.0), Coord2(9.0, 5.0) ),
+        Segment( Coord2(9.0, 5.0), Coord2(7.0, 6.0) ),
+        Segment( Coord2(7.0, 6.0), Coord2(7.0, 4.0) )
     ])
         
     assert( joint.segments() == [
-        ( (7.0, 1.0), (9.0, 1.0) ),
-        ( (9.0, 1.0), (7.0, 6.0) ),
-        ( (7.0, 6.0), (7.0, 4.0) ),
-        ( (7.0, 4.0), (7.0, 1.0) )
+        Segment( Coord2(7.0, 1.0), Coord2(9.0, 1.0) ),
+        Segment( Coord2(7.0, 6.0), Coord2(7.0, 4.0) )
+    ])
+    
+    assert( joint.shapeSegments() == [
+        Segment( Coord2(7.0, 1.0), Coord2(9.0, 1.0) ),
+        Segment( Coord2(9.0, 1.0), Coord2(7.0, 6.0) ),
+        Segment( Coord2(7.0, 6.0), Coord2(7.0, 4.0) ),
+        Segment( Coord2(7.0, 4.0), Coord2(7.0, 1.0) )
     ])
 
 def test_joint_autoSegemntSelection():
-    t1= tim.Tile( [(3,1), (5,1), (5,3), (3,3)] )
-    t2= tim.Tile( [(3,4), (5,4), (4,6)] )
+    t1= tim.Tile().setFromCoordinates( [ Coord2(3,1), Coord2(5,1), Coord2(5,3), Coord2(3,3)] )
+    t2= tim.Tile().setFromCoordinates( [ Coord2(3,4), Coord2(5,4), Coord2(4,6)] )
     joint= tim.Joint( t1, t2 )
 
     assert( joint._segmentA == 0 )
