@@ -1,9 +1,9 @@
 #!env python3
 import shapely
 import shapely.coordinates
-from src.tiledLand.geometry import Coord2
-import src.tiledLand.cutout.pygameView as timView
-#import src.tiledLand.cutout.cairoView as timView
+from tiledLand.geometry import Coord2
+import tiledLand.cutout.pygameView as timView
+#import tiledLand.cutout.cairoView as timView
 
 class Scenario :
     def __init__(self):

@@ -3,11 +3,11 @@ from .geometry import Coord2, Segment
 
 class Joint:
     # Initialization Destruction:
-    def __init__( self, tileA= None, tileB= None, segmentA= 0, segmentB= 0 ):
+    def __init__( self, tileA= None, tileB= None, gateA= 0, gateB= 0 ):
         self._tileA= tileA
-        self._segmentA= segmentA
+        self._gateA= gateA
         self._tileB= tileB
-        self._segmentB= segmentB
+        self._gateB= gateB
         self._tag= 0
     
     # Accessors:
@@ -17,20 +17,20 @@ class Joint:
     def tileB(self):
         return self._tileB
 
-    def updateSegments( self ):
-        self._segmentA= self.tileA().findExitSegment( self.tileB().center() )
-        self._segmentB= self.tileB().findExitSegment( self.tileA().center() )
-        return ( type(self._segmentA) == int and type(self._segmentB) == int )
+    def updateGates( self ):
+        self._gateA= self.tileA().findGateSegment( self.tileB().center() )
+        self._gateB= self.tileB().findGateSegment( self.tileA().center() )
+        return ( type(self._gateA) == int and type(self._gateB) == int )
 
-    def segments(self):
-        return [
-            self.tileA().segment( self._segmentA ),
-            self.tileB().segment( self._segmentB )
-        ]
+    def gates(self):
+        return (
+            self.tileA().segment( self._gateA ),
+            self.tileB().segment( self._gateB )
+        )
 
     def shapeSegments(self):
-        a1, a2= self.tileA().segment( self._segmentA ).tuple()
-        b1, b2= self.tileB().segment( self._segmentB ).tuple()
+        a1, a2= self.tileA().segment( self._gateA ).tuple()
+        b1, b2= self.tileB().segment( self._gateB ).tuple()
         return [
             Segment(a1, a2),
             Segment(a2, b1),
@@ -39,10 +39,10 @@ class Joint:
         ]
 
     def frontiere(self):
-        a1, a2= self.tileA().segment( self._segmentA ).tuple()
+        a1, a2= self.tileA().segment( self._gateA ).tuple()
         xa1, ya1= a1.tuple()
         xa2, ya2= a2.tuple()
-        b1, b2= self.tileB().segment( self._segmentB ).tuple()
+        b1, b2= self.tileB().segment( self._gateB ).tuple()
         xb1, yb1= b1.tuple()
         xb2, yb2= b2.tuple()
         return Segment(

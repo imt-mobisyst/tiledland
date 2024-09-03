@@ -1,9 +1,8 @@
 #!env python3
 
 import src.tiledLand as til
-from src.tiledLand.geometry import Coord2, Segment
-
-import src.tiledLand.cutout.cairoView as timView
+from tiledLand.geometry import Coord2, Segment
+import tiledLand.cutout.cairoView as timView
 
 import shapely
 

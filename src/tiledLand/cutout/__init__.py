@@ -148,8 +148,8 @@ class AbsFrame :
         self.drawPoint( center, colors[0] )
 
     def drawJoint( self, aJoint, color= colorPanel.backgroundBis ):
-        doors= aJoint.segments()
-        self.drawLine( doors[0].middle(), doors[1].middle(), color )
+        gateA, gateB= aJoint.gates()
+        self.drawLine( gateA.middle(), gateB.middle(), color )
 
     def drawJointShape( self, aJoint, color= colorPanel.backgroundBis ):
         for seg in aJoint.shapeSegments() :
@@ -157,6 +157,12 @@ class AbsFrame :
         front= aJoint.frontiere()
         self.drawLine( front.a(), front.b(), color )
 
+    def drawMap( self, aMap, colors= colorPanel.colors ):
+        for tile in aMap.tiles() :
+            self.drawTile( tile, colors )
+        for joint in aMap.allJoints() :
+            self.drawJoint( joint )
+        
     def drawBody(self, aBody, aColor= colorPanel.draw):
         pixx, pixy= self.toDrawing( aBody.position.x(), aBody.position.y() )
         pixRadius= aBody.radius * self._scale

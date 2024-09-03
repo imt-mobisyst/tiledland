@@ -13,6 +13,10 @@ class Coord2 :
         self._x= aCoord._x
         self._y= aCoord._x
 
+    def setFromTuple( self, t ):
+        self._x, self._y= t
+        return self
+
     # Accessors:
     def dimention(self):
         return 2
@@ -67,10 +71,17 @@ class Segment :
     def set(self, coordinateA, coordinateB):
         self._a= coordinateA
         self._b= coordinateB
+        return self
 
     def setAs(self, aSegment):
         self._a= aSegment._a
         self._b= aSegment._b
+        return self
+
+    def setFromList( self, l ):
+        self._a= Coord2().setFromTuple( l[0] )
+        self._b= Coord2().setFromTuple( l[1] )
+        return self
 
     # Accessors:
     def dimention(self):

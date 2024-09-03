@@ -1,10 +1,8 @@
 #!env python3
 import math
-from src.tiledLand.tile import Tile
-from src.tiledLand.geometry import Coord2, Segment
-
-#import src.tiledLand.cutout.pygameView as timView
-import src.tiledLand.cutout.cairoView as timView
+from tiledLand.tile import Tile
+from tiledLand.geometry import Coord2, Segment
+import tiledLand.cutout.cairoView as timView
 
 def main():
     # Set-up an IHM

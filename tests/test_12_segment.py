@@ -24,6 +24,4 @@ def test_Segment_init2():
     assert( seg.a().tuple() == (23.9, -16.08) )
     assert( seg.b().tuple() == (12.0,  1.302) )
 
-    print( ">>>>" )
-    print( seg.middle().round() )
     assert( seg.middle().round().tuple() == (17.9, -7.4) )

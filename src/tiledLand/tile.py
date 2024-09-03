@@ -9,9 +9,6 @@ class Tile:
         self._center= center
         self._limitCoords= []
         self._tags= []
-        self._connexions= []
-        self._connexionMirors= []
-        self._connexionGates= []
 
     def setTags( self, tags ):
         assert( len(tags) == self.size() )
@@ -25,6 +22,12 @@ class Tile:
         self._tags= [ 0 for c in self._limitCoords ]
         return self
 
+    def setFromList( self, l ):
+        return self.setFromCoordinates([
+            Coord2().setFromTuple( t )
+            for t in l
+        ])
+
     def setSquare(self, center, lenght):
         demi= lenght*0.5
         self._limitCoords= [
@@ -37,7 +40,8 @@ class Tile:
         self._center= center
         return self
 
-    def setRegular(self, numberOfVertex, center, radius):
+    def setRegular(self, numberOfVertex, center, size):
+        radius= size*0.5
         x, y= center.tuple()
         self._limitCoords= []
         self._tags= []
@@ -91,7 +95,7 @@ class Tile:
     def segmentTags(self):
         return self._tags
 
-    def findExitSegment( self, aTargetCoordinate ):
+    def findGateSegment( self, aTargetCoordinate ):
         lineOut= shapely.LineString( [self.center().tuple(), aTargetCoordinate.tuple()] )
         segmentList= self.segments()
         iSegment= 0
