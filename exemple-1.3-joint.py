@@ -2,13 +2,14 @@
 
 import src.tiledLand as til
 from tiledLand.geometry import Coord2, Segment
-import tiledLand.cutout.cairoView as timView
+import tiledLand.interface as tili
+
 
 import shapely
 
 def main():
     # Set-up an IHM
-    ihm= timView.Frame()
+    ihm= tili.Interface()
     game= Scenario()
 
     # Start
@@ -28,7 +29,6 @@ class Scenario :
         self._joint2.updateGates()
 
     def process( self, frame ):
-        frame.initBackground()
         frame.drawFrameGrid()
         
         frame.drawJointShape( self._joint1 )
@@ -38,7 +38,7 @@ class Scenario :
         front= self._joint1.frontiere()
         inter= til.intersection( front, Segment( self._joint1.tileA().center(), self._joint1.tileB().center() ) )
         if( inter ):
-            frame.drawPoint( inter )
+            frame.tracePoint( inter )
 
         frame.drawJoint( self._joint2 )
         frame.drawTile( self._joint2.tileA() )

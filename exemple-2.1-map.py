@@ -2,13 +2,11 @@
 import math
 
 import tiledLand as til
-import tiledLand.cutout.cairoView as timView
-
-import shapely
+import tiledLand.interface as tili
 
 def main():
     # Set-up an IHM
-    ihm= timView.Frame()
+    ihm= tili.Interface()
 
     up_x= math.cos( math.pi/3 )
     up_y= math.sin( math.pi/3 )
@@ -37,7 +35,6 @@ class Scenario :
         self._maps= maps
         
     def process( self, frame ):
-        frame.initBackground()
         frame.drawFrameGrid()
 
         for map in self._maps :

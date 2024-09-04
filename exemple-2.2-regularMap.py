@@ -3,13 +3,11 @@ import math
 
 #import src.tiledLand as tim
 import src.tiledLand as til
-import tiledLand.cutout.cairoView as timView
-
-import shapely
+import tiledLand.interface as tili
 
 def main():
     # Set-up an IHM
-    ihm= timView.Frame()
+    ihm= tili.Interface()
     
     map1= til.Map().setSquareGrid(
         [
@@ -44,7 +42,6 @@ class Scenario :
         self._maps= maps
         
     def process( self, frame ):
-        frame.initBackground()
         frame.drawFrameGrid()
 
         for map in self._maps :

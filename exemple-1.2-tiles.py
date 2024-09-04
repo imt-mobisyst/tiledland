@@ -2,11 +2,11 @@
 import math
 from tiledLand.tile import Tile
 from tiledLand.geometry import Coord2, Segment
-import tiledLand.cutout.cairoView as timView
+import tiledLand.interface as tili
 
 def main():
     # Set-up an IHM
-    ihm= timView.Frame()
+    ihm= tili.Interface()
     tiles= [
             Tile( Coord2(13.3, 2.8) ),
             Tile().setFromCoordinates( [ Coord2(1, 2), Coord2(1.98, 5.9), Coord2(4.98, 4.9), Coord2(4, 0) ] ),
@@ -35,7 +35,6 @@ class Scenario :
         self._tiles= tiles
 
     def process( self, frame ):
-        frame.initBackground()
         frame.drawFrameGrid()
         for tile in self._tiles :
             frame.drawTile( tile )
