@@ -31,10 +31,9 @@ def test_Joint_init2():
         Segment( Coord2(7.0, 6.0), Coord2(7.0, 4.0) )
     ])
         
-    assert( joint.segments() == [
-        Segment( Coord2(7.0, 1.0), Coord2(9.0, 1.0) ),
-        Segment( Coord2(7.0, 6.0), Coord2(7.0, 4.0) )
-    ])
+    assert( joint.gates() == ( Segment( Coord2(7.0, 1.0), Coord2(9.0, 1.0) ),
+                                Segment( Coord2(7.0, 6.0), Coord2(7.0, 4.0) ) )
+    )
     
     assert( joint.shapeSegments() == [
         Segment( Coord2(7.0, 1.0), Coord2(9.0, 1.0) ),
@@ -48,10 +47,10 @@ def test_joint_autoSegemntSelection():
     t2= tim.Tile().setFromCoordinates( [ Coord2(3,4), Coord2(5,4), Coord2(4,6)] )
     joint= tim.Joint( t1, t2 )
 
-    assert( joint._segmentA == 0 )
-    assert( joint._segmentB == 0 )
+    assert( joint._gateA == 0 )
+    assert( joint._gateB == 0 )
 
-    assert( joint.updateSegments() )
+    assert( joint.updateGates() )
     
-    assert( joint._segmentA == 2 )
-    assert( joint._segmentB == 0 )
+    assert( joint._gateA == 2 )
+    assert( joint._gateB == 0 )

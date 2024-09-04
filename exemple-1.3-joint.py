@@ -20,12 +20,12 @@ class Scenario :
         t1= til.Tile().setFromCoordinates( [ Coord2(3, 1), Coord2(5,1), Coord2(5,3), Coord2(3,3) ] )
         t2= til.Tile().setFromCoordinates( [ Coord2(3,4), Coord2(5,4), Coord2(4,6)] )
         self._joint1= til.Joint(t1, t2)
-        self._joint1.updateSegments()
+        self._joint1.updateGates()
 
         t1= til.Tile().setFromCoordinates( [ Coord2(13,1), Coord2(15,1), Coord2(15,3), Coord2(13,3)] )
         t2= til.Tile().setFromCoordinates( [ Coord2(13,4), Coord2(15,4), Coord2(14,6)] )
         self._joint2= til.Joint(t1, t2)
-        self._joint2.updateSegments()
+        self._joint2.updateGates()
 
     def process( self, frame ):
         frame.initBackground()
