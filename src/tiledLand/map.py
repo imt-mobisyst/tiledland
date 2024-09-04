@@ -1,5 +1,8 @@
+import math
+
 from .tile import Tile
 from .joint import Joint
+from .geometry import Coord2
 
 class Map:
     # Initialization Destruction:
@@ -13,6 +16,24 @@ class Map:
     def setTags( self, tags ):
         self._tags= tags
     
+    # Construction:
+    def addTile( self, aTile ):
+        self._tiles.append( aTile )
+        self._links.append( [] )
+        return len(self._tiles)
+    
+    def connect( self, tileIdA, tileIdB):
+        iA= tileIdA-1
+        iB= tileIdB-1
+        tileA= self._tiles[iA]
+        tileB= self._tiles[iB]
+        gateA= tileA.findGateSegment( tileB.center() )
+        gateB= tileB.findGateSegment( tileA.center() )
+        if tileIdB not in self._links[iA] :
+            self._links[iA].append( (tileIdB, gateA, gateB) )
+        if tileIdA not in self._links[iB] :
+            self._links[iB].append( (tileIdA, gateB, gateA) )
+
     # Accessors:
     def size(self):
         return len(self._tiles)
@@ -55,24 +76,69 @@ class Map:
                     joints.append( Joint( self.tile(i), self.tile(j), gi, gj ) )
         return joints
     
-    # Construction:
-    def addTile( self, aTile ):
-        self._tiles.append( aTile )
-        self._links.append( [] )
-        return len(self._tiles)
-
-    def addNewTile( self, aPosition ):
-        return self.addTile( self._TileGenerator(aPosition) )
-    
-    def connect( self, tileIdA, tileIdB):
-        iA= tileIdA-1
-        iB= tileIdB-1
-        tileA= self._tiles[iA]
-        tileB= self._tiles[iB]
-        gateA= tileA.findGateSegment( tileB.center() )
-        gateB= tileB.findGateSegment( tileA.center() )
-        if tileIdB not in self._links[iA] :
-            self._links[iA].append( (tileIdB, gateA, gateB) )
-        if tileIdA not in self._links[iB] :
-            self._links[iB].append( (tileIdA, gateB, gateA) )
+    # Generator:
+    def setSquareGrid( self, matrix, origine= Coord2(), scale= 1.0 ):
+        matrix.reverse()
+        demi= scale*0.5
+        lenght= scale*0.9
+        # Create tiles :
+        y= origine.y() + demi
+        for iLine in range( len( matrix ) ) :  
+            x= origine.x() + demi
+            for iCell in range( len( matrix[iLine] ) ) :
+                if matrix[iLine][iCell] > 0 :
+                    tileId= self.addTile( Tile().setSquare( Coord2(x, y), lenght ) )
+                    # Test Bottom:
+                    if iLine > 0 and matrix[iLine-1][iCell] != 0 :
+                        self.connect( matrix[iLine-1][iCell], tileId )
+                    # Test Left:
+                    if iCell > 0 and matrix[iLine][iCell-1] != 0 :
+                        self.connect( matrix[iLine][iCell-1], tileId )
+                    # record the new tileId.
+                    matrix[iLine][iCell]= tileId
+                # Increment
+                x+= scale
+            # Increment
+            y+= scale
         
+        return self
+    
+    def setHexaGrid( self, matrix, origine= Coord2(), scale= 1.0 ):
+        matrix.reverse()
+        demi= scale*0.5
+        stepX= scale
+        stepY= math.sin(math.pi/3) * scale
+        nbCell= len( matrix[0])
+        # Create tiles :
+        y= origine.y() + demi
+        for iLine in range( len( matrix ) ) :  
+            x= origine.x() + demi
+            if iLine%2 == 1 :
+                x+= demi
+            assert( nbCell == len( matrix[iLine] ) )
+            for iCell in range( len( matrix[iLine] ) ) :
+                if matrix[iLine][iCell] > 0 :
+                    # Create a new Tile
+                    tileId= self.addTile( Tile().setRegular( 6, Coord2(x, y), scale ) )
+                    # Test & connect Bottom 2.0:
+                    if iLine%2 == 0 :
+                        if iLine > 0 and iCell > 0 and matrix[iLine-1][iCell-1] != 0 :
+                            self.connect( matrix[iLine-1][iCell-1], tileId )
+                    # Test & connect Bottom 1:
+                    if iLine > 0 and matrix[iLine-1][iCell] != 0 :
+                        self.connect( matrix[iLine-1][iCell], tileId )
+                    # Test & connect Bottom 2.1:
+                    if iLine%2 == 1 :
+                        if iLine > 0 and iCell < (nbCell-1) and matrix[iLine-1][iCell+1] != 0 :
+                            self.connect( matrix[iLine-1][iCell+1], tileId )
+                    # Test & connect Left:
+                    if iCell > 0 and matrix[iLine][iCell-1] != 0 :
+                        self.connect( matrix[iLine][iCell-1], tileId )
+                    # record the new tileId.
+                    matrix[iLine][iCell]= tileId
+                # Increment
+                x+= stepX
+            # Increment
+            y+= stepY
+        
+        return self

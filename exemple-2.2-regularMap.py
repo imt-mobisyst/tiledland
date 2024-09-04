@@ -2,7 +2,7 @@
 import math
 
 #import src.tiledLand as tim
-import tiledLand as til
+import src.tiledLand as til
 import tiledLand.cutout.cairoView as timView
 
 import shapely
@@ -19,21 +19,21 @@ def main():
             [1,1,1,1,1,1,1,1,0,0],
             [1,1,0,0,0,1,0,1,0,0]
         ],
-        til.Coord2(1.0, 1.0), 1.0
+        til.Coord2(0.8, 1.0), 1.0
     )
 
-#    map2= til.Map().setHexaGrid(
-#        [
-#            [1,1,1,1,1,0,1,1,0,0],
-#             [1,0,1,1,1,0,1,1,1,1],
-#            [1,0,0,0,1,1,1,1,0,0],
-#             [1,1,1,1,1,1,1,1,0,0],
-#            [1,1,0,0,0,1,0,1,0,0]
-#        ],
-#        til.Coord2(13.0, 1.0), 1.0
-#    )
+    map2= til.Map().setHexaGrid(
+        [
+            [1,1,1,1,1,0,1,1,0,0],
+             [1,0,1,1,1,0,1,1,1,1],
+            [1,0,0,0,1,1,1,1,0,0],
+             [1,1,1,1,1,1,1,1,0,0],
+            [1,1,0,0,0,1,0,1,0,0]
+        ],
+        til.Coord2(12.8, 1.0), 1.0
+    )
 
-    game= Scenario( [map1] )
+    game= Scenario( [map1, map2] )
 
     # Start
     ihm.infiniteLoop( game.process )
