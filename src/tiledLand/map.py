@@ -6,12 +6,13 @@ from .geometry import Coord2
 
 class Map:
     # Initialization Destruction:
-    def __init__(self, diagonal= 1.0):
+    def __init__(self, tileCenters= [], edges= [], tileModel= Tile() ):
         # Dependancies:
         # Attributes:
-        self._range= diagonal/2.0
-        self._tiles= []
-        self._links= []
+        self._tiles= [ tileModel.copy().moveTo( coord ) for coord in tileCenters ]
+        self._links= [ [] for coord in tileCenters ]
+        for a, b in edges :
+            self.connect( a, b )
 
     def setTags( self, tags ):
         self._tags= tags

@@ -17,6 +17,10 @@ class Coord2 :
         self._x, self._y= t
         return self
 
+    # Deep Copy:
+    def copy(self):
+        return Coord2( self._x, self._y )
+    
     # Accessors:
     def dimention(self):
         return 2
@@ -121,3 +125,7 @@ class Segment :
         return (self._a != another._a) or (self._b != another._b)
 
     # Operators:
+
+    # Print
+    def __str__(self) -> str:
+        return f"{self._a}>{self._b}"

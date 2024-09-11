@@ -58,6 +58,13 @@ class Tile:
         self._center= center
         return self
     
+    # Deep Copy:
+    def copy(self):
+        deep= Tile( self._center )
+        deep._limitCoords= [ coord.copy() for coord in self._limitCoords ]
+        deep._tags= [ tag for tag in self._tags ]
+        return deep
+
     # Updates:
     def updateCenter(self):
         shape= shapely.Polygon( [ c.tuple() for c in self._limitCoords ] )
@@ -107,3 +114,13 @@ class Tile:
                 return iSegment
             iSegment+= 1
         return False
+    
+    # Modifier:
+    def move( self, transform ):
+        self._limitCoords= [ coord+transform for coord in self._limitCoords ]
+        self._center= self._center + transform
+        return self
+    
+    def moveTo( self, aCoordinate ):
+        transform= aCoordinate - self._center
+        return self.move( transform )

@@ -10,11 +10,12 @@ def main():
 
     up_x= math.cos( math.pi/3 )
     up_y= math.sin( math.pi/3 )
+
     map1= til.Map()
-    map1.addTile( til.Tile().setFromList( [(-1,7), (-3,7), (-3,9), (-1,9)] ) )        # 1
-    map1.addTile( til.Tile().setRegular( 6, til.Coord2(8, 8), 1 ) )           # 2
-    map1.addTile( til.Tile().setRegular( 6, til.Coord2(9, 8), 1 )  )          # 3
-    map1.addTile( til.Tile().setRegular( 6, til.Coord2(8+up_x, 8+up_y), 1 ) ) # 4
+    map1.addTile( til.Tile().setFromList( [(0.2,7), (1,7), (1,9), (0.2,9)] ) )        # 1
+    map1.addTile( til.Tile().setRegular( 6, til.Coord2(2, 8), 1 ) )           # 2
+    map1.addTile( til.Tile().setRegular( 6, til.Coord2(3, 8), 1 )  )          # 3
+    map1.addTile( til.Tile().setRegular( 6, til.Coord2(2+up_x, 8+up_y), 1 ) ) # 4
 
     map2= til.Map()
     map2.addTile( til.Tile().setFromList( [(3,1), (5,1), (5,3), (3,3)] ) )
@@ -24,7 +25,13 @@ def main():
     map2.connect( 1, 2 )
     map2.connect( 2, 3 )
 
-    game= Scenario( [map1, map2] )
+    map3= til.Map(
+        [til.Coord2(15, 8), til.Coord2(17, 8), til.Coord2(17, 5), til.Coord2(15, 5)],
+        [ (1,2), (2,3), (2,4), (4,1) ],
+        tileModel= til.Tile().setRegular( 12, til.Coord2(0.0, 0.0), 1 )
+    )
+
+    game= Scenario( [map1, map2, map3] )
 
     # Start
     ihm.infiniteLoop( game.process )
