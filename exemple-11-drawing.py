@@ -1,5 +1,5 @@
 #!env python3
-from tiledLand.geometry import Coord2
+from tiledLand.geometry import Coord2, Segment
 import tiledLand.interface as tili
 
 class Scenario :
@@ -8,7 +8,7 @@ class Scenario :
         self.p1= Coord2(4.5, -2.2)
         self.p2= Coord2(14.5, 5.2)
         self.p3= Coord2(-2.5, 6.2)
-        self.seg= [ Coord2(7.5, -3.2), Coord2(22.5, 12.2) ]
+        self.seg= Segment( Coord2(7.5, -3.2), Coord2(22.5, 12.2) )
         self.poly1= [ 
             Coord2(1, 2), Coord2(3, 4), Coord2(2, 6),
             Coord2(4, 8), Coord2(5, 5), Coord2(4, 0)
@@ -25,7 +25,9 @@ class Scenario :
         frame.tracePoint( self.p0 )
         frame.tracePoint( self.p1 )
         frame.traceLine( self.p1, self.p0 )
-        frame.traceLine( self.seg[0], self.seg[1] )
+        
+        frame.traceLine( self.seg.a(), self.seg.b() )
+
         frame.traceCircle( self.p1, 12.0 )
 
         frame.fillCircle( self.p2, 2.0 )
@@ -38,6 +40,8 @@ class Scenario :
             tili.Rgb(1.0, 0.5, 0.3),
             tili.Rgb(0.8, 0.1, 0.1)
         )
+
+        frame.tracePolygon( self.seg.copy().scale(1.1).inflate(4.0) )
 
         frame.drawFrameAxes()
         

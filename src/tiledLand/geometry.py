@@ -1,3 +1,4 @@
+import math
 
 class Coord2 :
     def __init__(self, x=0.0, y=0.0) -> None:
@@ -54,6 +55,29 @@ class Coord2 :
             self._y - another._y
         )
     
+    # Property:
+    def distance(self):
+        return math.sqrt( self.distanceSquare() )
+    
+    def distanceSquare(self):
+        return self._x*self._x + self._y*self._y
+
+    def normal(self):
+        factor= 1.0/self.distance()
+        return Coord2(
+            self._x*factor,
+            self._y*factor
+        )
+    
+    def orthonormal(self):
+        factor= 1.0/self.distance()
+        return Coord2(
+            -self._y*factor,
+            self._x*factor
+        )
+    
+    # Generator:
+
     # Transformation:
     def round( self, precision=1 ):
         return Coord2( round( self._x, precision ), round( self._y, precision ) )
@@ -97,26 +121,19 @@ class Segment :
     def b(self):
         return self._b
 
-    def tuple(self):
-        return (self._a, self._b)
+    def extremities(self):
+        return self._a, self._b
     
-    # Accessors:
-    def dimention(self):
-        assert( self._a.dimention() == self._b.dimention() )
-        return self._a.dimention()
-    
-    def a(self):
-        return self._a
-
-    def b(self):
-        return self._b
-
     def list(self):
-        return (self._a.tuple(), self._b.tuple())
+        return [self._a.tuple(), self._b.tuple()]
 
+    # Property:
     def middle(self):
         return (self._b - self._a).scale(0.5) + self._a
     
+    def vector(self):
+        return self._b - self._a
+
     # Comparison:
     def __eq__( self, another ):        
         return (self._a == another._a) and (self._b == another._b)
@@ -125,6 +142,27 @@ class Segment :
         return (self._a != another._a) or (self._b != another._b)
 
     # Operators:
+
+    # Transformation:
+    def scale( self, scalar ):
+        v= self.vector()
+        demi= v.distance() * scalar * 0.5
+        dir= v.normal().scale(demi)
+        middle= self.middle()
+        self._a= middle - dir
+        self._b= middle + dir
+        return self
+    
+    # Generators:
+    def copy(self):
+        return Segment( self._a.copy(), self._b.copy() )
+    
+    def inflate(self, thickness= 1.0):
+        delta= self.vector().orthonormal().scale(thickness/2)
+        return [
+            self.a()-delta, self.a()+delta,
+            self.b()+delta, self.b()-delta 
+        ]
 
     # Print
     def __str__(self) -> str:

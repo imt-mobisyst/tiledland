@@ -29,8 +29,8 @@ class Joint:
         )
 
     def shapeSegments(self):
-        a1, a2= self.tileA().segment( self._gateA ).tuple()
-        b1, b2= self.tileB().segment( self._gateB ).tuple()
+        a1, a2= self.tileA().segment( self._gateA ).extremities()
+        b1, b2= self.tileB().segment( self._gateB ).extremities()
         return [
             Segment(a1, a2),
             Segment(a2, b1),
@@ -39,10 +39,10 @@ class Joint:
         ]
 
     def frontiere(self):
-        a1, a2= self.tileA().segment( self._gateA ).tuple()
+        a1, a2= self.tileA().segment( self._gateA ).extremities()
         xa1, ya1= a1.tuple()
         xa2, ya2= a2.tuple()
-        b1, b2= self.tileB().segment( self._gateB ).tuple()
+        b1, b2= self.tileB().segment( self._gateB ).extremities()
         xb1, yb1= b1.tuple()
         xb2, yb2= b2.tuple()
         return Segment(

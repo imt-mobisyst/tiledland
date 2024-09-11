@@ -25,3 +25,40 @@ def test_Segment_init2():
     assert( seg.b().tuple() == (12.0,  1.302) )
 
     assert( seg.middle().round().tuple() == (17.9, -7.4) )
+
+def test_Segment_inflate():
+    seg= tlg.Segment(
+        tlg.Coord2(1.0, 1.0),
+        tlg.Coord2(10.0,  1.0)
+    )
+
+    assert( seg.vector() == tlg.Coord2(9.0, 0.0) )
+
+    assert( type(seg) == tlg.Segment )
+    rectangle= seg.inflate()
+    assert( len( rectangle ) == 4 )
+    assert( rectangle == [
+        tlg.Coord2(1.0, 0.5), tlg.Coord2(1.0, 1.5),
+        tlg.Coord2(10.0, 1.5), tlg.Coord2(10.0, 0.5)
+    ])
+
+    seg= tlg.Segment(
+        tlg.Coord2(1.0, 1.0),
+        tlg.Coord2(10.0,  10.0)
+    )
+
+    assert( seg.vector() == tlg.Coord2(9.0, 9.0) )
+    assert( seg.vector().normal().round(2) == tlg.Coord2(0.71, 0.71) )
+    assert( seg.vector().orthonormal().round(2) == tlg.Coord2(-0.71, 0.71) )
+
+    assert( type(seg) == tlg.Segment )
+    rectangle= seg.inflate()
+    assert( len( rectangle ) == 4 )
+
+    rectangle= [ coord.round(2) for coord in rectangle ]
+    print( ", ".join( [str(r) for r in rectangle] ) )
+
+    assert( rectangle == [
+        tlg.Coord2(1.35, 0.65), tlg.Coord2(0.65, 1.35),
+        tlg.Coord2(9.65, 10.35), tlg.Coord2(10.35, 9.65)
+    ])

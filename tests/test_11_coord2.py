@@ -42,4 +42,14 @@ def test_Coord2_comparison():
 
     a.set( 26.6, 3 )
     assert( a != b )
+
+def test_Coord2_normalization():
+    point= tlg.Coord2(3.0, 4.0)
+    
+    assert( point.distanceSquare() == 25.0 )
+    assert( point.distance() == 5.0 )
+
+    assert( point.normal().round(2) == tlg.Coord2(0.60, 0.80) )
+    assert( point.orthonormal().round(2) == tlg.Coord2(-0.80, 0.60) )
+
     
