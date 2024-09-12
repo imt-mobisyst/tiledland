@@ -278,7 +278,10 @@ class Interface() :
             for event in pygame.event.get() :
                 eventHandler( self, event )
             self.updateScreen()
-    
+
+    def signalHandler_stop(self, sig, frame):
+        self._loop= False
+
     def updateScreen(self):
         # Create PyGame surface from Cairo Surface
         width, height= self._surface.get_width(), self._surface.get_height()

@@ -51,3 +51,7 @@ class Joint:
         )
     
     # Construction:
+    
+    # Print:
+    def __str__(self):
+        return f"( {self._tileA._id}:{self._tileA._center} > {self._tileB._id}:{self._tileB._center} )"

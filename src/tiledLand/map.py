@@ -2,14 +2,17 @@ import math
 
 from .tile import Tile
 from .joint import Joint
-from .geometry import Coord2
+from .geometry import Coord2, Segment
 
 class Map:
     # Initialization Destruction:
     def __init__(self, tileCenters= [], edges= [], tileModel= Tile() ):
         # Dependancies:
         # Attributes:
-        self._tiles= [ tileModel.copy().moveTo( coord ) for coord in tileCenters ]
+        size= len(tileCenters)
+        self._tiles= [
+            tileModel.copy().setId(i).moveTo( coord )
+            for coord, i in zip( tileCenters, range(1,size+1) ) ]
         self._links= [ [] for coord in tileCenters ]
         for a, b in edges :
             self.connect( a, b )
@@ -17,12 +20,18 @@ class Map:
     def setTags( self, tags ):
         self._tags= tags
     
-    # Construction:
+    # Incremental Construction:
     def addTile( self, aTile ):
         self._tiles.append( aTile )
+        i= len(self._tiles)
+        self.tile(i).setId(i)
         self._links.append( [] )
-        return len(self._tiles)
-    
+        return i
+
+    def disconnectAll(self):
+        self._links= [ [] for t in self._tiles ]
+        return self
+
     def connect( self, tileIdA, tileIdB):
         iA= tileIdA-1
         iB= tileIdB-1
@@ -77,7 +86,7 @@ class Map:
                     joints.append( Joint( self.tile(i), self.tile(j), gi, gj ) )
         return joints
     
-    # Generator:
+    # Model Construction:
     def setSquareGrid( self, matrix, origine= Coord2(), scale= 1.0 ):
         matrix.reverse()
         demi= scale*0.5
@@ -142,4 +151,16 @@ class Map:
             # Increment
             y+= stepY
         
+        return self
+    
+    def setEdgeAsPath( self, thikness= 1.0, maxDistance=0 ):
+        joints= self.allJoints()
+        self.disconnectAll()
+        newEdge= []
+        for j in joints :
+            segment= Segment( j.tileA().center(), j.tileB().center() )
+            shape= segment.scale(0.5).inflate( thikness )
+            i= self.addTile( Tile().setFromCoordinates( shape ) )
+            self.connect( j.tileA().id(), i )
+            self.connect( j.tileB().id(), i )
         return self

@@ -5,8 +5,9 @@ from .geometry import Coord2, Segment
 class Tile:
 
     # Initialization Destruction:
-    def __init__( self, center= Coord2() ):
+    def __init__( self, center= Coord2(), id= 0 ):
         self._center= center
+        self._id= 0
         self._limitCoords= []
         self._tags= []
 
@@ -16,6 +17,10 @@ class Tile:
         return self
     
     # Construction:
+    def setId(self, i):
+        self._id= i
+        return self
+    
     def setFromCoordinates( self, coords ):
         self._limitCoords= list(coords)
         self.updateCenter()
@@ -75,6 +80,9 @@ class Tile:
     # Accessors:
     def center(self):
         return self._center
+    
+    def id(self):
+        return self._id
     
     def size(self):
         return len(self._limitCoords)

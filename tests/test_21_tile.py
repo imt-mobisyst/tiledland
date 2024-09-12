@@ -12,6 +12,7 @@ def test_Tile_init():
     assert( type(tile) == til.Tile )
     assert( tile.size() == 0 )
     assert( tile.segments() == [] )
+    assert( tile.id()  == 0 )
 
 def test_Tile_init2():
     tile= til.Tile().setFromCoordinates( [ Coord2(1, 2), Coord2(2, 6), Coord2(4, 5), Coord2(3, 0) ] )
