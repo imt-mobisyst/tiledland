@@ -13,6 +13,7 @@ def test_Tile_init():
     assert( tile.size() == 0 )
     assert( tile.segments() == [] )
     assert( tile.id()  == 0 )
+    assert( tile.tag()  == 0 )
 
 def test_Tile_init2():
     tile= til.Tile().setFromCoordinates( [ Coord2(1, 2), Coord2(2, 6), Coord2(4, 5), Coord2(3, 0) ] )
@@ -28,7 +29,8 @@ def test_Tile_init2():
     assert( tile.segmentTags() == [ 0, 0, 0, 0 ] )
 
 def test_Tile_segement():
-    tile= til.Tile().setFromCoordinates( [Coord2(1, 2), Coord2(2, 6), Coord2(4, 5), Coord2(3, 0)] )
+    tile= til.Tile( tag= 1 ).setFromCoordinates( [Coord2(1, 2), Coord2(2, 6), Coord2(4, 5), Coord2(3, 0)] )
+    assert( tile.tag()  == 1 )
     assert( tile.size() == 4 )
     assert(
         tile.segment(0) ==  Segment( Coord2(1, 2), Coord2(2, 6) )
@@ -42,23 +44,29 @@ def test_Tile_segement():
     assert(
         tile.segment(3) == Segment( Coord2(3, 0), Coord2(1, 2) )
     )
+    assert( tile.segmentTags() == [1, 1, 1, 1] )
 
 def test_Tile_copy():
-    model= til.Tile().setFromCoordinates( [Coord2(1, 2), Coord2(2, 6), Coord2(4, 5), Coord2(3, 0)] )
-    tile= model.copy()
+    model= til.Tile( tag= 2 ).setFromCoordinates( [Coord2(1, 2), Coord2(2, 6), Coord2(4, 5), Coord2(3, 0)] )
+    tile= model.copy().move( Coord2(10.0, 0.0) )
 
     assert( tile.size() == 4 )
+    assert( tile.tag() == 2 )
+    
+    print( [ s.a().tuple() for s in tile.segments() ] )
+    assert( tile.segmentTags() == [2, 2, 2, 2] )
+
     assert(
-        tile.segment(0) ==  Segment( Coord2(1, 2), Coord2(2, 6) )
+        tile.segment(0) ==  Segment( Coord2(11.0, 2.0), Coord2(12.0, 6.0) )
     )
     assert(
-        tile.segment(1) ==  Segment( Coord2(2, 6), Coord2(4, 5) )
+        tile.segment(1) ==  Segment( Coord2(12.0, 6.0), Coord2(14.0, 5.0) )
     )
     assert(
-        tile.segment(2) ==  Segment( Coord2(4, 5), Coord2(3, 0) )
+        tile.segment(2) ==  Segment( Coord2(14.0, 5.0), Coord2(13.0, 0.0) )
     )
     assert(
-        tile.segment(3) == Segment( Coord2(3, 0), Coord2(1, 2) )
+        tile.segment(3) == Segment( Coord2(13.0, 0.0), Coord2(11.0, 2.0) )
     )
 
 def test_Tile_modifier():

@@ -5,15 +5,27 @@ from .geometry import Coord2, Segment
 class Tile:
 
     # Initialization Destruction:
-    def __init__( self, center= Coord2(), id= 0 ):
+    def __init__( self, center= Coord2(), id= 0, tag= 0):
         self._center= center
         self._id= 0
+        self._tag= tag
         self._limitCoords= []
-        self._tags= []
+        self._limitTags= []
 
-    def setTags( self, tags ):
+    # Deep Copy:
+    def copy(self):
+        deep= Tile( self._center, self._id, self._tag )
+        deep._limitCoords= [ coord.copy() for coord in self._limitCoords ]
+        deep._limitTags= [ tag for tag in self._limitTags ]
+        return deep
+
+    def setSegementTags( self, tags ):
         assert( len(tags) == self.size() )
-        self._tags= tags
+        self._limitTags= tags
+        return self
+    
+    def setTag( self, tag ):
+        self._tag= tag
         return self
     
     # Construction:
@@ -24,7 +36,7 @@ class Tile:
     def setFromCoordinates( self, coords ):
         self._limitCoords= list(coords)
         self.updateCenter()
-        self._tags= [ 0 for c in self._limitCoords ]
+        self._limitTags= [ self.tag() for c in self._limitCoords ]
         return self
 
     def setFromList( self, l ):
@@ -41,7 +53,7 @@ class Tile:
             Coord2( center._x+demi, center._y-demi ),
             Coord2( center._x-demi, center._y-demi )
         ]
-        self._tags= [0, 0, 0, 0]
+        self._limitTags= [ self.tag() for i in range(4) ]
         self._center= center
         return self
 
@@ -49,7 +61,7 @@ class Tile:
         radius= size*0.5
         x, y= center.tuple()
         self._limitCoords= []
-        self._tags= []
+        self._limitTags= []
         delta= math.pi/(numberOfVertex/2)
         angle= math.pi  - delta/2
         delta= math.pi/(numberOfVertex/2)
@@ -59,16 +71,11 @@ class Tile:
                 y+math.sin(angle)*radius
             ) )
             angle+= -delta
-            self._tags.append( 0 )
+            self._limitTags.append( self.tag() )
         self._center= center
         return self
     
-    # Deep Copy:
-    def copy(self):
-        deep= Tile( self._center )
-        deep._limitCoords= [ coord.copy() for coord in self._limitCoords ]
-        deep._tags= [ tag for tag in self._tags ]
-        return deep
+
 
     # Updates:
     def updateCenter(self):
@@ -83,6 +90,9 @@ class Tile:
     
     def id(self):
         return self._id
+    
+    def tag(self):
+        return self._tag
     
     def size(self):
         return len(self._limitCoords)
@@ -108,7 +118,7 @@ class Tile:
         return Segment( self.segmentACoords()[i], self.segmentBCoords()[i] )
     
     def segmentTags(self):
-        return self._tags
+        return self._limitTags
 
     def findGateSegment( self, aTargetCoordinate ):
         lineOut= shapely.LineString( [self.center().tuple(), aTargetCoordinate.tuple()] )

@@ -10,10 +10,9 @@ from src.tiledLand.geometry import Coord2
 def test_map_initGraph():
     map= Map(
         [ Coord2(12.5, 3.4), Coord2(14.5, 2.4), Coord2(10.5, 0.8) ],
-        tileModel= Tile().setRegular( 12, Coord2(0.0, 0.0), 1 )
+        tileModel= Tile().setRegular( 12, Coord2(0.0, 0.0), 1.0 )
     )
     assert( map.size() == 3 )
-
 
     assert( map.tile(1).id()  == 1 )
     assert( map.tile(2).id()  == 2 )

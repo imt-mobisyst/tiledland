@@ -2,8 +2,8 @@ import math
 
 class Coord2 :
     def __init__(self, x=0.0, y=0.0) -> None:
-        self._x= x
-        self._y= y
+        self._x= float(x)
+        self._y= float(y)
 
     # Construction:
     def set(self, x, y):

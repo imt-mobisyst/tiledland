@@ -7,53 +7,15 @@ class Rgb:
         self.g= g
         self.b= b
 
-class colorPanel:
-    background= Rgb( 0.90, 0.8, 0.40)
-    backgroundBis= Rgb( 0.8, 0.70, 0.30)
-    draw=  Rgb( 0.8,  0.10,  0.10)
-    alt1=  Rgb( 0.10, 0.8,  0.10)
-    alt2=  Rgb( 0.10,  0.10, 0.8)
-    grey=  Rgb(0.40, 0.40, 0.40)
-    colors= [ backgroundBis, draw, alt1, alt2, grey ]
-
-class Interface() :
-
-    #Constructor:
-    def __init__(self, width=1200, height=800):
+class Pencil:
+    def __init__(self, width=1200, height=800, title='Tiled-Land'):
         # Initialize pyGame:
         pygame.init()
         self._screen= pygame.display.set_mode( (width, height), pygame.RESIZABLE )
-        pygame.display.set_caption('Poly-Map')
-        # Frame parameter:
-        self._dwidth= width/2
-        self._dheight= height/2
-        # Initialize cartesian basis:
-        self.initializeBasis(
-            Coord2( 10.0, 5.0),
-            40.0
-        )
-        # Initialize colors:
-        self.initializeColor(
-            [],  #background
-            [],  #draw
-            []   #fill
-        )
-        # Initialize engine:
-        self._loop= False
+        pygame.display.set_caption(title)
 
-    def initializeBasis(self, center, scale):
-        self._center= Coord2( 10.0, 5.0) # the center of the screen look at (10.0, 5.0)
-        self._scale= 40.0 # 1 meter = 40 pixel
-        return self
-    
-    def initializeColor( self, backgroundColors, drawColors, fillColors ):
-        self._bgColor= backgroundColors
-        self._drawColors= drawColors
-        self._fillColors= fillColors
-        return self
-    
     # Drawing primitives (level screen):
-    def initBackground(self, color):
+    def initBackground(self, color ):
         width, height= self._screen.get_width(), self._screen.get_height()
         self._surface= cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
         ctx = cairo.Context(self._surface)
@@ -68,8 +30,10 @@ class Interface() :
         ctx.set_line_width(8)
         ctx.set_source_rgba(0.0, 0.0, 0.0, 0.4)
         ctx.stroke()
-
-    def screenTracePoint( self, pixx, pixy, color ):
+        return width, height
+    
+    # Drawing primitives (level screen):
+    def tracePoint( self, pixx, pixy, color ):
         ctx = cairo.Context(self._surface)
         #ctx.set_line_width(10)
         pixRadius= 2 #self._epsilon * self._scale
@@ -77,7 +41,7 @@ class Interface() :
         ctx.set_source_rgb( color.r, color.g, color.b )
         ctx.fill()
 
-    def screenTraceLine( self, pixxA, pixyA, pixxB, pixyB, color ):
+    def traceLine( self, pixxA, pixyA, pixxB, pixyB, color ):
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(2)
         ctx.move_to(pixxA, pixyA)
@@ -85,21 +49,21 @@ class Interface() :
         ctx.set_source_rgb( color.r, color.g, color.b )
         ctx.stroke()
 
-    def screenTraceCircle( self, pixx, pixy, radius, color ):
+    def traceCircle( self, pixx, pixy, radius, color ):
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(2)
         ctx.arc(pixx, pixy, radius, 0, 2.0*math.pi)
         ctx.set_source_rgb( color.r, color.g, color.b )
         ctx.stroke()
 
-    def screenFillCircle( self, pixx, pixy, radius, color ):
+    def fillCircle( self, pixx, pixy, radius, color ):
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(2)
         ctx.arc(pixx, pixy, radius, 0, 2.0*math.pi)
         ctx.set_source_rgb( color.r, color.g, color.b )
         ctx.fill()
     
-    def screenDrawCircle( self, pixx, pixy, radius, colorFill, colorTrace ):
+    def drawCircle( self, pixx, pixy, radius, colorFill, colorTrace ):
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(2)
         ctx.arc(pixx, pixy, radius, 0, 2.0*math.pi)
@@ -108,7 +72,7 @@ class Interface() :
         ctx.set_source_rgb( colorTrace.r, colorTrace.g, colorTrace.b )
         ctx.stroke()
     
-    def screenTracePolygon( self, pixxs, pixys, color ):
+    def tracePolygon( self, pixxs, pixys, color ):
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(2)
         ctx.move_to( pixxs[0], pixys[0] )
@@ -118,7 +82,7 @@ class Interface() :
         ctx.set_source_rgb( color.r, color.g, color.b )
         ctx.stroke()
     
-    def screenFillPolygon( self, pixxs, pixys, color ):
+    def fillPolygon( self, pixxs, pixys, color ):
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(2)
         ctx.move_to( pixxs[0], pixys[0] )
@@ -128,7 +92,7 @@ class Interface() :
         ctx.set_source_rgb( color.r, color.g, color.b )
         ctx.fill()
     
-    def screenDrawPolygon( self, pixxs, pixys, colorFill, colorTrace ):
+    def drawPolygon( self, pixxs, pixys, colorFill, colorTrace ):
         ctx = cairo.Context(self._surface)
         ctx.set_line_width(2)
         ctx.move_to( pixxs[0], pixys[0] )
@@ -139,6 +103,53 @@ class Interface() :
         ctx.fill_preserve()
         ctx.set_source_rgb( colorTrace.r, colorTrace.g, colorTrace.b )
         ctx.stroke()
+
+    def updateScreen(self):
+        # Create PyGame surface from Cairo Surface
+        width, height= self._surface.get_width(), self._surface.get_height()
+        image = pygame.image.frombuffer(
+            self._surface.get_data(), # Cairo seems to works on a BGRA suface...
+            (width, height), "BGRA"
+        )
+
+        # Tranfer to Screen
+        self._screen.blit(image, (0, 0))
+        pygame.display.flip()
+        return width, height
+    
+class Interface:
+
+    #Constructor:
+    def __init__(self,
+                 width=1200, height=800,
+                 traceColors= [ Rgb( 0.8,  0.1,  0.1), Rgb( 0.1,  0.8,  0.1), Rgb( 0.1,  0.1,  0.8), Rgb(0.40, 0.40, 0.40), Rgb( 0.8, 0.70, 0.30) ],
+                 fillColors= [ Rgb( 0.9,  0.7,  0.5), Rgb( 0.8,  0.9,  0.5), Rgb( 0.8,  0.7,  0.9), Rgb(0.80, 0.80, 0.80), Rgb( 0.90, 0.8, 0.40) ] ):
+
+        #  Initialize Pencil:
+        self._pencil= Pencil()
+        # Initialize Color panels:
+        self._traceColors= traceColors
+        self._fillColors= fillColors
+        # Initialize Frame :
+        self._dwidth= width/2
+        self._dheight= height/2
+        self.initializeBasis(
+            Coord2( 10.0, 5.0),
+            40.0
+        )
+        # Initialize engine:
+        self._loop= False
+
+    def initializeBasis(self, center, scale):
+        self._center= Coord2( 10.0, 5.0) # the center of the screen look at (10.0, 5.0)
+        self._scale= 40.0 # 1 meter = 40 pixel
+        return self
+    
+    def initializeColorPanels( self, traceColors, fillColors ):
+        self._traceColors= traceColors
+        self._fillColors= fillColors
+        return self
+    
 
     # Transformation World <-> Screen
     def toDrawing(self, x, y ):
@@ -156,7 +167,7 @@ class Interface() :
         return 0, 0
 
     # Drawing primitives (level basis):
-    def drawFrameGrid( self, step= 10.0, color= colorPanel.backgroundBis ):
+    def drawFrameGrid( self, step= 10.0 ):
         pixX, pixY= self.toDrawing( 0, 0 )
         pixStep= step*self._scale
 
@@ -171,10 +182,10 @@ class Interface() :
 
         # Vertical
         for i in range( (int)(width/pixStep)+1 ) :
-            self.screenTraceLine( pixX+(pixStep*i), 10, pixX+(pixStep*i), height-10, color )
+            self._pencil.traceLine( pixX+(pixStep*i), 10, pixX+(pixStep*i), height-10, self._traceColors[-1] )
         # Horizontal
         for i in range( (int)(height/pixStep)+1 ) :
-            self.screenTraceLine( 10, pixY+(pixStep*i), width-10, pixY+(pixStep*i), color )
+            self._pencil.traceLine( 10, pixY+(pixStep*i), width-10, pixY+(pixStep*i), self._traceColors[-1] )
         return self
 
     def drawFrameAxes( self ):
@@ -184,78 +195,88 @@ class Interface() :
         self.tracePoint( zero, Rgb(0.1, 0.1, 0.8) )
 
     # Drawing primitives (level geometry):
-    def tracePoint( self, point, color= colorPanel.draw ):
+    def tracePoint( self, point, color= Rgb(0.2,0.2,0.2) ):
         pixx, pixy= self.toDrawing( point.x(), point.y() )
-        self.screenTracePoint( pixx, pixy, color )
+        self._pencil.tracePoint( pixx, pixy, color )
 
-    def traceLine( self, pA, pB, color= colorPanel.draw ):
+    def traceLine( self, pA, pB, color= Rgb(0.2,0.2,0.2) ):
         pixxA, pixyA= self.toDrawing( pA.x(), pA.y() )
         pixxB, pixyB= self.toDrawing( pB.x(), pB.y() )
-        self.screenTraceLine( pixxA, pixyA, pixxB, pixyB, color)
+        self._pencil.traceLine( pixxA, pixyA, pixxB, pixyB, color)
 
-    def traceCircle( self, point, radius, color= colorPanel.draw ):
+    def traceCircle( self, point, radius, color= Rgb(0.2,0.2,0.2) ):
         pixx, pixy= self.toDrawing(point.x(), point.y())
-        self.screenTraceCircle( pixx, pixy, radius*self._scale, color)
+        self._pencil.traceCircle( pixx, pixy, radius*self._scale, color)
 
-    def fillCircle( self, point, radius, color= colorPanel.backgroundBis ):
+    def fillCircle( self, point, radius, color= Rgb(0.8,0.8,0.8) ):
         pixx, pixy= self.toDrawing(point.x(), point.y())
-        self.screenFillCircle( pixx, pixy, radius*self._scale, color)
+        self._pencil.fillCircle( pixx, pixy, radius*self._scale, color)
 
-    def drawCircle( self, point, radius, colorFill= colorPanel.backgroundBis, colorTrace=colorPanel.draw ):
+    def drawCircle( self, point, radius, colorFill= Rgb(0.8,0.8,0.8), colorTrace=Rgb(0.2,0.2,0.2) ):
         pixx, pixy= self.toDrawing(point.x(), point.y())
-        self.screenDrawCircle( pixx, pixy, radius*self._scale, colorFill, colorTrace)
+        self._pencil.drawCircle( pixx, pixy, radius*self._scale, colorFill, colorTrace)
 
-    def tracePolygon( self, coords, color= colorPanel.draw ):
-        self.screenTracePolygon(
+    def tracePolygon( self, coords, color= Rgb(0.2,0.2,0.2) ):
+        self._pencil.tracePolygon(
             [ self.xToDrawing( c.x() ) for c in coords ],
             [ self.yToDrawing( c.y() ) for c in coords ],
             color
         )
 
-    def fillPolygon( self, coords, color= colorPanel.backgroundBis ):
-        self.screenFillPolygon(
+    def fillPolygon( self, coords, color= Rgb(0.8,0.8,0.8) ):
+        self._pencil.fillPolygon(
             [ self.xToDrawing( c.x() ) for c in coords ],
             [ self.yToDrawing( c.y() ) for c in coords ],
             color
         )
 
-    def drawPolygon( self, coords, colorFill= colorPanel.backgroundBis, colorTrace= colorPanel.draw ):
-        self.screenDrawPolygon(
+    def drawPolygon( self, coords, colorFill= Rgb(0.8,0.8,0.8), colorTrace= Rgb(0.2,0.2,0.2) ):
+        self._pencil.drawPolygon(
             [ self.xToDrawing( c.x() ) for c in coords ],
             [ self.yToDrawing( c.y() ) for c in coords ],
             colorFill, colorTrace
         )
 
     # Drawing primitives (level tiled-land):
-    def drawTile( self, aTile, colors= colorPanel.colors ):
-        maxTag= len( colors )-1
+    def drawTile( self, aTile ):
+        # Local parameters:
+        maxTag= min( len( self._traceColors ), len( self._fillColors ) )-1
         center= aTile.center()
-        for seg, tag in zip( aTile.segments(), aTile.segmentTags() ) :
-            color= colors[ min( tag, maxTag) ]
-            self.traceLine( seg.a(), seg.b(), color )
-        self.tracePoint( center, colors[0] )
+        segments= aTile.segments()
+        # fill shape:
+        if len(segments) > 0 :
+            self.fillPolygon(
+                [ seg.a() for seg in segments ],
+                self._fillColors[ aTile.tag()%(maxTag+1) ]
+            )
+        # trace shape:
+        for seg, tag in zip( segments, aTile.segmentTags() ) :
+            segmentColor= self._traceColors[ min( tag, maxTag) ]
+            self.traceLine( seg.a(), seg.b(), segmentColor )
+        # central point:
+        self.tracePoint( center, self._traceColors[ aTile.tag()%(maxTag+1) ] )
 
-    def drawJoint( self, aJoint, color= colorPanel.backgroundBis ):
+    def drawJoint( self, aJoint ):
         gateA, gateB= aJoint.gates()
-        self.traceLine( gateA.middle(), gateB.middle(), color )
+        self.traceLine( gateA.middle(), gateB.middle(), self._traceColors[-1] )
 
-    def drawJointShape( self, aJoint, color= colorPanel.backgroundBis ):
+    def drawJointShape( self, aJoint ):
         for seg in aJoint.shapeSegments() :
-            self.traceLine( seg.a(), seg.b(), color )
+            self.traceLine( seg.a(), seg.b(), self._traceColors[-1] )
         front= aJoint.frontiere()
-        self.traceLine( front.a(), front.b(), color )
+        self.traceLine( front.a(), front.b(), self._traceColors[-1] )
 
-    def drawMap( self, aMap, colors= colorPanel.colors ):
+    def drawMap( self, aMap ):
         for tile in aMap.tiles() :
-            self.drawTile( tile, colors )
+            self.drawTile( tile )
         for joint in aMap.allJoints() :
             self.drawJoint( joint )
         
-    def drawBody(self, aBody, aColor= colorPanel.draw):
+    def drawBody( self, aBody, aColor= Rgb(0.2,0.2,0.2) ):
         pixx, pixy= self.toDrawing( aBody.position.x(), aBody.position.y() )
         pixRadius= aBody.radius * self._scale
-        self.screenTraceCircle( pixx, pixy, pixRadius, aColor )
-        self.screenTraceLine( 
+        self._pencil.traceCircle( pixx, pixy, pixRadius, aColor )
+        self._pencil.traceLine( 
             pixx, pixy,
             pixx+(math.cos(aBody.orientation))*pixRadius,
             pixy+(-math.sin(aBody.orientation))*pixRadius,
@@ -273,23 +294,13 @@ class Interface() :
     def infiniteLoop(self, process= process_void, eventHandler= eventHandler_basic ):
         self._loop= True
         while self._loop :
-            self.initBackground( colorPanel.background )
+            self._pencil.initBackground( self._fillColors[-1] )
             self._loop= process( self )
             for event in pygame.event.get() :
                 eventHandler( self, event )
-            self.updateScreen()
+            self._pencil.updateScreen()
 
     def signalHandler_stop(self, sig, frame):
         self._loop= False
 
-    def updateScreen(self):
-        # Create PyGame surface from Cairo Surface
-        width, height= self._surface.get_width(), self._surface.get_height()
-        image = pygame.image.frombuffer(
-            self._surface.get_data(), # Cairo seems to works on a BGRA suface...
-            (width, height), "BGRA"
-        )
 
-        # Tranfer to Screen
-        self._screen.blit(image, (0, 0))
-        pygame.display.flip()

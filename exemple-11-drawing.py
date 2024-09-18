@@ -3,6 +3,7 @@ from tiledLand.geometry import Coord2, Segment
 import tiledLand.interface as tili
 
 class Scenario :
+    
     def __init__(self):
         self.p0= Coord2()
         self.p1= Coord2(4.5, -2.2)
@@ -21,6 +22,7 @@ class Scenario :
             Coord2(-1, 2), Coord2(-2, -3),
             Coord2(-5, -2), Coord2(-4, 0)
         ]
+    
     def process( self, frame ):
         frame.tracePoint( self.p0 )
         frame.tracePoint( self.p1 )
