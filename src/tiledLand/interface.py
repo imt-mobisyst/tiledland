@@ -8,16 +8,14 @@ class Rgb:
         self.b= b
 
 class Pencil:
-    def __init__(self, width=1200, height=800, title='Tiled-Land'):
-        # Initialize pyGame:
-        pygame.init()
-        self._screen= pygame.display.set_mode( (width, height), pygame.RESIZABLE )
-        pygame.display.set_caption(title)
 
+    def initializeSurface(self):
+        self._surface= cairo.SVGSurface("output.svg", 800, 600)
+        return 800, 600
+    
     # Drawing primitives (level screen):
     def initBackground(self, color ):
-        width, height= self._screen.get_width(), self._screen.get_height()
-        self._surface= cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+        width, height= self.initializeSurface()
         ctx = cairo.Context(self._surface)
         ctx.move_to(0, 0)
         ctx.line_to(0, height)
@@ -104,7 +102,23 @@ class Pencil:
         ctx.set_source_rgb( colorTrace.r, colorTrace.g, colorTrace.b )
         ctx.stroke()
 
-    def updateScreen(self):
+    def update(self):
+        pass
+    
+class PencilPygame(Pencil):
+    def __init__(self, width=1200, height=800, title='Tiled-Land'):
+        super().__init__()
+        # Initialize pyGame:
+        pygame.init()
+        self._screen= pygame.display.set_mode( (width, height), pygame.RESIZABLE )
+        pygame.display.set_caption(title)
+
+    def initializeSurface(self):
+        width, height= self._screen.get_width(), self._screen.get_height()
+        self._surface= cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+        return width, height
+
+    def update(self):
         # Create PyGame surface from Cairo Surface
         width, height= self._surface.get_width(), self._surface.get_height()
         image = pygame.image.frombuffer(
@@ -116,7 +130,7 @@ class Pencil:
         self._screen.blit(image, (0, 0))
         pygame.display.flip()
         return width, height
-    
+
 class Interface:
 
     #Constructor:
@@ -150,7 +164,6 @@ class Interface:
         self._fillColors= fillColors
         return self
     
-
     # Transformation World <-> Screen
     def toDrawing(self, x, y ):
         dx= (x-self._center._x)*self._scale
@@ -287,20 +300,38 @@ class Interface:
     def process_void(frame):
         return True
 
-    def eventHandler_basic(self, event):
-        if event.type == pygame.QUIT:
-            self._loop= False
+    def controlManadger_basic(self):
+        self._loop= False
 
-    def infiniteLoop(self, process= process_void, eventHandler= eventHandler_basic ):
+    def infiniteLoop(self, process= process_void, controlManadger= controlManadger_basic ):
         self._loop= True
         while self._loop :
             self._pencil.initBackground( self._fillColors[-1] )
             self._loop= process( self )
-            for event in pygame.event.get() :
-                eventHandler( self, event )
-            self._pencil.updateScreen()
+            controlManadger(self)
+            self._pencil.update()
 
     def signalHandler_stop(self, sig, frame):
         self._loop= False
 
+class InterfacePygame(Interface):
 
+    #Constructor:
+    def __init__(self,
+                 width=1200, height=800,
+                 traceColors= [ Rgb( 0.8,  0.1,  0.1), Rgb( 0.1,  0.8,  0.1), Rgb( 0.1,  0.1,  0.8), Rgb(0.40, 0.40, 0.40), Rgb( 0.8, 0.70, 0.30) ],
+                 fillColors= [ Rgb( 0.9,  0.7,  0.5), Rgb( 0.8,  0.9,  0.5), Rgb( 0.8,  0.7,  0.9), Rgb(0.80, 0.80, 0.80), Rgb( 0.90, 0.8, 0.40) ] ):
+        super().__init__(width, height, traceColors, fillColors)
+        #  Initialize Pencil:
+        self._pencil= PencilPygame()
+    
+    def process_void(self):
+        pass
+    
+    def controlManadger_pygame(self):
+        for event in pygame.event.get() :
+            if event.type == pygame.QUIT:
+                self._loop= False
+
+    def infiniteLoop(self, process= process_void, controlManadger= controlManadger_pygame ):
+        return super().infiniteLoop(process, controlManadger)

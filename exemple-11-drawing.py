@@ -51,7 +51,7 @@ class Scenario :
 
 def main():
     # Set-up an IHM
-    ihm= tili.Interface()
+    ihm= tili.InterfacePygame()
     game= Scenario()
 
     # Start
