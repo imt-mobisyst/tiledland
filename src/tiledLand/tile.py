@@ -74,8 +74,6 @@ class Tile:
             self._limitTags.append( self.tag() )
         self._center= center
         return self
-    
-
 
     # Updates:
     def updateCenter(self):
