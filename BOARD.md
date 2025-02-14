@@ -1,23 +1,28 @@
-# Board:
+# Board V0.1:
 
-## Integrated Color Panel.
+## Get Tiledland from Hackagames.tiled
 
-- Create a default panel with a Color class as a attribute of Frame.
-Make it easly redefinable.
-- Redefined Tile and Joint Drawing: DrawTile: Trace + Fill...
+- [x] Initialize with hackagames.tiled
+- [x] Initialize artist rendering
+- [ ] New Structure: core (Scene, Tiles and Agents), geometry and artist.
+- [ ] Remove dependancies to hacka.py (But test hacka.py compatibility)
 
-## Particles:
+## Scene, Tiles and Agents :
 
-- Center, radius, ...
+- [ ] Agents: BasicAgents with Center, Bearing and Shape
+- [ ] Scene as collection of: Shapes Tiles and Agents (based on an agent Type) 
+- [ ] Tiles as collection of: Shapes and Tiles
 
-## Automatic Tile:
+## Simple, but strong and independant plan geometry
 
-- Shape update with a radius.
-- Segment automatic tag.
-
+- [ ] Shape min/max radius, and collision.
+- [ ] Shape update with a radius.
+- [ ] Segment automatic tag.
+- [ ] get a tiles from a position (in max radius, and closest)
 
 ## Agent Based Model:
 
-- 
-- Agent: provide desired action in a context (i.e. )
-- Tile: Tic
+Or not ?..
+
+- [ ] Step engine, also in a way compatible to hackagames
+ 

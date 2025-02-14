@@ -1,58 +1,12 @@
 import math
-from hacka.py import pod
+from .float2 import Float2
 
-class Float2():
-    # Initialization Destruction:
-    def __init__( self, x= 0.0, y=0.0 ):
-        self._x= x
-        self._y= y
-
-    # Accessors
-    def x(self):
-        return self._x
-    
-    def y(self):
-        return self._y
-    
-    def tuple(self): 
-        return self._x, self._y
-    
-    # Construction
-    def setx(self, value):
-        self._x= value
-        return self
-    
-    def sety(self, value):
-        self._y= value
-        return self
-
-    def set( self, x, y ):
-        return self.setx(x).sety(y)
-    
-    def round(self, precision):
-        self._x= round( self._x, precision )
-        self._y= round( self._y, precision )
-
-    # Operator: 
-    def __add__(self, another):
-        return Float2( self._x+another._x,  self._y+another._y )
-
-    def __sub__(self, another):
-        return Float2( self._x-another._x,  self._y-another._y )
-
-    #Comparison:
-
-    def distance(self, another):
-        delta= another - self
-        dx, dy = delta.tuple()
-        return math.sqrt( dx*dx + dy*dy )
-    
-class Shape(pod.PodInterface):
+class Shape():
 
     # Initialization Destruction:
-    def __init__( self, matter= 0, size= 1.0 ):
-        self._matter= matter
+    def __init__( self, size= 1.0, matter= 0 ):
         self.setShapeSquare( size )
+        self._matter= matter
 
     # Accessor:
     def points(self):
@@ -133,21 +87,26 @@ class Shape(pod.PodInterface):
         return self.str()
     
     # Pod interface:
-    def asPod(self, family="Shape"):
-        tilePod= pod.Pod(
-            family,
-            "",
-            [self.matter()],
-            self.pointsAsList()
-        )
-        return tilePod
+        # Pod interface: 
+    def wordAttributes(self):
+        return ["Shape"]
     
-    def fromPod(self, aPod):
-        # Convert flags:
-        self._matter= aPod.flag(1)
-        # Convert Values:
-        vals= aPod.values()
-        xs= [ vals[i] for i in range( 0, len(vals), 2 ) ]
-        ys= [ vals[i] for i in range( 1, len(vals), 2 ) ]
-        self._points= [ Float2(x, y) for x, y in zip(xs, ys) ]
-        return self
+    def intAttributes(self):
+        return [self.matter()]
+    
+    def floatAttributes(self):
+        l= []
+        for p in self._points:
+            l+= [p.x(), p.y()]
+        return l
+    
+    def children(self):
+        return []
+    
+    def initializeFrom( self, aPod ):
+        values= aPod.floatAttributes()
+        self._points= [
+            Float2(x, y)
+            for x, y in zip( values[::2], values[1::2] )
+        ]
+        self._matter= aPod.intAttributes()[0]

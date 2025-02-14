@@ -2,7 +2,6 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from hacka.py.pod import Pod
 from src.tiledland import Tile, Scene 
 
 # ------------------------------------------------------------------------ #
@@ -58,11 +57,10 @@ def test_Scene_construction():
     assert( idScene == id(scene) )
     assert scene.edges() == [ (1, 1), (1, 3), (2, 1), (2, 2), (3, 2) ]
 
-
 def test_Scene_str():
     scene= Scene().initializeLine(3)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
-    scene.tile(2).append( Pod('Piece', 'dragon', [10, 3], [22.0]) )
+    #scene.tile(2).append( Pod('Piece', 'dragon', [10, 3], [22.0]) )
 
     print( f">>> {scene}." )
 

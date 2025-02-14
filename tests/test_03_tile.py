@@ -79,30 +79,3 @@ def test_Tile_str():
     tile.setMatter(2).connectAll( [1, 2, 3] )
     print(f">>> {tile}")
     assert str(tile) == "Tile-8/2 center: (18.5, 4.07) adjs: [1, 2, 3] pieces(0)"
-
-def test_Tile_pod():
-    tile= Tile( 3, 0, Float2(1.0, 2.0), 2.0 )
-    tile._adjacencies= [1, 2, 4]
-    print( tile.envelope() )
-    assert tile.envelope() == [(0.0, 3.0), (2.0, 3.0), (2.0, 1.0), (0.0, 1.0)]    
-    
-    pod= tile.asPod()
-    print(f">>> {pod}")
-    
-    assert str(pod) == "Tile: [3, 0, 1, 2, 4] [1.0, 2.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0]"
-    
-    tileBis= Tile().fromPod(pod)
-    assert tileBis.number() == 3
-    assert tileBis.center().tuple() == (1.0, 2.0)
-    assert tile.envelope() == [(0.0, 3.0), (2.0, 3.0), (2.0, 1.0), (0.0, 1.0)]
-    assert tileBis.adjacencies() == [1, 2, 4]
-    assert tileBis.asPod() == tile.asPod()
-
-def test_Tile_load():
-    tile= Tile( 3, 9, Float2(1.4, 2.0), 1.0 )
-    assert tile.matter() == 9
-    tile.connectAll( [1, 2, 4] )
-    tileBis= Tile().load( tile.dump() )
-    print( tile )
-    print( tileBis )
-    assert tileBis.asPod() == tile.asPod()

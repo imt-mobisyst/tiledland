@@ -1,8 +1,8 @@
-from hacka.py import pod
-from .shape import Float2, Shape
+from .geometry.shape import Float2, Shape
 from .tile import Tile
+from .agent import Agent
 
-class Scene( pod.PodInterface ):
+class Scene():
 
     # Constructor:
     def __init__( self ):
@@ -122,27 +122,6 @@ class Scene( pod.PodInterface ):
                     tilj= self.tile(j)
                     if conditionFromTo( tili, tilj ): # :
                        self.connect( i, j )
-
-    # Pod interface:
-    def asPod(self, family= "Scene"):
-        bPod= pod.Pod( family )
-        for s in self.shapes() :
-            bPod.append( s.asPod() )
-        for t in self.tiles() :
-            bPod.append( t.asPod() )
-        return bPod
-    
-    def fromPod(self, aPod):
-        self._tiles= [None]
-        self._shapes= []
-        self._size= 0
-        kids= aPod.children()
-        for kid in kids :
-            if kid.family() == "Shape" :
-                self.addShape( Shape().fromPod( kid ) )
-            if kid.family() == "Tile" :
-                self.addTile( Tile().fromPod( kid ) )
-        return self
 
     # Iterator over scene tiles
     def __iter__(self):

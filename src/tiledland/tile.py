@@ -1,20 +1,16 @@
 import math
-from .shape import Float2, Shape
-from hacka.py import pod
+from .geometry.shape import Float2, Shape
 
 class Tile(Shape):
 
     # Initialization Destruction:
     def __init__( self, num= 0, matter= 0, center= Float2(), size= 1.0 ):
         self._num= num
-        assert( type(center) == Float2 )
-        self._center= center
-        super().__init__(matter, size)
+        self._center= Float2( center.x, center.y )
+        super().__init__(size, matter)
         self._adjacencies= []
-        self._pieces= []
-        self._piecesBrushId= []
-        self._piecesShapeId= []
-    
+        self._agents= []
+
     # Accessor:
     def number(self):
         return self._num
@@ -29,22 +25,14 @@ class Tile(Shape):
         cx, cy= self._center.x(), self._center.y()
         return [ (cx+p.x(), cy+p.y()) for p in self.points() ]
 
-    def pieces(self) :
-        return self._pieces
+    def agents(self) :
+        return self._agents
     
     def count(self) :
-        return len( self._pieces)
+        return len( self._agents)
     
-    def pieceDescriptions(self):
-        return zip(
-            self._pieces,
-            self._piecesBrushId,
-            self._piecesShapeId
-        )
-    
-    def piece(self, i=1) :
+    def agent(self, i=1) :
         return self._pieces[i-1]
-
 
     def box(self):
         return [ p+self.center() for p in super().box() ]
@@ -88,18 +76,7 @@ class Tile(Shape):
         return self.center().distance( another.center() )
 
     # Pod interface:
-    def asPod(self, family="Tile"):
-        tilePod= pod.Pod(
-            family,
-            "",
-            [self.number(), self.matter()] + self.adjacencies(),
-            list( self.center().tuple() ) + self.pointsAsList()
-        )
-        for p in self.pieces() :
-            tilePod.append( p.asPod() )
-        return tilePod
-    
-    def fromPod(self, aPod):
+    def initializeFrom(self, aPod):
         # Convert flags:
         flags= aPod.flags()
         self._num= flags[0]
@@ -112,11 +89,11 @@ class Tile(Shape):
         self._center= Float2( xs[0], ys[0] )
         self._points= [ Float2(x, y) for x, y in zip(xs[1:], ys[1:]) ]
         # Load pices:
-        self.piecesFromChildren( aPod.children() )
+        self.agentsFromChildren( aPod.children() )
         return self
 
-    def piecesFromChildren(self, aListOfPod):
-        self._pieces= aListOfPod
+    def agentsFromChildren(self, aListOfPod):
+        self._agents= aListOfPod
         return self
 
     # to str
@@ -127,7 +104,7 @@ class Tile(Shape):
         x, y = round(x, 2), round(y, 2)
         s+= f" center: ({x}, {y})"
         s+= " adjs: "+ str(self._adjacencies)
-        s+= f" pieces({ len(self.pieces()) })"
+        s+= f" agents({ len(self.agents()) })"
         return s
     
     def __str__(self): 
