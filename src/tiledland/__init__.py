@@ -1,6 +1,13 @@
-from . import shape, tile, map
+from . import shape, tile, scene, artist
 
+# Scene:
 Float2= shape.Float2
 Shape= shape.Shape
 Tile= tile.Tile
-Map= map.Map
+Scene= scene.Scene
+
+# Artist:
+SupportVoid= artist.support.SupportVoid
+SupportSVG= artist.support.SupportSVG
+SupportPNG= artist.supportCairo.SupportPNG
+Artist= artist.Artist

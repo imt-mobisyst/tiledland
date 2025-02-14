@@ -2,7 +2,7 @@ import sys
 workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
-import src.tiledland.artist as hka
+import src.tiledland as tll
 
 # ------------------------------------------------------------------------ #
 #                 T E S T   I N T E R F A C E    A R T I S T
@@ -10,8 +10,8 @@ import src.tiledland.artist as hka
 
 # Test firstAI launch
 def test_support_load():
-    sup= hka.SupportSVG()
-    assert( type(sup) ) == hka.SupportSVG
+    sup= tll.SupportSVG()
+    assert( type(sup) ) == tll.SupportSVG
 
     print( sup.render() )
     assert( sup.render() == """<svg width="800" height="600">
@@ -19,7 +19,7 @@ def test_support_load():
 
 # Test firstAI launch
 def test_support_draw():
-    suppo= hka.SupportSVG()
+    suppo= tll.SupportSVG()
     
     assert( suppo.render() == """<svg width="800" height="600">
 </svg>""" )
@@ -60,7 +60,7 @@ def test_support_draw():
     #suppo.save( "shot-test.svg" )
 
 def test_support_write():
-    suppo= hka.SupportSVG()
+    suppo= tll.SupportSVG()
 
     suppo.fillCircle( 250, 150, 2, 0xffe3f2 )
     suppo.write( 250, 150, "Hello", 0x25e3f2, 12 )
@@ -82,14 +82,14 @@ def test_support_write():
 
 
 def test_artist_load():
-    pablo= hka.Artist()
+    pablo= tll.Artist()
 
-    assert( type( pablo ) ) == hka.Artist
-    assert( type( pablo.support() ) ) == hka.SupportVoid
+    assert( type( pablo ) ) == tll.Artist
+    assert( type( pablo.support() ) ) == tll.SupportVoid
 
     pablo.initializeSVG("shot-test.svg") 
 
-    assert( type( pablo.support() ) ) == hka.SupportSVG
+    assert( type( pablo.support() ) ) == tll.SupportSVG
 
     print(pablo.render())
     assert( pablo.render() == """<svg width="800" height="600">
@@ -127,7 +127,7 @@ def test_artist_load():
 
 def test_artist_flip():
     shotImg= "shot-test.svg"
-    pablo= hka.Artist().initializeSVG( filePath=shotImg )
+    pablo= tll.Artist().initializeSVG( filePath=shotImg )
 
     assert( pablo.support().filePath() == shotImg )
 

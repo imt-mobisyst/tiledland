@@ -3,7 +3,7 @@ import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 from hacka.py.pod import Pod
-from src.tiledland import Shape, Tile, Map
+from src.tiledland import Shape
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T

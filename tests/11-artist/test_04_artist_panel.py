@@ -2,7 +2,7 @@ import sys
 workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
-import src.tiledland.artist as hka
+import src.tiledland as tll
 
 # ------------------------------------------------------------------------ #
 #                 T E S T   I N T E R F A C E    A R T I S T
@@ -11,7 +11,7 @@ import src.tiledland.artist as hka
 # Test firstAI launch
 def test_artist_svg_load():
     shotImg= "shot-test.svg"
-    pablo= hka.Artist().initializeSVG( filePath= shotImg )
+    pablo= tll.Artist().initializeSVG( filePath= shotImg )
 
     shape= [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)]
     pablo.drawShape( shape, 1 )
@@ -60,7 +60,7 @@ def test_artist_svg_load():
 
 def test_artist_png_load():
     shotImg= "shot-test.png"
-    pablo= hka.Artist().initializePNG( filePath= shotImg )
+    pablo= tll.Artist().initializePNG( filePath= shotImg )
 
     shape= [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)]
     pablo.drawShape( shape, 1 )

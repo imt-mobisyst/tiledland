@@ -2,7 +2,7 @@ from hacka.py import pod
 from .shape import Float2, Shape
 from .tile import Tile
 
-class Map( pod.PodInterface ):
+class Scene( pod.PodInterface ):
 
     # Constructor:
     def __init__( self ):
@@ -124,7 +124,7 @@ class Map( pod.PodInterface ):
                        self.connect( i, j )
 
     # Pod interface:
-    def asPod(self, family= "Map"):
+    def asPod(self, family= "Scene"):
         bPod= pod.Pod( family )
         for s in self.shapes() :
             bPod.append( s.asPod() )
@@ -144,7 +144,7 @@ class Map( pod.PodInterface ):
                 self.addTile( Tile().fromPod( kid ) )
         return self
 
-    # Iterator over map cells
+    # Iterator over scene tiles
     def __iter__(self):
         self._ite= 1
         return self
@@ -162,7 +162,7 @@ class Map( pod.PodInterface ):
         return self._ite-1
     
     # string:
-    def str(self, name="Map"):
+    def str(self, name="Scene"):
         eltStrs =[]
         for s in self.shapes() :
             eltStrs.append( f"- {s}" )
