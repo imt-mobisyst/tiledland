@@ -2,16 +2,20 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland import Tile, Scene 
+from src.tiledland.geometry import Float2, Box
+from src.tiledland import Shape, Body, Tile, Scene 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
 def test_Scene_init():
-    tile= Tile(42)
-    assert tile.id() == 42
-    
+    scene= Scene()
+    assert type(scene) == Scene
+    assert scene.size() == 0
+    assert scene.box() == Box()
+
+def test_Scene_initLine():
     scene= Scene().initializeLine(3)
     assert scene.tile(1).id() == 1
     assert scene.tile(2).id() == 2
@@ -19,21 +23,17 @@ def test_Scene_init():
     assert scene.tiles() == [ scene.tile(1), scene.tile(2), scene.tile(3) ]
     assert scene.edges() == []
 
-    assert scene.tile(1).center().tuple() == (0.0, 0.0)
+    assert scene.tile(1).position().tuple() == (0.0, 0.0)
     assert scene.tile(1).envelope() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
 
-    assert scene.tile(2).center().tuple() == (1.0, 0.0)
+    assert scene.tile(2).position().tuple() == (1.0, 0.0)
     env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(2).envelope() ]
     assert env == [(0.55, 0.45), (1.45, 0.45), (1.45, -0.45), (0.55, -0.45)]
 
-    assert scene.tile(3).center().tuple() == (2.0, 0.0)
+    assert scene.tile(3).position().tuple() == (2.0, 0.0)
     env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(3).envelope() ]
     assert env == [(1.55, 0.45), (2.45, 0.45), (2.45, -0.45), (1.55, -0.45)]
     
-    assert scene.shapes() == [scene.shape()]
-    env= [ (round(x, 2), round(y, 2)) for x, y in scene.shape().envelope() ]
-    assert env == [(-0.25, 0.1), (-0.1, 0.25), (0.1, 0.25), (0.25, 0.1), (0.25, -0.1), (0.1, -0.25), (-0.1, -0.25), (-0.25, -0.1)]
-
 def test_Scene_construction():
     scene= Scene().initializeLine(3)
     assert scene.tile(1).adjacencies() == []

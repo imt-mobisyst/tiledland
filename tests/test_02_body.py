@@ -44,11 +44,20 @@ def test_Body_str():
     print(body)
     assert str(body) == "Body-42 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 
-def test_Body_podable():
+def test_Body_absObj():
     body= Body( 42, Float2(1.0, 2.0) )
 
+    assert body.numberOfWords() == 1
     assert body.wordAttributes() == ["Body"]
+    assert body.wordAttribute() == "Body"
+    assert body.numberOfInts() == 2
     assert body.intAttributes() == [42, 0]
+    assert body.intAttribute(1) == 42
+    assert body.intAttribute(2) == 0
+    assert body.numberOfFloats() == 2
     assert body.floatAttributes() == [1.0, 2.0]
+    assert body.floatAttribute(1) == 1.0
+    assert body.floatAttribute(2) == 2.0
+    assert body.numberOfChildren() == 1
     assert body.children() == [ body.shape() ]
 

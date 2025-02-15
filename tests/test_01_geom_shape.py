@@ -47,7 +47,7 @@ def test_Shape_str():
     print(f">>> {shape}")
     assert str(shape) == "Shape 6[(-8.66, -10.0), (8.66, 10.0)]"
 
-def test_Shape_podable():
+def test_Shape_absobj():
     shape= Shape( 10.0 )
 
     assert shape.wordAttributes() == ["Shape"]
@@ -60,3 +60,10 @@ def test_Shape_podable():
 
     shapeBis.initializeFrom( shape )
     assert shapeBis.envelope() == [(-5.0, 5.0), (5.0, 5.0), (5.0, -5.0), (-5.0, -5.0)]
+
+def test_Shape_copy():
+    shape= Shape(0.9)
+    assert shape.envelope() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
+    
+    shapeBis= shape.copy()
+    assert shapeBis.envelope() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]

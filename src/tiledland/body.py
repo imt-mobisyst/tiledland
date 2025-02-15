@@ -1,7 +1,7 @@
 from .geometry import Float2, Shape
+from .absobj import AbsObj
 
-
-class Body():
+class Body(AbsObj):
 
     # Initialization Destruction:
     def __init__( self, identifier= 0, position= Float2(0.0, 0.0), shape= None, matter= 0 ):
@@ -10,6 +10,7 @@ class Body():
         self._center= Float2( position.x(), position.y() )
         self._shape= shape
         if self._shape is None :
+            print( "is in fact None..." )
             self._shape= Shape()
 
     # Accessor: 
@@ -69,6 +70,7 @@ class Body():
         self.setMatter( integers[1] )
         self.setPosition( Float2().fromList( aPod.floatAttributes() ) )
         self.setShape( Shape().initializeFrom( aPod.children()[0] ) )
+        return self
     
     # str:
     def str(self, typeName= "Body"): 

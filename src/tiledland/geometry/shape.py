@@ -1,8 +1,9 @@
 import math
+from ..absobj import AbsObj
 from .float2 import Float2
 from .box import Box
 
-class Shape():
+class Shape(AbsObj):
 
     # Initialization Destruction:
     def __init__( self, size= 1.0 ):
@@ -90,3 +91,4 @@ class Shape():
             Float2(x, y)
             for x, y in zip( values[::2], values[1::2] )
         ]
+        return self

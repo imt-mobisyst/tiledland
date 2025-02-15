@@ -1,22 +1,20 @@
-from .geometry.shape import Float2, Shape
+from .absobj import AbsObj
+from .geometry import Float2, Box, Shape
 from .tile import Tile
 from .body import Body
 
-class Scene():
+class Scene(AbsObj):
 
     # Constructor:
-    def __init__( self ):
+    def __init__( self, bodyConstructor= Body ):
+        self._bodyCtt= bodyConstructor
         self._tiles= []
         self._size= 0
-        self._shapes= []
 
     # Accessor:
     def size(self):
         return self._size
 
-    def isTile(self, iTile):
-        return 0 < iTile and iTile <= self.size()
-    
     def tiles(self):
         return self._tiles[1:]
 
@@ -29,43 +27,29 @@ class Scene():
             edgeList+= [ (t.id(), neibor) for neibor in t.adjacencies() ]
         return edgeList
 
+    # Test:
+    def isTile(self, iTile):
+        return 0 < iTile and iTile <= self.size()
+    
+
     def isEdge(self, iFrom, iTo):
         return iTo in self.tile(iFrom).adjacencies()
     
     def box(self):
-        if self.size() == 0 :
-            return [ (0.0, 0.0), (0.0, 0.0) ]
-        tiles= self.tiles()
-        minPoint, maxPoint= tiles[0].box()
-        for t in tiles[1:] :
-            tMin, tMax= t.box()
-            if tMin.x() < minPoint.x():
-                minPoint.setx( tMin.x() )
-            if tMin.y() < minPoint.y():
-                minPoint.sety( tMin.y() )
-            if tMax.x() > maxPoint.x():
-                maxPoint.setx( tMax.x() )
-            if tMax.y() > maxPoint.y():
-                maxPoint.sety( tMax.y() )
-
-        return [minPoint, maxPoint]
-
-    def shapes(self):
-        return self._shapes
+        if self._size == 0 :
+            return Box()
+        box= self._tile[0].box()
+        for t in self._tile[1:] :
+            box+= t.box()
+        return box
         
-    def shape(self, i=0):
-        return self._shapes[i]
-    
     # Construction:
-    def initializeLine( self, size, tileSize=0.9, separation=0.1 ):
-        dist= tileSize+separation
+    def initializeLine( self, size, shape=Shape(0.9), distance=1.0 ):
         self._tiles= [None] + [
-            Tile(i+1, 0, Float2(dist*i, 0.0), tileSize )
+            Tile( i+1, Float2(distance*i, 0.0), shape.copy() )
             for i in range(size)
         ]
         self._size= size
-        # Basic Piece Shape:
-        self._shapes= [ Shape().setShapeRegular( tileSize*0.6, 8 ) ]
         return self
     
     def initializeSquares( self, matrix, tileSize= 1.0, separation=0.1 ):
