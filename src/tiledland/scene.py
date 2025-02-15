@@ -31,7 +31,6 @@ class Scene(AbsObj):
     def isTile(self, iTile):
         return 0 < iTile and iTile <= self.size()
     
-
     def isEdge(self, iFrom, iTo):
         return iTo in self.tile(iFrom).adjacencies()
     
@@ -42,7 +41,7 @@ class Scene(AbsObj):
         for t in self._tile[1:] :
             box+= t.box()
         return box
-        
+
     # Construction:
     def initializeLine( self, size, shape=Shape(0.9), distance=1.0 ):
         self._tiles= [None] + [
@@ -107,6 +106,22 @@ class Scene(AbsObj):
                     if conditionFromTo( tili, tilj ): # :
                        self.connect( i, j )
 
+    # absobj interface: 
+    def wordAttributes(self):
+        return ["Scene"]
+    
+    def intAttributes(self):
+        return []
+    
+    def floatAttributes(self):
+        return []
+    
+    def children(self):
+        return self.tiles()
+    
+    def initializeFrom( self, aPod ):
+        return self
+
     # Iterator over scene tiles
     def __iter__(self):
         self._ite= 1
@@ -127,13 +142,11 @@ class Scene(AbsObj):
     # string:
     def str(self, name="Scene"):
         eltStrs =[]
-        for s in self.shapes() :
-            eltStrs.append( f"- {s}" )
         for t in self.tiles() :
             eltStrs.append( f"- {t}" )
-            for piece in t.pieces() :
+            for piece in t.bodies() :
                 eltStrs.append( f"  - {piece}" )
         return f"{name}:\n" + "\n".join( eltStrs )
     
-    def __str__(self): 
+    def __str__(self):
         return self.str()

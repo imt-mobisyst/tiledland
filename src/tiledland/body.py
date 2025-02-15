@@ -10,7 +10,6 @@ class Body(AbsObj):
         self._center= Float2( position.x(), position.y() )
         self._shape= shape
         if self._shape is None :
-            print( "is in fact None..." )
             self._shape= Shape()
 
     # Accessor: 
@@ -51,7 +50,7 @@ class Body(AbsObj):
         self._shape= aShape
         return self
     
-    # Pod interface: 
+    # absobj interface: 
     def wordAttributes(self):
         return ["Body"]
     

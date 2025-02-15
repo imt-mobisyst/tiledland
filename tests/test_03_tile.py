@@ -69,3 +69,38 @@ def test_Tile_str():
     tile.setMatter(2).connectAll( [1, 2, 3] )
     print(f">>> {tile}")
     assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] bodies(0)"
+
+def test_Tile_absobj():
+    tile= Tile(8, Float2(18.5, 4.07))
+    tile.connectAll( [ 1, 3, 7, 19 ] )
+
+    assert tile.numberOfWords() == 1
+    assert tile.wordAttributes() == ["Tile"]
+    assert tile.wordAttribute() == "Tile"
+
+    assert tile.numberOfInts() == 6
+    assert tile.intAttributes() == [ tile.id(), tile.matter() ] + [ 1, 3, 7, 19 ]
+    
+    assert tile.numberOfFloats() == 2
+    assert tile.floatAttributes() == [18.5, 4.07]
+    
+    assert tile.numberOfChildren() == 1
+    assert tile.children() == [ tile.shape() ]
+
+    bod= Body()
+    tile.append( bod )
+
+    assert tile.numberOfChildren() == 2
+    assert tile.children() == [ tile.shape(), bod ]
+
+
+def test_Tile_copy():
+    tile= Tile(8, Float2(18.5, 4.07))
+    tile.connectAll( [ 1, 3, 7, 19 ] )
+
+    tileBis= tile.copy()
+    
+    tile.connect(4)
+
+    assert type(tile) == type(tileBis)
+    assert tileBis.adjencies() == [ 1, 3, 7, 19 ]

@@ -60,17 +60,16 @@ def test_Scene_construction():
 def test_Scene_str():
     scene= Scene().initializeLine(3)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
-    #scene.tile(2).append( Pod('Piece', 'dragon', [10, 3], [22.0]) )
+    scene.tile(2).append( Body(1) )
 
     print( f">>> {scene}." )
 
     assert "\n"+str(scene)+"\n" == """
 Scene:
-- Shape-0/8 [(-0.25, -0.25), (0.25, 0.25)]
-- Tile-1/0 center: (0.0, 0.0) adjs: [1, 3] pieces(0)
-- Tile-2/0 center: (1.0, 0.0) adjs: [1, 2] pieces(1)
-  - Piece: dragon [10, 3] [22.0]
-- Tile-3/0 center: (2.0, 0.0) adjs: [2] pieces(0)
+- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] bodies(0)
+- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] bodies(1)
+  - Body-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉
+- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] bodies(0)
 """
 
 def test_Scene_pod():
@@ -79,53 +78,43 @@ def test_Scene_pod():
                        [3, 1], [3, 2], [4, 1], [4, 2]
                         ] )
 
-    scene.tile(1).setCenter( 5.0, 3.0 )
-    scene.tile(2).setCenter( 5.0, 15.0 )
-    scene.tile(3).setCenter( 1.0, 9.0 )
-    scene.tile(4).setCenter( 9.0, 9.0 )
+    scene.tile(1).position().set( 5.0, 3.0 )
+    scene.tile(2).position().set( 5.0, 15.0 )
+    scene.tile(3).position().set( 1.0, 9.0 )
+    scene.tile(4).position().set( 9.0, 9.0 )
 
-    scene.shape().round(2)
+    print(f">>>\n{scene}")
+    assert '\n'+ str(scene) +'\n' == """
+Scene:
+- Tile-1 ⌊(4.55, 2.55), (5.45, 3.45)⌉ adjs[2, 3, 4] bodies(0)
+- Tile-2 ⌊(4.55, 14.55), (5.45, 15.45)⌉ adjs[1, 3, 4] bodies(0)
+- Tile-3 ⌊(0.55, 8.55), (1.45, 9.45)⌉ adjs[1, 2] bodies(0)
+- Tile-4 ⌊(8.55, 8.55), (9.45, 9.45)⌉ adjs[1, 2] bodies(0)
+"""
+
+def test_Scene_absobj():
+    scene= Scene().initializeLine(3)
+    scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
+
+    assert scene.numberOfWords() == 1
+    assert scene.wordAttributes() == ["Scene"]
+    assert scene.wordAttribute() == "Scene"
+
+    assert scene.numberOfInts() == 0
+    assert scene.intAttributes() == []
     
-    scenePod= scene.asPod()
-    print(f">>>1 {scenePod}")
-    assert '\n'+ str(scenePod) +'\n' == """
-Scene:
-- Shape: [0] [-0.25, 0.1, -0.1, 0.25, 0.1, 0.25, 0.25, 0.1, 0.25, -0.1, 0.1, -0.25, -0.1, -0.25, -0.25, -0.1]
-- Tile: [1, 0, 2, 3, 4] [5.0, 3.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
-- Tile: [2, 0, 1, 3, 4] [5.0, 15.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
-- Tile: [3, 0, 1, 2] [1.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
-- Tile: [4, 0, 1, 2] [9.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
-"""
-
-    scenePod= Scene().fromPod( scene.asPod() ).asPod()
-    print(f">>>2 {scenePod}")
-    assert '\n'+ str(scenePod) +'\n' == """
-Scene:
-- Shape: [0] [-0.25, 0.1, -0.1, 0.25, 0.1, 0.25, 0.25, 0.1, 0.25, -0.1, 0.1, -0.25, -0.1, -0.25, -0.25, -0.1]
-- Tile: [1, 0, 2, 3, 4] [5.0, 3.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
-- Tile: [2, 0, 1, 3, 4] [5.0, 15.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
-- Tile: [3, 0, 1, 2] [1.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
-- Tile: [4, 0, 1, 2] [9.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
-"""
-
-    print(f">>> {scenePod.dump()}")
-    assert '\n'+ scenePod.dump() +'\n' == """
-Scene - 0 0 0 5 :
-Shape - 0 1 16 0 : 0 -0.25 0.1 -0.1 0.25 0.1 0.25 0.25 0.1 0.25 -0.1 0.1 -0.25 -0.1 -0.25 -0.25 -0.1
-Tile - 0 5 10 0 : 1 0 2 3 4 5.0 3.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45
-Tile - 0 5 10 0 : 2 0 1 3 4 5.0 15.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45
-Tile - 0 4 10 0 : 3 0 1 2 1.0 9.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45
-Tile - 0 4 10 0 : 4 0 1 2 9.0 9.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45
-"""
-
+    assert scene.numberOfFloats() == 0
+    assert scene.floatAttributes() == []
+    
+    assert scene.numberOfChildren() == 3
+    assert scene.children() == [ scene.tile(1), scene.tile(2), scene.tile(3) ]
 
 def test_Scene_copy():
     scene= Scene().initializeLine(3)
-
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
 
     sceneBis= scene.copy()
-
+    
     scene.connect(3, 1)
 
     assert type(scene) == type(sceneBis)

@@ -22,14 +22,7 @@ class Tile(Body):
     def body(self, i=1) :
         return self._bodies[i-1]
     
-    # Construction    
-    def setNumber(self, i):
-        self._num= i
-        return self
-
-    def setCenter(self, x, y):
-        self._center= Float2(x, y)
-        return self
+    # Construction:
 
     # Connection:
     def connect(self, iTo):
@@ -43,25 +36,38 @@ class Tile(Body):
             self.connect( iTo )
         return self
     
-    # Piece managment
+    # Body managment
     def append(self, aPod, brushId=0, shapeId=0 ): 
-        self._pieces.append( aPod )
-        self._piecesBrushId.append( brushId )
-        self._piecesShapeId.append( shapeId )
+        self._bodies.append( aPod )
         return self
     
     def clear(self):
-        self._pieces = []
-        self._piecesBrushId = []
-        self._piecesShapeId = []
+        self._bodies = []
         return self
     
     # Comparison :
     def centerDistance(self, another):
-        return self.center().distance( another.center() )
+        return self.position().distance( another.position() )
 
-    # Pod interface:
-    def initializeFrom(self, aPod):
+        # absobj interface: 
+    def wordAttributes(self):
+        return ["Tile"]
+    
+    def intAttributes(self):
+        return super(Tile, self).intAttributes() + self.adjacencies()
+        
+    def children(self):
+        return [ self.shape() ] + self.bodies()
+    
+    def initializeFrom( self, aPod ):
+        integers= aPod.intAttributes()
+        self.setId( integers[0] )
+        self.setMatter( integers[1] )
+        self.setPosition( Float2().fromList( aPod.floatAttributes() ) )
+        self.setShape( Shape().initializeFrom( aPod.children()[0] ) )
+        return self
+    
+    def initializeFrom( self, aPod, childrenConstructor= Body ):
         # Convert flags:
         flags= aPod.flags()
         self._num= flags[0]
