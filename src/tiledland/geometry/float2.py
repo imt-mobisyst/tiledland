@@ -31,7 +31,7 @@ class Float2():
     def set( self, x, y ):
         return self.setx(x).sety(y)
     
-    def round(self, precision):
+    def round(self, precision=0):
         self._x= round( self._x, precision )
         self._y= round( self._y, precision )
         return self

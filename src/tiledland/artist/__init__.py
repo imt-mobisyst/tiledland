@@ -245,7 +245,7 @@ class Artist():
         x, y= aTile.center().tuple()
         x= x+(minx-x)*2/3
         y= y+(miny-y)*2/3
-        self.write( x, y, str(aTile.number()), self._panel[ aTile.matter() ] )
+        self.write( x, y, str(aTile.id()), self._panel[ aTile.matter() ] )
 
     def drawPiece( self, position, brushId, shape, name ):
         x, y= position

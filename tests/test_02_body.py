@@ -41,7 +41,8 @@ def test_Body_init2():
     
 def test_Body_str():
     body= Body( 42, Float2(1.0, 2.0) )
-    assert str(body) == "42 on (1.0, 2.0)"
+    print(body)
+    assert str(body) == "Body-42 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 
 def test_Body_podable():
     body= Body( 42, Float2(1.0, 2.0) )

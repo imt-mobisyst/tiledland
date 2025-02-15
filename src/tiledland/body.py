@@ -4,11 +4,13 @@ from .geometry import Float2, Shape
 class Body():
 
     # Initialization Destruction:
-    def __init__( self, identifier= 0, position= Float2(0.0, 0.0), shape= Shape(), matter= 0 ):
+    def __init__( self, identifier= 0, position= Float2(0.0, 0.0), shape= None, matter= 0 ):
         self._id= identifier
         self._matter= matter
         self._center= Float2( position.x(), position.y() )
         self._shape= shape
+        if self._shape is None :
+            self._shape= Shape()
 
     # Accessor: 
     def id(self):
@@ -23,9 +25,13 @@ class Body():
     def position(self):
         return self._center
     
+    # Shape accessor : 
     def envelope(self):
         x, y= self._center.tuple()
         return [ (x+p.x(), y+p.y()) for p in self._shape.points() ]
+    
+    def box(self):
+        return self.shape().box().move(self.position())
     
     # Construction:
     def setId(self, aInteger):
@@ -34,9 +40,10 @@ class Body():
     
     def setMatter(self, aInteger):
         self._matter= aInteger
+        return self
     
     def setPosition(self, aFloat2):
-        self._position= aFloat2
+        self._center= aFloat2
         return self
     
     def setShape(self, aShape):
@@ -64,8 +71,8 @@ class Body():
         self.setShape( Shape().initializeFrom( aPod.children()[0] ) )
     
     # str:
-    def str(self): 
-        return str(self.id()) + " on "+ str(self.position())
+    def str(self, typeName= "Body"): 
+        return typeName + f"-{self.id()} {self.box()}"
     
     def __str__(self):
         return self.str()

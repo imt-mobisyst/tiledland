@@ -32,20 +32,20 @@ def test_Shape_regular():
         (8.66, -5.0), (0.0, -10.0), (-8.66, -5.0)
     ]
     
-    box= [ 
-        (round(corner.x(), 2), round(corner.y(), 2))
-        for corner in shape.box()
-    ]
-    assert box == [ (-8.66, -10.0), (8.66, 10.0) ]
+    box= shape.box()
+    box.round(2)
+
+    assert box.list() == [-8.66, -10.0, 8.66, 10.0]
+    assert box.zip() == [ (-8.66, -10.0), (8.66, 10.0) ]
 
     
 def test_Shape_str():
     shape= Shape(10.0)
     print(f">>> {shape}")
-    assert str(shape) == "Shape-4 [(-5.0, -5.0), (5.0, 5.0)]"
+    assert str(shape) == "Shape 4[(-5.0, -5.0), (5.0, 5.0)]"
     shape.setShapeRegular( 20.0, 6 )
     print(f">>> {shape}")
-    assert str(shape) == "Shape-6 [(-8.66, -10.0), (8.66, 10.0)]"
+    assert str(shape) == "Shape 6[(-8.66, -10.0), (8.66, 10.0)]"
 
 def test_Shape_podable():
     shape= Shape( 10.0 )

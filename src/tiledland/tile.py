@@ -4,39 +4,23 @@ from .body import Body
 
 class Tile(Body):
 
-    # Initialization Destruction:
-    def __init__( self, num= 0, matter= 0, position= Float2(), size= 1.0 ):
-        self._num= num
-        self._center= Float2( position.x(), position.y() )
-        super().__init__(size, matter)
+    def __init__( self, identifier= 0, position= Float2(0.0, 0.0), shape= None, matter= 0 ):
+        super(Tile, self).__init__(identifier, position, shape, matter)
         self._adjacencies= []
-        self._bodys= []
+        self._bodies= []
 
-    # Accessor:
-    def number(self):
-        return self._num
-
-    def position(self):
-        return self._center
-    
+    # Accessor:    
     def adjacencies(self):
         return self._adjacencies
 
-    def envelope(self):
-        cx, cy= self._center.x(), self._center.y()
-        return [ (cx+p.x(), cy+p.y()) for p in self.points() ]
-
     def bodies(self) :
-        return self._bodys
+        return self._bodies
     
     def count(self) :
-        return len( self._bodys)
+        return len( self._bodies)
     
     def body(self, i=1) :
-        return self._pieces[i-1]
-
-    def box(self):
-        return [ p+self.center() for p in super().box() ]
+        return self._bodies[i-1]
     
     # Construction    
     def setNumber(self, i):
@@ -94,18 +78,15 @@ class Tile(Body):
         return self
 
     def bodysFromChildren(self, aListOfPod):
-        self._bodys= aListOfPod
+        self._bodies= aListOfPod
         return self
 
     # to str
-    def str(self, name="Tile", ident=0): 
+    def str(self, typeName="Tile"): 
         # Myself :
-        s= f"{name}-{self.number()}/{self.matter()}"
-        x, y = self._center.tuple()
-        x, y = round(x, 2), round(y, 2)
-        s+= f" center: ({x}, {y})"
-        s+= " adjs: "+ str(self._adjacencies)
-        s+= f" bodys({ len(self.bodys()) })"
+        s= super(Tile, self).str(typeName)
+        s+= " adjs"+ str(self._adjacencies)
+        s+= f" bodies({ len(self.bodies()) })"
         return s
     
     def __str__(self): 

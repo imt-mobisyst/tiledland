@@ -1,5 +1,6 @@
 import math
 from .float2 import Float2
+from .box import Box
 
 class Shape():
 
@@ -12,20 +13,8 @@ class Shape():
         return self._points
     
     def box(self):
-        points= self.points()
-        minPoint= Float2( points[0].x(), points[0].y() )
-        maxPoint= Float2( points[0].x(), points[0].y() )
-        for p in points :
-            if p.x() < minPoint.x() :
-                minPoint.setx( p.x() )
-            if p.y() < minPoint.y() :
-                minPoint.sety( p.y() )
-            if p.x() > maxPoint.x() :
-                maxPoint.setx( p.x() )
-            if p.y() > maxPoint.y() :
-                maxPoint.sety( p.y() )
-        return [minPoint, maxPoint]
-
+        return Box(self.points())
+    
     def envelope(self):
         return [ (p.x(), p.y()) for p in self._points ]
     
@@ -69,10 +58,10 @@ class Shape():
         return self
     
     # to str
-    def str(self, name="Shape", ident=0): 
+    def str(self, typeName="Shape"): 
         # Myself :
-        s= f"{name}-{len(self._points)} " 
-        s+= str( [(round(corner.x(), 2), round(corner.y(), 2)) for corner in self.box()] )
+        s= f"{typeName} {len(self._points)}" 
+        s+= str( [(round(x, 2), round(y, 2)) for x, y in self.box().zip()] )
         return s
     
     def __str__(self): 

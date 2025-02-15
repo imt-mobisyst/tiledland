@@ -26,7 +26,7 @@ class Scene():
     def edges(self):
         edgeList= []
         for t in self.tiles() :
-            edgeList+= [ (t.number(), neibor) for neibor in t.adjacencies() ]
+            edgeList+= [ (t.id(), neibor) for neibor in t.adjacencies() ]
         return edgeList
 
     def isEdge(self, iFrom, iTo):
@@ -103,7 +103,7 @@ class Scene():
     def addPiece( self, aPod, tileId, brushId=0, shapeId=0 ):
         tile= self.tile( tileId )
         tile.append( aPod, brushId, shapeId )
-        return tile.number()
+        return tile.id()
     
     def connect(self, iFrom, iTo):
         self.tile(iFrom).connect(iTo)

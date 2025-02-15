@@ -10,12 +10,12 @@ from src.tiledland import Tile, Scene
 
 def test_Scene_init():
     tile= Tile(42)
-    assert tile.number() == 42
+    assert tile.id() == 42
     
     scene= Scene().initializeLine(3)
-    assert scene.tile(1).number() == 1
-    assert scene.tile(2).number() == 2
-    assert scene.tile(3).number() == 3
+    assert scene.tile(1).id() == 1
+    assert scene.tile(2).id() == 2
+    assert scene.tile(3).id() == 3
     assert scene.tiles() == [ scene.tile(1), scene.tile(2), scene.tile(3) ]
     assert scene.edges() == []
 

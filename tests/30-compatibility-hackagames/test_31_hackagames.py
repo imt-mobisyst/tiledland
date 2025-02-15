@@ -29,7 +29,7 @@ def test_Tile_pod():
     assert str(pod) == "Tile: [3, 0, 1, 2, 4] [1.0, 2.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0]"
     
     tileBis= Tile().fromPod(pod)
-    assert tileBis.number() == 3
+    assert tileBis.id() == 3
     assert tileBis.center().tuple() == (1.0, 2.0)
     assert tile.envelope() == [(0.0, 3.0), (2.0, 3.0), (2.0, 1.0), (0.0, 1.0)]
     assert tileBis.adjacencies() == [1, 2, 4]
@@ -51,4 +51,16 @@ def test_Tile_load():
     print( shape )
     print( shapeBis )
     assert shapeBis.asPod() == shape.asPod()
+
+def test_Tile_bodies():
+    tile= Tile(1)
+    assert tile.bodies() == []
+    
+    tile.append( Pod('Piece', 'dragon', [10, 3], [22.0]) )
+
+    assert len(tile.bodies()) == 1
+    assert tile.piece(1) == Pod('Piece', 'dragon', [10, 3], [22.0])
+    
+    tile.clear()
+    assert tile.bodies() == []
 '''
