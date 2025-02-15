@@ -16,10 +16,10 @@ def test_Tile_init():
 
     assert tile.number() == 0
     assert tile.matter() == 0
-    assert tile.center().tuple() == (0.0, 0.0)
+    assert tile.position().tuple() == (0.0, 0.0)
     assert tile.envelope() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5)]
     assert tile.adjacencies() == []
-    assert tile.pieces() == []
+    assert tile.bodies() == []
     
     tile= Tile( 3, 0, Float2(10.3, 9.7), 42.0 )
 

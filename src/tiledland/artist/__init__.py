@@ -273,13 +273,13 @@ class Artist():
         for tile in aScene.tiles() :
             self.drawTile( tile )
 
-    def drawSceneAgents( self, aScene ):
+    def drawSceneBodies( self, aScene ):
         for tile in aScene.tiles() :
             x, y= tile.center().tuple()
             position= (x+0.1, y+0.1)
-            for agent, brushId, shapeId in tile.pieceDescriptions() :
+            for body, brushId, shapeId in tile.pieceDescriptions() :
                 shape= aScene._shapes[shapeId]
-                self.drawAgents( position, brushId, shape, piece.family() )
+                self.drawBodies( position, brushId, shape, piece.family() )
     
     def writeSceneTiles( self, aScene ):
         for tile in aScene.tiles() :

@@ -1,21 +1,22 @@
 import math
-from .geometry.shape import Float2, Shape
+from .geometry import Float2, Shape
+from .body import Body
 
-class Tile(Shape):
+class Tile(Body):
 
     # Initialization Destruction:
-    def __init__( self, num= 0, matter= 0, center= Float2(), size= 1.0 ):
+    def __init__( self, num= 0, matter= 0, position= Float2(), size= 1.0 ):
         self._num= num
-        self._center= Float2( center.x, center.y )
+        self._center= Float2( position.x(), position.y() )
         super().__init__(size, matter)
         self._adjacencies= []
-        self._agents= []
+        self._bodys= []
 
     # Accessor:
     def number(self):
         return self._num
 
-    def center(self):
+    def position(self):
         return self._center
     
     def adjacencies(self):
@@ -25,13 +26,13 @@ class Tile(Shape):
         cx, cy= self._center.x(), self._center.y()
         return [ (cx+p.x(), cy+p.y()) for p in self.points() ]
 
-    def agents(self) :
-        return self._agents
+    def bodies(self) :
+        return self._bodys
     
     def count(self) :
-        return len( self._agents)
+        return len( self._bodys)
     
-    def agent(self, i=1) :
+    def body(self, i=1) :
         return self._pieces[i-1]
 
     def box(self):
@@ -89,11 +90,11 @@ class Tile(Shape):
         self._center= Float2( xs[0], ys[0] )
         self._points= [ Float2(x, y) for x, y in zip(xs[1:], ys[1:]) ]
         # Load pices:
-        self.agentsFromChildren( aPod.children() )
+        self.bodysFromChildren( aPod.children() )
         return self
 
-    def agentsFromChildren(self, aListOfPod):
-        self._agents= aListOfPod
+    def bodysFromChildren(self, aListOfPod):
+        self._bodys= aListOfPod
         return self
 
     # to str
@@ -104,7 +105,7 @@ class Tile(Shape):
         x, y = round(x, 2), round(y, 2)
         s+= f" center: ({x}, {y})"
         s+= " adjs: "+ str(self._adjacencies)
-        s+= f" agents({ len(self.agents()) })"
+        s+= f" bodys({ len(self.bodys()) })"
         return s
     
     def __str__(self): 

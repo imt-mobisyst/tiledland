@@ -13,17 +13,13 @@ def test_Shape_init():
     
     shape= Shape()
 
-    assert shape.matter() == 0
     print( shape.envelope() )
     assert shape.envelope() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5)]
     
-    shape= Shape( 42.0, 2 )
-
-    assert shape.matter() == 2
+    shape= Shape( 42.0 )
     assert shape.envelope() == [(-21.0, 21.0), (21.0, 21.0), (21.0, -21.0), (-21.0, -21.0)]
 
     shape.setShapeSquare( 2.0 )
-
     assert shape.envelope() == [(-1.0, 1.0), (1.0, 1.0), (1.0, -1.0), (-1.0, -1.0)]
 
 def test_Shape_regular():
@@ -44,26 +40,23 @@ def test_Shape_regular():
 
     
 def test_Shape_str():
-    shape= Shape(10.0, 8)
+    shape= Shape(10.0)
     print(f">>> {shape}")
-    assert str(shape) == "Shape-8/4 [(-5.0, -5.0), (5.0, 5.0)]"
-    shape.setMatter(2).setShapeRegular( 20.0, 6 )
+    assert str(shape) == "Shape-4 [(-5.0, -5.0), (5.0, 5.0)]"
+    shape.setShapeRegular( 20.0, 6 )
     print(f">>> {shape}")
-    assert str(shape) == "Shape-2/6 [(-8.66, -10.0), (8.66, 10.0)]"
+    assert str(shape) == "Shape-6 [(-8.66, -10.0), (8.66, 10.0)]"
 
 def test_Shape_podable():
-    shape= Shape( 10.0, 5 )
+    shape= Shape( 10.0 )
 
     assert shape.wordAttributes() == ["Shape"]
-    assert shape.intAttributes() == [5]
+    assert shape.intAttributes() == []
     assert shape.floatAttributes() == [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]
     assert shape.children() == []
 
     shapeBis= Shape()
-    assert shapeBis.matter() == 0
     assert shapeBis.envelope() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5)]
 
     shapeBis.initializeFrom( shape )
-
-    assert shapeBis.matter() == 5
     assert shapeBis.envelope() == [(-5.0, 5.0), (5.0, 5.0), (5.0, -5.0), (-5.0, -5.0)]

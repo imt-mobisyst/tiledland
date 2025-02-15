@@ -14,7 +14,7 @@ class Float2():
         return self._y
     
     def tuple(self): 
-        return self._x, self._y
+        return (self._x, self._y)
     
     def list(self): 
         return [self._x, self._y]

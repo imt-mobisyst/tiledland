@@ -4,17 +4,13 @@ from .float2 import Float2
 class Shape():
 
     # Initialization Destruction:
-    def __init__( self, size= 1.0, matter= 0 ):
+    def __init__( self, size= 1.0 ):
         self.setShapeSquare( size )
-        self._matter= matter
 
     # Accessor:
     def points(self):
         return self._points
-
-    def matter(self):
-        return self._matter
-
+    
     def box(self):
         points= self.points()
         minPoint= Float2( points[0].x(), points[0].y() )
@@ -41,10 +37,6 @@ class Shape():
         return l
 
     # Construction:
-    def setMatter(self, m):
-        self._matter= m
-        return self
-    
     def setEnveloppe( self, envelopes ):
         self._points= [ Float2(x, y) for x, y in envelopes ]
         return self
@@ -79,7 +71,7 @@ class Shape():
     # to str
     def str(self, name="Shape", ident=0): 
         # Myself :
-        s= f"{name}-{self.matter()}/{len(self._points)} " 
+        s= f"{name}-{len(self._points)} " 
         s+= str( [(round(corner.x(), 2), round(corner.y(), 2)) for corner in self.box()] )
         return s
     
@@ -92,7 +84,7 @@ class Shape():
         return ["Shape"]
     
     def intAttributes(self):
-        return [self.matter()]
+        return []
     
     def floatAttributes(self):
         l= []
@@ -109,4 +101,3 @@ class Shape():
             Float2(x, y)
             for x, y in zip( values[::2], values[1::2] )
         ]
-        self._matter= aPod.intAttributes()[0]

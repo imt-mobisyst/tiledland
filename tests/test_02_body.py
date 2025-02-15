@@ -1,0 +1,53 @@
+# HackaGames UnitTest - `pytest`
+import sys
+sys.path.insert( 1, __file__.split('tests')[0] )
+
+from src.tiledland import Body, Shape, Float2
+
+# ------------------------------------------------------------------------ #
+#         T E S T   H A C K A G A M E S - C O M P O N E N T
+# ------------------------------------------------------------------------ #
+
+def test_Body_init():
+    body= Body()
+
+    assert type(body) == Body
+    assert body.id() == 0
+    print( f"{body.position()} == {Float2(0.0, 0.0)}") 
+
+    assert body.position() == Float2(0.0, 0.0)
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in body.envelope() ]
+    assert env == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5)]
+
+    body.setShape( Shape().setShapeRegular(0.5, 8) )
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in body.envelope() ]
+    assert env == [(-0.23, 0.1), (-0.1, 0.23), (0.1, 0.23), (0.23, 0.1), (0.23, -0.1), (0.1, -0.23), (-0.1, -0.23), (-0.23, -0.1)]
+
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in body.envelope() ]
+    assert env == [(-0.23, 0.1), (-0.1, 0.23), (0.1, 0.23), (0.23, 0.1), (0.23, -0.1), (0.1, -0.23), (-0.1, -0.23), (-0.23, -0.1)]
+
+    body.position().set(1.0, 2.0)
+    assert body.position() == Float2(1.0, 2.0)
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in body.envelope() ]
+    assert env == [(0.77, 2.1), (0.9, 2.23), (1.1, 2.23), (1.23, 2.1), (1.23, 1.9), (1.1, 1.77), (0.9, 1.77), (0.77, 1.9)]
+
+def test_Body_init2():
+    body= Body( 42, Float2(1.0, 2.0), Shape().setShapeRegular(0.5, 8) )
+    
+    assert body.id() == 42
+    assert body.position() == Float2(1.0, 2.0)
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in body.envelope() ]
+    assert env == [(0.77, 2.1), (0.9, 2.23), (1.1, 2.23), (1.23, 2.1), (1.23, 1.9), (1.1, 1.77), (0.9, 1.77), (0.77, 1.9)]
+    
+def test_Body_str():
+    body= Body( 42, Float2(1.0, 2.0) )
+    assert str(body) == "42 on (1.0, 2.0)"
+
+def test_Body_podable():
+    body= Body( 42, Float2(1.0, 2.0) )
+
+    assert body.wordAttributes() == ["Body"]
+    assert body.intAttributes() == [42, 0]
+    assert body.floatAttributes() == [1.0, 2.0]
+    assert body.children() == [ body.shape() ]
+

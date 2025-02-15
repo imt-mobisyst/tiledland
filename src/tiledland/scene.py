@@ -1,6 +1,6 @@
 from .geometry.shape import Float2, Shape
 from .tile import Tile
-from .agent import Agent
+from .body import Body
 
 class Scene():
 
