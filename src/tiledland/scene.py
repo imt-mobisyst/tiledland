@@ -51,7 +51,7 @@ class Scene(AbsObj):
         self._size= size
         return self
     
-    def initializeSquares( self, matrix, tileSize= 1.0, separation=0.1 ):
+    def initializeGrid( self, matrix, tileSize= 1.0, separation=0.1 ):
         dist= tileSize+separation
         self._tiles= [None]
         
@@ -73,20 +73,25 @@ class Scene(AbsObj):
         self._shapes= [ Shape().setShapeRegular( tileSize*0.7, 8 ) ]
         return self
 
+    def clearTiles( self ):
+        self._tiles= [Tile()]
+        self._size= 0
+        return self
+
     def addTile( self, aTile ):
+        print( f"append: {self._size} - {aTile}" )
         self._size+= 1
-        aTile.setNumber( self._size )
+        aTile.setId( self._size )
         self._tiles.append( aTile )
+        print( f"tiles: {self._tiles}" )
+        print( f"{self}" )
+
         return self._size
 
-    def addShape( self, aShape ):
-        self._shapes.append( aShape )
-        return len(self._shapes)
-
-    def addPiece( self, aPod, tileId, brushId=0, shapeId=0 ):
-        tile= self.tile( tileId )
-        tile.append( aPod, brushId, shapeId )
-        return tile.id()
+    #def addPiece( self, aPod, tileId, brushId=0, shapeId=0 ):
+    #    tile= self.tile( tileId )
+    #    tile.append( aPod, brushId, shapeId )
+    #    return tile.id()
     
     def connect(self, iFrom, iTo):
         self.tile(iFrom).connect(iTo)
@@ -119,9 +124,12 @@ class Scene(AbsObj):
     def children(self):
         return self.tiles()
     
-    def initializeFrom( self, aPod ):
+    def initializeFrom( self, absObj ):
+        self.clearTiles()
+        for absTile in absObj.children() :
+            self.addTile( Tile().initializeFrom( absTile, self._bodyCtt ) )
         return self
-
+    
     # Iterator over scene tiles
     def __iter__(self):
         self._ite= 1
@@ -142,10 +150,11 @@ class Scene(AbsObj):
     # string:
     def str(self, name="Scene"):
         eltStrs =[]
+        print( f"> {self.tiles()}")
         for t in self.tiles() :
             eltStrs.append( f"- {t}" )
-            for piece in t.bodies() :
-                eltStrs.append( f"  - {piece}" )
+            for bod in t.bodies() :
+                eltStrs.append( f"  - {bod}" )
         return f"{name}:\n" + "\n".join( eltStrs )
     
     def __str__(self):

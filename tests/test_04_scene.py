@@ -113,13 +113,31 @@ def test_Scene_copy():
     scene= Scene().initializeLine(3)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
 
+    assert scene.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
+
+    assert '\n'+ str(scene) +'\n' == """
+Scene:
+- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] bodies(0)
+- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] bodies(0)
+- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] bodies(0)
+"""
+
+    print("Go for the copying...")
     sceneBis= scene.copy()
-    
     scene.connect(3, 1)
 
     assert type(scene) == type(sceneBis)
     assert sceneBis.size() == 3
-    assert sceneBis.edges() == [ (1, 1), (1, 3), (2, 1), (2, 2), (3, 2) ]
+
+    print(f">>>\n{sceneBis}")
+    assert '\n'+ str(sceneBis) +'\n' == """
+Scene:
+- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] bodies(0)
+- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] bodies(0)
+- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] bodies(0)
+"""
+
+    assert sceneBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
 
 def t_est_Scene_connection():
     scene= scene.Scene(3)

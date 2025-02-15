@@ -23,7 +23,10 @@ class Tile(Body):
         return self._bodies[i-1]
     
     # Construction:
-
+    def setAdjacencies( self, aList ):
+        self._adjacencies= aList
+        return self
+    
     # Connection:
     def connect(self, iTo):
         if iTo not in self._adjacencies :
@@ -59,40 +62,26 @@ class Tile(Body):
     def children(self):
         return [ self.shape() ] + self.bodies()
     
-    def initializeFrom( self, aPod ):
-        integers= aPod.intAttributes()
+    def initializeFrom( self, absObj, bodyConstructor= Body ):
+        integers= absObj.intAttributes()
+        children= absObj.children()
         self.setId( integers[0] )
         self.setMatter( integers[1] )
-        self.setPosition( Float2().fromList( aPod.floatAttributes() ) )
-        self.setShape( Shape().initializeFrom( aPod.children()[0] ) )
+        self.setPosition( Float2().fromList( absObj.floatAttributes() ) )
+        self.setAdjacencies( integers[2:] )
+        self.setShape( Shape().initializeFrom( children[0] ) )
+        for absBod in children[1:] :
+            self.append( bodyConstructor().initializeFrom( absBod ) )
         return self
     
-    def initializeFrom( self, aPod, childrenConstructor= Body ):
-        # Convert flags:
-        flags= aPod.flags()
-        self._num= flags[0]
-        self._matter= flags[1]
-        self._adjacencies= flags[2:]
-        # Convert Values:
-        vals= aPod.values()
-        xs= [ vals[i] for i in range( 0, len(vals), 2 ) ]
-        ys= [ vals[i] for i in range( 1, len(vals), 2 ) ]
-        self._center= Float2( xs[0], ys[0] )
-        self._points= [ Float2(x, y) for x, y in zip(xs[1:], ys[1:]) ]
-        # Load pices:
-        self.bodysFromChildren( aPod.children() )
-        return self
-
-    def bodysFromChildren(self, aListOfPod):
-        self._bodies= aListOfPod
-        return self
-
     # to str
     def str(self, typeName="Tile"): 
+        print( f"str(tile):" )
         # Myself :
         s= super(Tile, self).str(typeName)
         s+= " adjs"+ str(self._adjacencies)
         s+= f" bodies({ len(self.bodies()) })"
+        print( f"> "+s )
         return s
     
     def __str__(self): 

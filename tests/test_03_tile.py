@@ -98,9 +98,10 @@ def test_Tile_copy():
     tile= Tile(8, Float2(18.5, 4.07))
     tile.connectAll( [ 1, 3, 7, 19 ] )
 
+    assert tile.adjacencies() == [ 1, 3, 7, 19 ]
+
     tileBis= tile.copy()
-    
     tile.connect(4)
 
     assert type(tile) == type(tileBis)
-    assert tileBis.adjencies() == [ 1, 3, 7, 19 ]
+    assert tileBis.adjacencies() == [ 1, 3, 7, 19 ]
