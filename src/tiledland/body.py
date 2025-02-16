@@ -1,7 +1,7 @@
 from .geometry import Float2, Shape
-from .absobj import AbsObj
+from .pod import Podable, Pod
 
-class Body(AbsObj):
+class Body(Podable):
 
     # Initialization Destruction:
     def __init__( self, identifier= 0, position= Float2(0.0, 0.0), shape= None, matter= 0 ):
@@ -27,7 +27,7 @@ class Body(AbsObj):
     
     # Shape accessor : 
     def envelope(self):
-        x, y= self._center.tuple()
+        x, y= self._center.asTuple()
         return [ (x+p.x(), y+p.y()) for p in self._shape.points() ]
     
     def box(self):
@@ -50,25 +50,21 @@ class Body(AbsObj):
         self._shape= aShape
         return self
     
-    # absobj interface: 
-    def wordAttributes(self):
-        return ["Body"]
+    # Pod interface:
+    def asPod(self):
+        return Pod().fromLists( 
+            ["Body"], 
+            [self.id(), self.matter()],
+            self.position().asList(),
+            [ self.shape().asPod() ]
+        )
     
-    def intAttributes(self):
-        return [self.id(), self.matter()]
-    
-    def floatAttributes(self):
-        return self.position().list()
-    
-    def children(self):
-        return [self.shape()]
-    
-    def initializeFrom( self, aPod ):
-        integers= aPod.intAttributes()
+    def fromPod( self, aPod ):
+        integers= aPod.integers()
         self.setId( integers[0] )
         self.setMatter( integers[1] )
-        self.setPosition( Float2().fromList( aPod.floatAttributes() ) )
-        self.setShape( Shape().initializeFrom( aPod.children()[0] ) )
+        self.setPosition( Float2().fromList( aPod.values() ) )
+        self.setShape( Shape().fromPod( aPod.children()[0] ) )
         return self
     
     # str:

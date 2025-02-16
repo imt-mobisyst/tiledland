@@ -23,14 +23,14 @@ def test_Scene_initLine():
     assert scene.tiles() == [ scene.tile(1), scene.tile(2), scene.tile(3) ]
     assert scene.edges() == []
 
-    assert scene.tile(1).position().tuple() == (0.0, 0.0)
+    assert scene.tile(1).position().asTuple() == (0.0, 0.0)
     assert scene.tile(1).envelope() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
 
-    assert scene.tile(2).position().tuple() == (1.0, 0.0)
+    assert scene.tile(2).position().asTuple() == (1.0, 0.0)
     env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(2).envelope() ]
     assert env == [(0.55, 0.45), (1.45, 0.45), (1.45, -0.45), (0.55, -0.45)]
 
-    assert scene.tile(3).position().tuple() == (2.0, 0.0)
+    assert scene.tile(3).position().asTuple() == (2.0, 0.0)
     env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(3).envelope() ]
     assert env == [(1.55, 0.45), (2.45, 0.45), (2.45, -0.45), (1.55, -0.45)]
     
@@ -92,24 +92,26 @@ Scene:
 - Tile-4 ⌊(8.55, 8.55), (9.45, 9.45)⌉ adjs[1, 2] bodies(0)
 """
 
-def test_Scene_absobj():
+def test_Scene_podable():
     scene= Scene().initializeLine(3)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
 
-    assert scene.numberOfWords() == 1
-    assert scene.wordAttributes() == ["Scene"]
-    assert scene.wordAttribute() == "Scene"
+    pod= scene.asPod()
 
-    assert scene.numberOfInts() == 0
-    assert scene.intAttributes() == []
-    
-    assert scene.numberOfFloats() == 0
-    assert scene.floatAttributes() == []
-    
-    assert scene.numberOfChildren() == 3
-    assert scene.children() == [ scene.tile(1), scene.tile(2), scene.tile(3) ]
+    assert pod.numberOfWords() == 1
+    assert pod.words() == ["Scene"]
+    assert pod.word() == "Scene"
 
-def test_Scene_copy():
+    assert pod.numberOfIntegers() == 0
+    assert pod.integers() == []
+    
+    assert pod.numberOfValues() == 0
+    assert pod.values() == []
+    
+    assert pod.numberOfChildren() == 3
+    assert pod.children() == [ t.asPod() for t in scene.tiles() ]
+    
+def test_Scene_podcopy():
     scene= Scene().initializeLine(3)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
 
@@ -123,7 +125,7 @@ Scene:
 """
 
     print("Go for the copying...")
-    sceneBis= scene.copy()
+    sceneBis= scene.podCopy()
     scene.connect(3, 1)
 
     assert type(scene) == type(sceneBis)

@@ -45,7 +45,7 @@ def test_Tile_load():
     assert tileBis.asPod() == tile.asPod()
     
 def test_Tile_load():
-    shape= Shape(8).setShapeRegular( 12.0, 7 )
+    shape= Shape(8).initializeRegular( 12.0, 7 )
     
     shapeBis= Shape().load( shape.dump() )
     print( shape )

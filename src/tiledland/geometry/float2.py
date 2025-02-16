@@ -13,10 +13,11 @@ class Float2():
     def y(self):
         return self._y
     
-    def tuple(self): 
+    # Transform :
+    def asTuple(self): 
         return (self._x, self._y)
     
-    def list(self): 
+    def asList(self): 
         return [self._x, self._y]
     
     # Construction
@@ -38,6 +39,13 @@ class Float2():
     
     def fromList( self, aList ):
         return self.setx( aList[0] ).sety( aList[1] )
+    
+    # Object operator:
+    def copy(self):
+        cpy= type(self)()
+        cpy._x= self.x()
+        cpy._y= self.y()
+        return cpy
     
     # Operator: 
     def __add__(self, another):

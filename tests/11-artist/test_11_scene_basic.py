@@ -32,7 +32,7 @@ def test_artist_tile():
 
     compareSvg( shotImg, "tests/refs/11.11-artist-tile-02.svg" )
 
-    tile= tll.Tile( 1, 1 ).setCenter( 0.4, 0.2 ).setShapeRegular( 2.0, 6 )
+    tile= tll.Tile( 1, 1 ).setCenter( 0.4, 0.2 ).initializeRegular( 2.0, 6 )
     pablo.drawTile( tile )
     pablo.flip()
 
@@ -73,12 +73,12 @@ def test_artist_scene_net():
     pablo= tll.Artist( tll.SupportSVG( filePath= shotImg ) )
     scene= tll.Scene()
     
-    assert scene.addTile( tll.Tile().setShapeRegular( (-1.0, 0.0), 0.9, 6 ) ) == 1
-    assert scene.addTile( tll.Tile( type=1 ).setShapeRegular( (0.0, 0.0), 0.9, 6 ) ) == 2
-    assert scene.addTile( tll.Tile().setShapeRegular( (1.0, 0.0), 0.9, 6 ) ) == 3
+    assert scene.addTile( tll.Tile().initializeRegular( (-1.0, 0.0), 0.9, 6 ) ) == 1
+    assert scene.addTile( tll.Tile( type=1 ).initializeRegular( (0.0, 0.0), 0.9, 6 ) ) == 2
+    assert scene.addTile( tll.Tile().initializeRegular( (1.0, 0.0), 0.9, 6 ) ) == 3
 
-    assert scene.addTile( tll.Tile().setShapeRegular( (0.5, 0.866), 0.9, 6 ) ) == 4
-    assert scene.addTile( tll.Tile().setShapeRegular( (-0.5, -0.866), 0.9, 6 ) ) == 5
+    assert scene.addTile( tll.Tile().initializeRegular( (0.5, 0.866), 0.9, 6 ) ) == 4
+    assert scene.addTile( tll.Tile().initializeRegular( (-0.5, -0.866), 0.9, 6 ) ) == 5
 
     pablo.drawSceneTiles(scene)
     pablo.writeSceneTiles(scene)

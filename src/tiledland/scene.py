@@ -1,9 +1,9 @@
-from .absobj import AbsObj
+from .pod import Podable, Pod
 from .geometry import Float2, Box, Shape
 from .tile import Tile
 from .body import Body
 
-class Scene(AbsObj):
+class Scene(Podable):
 
     # Constructor:
     def __init__( self, bodyConstructor= Body ):
@@ -70,7 +70,7 @@ class Scene(AbsObj):
                     matrix[i][j]= iTile
         self._size= iTile
         # Basic Piece Shape:
-        self._shapes= [ Shape().setShapeRegular( tileSize*0.7, 8 ) ]
+        self._shapes= [ Shape().initializeRegular( tileSize*0.7, 8 ) ]
         return self
 
     def clearTiles( self ):
@@ -111,23 +111,17 @@ class Scene(AbsObj):
                     if conditionFromTo( tili, tilj ): # :
                        self.connect( i, j )
 
-    # absobj interface: 
-    def wordAttributes(self):
-        return ["Scene"]
+        # Podable:
+    def asPod( self ):
+        return Pod().fromLists(
+            ["Scene"], [], [],
+            [ t.asPod() for t in self.tiles() ]
+        )
     
-    def intAttributes(self):
-        return []
-    
-    def floatAttributes(self):
-        return []
-    
-    def children(self):
-        return self.tiles()
-    
-    def initializeFrom( self, absObj ):
+    def fromPod( self, aPod ):
         self.clearTiles()
-        for absTile in absObj.children() :
-            self.addTile( Tile().initializeFrom( absTile, self._bodyCtt ) )
+        for absTile in aPod.children() :
+            self.addTile( Tile().fromPod( absTile, self._bodyCtt ) )
         return self
     
     # Iterator over scene tiles

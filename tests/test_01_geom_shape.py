@@ -19,11 +19,11 @@ def test_Shape_init():
     shape= Shape( 42.0 )
     assert shape.envelope() == [(-21.0, 21.0), (21.0, 21.0), (21.0, -21.0), (-21.0, -21.0)]
 
-    shape.setShapeSquare( 2.0 )
+    shape.initializeSquare( 2.0 )
     assert shape.envelope() == [(-1.0, 1.0), (1.0, 1.0), (1.0, -1.0), (-1.0, -1.0)]
 
 def test_Shape_regular():
-    shape= Shape().setShapeRegular( 20.0, 6 )
+    shape= Shape().initializeRegular( 20.0, 6 )
     assert len(shape.envelope()) == 6
     env= [ ( round(x, 2), round(y, 2) ) for x, y in shape.envelope() ]
     print( env )
@@ -35,35 +35,43 @@ def test_Shape_regular():
     box= shape.box()
     box.round(2)
 
-    assert box.list() == [-8.66, -10.0, 8.66, 10.0]
-    assert box.zip() == [ (-8.66, -10.0), (8.66, 10.0) ]
+    assert box.asList() == [-8.66, -10.0, 8.66, 10.0]
+    assert box.asZip() == [ (-8.66, -10.0), (8.66, 10.0) ]
 
     
 def test_Shape_str():
     shape= Shape(10.0)
     print(f">>> {shape}")
     assert str(shape) == "Shape 4[(-5.0, -5.0), (5.0, 5.0)]"
-    shape.setShapeRegular( 20.0, 6 )
+    shape.initializeRegular( 20.0, 6 )
     print(f">>> {shape}")
     assert str(shape) == "Shape 6[(-8.66, -10.0), (8.66, 10.0)]"
 
-def test_Shape_absobj():
+def test_Shape_podable():
     shape= Shape( 10.0 )
+    pod= shape.asPod()
 
-    assert shape.wordAttributes() == ["Shape"]
-    assert shape.intAttributes() == []
-    assert shape.floatAttributes() == [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]
-    assert shape.children() == []
+    assert pod.words() == ["Shape"]
+    assert pod.integers() == []
+    assert pod.values() == [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]
+    assert pod.children() == []
 
     shapeBis= Shape()
     assert shapeBis.envelope() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5)]
 
-    shapeBis.initializeFrom( shape )
+    shapeBis.fromPod( shape.asPod() )
     assert shapeBis.envelope() == [(-5.0, 5.0), (5.0, 5.0), (5.0, -5.0), (-5.0, -5.0)]
 
-def test_Shape_copy():
+def test_Shape_podCopy():
     shape= Shape(0.9)
     assert shape.envelope() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
     
     shapeBis= shape.copy()
+    assert shapeBis.envelope() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
+
+def test_Shape_podCopy():
+    shape= Shape(0.9)
+    assert shape.envelope() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
+    
+    shapeBis= shape.podCopy()
     assert shapeBis.envelope() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]

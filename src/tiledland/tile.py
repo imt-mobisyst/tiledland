@@ -1,4 +1,5 @@
 import math
+from .pod import Pod
 from .geometry import Float2, Shape
 from .body import Body
 
@@ -52,26 +53,26 @@ class Tile(Body):
     def centerDistance(self, another):
         return self.position().distance( another.position() )
 
-        # absobj interface: 
-    def wordAttributes(self):
-        return ["Tile"]
+    # Pod interface:
+    def asPod(self):
+        return Pod().fromLists(  
+            ["Tile"], 
+            [self.id(), self.matter()] + self.adjacencies(),
+            self.position().asList(),
+            [self.shape().asPod()] + [ bod.asPod() for bod in self.bodies() ]
+        )
     
-    def intAttributes(self):
-        return super(Tile, self).intAttributes() + self.adjacencies()
-        
-    def children(self):
-        return [ self.shape() ] + self.bodies()
-    
-    def initializeFrom( self, absObj, bodyConstructor= Body ):
-        integers= absObj.intAttributes()
-        children= absObj.children()
+    def fromPod( self, aPod, bodyConstructor=Body ):
+        integers= aPod.integers()
+        children= aPod.children()
         self.setId( integers[0] )
         self.setMatter( integers[1] )
-        self.setPosition( Float2().fromList( absObj.floatAttributes() ) )
         self.setAdjacencies( integers[2:] )
-        self.setShape( Shape().initializeFrom( children[0] ) )
-        for absBod in children[1:] :
-            self.append( bodyConstructor().initializeFrom( absBod ) )
+        self.setPosition( Float2().fromList( aPod.values() ) )
+        self.setShape( Shape().fromPod( aPod.children()[0] ) )
+        self.clear()
+        for podBod in children[1:] :
+            self.append( bodyConstructor().fromPod( podBod ) )
         return self
     
     # to str

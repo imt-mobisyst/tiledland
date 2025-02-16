@@ -35,12 +35,15 @@ class Box():
         self._max+= aFloat2
         return self
 
-    def list(self):
-        return self._min.list() + self._max.list()
-    def zip(self):
-        return [self._min.tuple(), self._max.tuple()]
+    # Transform:
+
+    def asList(self):
+        return self._min.asList() + self._max.asList()
     
-    #Comparison:
+    def asZip(self):
+        return [self._min.asTuple(), self._max.asTuple()]
+    
+    # Comparison:
     def __eq__(self, another):
         return ( self._min == another.leftFloor()
             and self._max == another.rightCeiling()
