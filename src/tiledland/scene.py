@@ -80,6 +80,10 @@ class Scene(Podable):
         self._shapes= [ Shape().initializeRegular( tileSize*0.7, 8 ) ]
         return self
 
+    def setBodyConstrutor(self, bodyConstructor ):
+        self._bodyCtt= bodyConstructor
+        return self
+
     def clearTiles( self ):
         self._tiles= [None]
         self._size= 0

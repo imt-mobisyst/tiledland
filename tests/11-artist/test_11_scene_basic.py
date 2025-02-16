@@ -2,7 +2,6 @@ import sys
 workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
-import hacka.py as hacka
 import src.tiledland as tll
 
 def zipSvgFile( img1, img2 ):
@@ -206,7 +205,7 @@ def test_artist_scene_piece():
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-body-04.svg" ):
         assert( lineShot == lineRef )
-    
+
     scene.clearBodies()
     pablo.drawScene(scene)
     pablo.flip()

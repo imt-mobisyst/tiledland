@@ -17,6 +17,19 @@ scene.connectAllCondition(
 )
 
 # Add some objects on the scene:
+def newBody():
+    return tll.Body( shape=tll.Shape().initializeRegular(0.7, 6) )
+
+scene.setBodyConstrutor( newBody )
+
+bod= scene.popBodyOn(9)
+bod.setId(1).setMatter(13)
+
+bod= scene.popBodyOn(14)
+bod.setId(2).setMatter(15)
+
+bod= scene.popBodyOn(26)
+bod.setId(3).setMatter(13)
 
 # Create an artist to render this scene:
 artist= tll.Artist().initializePNG( filePath= "shot-example.png" )
