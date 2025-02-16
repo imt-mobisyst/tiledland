@@ -5,6 +5,10 @@ class Box():
 
     # Initialization Destruction:
     def __init__( self, listOfPoint=[Float2()] ):
+        self.fromList( listOfPoint )
+
+    # initialization:
+    def fromList( self, listOfPoint= [Float2()] ):
         self._min= Float2( listOfPoint[0].x(), listOfPoint[0].y() )
         self._max= Float2( listOfPoint[0].x(), listOfPoint[0].y() )
         for p in listOfPoint :
@@ -16,7 +20,9 @@ class Box():
                 self._max.setx( p.x() )
             if p.y() > self._max.y() :
                 self._max.sety( p.y() )
-    
+        return self
+        
+
     # Accessors
     def leftFloor(self):
         return self._min
@@ -24,7 +30,7 @@ class Box():
     def rightCeiling(self):
         return self._max
 
-    # Transformations:
+    # Construction:
     def round(self, precition=0):
         self._min.round(precition)
         self._max.round(precition)
@@ -34,9 +40,15 @@ class Box():
         self._min+= aFloat2
         self._max+= aFloat2
         return self
-
+    
+    def merge( self, another ):
+        self._min._x= min( self._min._x, another._min._x )
+        self._min._y= min( self._min._y, another._min._y )
+        self._max._x= max( self._max._x, another._max._x )
+        self._max._y= max( self._max._y, another._max._y )
+        return self
+    
     # Transform:
-
     def asList(self):
         return self._min.asList() + self._max.asList()
     

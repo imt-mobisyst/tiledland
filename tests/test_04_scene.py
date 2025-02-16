@@ -92,6 +92,18 @@ Scene:
 - Tile-4 ⌊(8.55, 8.55), (9.45, 9.45)⌉ adjs[1, 2] bodies(0)
 """
 
+def test_Scene_box():
+    scene= Scene()
+    assert scene.box() == Box( [Float2(0.0, 0.0)] )
+
+    scene= Scene().initializeLine(4)
+    print( scene.box() )
+    assert scene.box().asZip() == [(-0.45, -0.45), (3.45, 0.45)]
+    
+    scene.initializeGrid( [[0, 1], [0, -1]] )
+    print( scene.box() )
+    assert scene.box().asZip() == [(-0.5, -0.5), (1.6, 1.6)]
+
 def test_Scene_podable():
     scene= Scene().initializeLine(3)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
@@ -110,7 +122,7 @@ def test_Scene_podable():
     
     assert pod.numberOfChildren() == 3
     assert pod.children() == [ t.asPod() for t in scene.tiles() ]
-    
+
 def test_Scene_podcopy():
     scene= Scene().initializeLine(3)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
@@ -141,24 +153,21 @@ Scene:
 
     assert sceneBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
 
-def t_est_Scene_connection():
-    scene= scene.Scene(3)
+def test_Scene_connection():
+    scene= Scene().initializeLine(3)
     scene.connect(1, 2)
     scene.connect(2, 2)
     scene.connect(2, 3)
     scene.connect(3, 2)
-    assert "\n"+str(scene) == """
-Scene
-- tile-1
-- Edge-1 [2]
-- tile-2
-- Edge-2 [2, 3]
-- tile-3
-- Edge-3 [2]"""
+    print( f"---\n{scene}.")
+    assert str(scene) == """Scene:
+- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[2] bodies(0)
+- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[2, 3] bodies(0)
+- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] bodies(0)"""
 
-    assert scene.edgesFrom(1) == [2]
-    assert scene.edgesFrom(2) == [2, 3]
-    assert scene.edgesFrom(3) == [2]
+    assert scene.tile(1).adjacencies() == [2]
+    assert scene.tile(2).adjacencies() == [2, 3]
+    assert scene.tile(3).adjacencies() == [2]
     
     assert scene.isEdge(1, 2)
     assert scene.isEdge(2, 2)
@@ -167,21 +176,48 @@ Scene
     assert not scene.isEdge(1, 3)
     assert not scene.isEdge(3, 1)
   
-def t_est_Scene_iterator():
-    scene= Scene(3)
-    scene.connect(1, 2)
-    scene.connect(2, 2)
-    scene.connect(2, 3)
-    scene.connect(3, 2)
+def test_Scene_withBodies():
+    scene= Scene().initializeGrid( [[0, 1],[-1, 0]] )
+    
+    assert scene.countBodies() == 0
+    assert scene.tile(1).count() == 0
+    assert scene.tile(2).count() == 0
+    assert scene.tile(3).count() == 0
+    
+    scene.popBodyOn(2)
 
-    ref= [
-        [ "tile-1", [2]],
-        [ "tile-2", [2, 3]],
-        [ "tile-3", [2] ]
-    ]
-    i= 0
-    for tile, edges in scene :
-        assert scene.itile() == i+1
-        assert str(tile) == ref[i][0]
-        assert edges == ref[i][1]
-        i+=1
+    assert scene.countBodies() == 1
+    assert scene.tile(1).count() == 0
+    assert scene.tile(2).count() == 1
+    assert scene.tile(3).count() == 0
+
+    scene.popBodyOn(1)
+
+    assert scene.countBodies() == 2
+    assert scene.tile(1).count() == 1
+    assert scene.tile(2).count() == 1
+    assert scene.tile(3).count() == 0
+
+    bod= scene.popBodyOn(2)
+    bod.setId(4)
+
+    assert scene.countBodies() == 3
+    assert scene.tile(1).count() == 1
+    assert scene.tile(2).count() == 2
+    assert scene.tile(3).count() == 0
+
+    print( f"---\n{scene}.")
+    assert str(scene) == """Scene:
+- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[] bodies(1)
+  - Body-0 ⌊(-0.5, 0.6), (0.5, 1.6)⌉
+- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[] bodies(2)
+  - Body-0 ⌊(0.6, 0.6), (1.6, 1.6)⌉
+  - Body-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉
+- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[] bodies(0)"""
+
+    scene.clearBodies()
+
+    assert scene.countBodies() == 0
+    assert scene.tile(1).count() == 0
+    assert scene.tile(2).count() == 0
+    assert scene.tile(3).count() == 0

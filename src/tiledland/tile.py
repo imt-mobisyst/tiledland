@@ -77,12 +77,10 @@ class Tile(Body):
     
     # to str
     def str(self, typeName="Tile"): 
-        print( f"str(tile):" )
         # Myself :
         s= super(Tile, self).str(typeName)
         s+= " adjs"+ str(self._adjacencies)
         s+= f" bodies({ len(self.bodies()) })"
-        print( f"> "+s )
         return s
     
     def __str__(self): 

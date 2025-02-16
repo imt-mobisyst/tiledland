@@ -9,10 +9,16 @@
 
 ## Scene, Tiles and Bodies :
 
-- [ ] Bodies: Center, Bearing and Shape
-- [ ] Scene as collection of: Bodies structured on Tiles
-- [ ] Tiles as collection of: Bodies and Tiles
+- [ ] Bodies: Position, Bearing and Shape
+- [ ] Scene as collection of: Bodies, structured on Tiles
+- [ ] Tiles as collection of: Abstract Bodies
 - [ ] Abstraction on Scene: Bodies could be anything...
+
+## Documentation :
+
+- [ ] Presentation of Core components
+- [ ] Presentation of geometry submodule
+- [ ] Developpers expectation: (template from Shape + class structure + tests)
 
 ## Simple, but strong and independant plan geometry
 

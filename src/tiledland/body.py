@@ -50,6 +50,14 @@ class Body(Podable):
         self._shape= aShape
         return self
     
+    def setShapeRegular(self, size= 1.0):
+        self._shape.initializeSquare(size)
+        return self
+
+    def setShapeRegular(self, numberOfVertex= 6, size= 1.0):
+        self._shape.initializeRegular( numberOfVertex, size)
+        return self
+
     # Pod interface:
     def asPod(self):
         return Pod().fromLists( 

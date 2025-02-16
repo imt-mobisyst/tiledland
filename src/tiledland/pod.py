@@ -9,7 +9,6 @@ class Podable():
       
     # Object construction:
     def podCopy( self ):
-        print( f"PodCopy: {type(self)}" )
         return type(self)().fromPod( self.asPod() )
   
 class Pod(Podable):

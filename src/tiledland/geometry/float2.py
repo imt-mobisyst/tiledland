@@ -62,7 +62,7 @@ class Float2():
 
     def distance(self, another):
         delta= another - self
-        dx, dy = delta.tuple()
+        dx, dy = delta.asTuple()
         return math.sqrt( dx*dx + dy*dy )
     
     # to str

@@ -92,8 +92,8 @@ class Artist():
     
     def fitBox( self, aBox, marge=10 ):
         marge= marge*2
-        minx, miny= aBox[0].tuple()
-        maxx, maxy= aBox[1].tuple()
+        minx, miny= aBox.leftFloor().asTuple()
+        maxx, maxy= aBox.rightCeiling().asTuple()
         self.setCamera( (minx+maxx)*0.5, (miny+maxy)*0.5 )
         distx= maxx-minx
         disty= maxy-miny
@@ -241,31 +241,29 @@ class Artist():
         )
     
     def writeTile( self, aTile ):
-        minx, miny= aTile.box()[0].tuple()
-        x, y= aTile.center().tuple()
+        minx, miny= aTile.box().leftFloor().asTuple()
+        x, y= aTile.position().asTuple()
         x= x+(minx-x)*2/3
         y= y+(miny-y)*2/3
         self.write( x, y, str(aTile.id()), self._panel[ aTile.matter() ] )
 
-    def drawPiece( self, position, brushId, shape, name ):
-        x, y= position
+    def drawBody( self, body, brushId ):
         self.fillShape(
-            shape.envelope(),
-            brushId, x, y )
-        minx, miny= shape.box()[0].tuple()
-        x= x+(minx)*4/5
-        y= y+(miny)*1/3
-        self.write( x, y, name, self._panel[brushId] )
+            body.envelope(),
+            brushId )
+        minx, miny= body.box().leftFloor().asTuple()
+        x, y= body.position().asTuple()
+        self.write( x, y, str(body.id()), self._panel[brushId] )
     
     def drawSceneNetwork( self, aScene ):
         for tile in aScene.tiles() :
-            cx, cy= tile.center().tuple()
+            cx, cy= tile.position().asTuple()
             self.tracePoint( cx, cy, self._panel[ tile.matter() ] )
 
         for fromId, toId in aScene.edges() :
-            fromX, fromY= aScene.tile( fromId ).center().tuple()
+            fromX, fromY= aScene.tile( fromId ).position().asTuple()
             brush= self._panel[ aScene.tile( fromId ).matter() ]
-            toX, toY= aScene.tile( toId ).center().tuple()
+            toX, toY= aScene.tile( toId ).position().asTuple()
             self.traceLine( fromX, fromY, toX, toY, brush )
         #    self.tracePoint( aScene.tile(fromId) )
 
@@ -275,11 +273,10 @@ class Artist():
 
     def drawSceneBodies( self, aScene ):
         for tile in aScene.tiles() :
-            x, y= tile.center().tuple()
+            x, y= tile.position().asTuple()
             position= (x+0.1, y+0.1)
-            for body, brushId, shapeId in tile.pieceDescriptions() :
-                shape= aScene._shapes[shapeId]
-                self.drawBodies( position, brushId, shape, piece.family() )
+            for body in tile.bodies() :
+                self.drawBody( body, body.matter() )
     
     def writeSceneTiles( self, aScene ):
         for tile in aScene.tiles() :
@@ -289,7 +286,7 @@ class Artist():
         self.drawSceneNetwork(aScene)
         self.drawSceneTiles(aScene)
         self.writeSceneTiles(aScene)
-        self.drawScenePieces(aScene)
+        self.drawSceneBodies(aScene)
 
     # Control:
     def flip(self):

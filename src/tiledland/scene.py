@@ -14,7 +14,7 @@ class Scene(Podable):
     # Accessor:
     def size(self):
         return self._size
-
+    
     def tiles(self):
         return self._tiles[1:]
 
@@ -27,6 +27,12 @@ class Scene(Podable):
             edgeList+= [ (t.id(), neibor) for neibor in t.adjacencies() ]
         return edgeList
 
+    def countBodies(self):
+        nb= 0
+        for t in self.tiles() :
+            nb+= t.count()
+        return nb
+
     # Test:
     def isTile(self, iTile):
         return 0 < iTile and iTile <= self.size()
@@ -37,9 +43,9 @@ class Scene(Podable):
     def box(self):
         if self._size == 0 :
             return Box()
-        box= self._tile[0].box()
-        for t in self._tile[1:] :
-            box+= t.box()
+        box= self.tile(1).box()
+        for t in self.tiles()[1:] :
+            box.merge( t.box() )
         return box
 
     # Construction:
@@ -62,9 +68,10 @@ class Scene(Podable):
                 if matrix[i][j] >= 0 : 
                     iTile+= 1
                     tile= Tile(
-                        iTile, matrix[i][j],
+                        iTile,
                         Float2( dist*j, dist*(maxLine-i) ),
-                        tileSize
+                        Shape(tileSize),
+                        matrix[i][j]
                     )
                     self._tiles.append( tile )
                     matrix[i][j]= iTile
@@ -74,25 +81,28 @@ class Scene(Podable):
         return self
 
     def clearTiles( self ):
-        self._tiles= [Tile()]
+        self._tiles= [None]
         self._size= 0
         return self
 
     def addTile( self, aTile ):
-        print( f"append: {self._size} - {aTile}" )
         self._size+= 1
         aTile.setId( self._size )
         self._tiles.append( aTile )
-        print( f"tiles: {self._tiles}" )
-        print( f"{self}" )
-
         return self._size
 
-    #def addPiece( self, aPod, tileId, brushId=0, shapeId=0 ):
-    #    tile= self.tile( tileId )
-    #    tile.append( aPod, brushId, shapeId )
-    #    return tile.id()
-    
+    def clearBodies(self):
+        for t in self.tiles() :
+            t.clear()
+        return self
+
+
+    def popBodyOn(self, iTile=1 ):
+        bod= self._bodyCtt()
+        bod.setPosition( self.tile(iTile).position().copy() )
+        self.tile(iTile).append( bod )
+        return bod
+
     def connect(self, iFrom, iTo):
         self.tile(iFrom).connect(iTo)
         return self
@@ -111,7 +121,7 @@ class Scene(Podable):
                     if conditionFromTo( tili, tilj ): # :
                        self.connect( i, j )
 
-        # Podable:
+    # Podable:
     def asPod( self ):
         return Pod().fromLists(
             ["Scene"], [], [],
@@ -123,28 +133,10 @@ class Scene(Podable):
         for absTile in aPod.children() :
             self.addTile( Tile().fromPod( absTile, self._bodyCtt ) )
         return self
-    
-    # Iterator over scene tiles
-    def __iter__(self):
-        self._ite= 1
-        return self
-
-    def __next__(self):
-        if self._ite <= self.size() :
-            tile = self.tile( self._ite )
-            edges= self.edgesFrom( self._ite )
-            self._ite += 1
-            return tile, edges
-        else:
-            raise StopIteration
-
-    def iTile(self):
-        return self._ite-1
-    
+        
     # string:
     def str(self, name="Scene"):
         eltStrs =[]
-        print( f"> {self.tiles()}")
         for t in self.tiles() :
             eltStrs.append( f"- {t}" )
             for bod in t.bodies() :

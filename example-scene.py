@@ -3,7 +3,7 @@ import tiledland as tll
 
 # Create a new Tiled-Map as a grid:
 scene= tll.Scene()
-scene.initializeSquares(
+scene.initializeGrid(
     [[0, 1, 1, -1, 0, 0, 0, 0],
     [5, -1, 0, 2, 0, -1, 5, 0],
     [0, 0, 0, -1, 0, 1, 1, 0],
