@@ -1,5 +1,4 @@
 import src.tiledland as tll
-import hacka.py as hk
 
 '''
 def test_Shape_pod():
