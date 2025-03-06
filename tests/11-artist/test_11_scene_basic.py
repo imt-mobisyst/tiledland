@@ -185,8 +185,7 @@ def test_artist_scene_piece():
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-body-02.svg" ):
         assert( lineShot == lineRef )
-
-
+    
     popBody(2,  9, 13)
     popBody(2, 14, 15)
     popBody(3, 23, 13)
