@@ -16,11 +16,18 @@ class Scene(Podable):
         return self._size
     
     def tiles(self):
-        return self._tiles[1:]
+        return self._tiles
 
     def tile(self, iCell):
-        return self._tiles[iCell]
+        return self._tiles[iCell-1]
 
+    def neighbours(self, iCell):
+        neibs= [] 
+        for iNei in self.tile(iCell).adjacencies() :
+            dir= self.tile(iCell).clockDirection( self.tile(iNei).position() )
+            neibs.append( (iNei, dir) )
+        return neibs
+    
     def edges(self):
         edgeList= []
         for t in self.tiles() :
@@ -49,8 +56,16 @@ class Scene(Podable):
         return box
 
     # Construction:
-    def initializeLine( self, size, shape=Shape(0.9), distance=1.0 ):
-        self._tiles= [None] + [
+    def append( self, tile ):
+        self._tiles.append( tile )
+        self._size+= 1
+        self.tile( self._size ).setId( self._size )
+        return self._size
+
+    def initializeLine( self, size, shape= None, distance=1.0 ):
+        if shape is None :
+            shape= Shape().initializeSquare(0.9)
+        self._tiles= [
             Tile( i+1, Float2(distance*i, 0.0), shape.copy() )
             for i in range(size)
         ]
@@ -59,7 +74,7 @@ class Scene(Podable):
     
     def initializeGrid( self, matrix, tileSize= 1.0, separation=0.1 ):
         dist= tileSize+separation
-        self._tiles= [None]
+        self._tiles= []
         
         iTile= 0
         maxLine= len(matrix)-1
@@ -70,7 +85,7 @@ class Scene(Podable):
                     tile= Tile(
                         iTile,
                         Float2( dist*j, dist*(maxLine-i) ),
-                        Shape(tileSize),
+                        Shape().initializeSquare(tileSize),
                         matrix[i][j]
                     )
                     self._tiles.append( tile )
@@ -85,7 +100,7 @@ class Scene(Podable):
         return self
 
     def clearTiles( self ):
-        self._tiles= [None]
+        self._tiles= []
         self._size= 0
         return self
 

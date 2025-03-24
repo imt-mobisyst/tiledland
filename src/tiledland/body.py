@@ -10,7 +10,7 @@ class Body(Podable):
         self._center= Float2( position.x(), position.y() )
         self._shape= shape
         if self._shape is None :
-            self._shape= Shape()
+            self._shape= Shape().initializeSquare(1.0)
 
     # Accessor: 
     def id(self):
@@ -27,12 +27,19 @@ class Body(Podable):
     
     # Shape accessor : 
     def envelope(self):
-        x, y= self._center.asTuple()
-        return [ (x+p.x(), y+p.y()) for p in self._shape.points() ]
+        cx, cy= self._center.asTuple()
+        return [ (cx+x, cy+y) for x, y in self._shape.asZipped() ]
     
     def box(self):
         return self.shape().box().move(self.position())
     
+    def radius(self):
+        r= 0.0
+        for p in self._shape._points :
+            d= self._center.distance( p )
+            r= max( d, r )
+        return r
+
     # Construction:
     def setId(self, aInteger):
         self._id= aInteger

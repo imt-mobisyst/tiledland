@@ -88,10 +88,11 @@ class SupportPNG( SupportVoid ):
         ctx = cairo.Context( self._canvas )
         r, g, b= percentColor(strokeColor)
         ctx.set_line_width(strokeWidth)
-        ctx.move_to( pixXs[0], pixYs[0] )
-        for pixx, pixy in zip( pixXs[1:], pixYs[1:] ) :
-            ctx.line_to(pixx, pixy)
-        ctx.close_path()
+        if len(pixXs) > 0 :
+            ctx.move_to( pixXs[0], pixYs[0] )
+            for pixx, pixy in zip( pixXs[1:], pixYs[1:] ) :
+                ctx.line_to(pixx, pixy)
+            ctx.close_path()
         ctx.set_source_rgb( r, g, b )
         ctx.stroke()
         return self
@@ -99,10 +100,11 @@ class SupportPNG( SupportVoid ):
     def fillPolygon( self, pixXs, pixYs, fillColor ):
         ctx = cairo.Context( self._canvas )
         r, g, b= percentColor( fillColor )
-        ctx.move_to( pixXs[0], pixYs[0] )
-        for pixx, pixy in zip( pixXs[1:], pixYs[1:] ) :
-            ctx.line_to( pixx, pixy )
-        ctx.close_path()
+        if len(pixXs) > 0 :
+            ctx.move_to( pixXs[0], pixYs[0] )
+            for pixx, pixy in zip( pixXs[1:], pixYs[1:] ) :
+                ctx.line_to( pixx, pixy )
+            ctx.close_path()
         ctx.set_source_rgb( r, g, b )
         ctx.fill()
         return self
@@ -112,10 +114,11 @@ class SupportPNG( SupportVoid ):
         sr, sg, sb= percentColor(strokeColor)
         fr, fg, fb= percentColor(fillColor)
         ctx.set_line_width(strokeWidth)
-        ctx.move_to( pixXs[0], pixYs[0] )
-        for pixx, pixy in zip( pixXs[1:], pixYs[1:] ) :
-            ctx.line_to(pixx, pixy)
-        ctx.close_path()
+        if len(pixXs) > 0 :
+            ctx.move_to( pixXs[0], pixYs[0] )
+            for pixx, pixy in zip( pixXs[1:], pixYs[1:] ) :
+                ctx.line_to(pixx, pixy)
+            ctx.close_path()
         ctx.set_source_rgb( fr, fg, fb )
         ctx.fill_preserve()
         ctx.set_source_rgb( sr, sg, sb )

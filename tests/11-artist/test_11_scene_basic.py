@@ -25,7 +25,7 @@ def test_artist_tile():
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-tile-01.svg" ):
         assert( lineShot == lineRef )
     
-    tile= tll.Tile( 3, tll.Float2(1.3, 0.9), tll.Shape(4.0) )
+    tile= tll.Tile( 3, tll.Float2(1.3, 0.9), tll.Shape().initializeSquare(4.0) )
     pablo.drawTile( tile )
     pablo.flip()
 

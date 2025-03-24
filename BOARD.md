@@ -4,15 +4,16 @@
 
 - [x] Initialize with hackagames.tiled
 - [x] Initialize artist rendering
-- [x] New Structure: core (Scene, Tiles and Bodies), geometry and artist.
+- [x] New Structure: core (Scene, Tiles and Bodies), geometry and artist
 - [-] Remove dependancies to hacka.py (But test hacka.py compatibility)
 
 ## Scene, Tiles and Bodies :
 
-- [ ] Bodies: Position, Bearing and Shape
+- [ ] Bodies: Position, clock-position and Shape
 - [x] Scene as collection of: Bodies, structured on Tiles
 - [x] Tiles as collection of: Abstract Thinks
 - [x] Abstraction on Scene: Bodies could be anything...
+- [ ] Bodies: update position and Shape function (auto-centering) 
 
 ## Documentation :
 

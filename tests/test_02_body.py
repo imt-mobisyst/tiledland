@@ -40,7 +40,7 @@ def test_Body_init2():
     assert env == [(0.77, 2.1), (0.9, 2.23), (1.1, 2.23), (1.23, 2.1), (1.23, 1.9), (1.1, 1.77), (0.9, 1.77), (0.77, 1.9)]
     
 def test_Body_str():
-    body= Body( 42, Float2(1.0, 2.0) )
+    body= Body( 42, Float2(1.0, 2.0), Shape().initializeSquare(1.0) )
     print(body)
     assert str(body) == "Body-42 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 

@@ -40,6 +40,11 @@ class Float2():
     def fromList( self, aList ):
         return self.setx( aList[0] ).sety( aList[1] )
     
+    def fromTrigo( self, aRadAngle, aDistance= 1.0 ):
+        self._x= math.cos( aRadAngle ) * aDistance
+        self._y= math.sin( aRadAngle ) * aDistance
+        return self
+
     # Object operator:
     def copy(self):
         cpy= type(self)()

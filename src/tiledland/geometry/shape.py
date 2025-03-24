@@ -6,9 +6,9 @@ from .box import Box
 class Shape(Podable):
 
     # Constructor/Destructor:
-    def __init__( self, size= 1.0 ):
-        self.initializeSquare( size )
-
+    def __init__( self ):
+        self._points= []
+    
     # Initialization:
     def initializeSquare(self, size):
         demi= size*0.5
@@ -31,32 +31,44 @@ class Shape(Podable):
             self._points.append(p)
             angle+= -delta
         return self
-
+    
     # Accessor:
+    def size(self):
+        return len(self._points)
+    
     def points(self):
         return self._points
     
     def box(self):
+        if self.size() == 0 :
+            return Box()
         return Box(self.points())
     
-    def envelope(self):
-        return [ (p.x(), p.y()) for p in self._points ]
-
-    # Construction:
-    def setEnveloppe( self, envelopes ):
-        self._points= [ Float2(x, y) for x, y in envelopes ]
-        return self
-    
-    def round(self, precision):
-        for p in self._points :
-            p.round(precision)
-    
-    # Transform:
+    # Morphing:
     def asList(self):
         l= []
         for p in self._points:
             l+= [p.x(), p.y()]
         return l
+    
+    def asLists(self):
+        return [p.x() for p in self._points], [p.y() for p in self._points]
+    
+    def fromLists(self, listX, listY):
+        self._points= [ Float2(x, y) for x, y in zip(listX, listY) ]
+        return self
+
+    def asZipped(self):
+        return [ (p.x(), p.y()) for p in self._points ]
+
+    def fromZipped( self, zipedList ):
+        self._points= [ Float2(x, y) for x, y in zipedList ]
+        return self
+    
+    # Construction:
+    def round(self, precision):
+        for p in self._points :
+            p.round(precision)
     
     # Object operator:
     def copy(self):

@@ -1,4 +1,5 @@
 import math
+from . import geometry
 from .pod import Pod
 from .geometry import Float2, Shape
 from .body import Body
@@ -40,6 +41,21 @@ class Tile(Body):
             self.connect( iTo )
         return self
     
+    def clockDirection( self, aPosition ):
+        center= self.position()
+        radius= self.radius()
+        if center.distance( aPosition ) < radius :
+            return 0
+        clock= 1
+        distance= aPosition.distance( center + geometry.clockPositions[1] )
+        for i in range( 2, geometry.clockLenght ):
+            option= center + geometry.clockPositions[i]
+            d= aPosition.distance( option )
+            if d < distance :
+                clock= i
+                distance= d
+        return clock
+
     # Body managment
     def append(self, aPod, brushId=0, shapeId=0 ): 
         self._bodies.append( aPod )
