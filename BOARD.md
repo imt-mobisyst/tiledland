@@ -4,16 +4,16 @@
 
 - [x] Initialize with hackagames.tiled
 - [x] Initialize artist rendering
-- [x] New Structure: core (Scene, Tiles and Bodies), geometry and artist
+- [x] New Structure: core (Scene, Tiles and Agents), geometry and artist
 - [-] Remove dependancies to hacka.py (But test hacka.py compatibility)
 
-## Scene, Tiles and Bodies :
+## Scene, Tiles and Agents :
 
-- [x] Bodies: Position, clock-position and Shape
-- [x] Scene as collection of: Bodies, structured on Tiles
+- [x] Agents: Position, clock-position and Shape
+- [x] Scene as collection of: Agents, structured on Tiles
 - [x] Tiles as collection of: Abstract Thinks
-- [x] Abstraction on Scene: Bodies could be anything...
-- [ ] Bodies: update position and Shape function (auto-centering) 
+- [x] Abstraction on Scene: Agents could be anything...
+- [ ] Agents: update position and Shape function (auto-centering) 
 
 ## Documentation :
 
@@ -34,7 +34,7 @@
 - [ ] Segment automatic tag.
 - [ ] get a tiles from a position (in max radius, and closest)
 
-## Body Based Model:
+## Agent Based Model:
 
 Or not ?..
 

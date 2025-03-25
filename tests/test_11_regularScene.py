@@ -3,7 +3,7 @@ import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src.tiledland.geometry import Float2, Box
-from src.tiledland import Shape, Body, Tile, Scene 
+from src.tiledland import Shape, Agent, Tile, Scene 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
@@ -60,16 +60,16 @@ def test_Scene_construction():
 def test_Scene_str():
     scene= Scene().initializeLine(3)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
-    scene.tile(2).append( Body(1) )
+    scene.tile(2).append( Agent(1, 1) )
 
     print( f">>> {scene}." )
 
     assert "\n"+str(scene)+"\n" == """
 Scene:
-- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] bodies(0)
-- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] bodies(1)
-  - Body-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉
-- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] bodies(0)
+- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] agents(1)
+  - Agent-1.1 ⌊(-0.2, -0.2), (0.2, 0.2)⌉
+- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] agents(0)
 """
 
 def test_Scene_pod():
@@ -86,10 +86,10 @@ def test_Scene_pod():
     print(f">>>\n{scene}")
     assert '\n'+ str(scene) +'\n' == """
 Scene:
-- Tile-1 ⌊(4.55, 2.55), (5.45, 3.45)⌉ adjs[2, 3, 4] bodies(0)
-- Tile-2 ⌊(4.55, 14.55), (5.45, 15.45)⌉ adjs[1, 3, 4] bodies(0)
-- Tile-3 ⌊(0.55, 8.55), (1.45, 9.45)⌉ adjs[1, 2] bodies(0)
-- Tile-4 ⌊(8.55, 8.55), (9.45, 9.45)⌉ adjs[1, 2] bodies(0)
+- Tile-1 ⌊(4.55, 2.55), (5.45, 3.45)⌉ adjs[2, 3, 4] agents(0)
+- Tile-2 ⌊(4.55, 14.55), (5.45, 15.45)⌉ adjs[1, 3, 4] agents(0)
+- Tile-3 ⌊(0.55, 8.55), (1.45, 9.45)⌉ adjs[1, 2] agents(0)
+- Tile-4 ⌊(8.55, 8.55), (9.45, 9.45)⌉ adjs[1, 2] agents(0)
 """
 
 def test_Scene_box():
@@ -131,9 +131,9 @@ def test_Scene_podcopy():
 
     assert '\n'+ str(scene) +'\n' == """
 Scene:
-- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] bodies(0)
-- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] bodies(0)
-- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] bodies(0)
+- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] agents(0)
+- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] agents(0)
 """
 
     print("Go for the copying...")
@@ -146,9 +146,9 @@ Scene:
     print(f">>>\n{sceneBis}")
     assert '\n'+ str(sceneBis) +'\n' == """
 Scene:
-- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] bodies(0)
-- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] bodies(0)
-- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] bodies(0)
+- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] agents(0)
+- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] agents(0)
 """
 
     assert sceneBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
@@ -161,9 +161,9 @@ def test_Scene_connection():
     scene.connect(3, 2)
     print( f"---\n{scene}.")
     assert str(scene) == """Scene:
-- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[2] bodies(0)
-- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[2, 3] bodies(0)
-- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] bodies(0)"""
+- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[2] agents(0)
+- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[2, 3] agents(0)
+- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] agents(0)"""
 
     assert scene.tile(1).adjacencies() == [2]
     assert scene.tile(2).adjacencies() == [2, 3]
@@ -176,48 +176,48 @@ def test_Scene_connection():
     assert not scene.isEdge(1, 3)
     assert not scene.isEdge(3, 1)
   
-def test_Scene_withBodies():
+def test_Scene_withAgents():
     scene= Scene().initializeGrid( [[0, 1],[-1, 0]] )
     
-    assert scene.testNumberOfBodies() == 0
+    assert scene.testNumberOfAgents() == 0
     assert scene.tile(1).count() == 0
     assert scene.tile(2).count() == 0
     assert scene.tile(3).count() == 0
     
-    scene.popBodyOn(2)
+    scene.popAgentOn(2)
 
-    assert scene.testNumberOfBodies() == 1
+    assert scene.testNumberOfAgents() == 1
     assert scene.tile(1).count() == 0
     assert scene.tile(2).count() == 1
     assert scene.tile(3).count() == 0
 
-    scene.popBodyOn(1)
+    scene.popAgentOn(1)
 
-    assert scene.testNumberOfBodies() == 2
+    assert scene.testNumberOfAgents() == 2
     assert scene.tile(1).count() == 1
     assert scene.tile(2).count() == 1
     assert scene.tile(3).count() == 0
 
-    bod= scene.popBodyOn(2)
+    bod= scene.popAgentOn(2)
     bod.setId(4)
 
-    assert scene.testNumberOfBodies() == 3
+    assert scene.testNumberOfAgents() == 3
     assert scene.tile(1).count() == 1
     assert scene.tile(2).count() == 2
     assert scene.tile(3).count() == 0
 
     print( f"---\n{scene}.")
     assert str(scene) == """Scene:
-- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[1, 2] bodies(1)
-  - Body-2 ⌊(-0.5, 0.6), (0.5, 1.6)⌉
-- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 2, 3] bodies(2)
-  - Body-1 ⌊(0.6, 0.6), (1.6, 1.6)⌉
-  - Body-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉
-- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] bodies(0)"""
+- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[1, 2] agents(1)
+  - Agent-2 ⌊(-0.2, 0.9), (0.2, 1.3)⌉
+- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 2, 3] agents(2)
+  - Agent-1 ⌊(0.9, 0.9), (1.3, 1.3)⌉
+  - Agent-4 ⌊(0.9, 0.9), (1.3, 1.3)⌉
+- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] agents(0)"""
 
-    scene.clearBodies()
+    scene.clearAgents()
 
-    assert scene.testNumberOfBodies() == 0
+    assert scene.testNumberOfAgents() == 0
     assert scene.tile(1).count() == 0
     assert scene.tile(2).count() == 0
     assert scene.tile(3).count() == 0

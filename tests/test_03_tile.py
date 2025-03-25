@@ -3,7 +3,7 @@ import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src import tiledland as tll
-from src.tiledland import Float2, Shape, Body, Tile
+from src.tiledland import Float2, Shape, Agent, Tile
 from src.tiledland.pod import Pod
 
 # ------------------------------------------------------------------------ #
@@ -18,7 +18,7 @@ def test_Tile_init():
     assert tile.position().asTuple() == (0.0, 0.0)
     assert tile.envelope() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5)]
     assert tile.adjacencies() == []
-    assert tile.bodies() == []
+    assert tile.agents() == []
     
     tile= Tile( 3, Float2(10.3, 9.7), Shape().initializeSquare(42.0), 0 )
 
@@ -26,7 +26,7 @@ def test_Tile_init():
     assert tile.position().asTuple() == (10.3, 9.7)
     assert tile.envelope() == [(-10.7, 30.7), (31.3, 30.7), (31.3, -11.3), (-10.7, -11.3)]
     assert tile.adjacencies() == []
-    assert tile.bodies() == []
+    assert tile.agents() == []
 
     tile.setId(1).setMatter(8).setPosition( Float2(1.0, 1.0) )
     tile.shape().initializeSquare( 2.0 )
@@ -36,7 +36,7 @@ def test_Tile_init():
     assert tile.position().asTuple() == (1.0, 1.0)
     assert tile.envelope() == [(0.0, 2.0), (2.0, 2.0), (2.0, 0.0), (0.0, 0.0)]
     assert tile.adjacencies() == []
-    assert tile.bodies() == []
+    assert tile.agents() == []
 
 def test_Tile_regular():
     tile= Tile( 1 )
@@ -65,14 +65,14 @@ def test_Tile_adjencies():
 def test_Tile_str():
     tile= Tile(8, Float2(18.5, 4.07) )
     print(f">>> {tile}")
-    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] bodies(0)"
+    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] agents(0)"
     tile.setMatter(2).connectAll( [1, 2, 3] )
     print(f">>> {tile}")
-    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] bodies(0)"
+    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] agents(0)"
 
     tile= Tile( shape= Shape() )
     print(f">>> {tile}")
-    assert str(tile) == "Tile-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] bodies(0)"
+    assert str(tile) == "Tile-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] agents(0)"
 
     print(f">>> {tile.envelope()}")
     assert tile.position().asTuple() == (0.0, 0.0)
@@ -96,7 +96,7 @@ def test_Tile_absobj():
     assert pod.numberOfChildren() == 1
     assert pod.children() == [ tile.shape().asPod() ]
 
-    bod= Body()
+    bod= Agent()
     tile.append( bod )
     pod= tile.asPod()
 
@@ -107,8 +107,8 @@ def test_Tile_absobj():
 
     tileBis= Tile().fromPod( pod )
 
-    assert type( tileBis.body(1) ) is Body
-    assert not ( tileBis.body(1) is bod )
+    assert type( tileBis.agent(1) ) is Agent
+    assert not ( tileBis.agent(1) is bod )
 
     print( tileBis )
     pod= tileBis.asPod()
@@ -130,7 +130,7 @@ def test_Tile_absobj():
 def test_Tile_podCopy():
     tile= Tile(8, Float2(18.5, 4.07))
     tile.connectAll( [ 1, 3, 7, 19 ] )
-    tile.append( Body(1) )
+    tile.append( Agent(1) )
 
     assert tile.adjacencies() == [ 1, 3, 7, 19 ]
 
@@ -140,8 +140,8 @@ def test_Tile_podCopy():
     assert type(tile) == type(tileBis)
     assert tileBis.adjacencies() == [ 1, 3, 7, 19 ]
 
-    assert str(tileBis) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 3, 7, 19] bodies(1)"
-    assert str(tileBis.body()) == str(tile.body())
+    assert str(tileBis) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 3, 7, 19] agents(1)"
+    assert str(tileBis.agent()) == str(tile.agent())
 
 
 def test_Tile_clockDirection():

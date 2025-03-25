@@ -38,16 +38,16 @@ class Artist():
             Brush(0x888888, 0x555555, 4), # 8-Grey
             Brush(0x444444, 0x000000, 4), # 9-Black
 
-            Brush(0xaa6606, 0xffbb55, 4), # 0-Background
-            Brush(0x991100, 0xff6644, 4), # 1-Red
-            Brush(0x119911, 0x44ff44, 4), # 2-Green
-            Brush(0x1111aa, 0x6666ff, 4), # 3-Blue
-            Brush(0xdd5500, 0xff9922, 4), # 4-Orange
-            Brush(0x8800aa, 0xdd77ff, 4), # 5-Purple
-            Brush(0x117799, 0x66ddee, 4), # 6-Cian
-            Brush(0xdddddd, 0xffffff, 4), # 7-White
-            Brush(0x555555, 0x888888, 4), # 8-Grey
-            Brush(0x000000, 0x444444, 4) # 9-Black
+            Brush(0xaa6606, 0xffbb55, 4), # 10-Background
+            Brush(0x991100, 0xff6644, 4), # 11-Red
+            Brush(0x119911, 0x44ff44, 4), # 12-Green
+            Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
+            Brush(0xdd5500, 0xff9922, 4), # 14-Orange
+            Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
+            Brush(0x117799, 0x66ddee, 4), # 16-Cian
+            Brush(0xdddddd, 0xffffff, 4), # 17-White
+            Brush(0x555555, 0x888888, 4), # 18-Grey
+            Brush(0x000000, 0x444444, 4)  # 19-Black
         ]
         self._fontSize= 16
 
@@ -247,13 +247,14 @@ class Artist():
         y= y+(miny-y)*2/3
         self.write( x, y, str(aTile.id()), self._panel[ aTile.matter() ] )
 
-    def drawBody( self, body, brushId ):
+    def drawAgent( self, agent, brushId ):
+        print( f">>> drawAgent {agent} > {agent.matter()}" )
         self.fillShape(
-            body.envelope(),
+            agent.envelope(),
             brushId )
-        minx, miny= body.box().leftFloor().asTuple()
-        x, y= body.position().asTuple()
-        self.write( x, y, str(body.id()), self._panel[brushId] )
+        minx, miny= agent.box().leftFloor().asTuple()
+        x, y= agent.position().asTuple()
+        self.write( x, y, str(agent.id()), self._panel[brushId] )
     
     def drawSceneNetwork( self, aScene ):
         for tile in aScene.tiles() :
@@ -271,12 +272,12 @@ class Artist():
         for tile in aScene.tiles() :
             self.drawTile( tile )
 
-    def drawSceneBodies( self, aScene ):
+    def drawSceneAgents( self, aScene ):
         for tile in aScene.tiles() :
             x, y= tile.position().asTuple()
             position= (x+0.1, y+0.1)
-            for body in tile.bodies() :
-                self.drawBody( body, body.matter() )
+            for agent in tile.agents() :
+                self.drawAgent( agent, agent.matter() )
     
     def writeSceneTiles( self, aScene ):
         for tile in aScene.tiles() :
@@ -286,7 +287,7 @@ class Artist():
         self.drawSceneNetwork(aScene)
         self.drawSceneTiles(aScene)
         self.writeSceneTiles(aScene)
-        self.drawSceneBodies(aScene)
+        self.drawSceneAgents(aScene)
 
     # Control:
     def flip(self):

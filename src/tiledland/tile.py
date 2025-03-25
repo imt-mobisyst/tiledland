@@ -2,27 +2,31 @@ import math
 from . import geometry
 from .pod import Pod
 from .geometry import Float2, Shape
-from .body import Body
+from .agent import Agent
 
-class Tile(Body):
+class Tile(Agent):
 
-    def __init__( self, identifier= 0, position= Float2(0.0, 0.0), shape= None, matter= 0 ):
-        super(Tile, self).__init__(identifier, position, shape, matter)
+    def __init__( self, identifier= 0, position= Float2(0.0, 0.0), shape= None, matter=0):
+        shape
+        if shape is None :
+            shape= Shape().initializeSquare(1.0)
         self._adjacencies= []
-        self._bodies= []
-
-    # Accessor:    
+        self._agents= []
+        super(Tile, self).__init__(identifier, 0, position, shape)
+        self._matter= matter
+        
+    # Accessor:
     def adjacencies(self):
         return self._adjacencies
 
-    def bodies(self) :
-        return self._bodies
+    def agents(self) :
+        return self._agents
     
     def count(self) :
-        return len( self._bodies)
+        return len( self._agents)
     
-    def body(self, i=1) :
-        return self._bodies[i-1]
+    def agent(self, i=1) :
+        return self._agents[i-1]
     
     # Construction:
     def setAdjacencies( self, aList ):
@@ -56,13 +60,13 @@ class Tile(Body):
                 distance= d
         return clock
 
-    # Body managment
+    # Agent managment
     def append(self, aPod, brushId=0, shapeId=0 ): 
-        self._bodies.append( aPod )
+        self._agents.append( aPod )
         return self
     
     def clear(self):
-        self._bodies = []
+        self._agents = []
         return self
     
     # Comparison :
@@ -75,10 +79,10 @@ class Tile(Body):
             ["Tile"], 
             [self.id(), self.matter()] + self.adjacencies(),
             self.position().asList(),
-            [self.shape().asPod()] + [ bod.asPod() for bod in self.bodies() ]
+            [self.shape().asPod()] + [ ag.asPod() for ag in self.agents() ]
         )
     
-    def fromPod( self, aPod, bodyConstructor=Body ):
+    def fromPod( self, aPod, agentFactory=Agent ):
         integers= aPod.integers()
         children= aPod.children()
         self.setId( integers[0] )
@@ -88,7 +92,7 @@ class Tile(Body):
         self.setShape( Shape().fromPod( aPod.children()[0] ) )
         self.clear()
         for podBod in children[1:] :
-            self.append( bodyConstructor().fromPod( podBod ) )
+            self.append( agentFactory().fromPod( podBod ) )
         return self
     
     # to str
@@ -96,7 +100,7 @@ class Tile(Body):
         # Myself :
         s= super(Tile, self).str(typeName)
         s+= " adjs"+ str(self._adjacencies)
-        s+= f" bodies({ len(self.bodies()) })"
+        s+= f" agents({ len(self.agents()) })"
         return s
     
     def __str__(self): 

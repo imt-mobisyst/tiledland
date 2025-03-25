@@ -167,47 +167,47 @@ def test_artist_scene_piece():
     pablo.drawScene(scene)
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-body-01.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-01.svg" ):
         assert( lineShot == lineRef )
 
-    def popBody( iRobot, iTile, iMatter ):
-        bod= tll.Body( iRobot,
+    def popAgent( iRobot, iTile, iMatter ):
+        bod= tll.Agent( iRobot, 0,
             tll.Float2(0.1, 0.1)+scene.tile(iTile).position(),
             tll.Shape().initializeRegular(0.7, 6),
-            iMatter
         )
+        bod.setMatter(iMatter)
         scene.tile(iTile).append( bod )
     
-    popBody(1, 12, 13)
+    popAgent(1, 12, 13)
 
     pablo.drawScene(scene)
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-body-02.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-02.svg" ):
         assert( lineShot == lineRef )
     
-    popBody(2,  9, 13)
-    popBody(2, 14, 15)
-    popBody(3, 23, 13)
-    popBody(1, 20, 15)
+    popAgent(2,  9, 13)
+    popAgent(2, 14, 15)
+    popAgent(3, 23, 13)
+    popAgent(1, 20, 15)
 
     pablo.drawScene(scene)
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-body-03.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-03.svg" ):
         assert( lineShot == lineRef )
 
-    popBody(1, 17, 1)
+    popAgent(1, 17, 1)
 
     pablo.drawScene(scene)
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-body-04.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-04.svg" ):
         assert( lineShot == lineRef )
 
-    scene.clearBodies()
+    scene.clearAgents()
     pablo.drawScene(scene)
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-body-01.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-01.svg" ):
         assert( lineShot == lineRef )

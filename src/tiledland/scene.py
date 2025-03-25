@@ -1,13 +1,13 @@
 from .pod import Podable, Pod
 from .geometry import Float2, Box, Shape
 from .tile import Tile
-from .body import Body
+from .agent import Agent
 
 class Scene(Podable):
 
     # Constructor:
-    def __init__(self, bodyConstructor= Body):
-        self._bodyCtt= bodyConstructor
+    def __init__(self, agentFactory= Agent):
+        self._factory= agentFactory
         self.clear()
 
     # Accessor:
@@ -20,11 +20,14 @@ class Scene(Podable):
     def tile(self, iCell):
         return self._tiles[iCell-1]
 
-    def body(self, iBody):
-        return self._bodies[iBody-1]
+    def agent(self, iAgent, iOwner=0 ):
+        return self._agents[iOwner][iAgent-1]
 
-    def numberOfBodies(self):
-        return len(self._bodies)
+    def numberOfOwner(self):
+        return len(self._agents)
+    
+    def numberOfAgent(self, iOwner):
+        return len( self._agents[iOwner] )
 
     def neighbours(self, iCell):
         neibs= [] 
@@ -53,13 +56,16 @@ class Scene(Podable):
         for t in self.tiles()[1:] :
             box.merge( t.box() )
         return box
-    
-    def testNumberOfBodies(self):
-        nb= 0
+
+    def testNumberOfAgents(self):
+        nb1= 0
+        nb2= 0
         for t in self.tiles() :
-            nb+= t.count()
-        assert nb == len(self._bodies)
-        return nb
+            nb1+= t.count()
+        for grp in self._agents :
+            nb2+= len(grp)
+        assert nb1 == nb2
+        return nb1
     
     # Construction:
     def append( self, tile ):
@@ -104,35 +110,40 @@ class Scene(Podable):
             )
         return self
 
-    def setBodyConstrutor(self, bodyConstructor ):
-        self._bodyCtt= bodyConstructor
+    def setAgentFactory(self, agentFactory ):
+        self._factory= agentFactory
         return self
 
     def clear( self ):
         self._tiles= []
-        self._bodies= []
+        self._agents= [[]]
         self._size= 0
         return self
 
     def addTile( self, aTile ):
-        assert aTile.bodies() == []
+        assert aTile.agents() == []
         self._size+= 1
         aTile.setId( self._size )
         self._tiles.append( aTile )
         return self._size
 
-    def clearBodies(self):
+    def clearAgents(self):
         for t in self.tiles() :
             t.clear()
-        self._bodies= []
+        self._agents= [[]]
         return self
 
-    def popBodyOn(self, iTile=1 ):
-        bod= self._bodyCtt( len(self._bodies)+1 )
-        bod.setPosition( self.tile(iTile).position().copy() )
-        self.tile(iTile).append( bod )
-        self._bodies.append( bod )
-        return bod
+    def popAgentOn(self, iTile=1, owner= 0 ):
+        if iTile > self.size() :
+            return False
+        while len(self._agents) <= owner :
+            self._agents.append([])
+        ag= self._factory( len(self._agents[owner])+1, owner )
+        ag.setTile(iTile)
+        ag.setPosition( self.tile(iTile).position().copy() )
+        self.tile(iTile).append( ag )
+        self._agents[owner].append( ag )
+        return ag
 
     def connect(self, iFrom, iTo):
         self.tile(iFrom).connect(iTo)
@@ -152,6 +163,19 @@ class Scene(Podable):
                     if conditionFromTo( tili, tilj ): # :
                        self.connect( i, j )
 
+    # Agent accessors:
+    def allAgents( self, iGroup=0 ):
+        alls= []
+        for ags in self._agents:
+            alls+= ags
+        return alls
+    
+    def agents( self, iGroup=0 ):
+        return self._agents[iGroup]
+
+    def agentTiles( self, iGroup=0 ):
+        return [ ag.tile() for ag in self.agents(iGroup) ]
+
     # Podable:
     def asPod( self ):
         return Pod().fromLists(
@@ -162,7 +186,7 @@ class Scene(Podable):
     def fromPod( self, aPod ):
         self.clear()
         for absTile in aPod.children() :
-            self.addTile( Tile().fromPod( absTile, self._bodyCtt ) )
+            self.addTile( Tile().fromPod( absTile, self._factory ) )
         return self
         
     # string:
@@ -170,8 +194,8 @@ class Scene(Podable):
         eltStrs =[]
         for t in self.tiles() :
             eltStrs.append( f"- {t}" )
-            for bod in t.bodies() :
-                eltStrs.append( f"  - {bod}" )
+            for ag in t.agents() :
+                eltStrs.append( f"  - {ag}" )
         return f"{name}:\n" + "\n".join( eltStrs )
     
     def __str__(self):

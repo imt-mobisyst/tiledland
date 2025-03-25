@@ -30,8 +30,9 @@ refMatrix= [
     [43, 44, 45, 46, 47,   , 48,   ,   ,   ]
 """
 
-def test_pnd_mobile():
-    mobile= pnd.Mobile()
+def test_pnd_robot():
+    robot= pnd.Robot()
+    assert str(mobile) == "Robot-1.0 ⌊(-0.18, -0.18), (0.18, 0.18)⌉"
 
 def test_pnd_scene():
     model= pnd.Scene()
@@ -46,13 +47,13 @@ def test_pnd_scene():
     refsFile= open( "tests/refs/41.pickndel-scene-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-    bod= model.popBodyOn(1)
+    bod= model.popAgentOn(1)
     print( bod )
     assert bod.id() == 1
-    assert model.popBodyOn(25).id() == 2
+    assert model.popAgentOn(25).id() == 2
 
-    assert model.popBodyOn(7).id() == 3
-    assert model.popBodyOn(44).id() == 4
+    assert model.popAgentOn(7).id() == 3
+    assert model.popAgentOn(44).id() == 4
 
     artist.drawScene( model )
     artist.flip()
@@ -61,7 +62,7 @@ def test_pnd_scene():
     refsFile= open( "tests/refs/41.pickndel-scene-02.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-def test_moveIt_neibors():
+def test_pnd_neibors():
     # Game MoveIt:
     model= pnd.Scene()
     model.initializeGrid( refMatrix, 0.9, 0.1 )
@@ -80,32 +81,30 @@ def test_moveIt_neibors():
     assert model.clockposition(11, 3) == 12
     assert model.clockposition(11, 9) == 11
 
-def test_moveIt_robots():
+def test_pnd_robot():
     # Game MoveIt:
     model= pnd.Scene( numberOfPlayers=2 )
     model.initializeGrid( refMatrix, 0.9, 0.1 )
 
-    assert str(model.popRobot(1, 1)) == 'R-1: [1, 1, 0]'
-    assert str(model.popRobot(1, 25)) == 'R-2: [1, 2, 0]'
+    assert str(model.popAgentOn(1, 1)) == 'Robot-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉'
+    assert str(model.popAgentOn(25, 1)) == 'Robot-1.2 ⌊(0.82, 2.82), (1.18, 3.18)⌉'
 
-    assert str(model.popRobot(2, 7)) == 'R-1: [2, 1, 0]'
-    assert str(model.popRobot(2, 44)) == 'R-2: [2, 2, 0]'
+    assert str(model.popAgentOn(7, 2)) == 'Robot-2.1 ⌊(6.82, 5.82), (7.18, 6.18)⌉'
+    assert str(model.popAgentOn(44, 2)) == 'Robot-2.2 ⌊(0.82, -0.18), (1.18, 0.18)⌉'
+    
+    assert model.agentTiles(1) == [1, 25]
+    assert model.agentTiles(2) == [7, 44]
+    assert model.agents() == []
 
-    assert model.popRobot(3, 33) == False
-    assert model.popRobot(1, 7) == False
-
-    assert model.mobilePositions(1) == [1, 25]
-    assert model.mobilePositions(2) == [7, 44]
-
-    assert model.vips() == []
+    assert [ ag.tile() for ag in model.allAgents() ] == [1, 25, 7, 44]
 
     assert model.move( 11, 12 ) == False
     assert model.move( 1, 6 ) == 10
 
-    assert model.mobilePositions(1) == [10, 25]
-    assert model.mobilePositions(2) == [7, 44]
+    assert model.agentTiles(1) == [10, 25]
+    assert model.agentTiles(2) == [7, 44]
 
-    assert str( model.tile(10).piece() ) == 'R-1: [1, 1, 0]'
+    assert str( model.tile(10).agent() ) == 'Robot-1.1 ⌊(-0.18, 4.82), (0.18, 5.18)⌉'
 
     assert model.clockBearing(44) == [9, 0, 3]
 
@@ -118,11 +117,11 @@ def test_moveIt_robots():
     artist= tll.Artist().initializePNG( "shot-test.png" )
     artist.fitBox( model.box(), 10 )
     
-    artist.drawMap( map )
+    artist.drawScene( model )
     artist.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
-    refsFile= open( "tests/refs/41-pickndel-scene-03.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/41.pickndel-scene-03.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
 

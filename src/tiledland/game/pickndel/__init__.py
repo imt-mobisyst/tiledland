@@ -2,10 +2,10 @@
 MoveIt - an HackaGame game 
 """
 
-from . import mobile, scene#, gameengine, gamemaster, player
+from . import robot, scene#, gameengine, gamemaster, player
 
 # Game Component:
-Mobile= mobile.Mobile
+Robot= robot.Robot
 Scene= scene.Scene
 
 # Hackagame Game:

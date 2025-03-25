@@ -2,20 +2,17 @@
 Test - MoveIt Robot Class
 """
 
-from ... import Float2, Shape, body
+from ... import Float2, Shape, agent
 
 mobileShape= Shape().initializeRegular(0.4, 8)
 
-class Mobile(body.Body):
-    def __init__( self, identifier=0, position= Float2(0.0, 0.0), owner=1, mission= 0):
-        super().__init__(identifier, position, mobileShape, owner)
+class Robot(agent.Agent):
+    def __init__( self, identifier=0, owner=1, position= Float2(0.0, 0.0), mission= 0):
+        super().__init__(identifier, owner, position, mobileShape)
         self._mission= mission
         self._clockMove= 0
 
-    # Accessor: 
-    def owner(self):
-        return self._owner
-    
+    # Accessor:     
     def mission(self):
         return self._mission
     
@@ -27,3 +24,7 @@ class Mobile(body.Body):
 
     def setMove(self, clockDir):
         self._clockMove= clockDir
+
+    # Accessor: 
+    def str(self, typeName= "Robot"): 
+        return super(Robot, self).str(typeName)

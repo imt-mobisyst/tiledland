@@ -51,17 +51,17 @@ def test_Tile_load():
     print( shapeBis )
     assert shapeBis.asPod() == shape.asPod()
 
-def test_Tile_bodies():
+def test_Tile_agents():
     tile= Tile(1)
-    assert tile.bodies() == []
+    assert tile.agents() == []
     
     tile.append( Pod('Piece', 'dragon', [10, 3], [22.0]) )
 
-    assert len(tile.bodies()) == 1
+    assert len(tile.agents()) == 1
     assert tile.piece(1) == Pod('Piece', 'dragon', [10, 3], [22.0])
     
     tile.clear()
-    assert tile.bodies() == []
+    assert tile.agents() == []
 
 def test_Scene_pod():
     scene= Scene().initializeLine(4)
