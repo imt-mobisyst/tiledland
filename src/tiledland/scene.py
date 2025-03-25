@@ -6,10 +6,9 @@ from .body import Body
 class Scene(Podable):
 
     # Constructor:
-    def __init__( self, bodyConstructor= Body ):
+    def __init__(self, bodyConstructor= Body):
         self._bodyCtt= bodyConstructor
-        self._tiles= []
-        self._size= 0
+        self.clear()
 
     # Accessor:
     def size(self):
@@ -20,6 +19,12 @@ class Scene(Podable):
 
     def tile(self, iCell):
         return self._tiles[iCell-1]
+
+    def body(self, iBody):
+        return self._bodies[iBody-1]
+
+    def numberOfBodies(self):
+        return len(self._bodies)
 
     def neighbours(self, iCell):
         neibs= [] 
@@ -33,12 +38,6 @@ class Scene(Podable):
         for t in self.tiles() :
             edgeList+= [ (t.id(), neibor) for neibor in t.adjacencies() ]
         return edgeList
-
-    def countBodies(self):
-        nb= 0
-        for t in self.tiles() :
-            nb+= t.count()
-        return nb
 
     # Test:
     def isTile(self, iTile):
@@ -54,7 +53,14 @@ class Scene(Podable):
         for t in self.tiles()[1:] :
             box.merge( t.box() )
         return box
-
+    
+    def testNumberOfBodies(self):
+        nb= 0
+        for t in self.tiles() :
+            nb+= t.count()
+        assert nb == len(self._bodies)
+        return nb
+    
     # Construction:
     def append( self, tile ):
         self._tiles.append( tile )
@@ -62,7 +68,7 @@ class Scene(Podable):
         self.tile( self._size ).setId( self._size )
         return self._size
 
-    def initializeLine( self, size, shape= None, distance=1.0 ):
+    def initializeLine( self, size, shape= None, distance=1.0, connect=True ):
         if shape is None :
             shape= Shape().initializeSquare(0.9)
         self._tiles= [
@@ -72,7 +78,7 @@ class Scene(Podable):
         self._size= size
         return self
     
-    def initializeGrid( self, matrix, tileSize= 1.0, separation=0.1 ):
+    def initializeGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
         dist= tileSize+separation
         self._tiles= []
         
@@ -89,22 +95,27 @@ class Scene(Podable):
                         matrix[i][j]
                     )
                     self._tiles.append( tile )
-                    matrix[i][j]= iTile
+                    #matrix[i][j]= iTile
         self._size= iTile
-        # Basic Piece Shape:
-        self._shapes= [ Shape().initializeRegular( tileSize*0.7, 8 ) ]
+
+        if connect :
+            self.connectAllCondition(
+                lambda tileFrom, tileTo :  tileFrom.centerDistance( tileTo ) < (tileSize+separation)*1.1
+            )
         return self
 
     def setBodyConstrutor(self, bodyConstructor ):
         self._bodyCtt= bodyConstructor
         return self
 
-    def clearTiles( self ):
+    def clear( self ):
         self._tiles= []
+        self._bodies= []
         self._size= 0
         return self
 
     def addTile( self, aTile ):
+        assert aTile.bodies() == []
         self._size+= 1
         aTile.setId( self._size )
         self._tiles.append( aTile )
@@ -113,13 +124,14 @@ class Scene(Podable):
     def clearBodies(self):
         for t in self.tiles() :
             t.clear()
+        self._bodies= []
         return self
 
-
     def popBodyOn(self, iTile=1 ):
-        bod= self._bodyCtt()
+        bod= self._bodyCtt( len(self._bodies)+1 )
         bod.setPosition( self.tile(iTile).position().copy() )
         self.tile(iTile).append( bod )
+        self._bodies.append( bod )
         return bod
 
     def connect(self, iFrom, iTo):
@@ -148,7 +160,7 @@ class Scene(Podable):
         )
     
     def fromPod( self, aPod ):
-        self.clearTiles()
+        self.clear()
         for absTile in aPod.children() :
             self.addTile( Tile().fromPod( absTile, self._bodyCtt ) )
         return self

@@ -9,7 +9,7 @@
 
 ## Scene, Tiles and Bodies :
 
-- [ ] Bodies: Position, clock-position and Shape
+- [x] Bodies: Position, clock-position and Shape
 - [x] Scene as collection of: Bodies, structured on Tiles
 - [x] Tiles as collection of: Abstract Thinks
 - [x] Abstraction on Scene: Bodies could be anything...
@@ -20,6 +20,12 @@
 - [ ] Presentation of Core components
 - [ ] Presentation of geometry submodule
 - [ ] Developpers expectation: (template from Shape + class structure + tests)
+
+## Hacka Games: 
+
+- [ ] Pick'n Del: Pick-up and Delivery with hiden random congestion.
+- [ ] Move-it: Based on MultiPath solving problem.
+
 
 ## Simple, but strong and independant plan geometry
 
