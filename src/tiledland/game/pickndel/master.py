@@ -47,11 +47,14 @@ class GameMaster( hk.AbsSequentialGame ) :
         ]
 
     # Game interface :
-    def initialize(self):
+    def initialize(self, mission=None):
         self._tic= self._initialTic
         self._scores= [ 0.0 for i in range( self.numberOfPlayers()+1 ) ]
         self._model.clearMissions()
-        self._model.addMissionAtRandom()
+        if mission is None :
+            self._model.addMissionAtRandom()
+        else :
+            self._model.addMission( mission[0], mission[1] )
         return hk.Pod( self._model.asPod( "Pick'n Del" ) ) 
     
     def moveit_initialize(self):
@@ -69,34 +72,12 @@ class GameMaster( hk.AbsSequentialGame ) :
     
     def playerHand( self, iPlayer ):
         # Engine :
-        pod= hk.Pod().fromLists( "State", "", [self._tic], self._scores )
+        pod= hk.Pod().fromLists( ["State"], [self._tic], self._scores )
         # Missions :
-        pod.append( self.missionsAsPod() )
+        pod.append( self._model.missionsAsPod() )
         # Mobiles :
-        pod.append( self.mobilesAsPod() )
+        pod.append( self._model.mobilesAsPod() )
         return pod
-
-    def missionsAsPod(self):
-        podMissions= hk.Pod().fromLists( ["missions"] )
-        i= 1
-        for m in self._model.missions() :
-            podMissions.append( hk.Pod().fromLists( [f"{i}"], m.asList() ) )
-            i+= 1
-        return podMissions
-    
-    def missionsFromPod( self, podState ):
-        self._missions= []
-        for pod in podState.children() :
-            self._missions.append( Mission(pod.flag(1), pod.flag(2),pod.flag(3), pod.flag(4)) )
-        return self
-    
-    def mobilesAsPod(self):
-        podMobiles= hk.Pod().fromLists( ["mobiles"] )
-        for group in range( self._model.numberOfGroups() ):
-            for ir in range( 1, self._model.numberOfAgents(group)+1 ):
-                mobil= self._model.agent(ir, group)
-                podMobiles.append( hk.Pod().fromLists( integers=[group, ir, mobil.tile(), mobil.mission() ] ) )
-        return podMobiles
     
     def mobilesFromPod( self, podState ):
         self._map.clearMobiles()

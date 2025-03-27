@@ -1,14 +1,22 @@
 
 from .robot import Robot
 from ... import Float2, Shape, Box, scene, Tile, artist
+import hacka.py as hk
 import random
 
 class Mission:
-    def __init__( self, start, final, reward, owner ):
+    def __init__( self, start= 0, final= 0, reward= 0, owner= 0 ):
         self.start= start
         self.final= final
         self.reward= reward
         self.owner= owner
+
+    def fromList(self, aList):
+        self.start= aList[0]
+        self.final= aList[1]
+        self.reward= aList[2]
+        self.owner= aList[3]
+        return self
 
     def asList(self):
         return [self.start, self.final, self.reward, self.owner]
@@ -110,7 +118,7 @@ class World( scene.Scene ):
         robot.setPosition( self.tile(iTo).position() )
         return iTo
     
-    def tileFromPod(self, aPod):
+    def bug_tileFromPod(self, aPod):
         tile= Tile()
         flags= aPod.flags()
         tile._num= flags[0]
@@ -128,23 +136,52 @@ class World( scene.Scene ):
         tile._piecesShapeId = [ 0 for mob in tile._pieces ]
         return tile
 
-    def fromPod(self, aPod):
-        self._tiles= [None]
-        self._shapes= []
-        self._size= 0
-        kids= aPod.children()
-        for kid in kids :
-            if kid.family() == "Shape" :
-                self.addShape( Shape().fromPod( kid ) )
-            if kid.family() == "Tile" :
-                self.addTile( self.tileFromPod( kid ) )
-        # Update cros knoldge:
-        for t in range( 1, self.size()+1 ):
-            for p in range( len( self.tile(t)._pieces ) ) :
-                iPlayer= self.tile(t)._pieces[p].flag(1)
-                iRobot= self.tile(t)._pieces[p].flag(2)
-                self._mobiles[iPlayer][iRobot-1]= t
+    # Podable:
+    def asPod( self, name= "Pick'n Del" ):
+        return hk.Pod().fromLists(
+            [name], [], [],
+            [ super(World, self).asPod(), self.missionsAsPod() ]
+        )
+    
+    def missionsAsPod(self):
+        if len(self._missions) > 0 :
+            return hk.Pod().fromLists( ["Mission"], self.mission(1).asList() )
+        return hk.Pod().fromLists( ["Mission"] )
+    
+    def mobilesAsPod(self):
+        podMobiles= hk.Pod().fromLists( ["mobiles"] )
+        for group in range( self.numberOfGroups() ):
+            for mobile in self.agents( group ):
+                mPod= hk.Pod().fromLists( ["robot"], [group, mobile.id(), mobile.tile(), mobile.mission()] )
+                podMobiles.append(mPod)
+        return podMobiles
+
+    def fromPod( self, aPod ):
+        super(World, self).fromPod( aPod.child(1) )
+        self.missionsFromPod(  aPod.child(2) )
         return self
+    
+    def missionsFromPod(self, aPod):
+        self._missions= []
+        if aPod.numberOfIntegers() > 3 :
+            self._missions= [ Mission().fromList( aPod.integers() ) ]
+        return self._missions
+    
+    def mobilesFromPod(self, aPod):
+        self.clearAgents()
+        for pod in aPod.children() :
+            iPlayer= pod.integer(1)
+            iRobot= pod.integer(2)
+            pos= pod.integer(3)
+            mis= pod.integer(4)
+            robot= self.popAgentOn( pos, iPlayer )
+            assert robot.id() == iRobot
+            robot.setMission(mis)
+        return self._agents
+
+    def setOnPodState(self, aPod):
+        self.missionsFromPod( aPod.child(1) )
+        self.mobilesFromPod( aPod.child(2) )
     
     # Rendering :
     def render(self):

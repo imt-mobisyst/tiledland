@@ -154,7 +154,6 @@ class Scene(Podable):
         return self
 
     def addTile( self, aTile ):
-        assert aTile.agents() == []
         self._size+= 1
         aTile.setId( self._size )
         self._tiles.append( aTile )
@@ -166,16 +165,23 @@ class Scene(Podable):
         self._agents= [[]]
         return self
 
-    def popAgentOn(self, iTile=1, group= 0 ):
-        if iTile > self.size() :
-            return False
+    def __addAgent( self, anAgent ):
+        group= anAgent.group()
         while len(self._agents) <= group :
             self._agents.append([])
+        assert anAgent.id() == len(self._agents[group])+1 
+        self._agents[group].append(anAgent)
+    
+    def popAgentOn(self, iTile=1, group= 0 ):
+        while len(self._agents) <= group :
+            self._agents.append([])
+        if iTile > self.size() :
+            return False
         ag= self._factory( len(self._agents[group])+1, group )
         ag.setTile(iTile)
         ag.setPosition( self.tile(iTile).position().copy() )
         self.tile(iTile).append( ag )
-        self._agents[group].append( ag )
+        self.__addAgent(ag)
         return ag
 
     def connect(self, iFrom, iTo):
@@ -251,10 +257,14 @@ class Scene(Podable):
     
     def fromPod( self, aPod ):
         self.clear()
+        allAgents= []
         for absTile in aPod.children() :
-            self.addTile( Tile().fromPod( absTile, self._factory ) )
+            t= Tile().fromPod( absTile, self._factory )
+            self.addTile(t)
+            for ag in t.agents() :
+                self.__addAgent(ag)
         return self
-        
+    
     # string:
     def str(self, name="Scene"):
         eltStrs =[]

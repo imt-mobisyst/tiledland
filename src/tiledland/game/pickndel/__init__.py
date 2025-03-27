@@ -1,8 +1,8 @@
 """
-MoveIt - an HackaGame game 
+Pick'n Del - an HackaGame game 
 """
 
-from . import robot, master, world#, player
+from . import robot, master, world, player
 
 # Game Component:
 Robot= robot.Robot
@@ -12,6 +12,6 @@ World= world.World
 GameMaster= master.GameMaster
 
 # Players
-#BasicBot= player.BasicBot
+BasicBot= player.BasicBot
 #BlindBot= player.BlindBot
 #ShellPlayer= player.ShellPlayer
