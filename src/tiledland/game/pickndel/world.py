@@ -37,6 +37,16 @@ class World( scene.Scene ):
         self.marketBrush.width= 8
 
     # Accessor: 
+    def carrierTile(self, iCarrier= 1, iPlayer= 1):
+        return self.agent(iCarrier, iPlayer).tile()
+    
+    def carrierGoal(self, iCarrier= 1, iPlayer= 1):
+        mission= self.agent(iCarrier, iPlayer).mission()
+        if mission != 0 : 
+            return self.mission( mission ).final
+        mission= self.missionIndexes()[0]
+        return self.mission( mission ).start
+    
     def missions(self):
         return self._missions
 

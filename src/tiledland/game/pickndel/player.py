@@ -74,7 +74,9 @@ class ShellPlayer( BasicBot ):
     def decide(self):
         if self._action != "stop" :
             msg= f'tic-{ self.ticCounter() }'
-            msg+= ' - Enter your action: '
+            msg+= f'tile-{ self._model.carrierTile() }'
+            msg+= f'goal-{ self._model.carrierGoal() }'
+            msg+= '\n> Enter your action: '
             self._action = input(msg)
         if self._action == "stop" :
             return "pass"
