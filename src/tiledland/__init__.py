@@ -1,9 +1,10 @@
-from .geometry import float2, shape
+from .geometry import float2, shape, box
 from . import agent, tile, scene, artist
 
 # Geometry:
 Float2= float2.Float2
 Shape= shape.Shape
+Box= box.Box
 
 # Geometry:
 Tile= tile.Tile

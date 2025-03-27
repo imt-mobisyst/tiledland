@@ -27,4 +27,6 @@ class Robot(agent.Agent):
 
     # Accessor: 
     def str(self, typeName= "Robot"): 
-        return super(Robot, self).str(typeName)
+        s= super(Robot, self).str(typeName)
+        s+= f" |{self._clockMove}, {self._mission}|"
+        return s

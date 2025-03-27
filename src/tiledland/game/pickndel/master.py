@@ -9,14 +9,15 @@ from .world import World
 class GameMaster( hk.AbsSequentialGame ) :
 
     # Initialization:
-    def __init__( self, model, numberOfPlayers=1, numberOfRobots= 1, tic= 100, seed=False ):
+    def __init__( self, world, numberOfPlayers=1, numberOfRobots= 1, tic= 100, seed=False ):
         super().__init__( numberOfPlayers )
         self._seed= seed
         # GameEngine:
-        assert( type(model) == World )
-        self._model= model
+        assert( type(world) == World )
+        self._model= world
         self._model.computeDistances()
         self._initialTic= tic
+        self._tic= 0
         # Initialize Players:
         iTile= 1
         for pId in range(1, numberOfPlayers+1) :
@@ -27,17 +28,30 @@ class GameMaster( hk.AbsSequentialGame ) :
     
 
     # Accessor :
+    def world(self):
+        return self._model
+    
     def score(self, iPlayer):
         return self._scores[iPlayer]
     
     def numberOfRobots(self, iPlayer=1):
         return len( self._model.agents(iPlayer) )
     
+    def ticCounter(self):
+        return self._tic
+
+    def mobileTiles(self):
+        return [
+            [m.tile() for m in self.world().agents(group) ]
+            for group in range( self.world().numberOfGroups() )
+        ]
+
     # Game interface :
     def initialize(self):
         self._tic= self._initialTic
         self._scores= [ 0.0 for i in range( self.numberOfPlayers()+1 ) ]
         self._model.clearMissions()
+        self._model.addMissionAtRandom()
         return hk.Pod( self._model.asPod( "Pick'n Del" ) ) 
     
     def moveit_initialize(self):
@@ -66,7 +80,7 @@ class GameMaster( hk.AbsSequentialGame ) :
         podMissions= hk.Pod().fromLists( ["missions"] )
         i= 1
         for m in self._model.missions() :
-            podMissions.append( hk.Pod().fromLists( [f"{i}"], m.list() ) )
+            podMissions.append( hk.Pod().fromLists( [f"{i}"], m.asList() ) )
             i+= 1
         return podMissions
     
@@ -98,7 +112,7 @@ class GameMaster( hk.AbsSequentialGame ) :
         # Interpret action string
         decompo= action.split(" ")
         iRobot= 1
-        while len(decompo) > 0 :
+        while len(decompo) > 0 and iRobot <= self.numberOfPlayers() :
             act= decompo.pop(0)
             if act == 'go' :
                 clockDir= int(decompo.pop(0))
@@ -124,20 +138,20 @@ class GameMaster( hk.AbsSequentialGame ) :
         if not( model.isAgent(iPlayer, iRobot) and model.isMission(iMission) ) :
             return False
         # Localvariable:
-        robot= self.agent(iRobot, iPlayer)
-        iFrom, iTo, pay, owner= self.mission(iMission).tuple()
+        robot= model.agent(iRobot, iPlayer)
+        iFrom, iTo, pay, owner= model.mission(iMission).asTuple()
         # Mission start:
         if robot.mission() == 0 : 
             if robot.tile() == iFrom and owner == 0 :
                 robot.setMission( iMission )
-                self.updateMission(iMission, iFrom, iTo, pay, iPlayer)
+                model.updateMission(iMission, iFrom, iTo, pay, iPlayer)
                 return True
             return False
         # Mission end:
         if robot.mission() == iMission and robot.tile() == iTo : 
             robot.setMission(0)
             self._scores[iPlayer]+= pay
-            self.updateMission(iMission, 0, iTo, 0, iPlayer)
+            model.updateMission(iMission, 0, iTo, 0, iPlayer)
             return True
         return False
 
@@ -157,7 +171,7 @@ class GameMaster( hk.AbsSequentialGame ) :
         # Start Collision: 
         for iPlayer in range( 1, self._numberOfPlayers+1 ):
             for m in moves[iPlayer] :
-                if m[0] != m[1] and self._map.tile(m[1]).count() > 0 :
+                if m[0] != m[1] and self._model.tile(m[1]).count() > 0 :
                     self._scores[iPlayer]+= -100
                     collision+= 1
                     m[1]= m[0]
@@ -188,51 +202,50 @@ class GameMaster( hk.AbsSequentialGame ) :
 
     def tic( self ):
         self.applyMoveActions()
-
     
     def isEnded( self ):
         # if the counter reach it final value
-        return self.tic() == 0
+        return self.ticCounter() == 0
 
     def playerScore( self, iPlayer ):
         # All players are winners.
         return self.score(iPlayer)
     
     def toward(self, iTile, iTarget):
-        gameMap= self._engine.map()
+        world= self.world()
         # If no need to move:
         if iTile == iTarget :
             return 0, iTile
         # Get candidates:
-        clockdirs= gameMap.clockBearing(iTile)
-        nextTiles= gameMap.neighbours(iTile)
+        clockdirs= world.clockBearing(iTile)
+        nextTiles= world.adjacencies(iTile)
         selectedDir= clockdirs[0]
         selectedNext= nextTiles[0]
         # Test all candidates:
         for clock, tile in zip( clockdirs, nextTiles ) :
-            if self._distances[tile][iTarget] < self._distances[selectedNext][iTarget] :
+            if world._distances[tile][iTarget] < world._distances[selectedNext][iTarget] :
                 selectedDir= clock
                 selectedNext= tile
         # Return the selected candidates:
         return selectedDir, selectedNext
 
-    def moveOptions(self, iTile, iTarget):
-        gameMap= self._engine.map()
+    def bug_moveOptions(self, iTile, iTarget):
+        world= self.world()
         # If no need to move:
         if iTile == iTarget :
             return [(0, iTile)]
         # Get candidates:
-        clockdirs= gameMap.clockBearing(iTile)
-        nextTiles= gameMap.neighbours(iTile)
+        clockdirs= world.clockBearing(iTile)
+        nextTiles= world.adjacencies(iTile)
         selected= [ (clockdirs[0], nextTiles[0]) ]
-        refDist= self._distances[nextTiles[0]][iTarget]
+        refDist= world._distances[nextTiles[0]][iTarget]
         # Test all candidates:
         for clock, tile in zip( clockdirs[1:], nextTiles[1:] ) :
-            if self._distances[tile][iTarget] == refDist :
+            if world._distances[tile][iTarget] == refDist :
                 selected.append( (clock, tile) )
-            elif self._distances[tile][iTarget] < refDist :
+            elif world._distances[tile][iTarget] < refDist :
                 selected= [ (clock, tile) ]
-                refDist= self._distances[tile][iTarget]
+                refDist= world._distances[tile][iTarget]
             
         # Return the selected candidates:
         return selected

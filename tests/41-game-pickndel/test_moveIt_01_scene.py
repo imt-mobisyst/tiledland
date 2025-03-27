@@ -32,7 +32,7 @@ refMatrix= [
 
 def test_pnd_initRobot():
     robot= pnd.Robot()
-    assert str(robot) == "Robot-1.0 ⌊(-0.18, -0.18), (0.18, 0.18)⌉"
+    assert str(robot) == "Robot-1.0 ⌊(-0.18, -0.18), (0.18, 0.18)⌉ |0, 0|"
 
 def test_pnd_world():
     model= pnd.World()
@@ -87,11 +87,11 @@ def test_pnd_robot():
     model= pnd.World( numberOfPlayers=2 )
     model.initializeGrid( refMatrix, 0.9, 0.1 )
     
-    assert str(model.popAgentOn(1, 1)) == 'Robot-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉'
-    assert str(model.popAgentOn(25, 1)) == 'Robot-1.2 ⌊(0.82, 2.82), (1.18, 3.18)⌉'
+    assert str(model.popAgentOn(1, 1)) == 'Robot-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉ |0, 0|'
+    assert str(model.popAgentOn(25, 1)) == 'Robot-1.2 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
 
-    assert str(model.popAgentOn(7, 2)) == 'Robot-2.1 ⌊(6.82, 5.82), (7.18, 6.18)⌉'
-    assert str(model.popAgentOn(44, 2)) == 'Robot-2.2 ⌊(0.82, -0.18), (1.18, 0.18)⌉'
+    assert str(model.popAgentOn(7, 2)) == 'Robot-2.1 ⌊(6.82, 5.82), (7.18, 6.18)⌉ |0, 0|'
+    assert str(model.popAgentOn(44, 2)) == 'Robot-2.2 ⌊(0.82, -0.18), (1.18, 0.18)⌉ |0, 0|'
     
     assert model.agentTiles(1) == [1, 25]
     assert model.agentTiles(2) == [7, 44]
@@ -105,7 +105,7 @@ def test_pnd_robot():
     assert model.agentTiles(1) == [10, 25]
     assert model.agentTiles(2) == [7, 44]
 
-    assert str( model.tile(10).agent() ) == 'Robot-1.1 ⌊(-0.18, 4.82), (0.18, 5.18)⌉'
+    assert str( model.tile(10).agent() ) == 'Robot-1.1 ⌊(-0.18, 4.82), (0.18, 5.18)⌉ |0, 0|'
 
     assert model.clockBearing(44) == [9, 0, 3]
 

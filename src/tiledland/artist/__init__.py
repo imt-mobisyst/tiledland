@@ -97,8 +97,11 @@ class Artist():
         self.setCamera( (minx+maxx)*0.5, (miny+maxy)*0.5 )
         distx= maxx-minx
         disty= maxy-miny
-        ratioX= (self._support.width()-marge)/distx
-        ratioY= (self._support.height()-marge)/disty
+        ratioX, ratioY= 1.0, 1.0
+        if distx != 0.0 :
+           ratioX= (self._support.width()-marge)/distx
+        if disty != 0.0 :
+            ratioY= (self._support.height()-marge)/disty
         self.setScale( min(ratioX, ratioY) )
         return self
 
@@ -248,7 +251,6 @@ class Artist():
         self.write( x, y, str(aTile.id()), self._panel[ aTile.matter() ] )
 
     def drawAgent( self, agent, brushId ):
-        print( f">>> drawAgent {agent} > {agent.matter()}" )
         self.fillShape(
             agent.envelope(),
             brushId )

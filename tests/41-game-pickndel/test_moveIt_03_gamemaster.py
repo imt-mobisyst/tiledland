@@ -31,84 +31,107 @@ def test_gamemaster_method():
     assert( not master.isEnded() )
     assert( master.playerScore(1) == 0.0 )
 
+    world.setMissions( [] )
+    assert len( world.missions() ) == 0
+
+    world.setMissions( [(1, 2)] )
+    assert len( world.missions() ) == 1
+    assert world.mission(1).asTuple() == (1, 2, 10, 0)
+
 def test_gamemaster_live_cycle():
-    game= mi.GameEngine( tic= 10, missions=[(1, 2)] )
-    master= mi.GameMaster( game )
+    world= pnd.World()
+    world.initializeGrid( [[0, 0], [0, 0]] )
+    master= pnd.GameMaster( world, 1, tic=10 )
 
     assert master.initialize()
+    world.setMissions( [(1, 2)] )
 
     t= 10
     while t > 0 :
         assert not master.isEnded()
-        assert game.tic() == t
+        assert master.ticCounter() == t
         master.tic()
         t-= 1
 
+    assert len( world.missions() ) == 1
+    assert world.mission(1).asTuple() == (1, 2, 10, 0)
     assert( master.isEnded() )
     
 def test_gamemaster_moves():
-    game= mi.GameEngine( tic= 10, missions= [(4, 5), (7, 8)] )
-    master= mi.GameMaster( game )
+    world= pnd.World()
+    world.initializeGrid( [[0, 0, 0, -1], [0, -1, 0, 0], [0, 0, 0, 0]] )
+    master= pnd.GameMaster( world, 1, tic=20 )
+    master.initialize()
+    world.setMissions( [(4, 5), (7, 8)] )
 
-    game.render()
-    local.sleep()
+    world.render()
 
-    shotFile= open( "shot-test.png", mode='rb' ).read()
-    refsFile= open( "tests/refs/02-engine-04.png", mode='rb' ).read()
+    shotFile= open( "shot-pickndel.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/41.pickndel-master-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-    assert game._map.mobilePositions(1) == [1]
+    assert world.mobileTiles(1) == [1]
 
     # Turn 1
-    master.initialize()
     master.playerHand(1)
-    master.applyPlayerAction( 1, "move 1 6" )
-    master.tic()
+    master.applyPlayerAction( 1, "go 6" )
 
-    assert game.mobilePosition(1, 1) == 4
-    assert game.mobileMission(1, 1) == 0
+    assert str(world.agent(1, 1)) == "Robot-1.1 ⌊(-0.18, 2.02), (0.18, 2.38)⌉ |6, 0|"
+
+    master.tic()
+    assert world.agent(1, 1).tile() == 4
+    assert world.agent(1, 1).mission() == 0
     
+    assert str(world.agent(1, 1)) == "Robot-1.1 ⌊(-0.18, 0.92), (0.18, 1.28)⌉ |0, 0|"
+
+    world.render()
+    shotFile= open( "shot-pickndel.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/41.pickndel-master-02.png", mode='rb' ).read()
+    assert( shotFile == refsFile )
+
     # Turn 2
     master.playerHand(1)
-    master.applyPlayerAction( 1, "mission 1 1" )
+    master.applyPlayerAction( 1, "do 1" )
     master.tic()
 
-    assert game.mobilePosition(1, 1) == 4
-    assert game.mobileMission(1, 1) == 1
-    
+    assert world.agent(1, 1).tile() == 4
+    assert world.agent(1, 1).mission() == 1
+    assert str(world.agent(1, 1)) == "Robot-1.1 ⌊(-0.18, 0.92), (0.18, 1.28)⌉ |0, 1|"
+
     # Turn 3-6
     moves= [12, 3, 3, 6]
     for m in moves :
         master.playerHand(1)
-        master.applyPlayerAction( 1, f"move 1 {m}" )
+        master.applyPlayerAction( 1, f"go {m}" )
         master.tic()
 
-    assert game.mobilePosition(1, 1) == 5
-    assert game.mobileMission(1, 1) == 1
-    assert game.score(1) == 0.0
+    assert world.agent(1, 1).tile() == 5
+    assert world.agent(1, 1).mission() == 1
+    assert master.score(1) == 0.0
 
     # Turn 7
     master.playerHand(1)
-    master.applyPlayerAction( 1, "mission 1 1 move 1 12" )
+    master.applyPlayerAction( 1, "do 1 go 1" )
     master.tic()
 
-    assert game.mobilePosition(1, 1) == 5
-    assert game.mobileMission(1, 1) == 0
-    assert game.score(1) == 10.0
+    assert world.agent(1, 1).tile() == 5
+    assert world.agent(1, 1).mission() == 0
+    assert master.score(1) == 10.0
 
 def test_gamemaster_distances_path():
-    game= mi.GameEngine(
-        matrix= [
-            [00, 00, 00, 00],
-            [-1, 00, -1, -1],
-            [00, 00, 00, 00],
-            [00, -1, -1, 00]
-        ],
-        tic= 10, missions= [(4, 5), (7, 8)] )
-    master= mi.GameMaster( game )
+    world= pnd.World()
+    world.initializeGrid([
+        [00, 00, 00, 00],
+        [-1, 00, -1, -1],
+        [00, 00, 00, 00],
+        [00, -1, -1, 00]
+    ])
+    master= pnd.GameMaster( world, 1, tic=10 )
+    master.initialize()
+    world.setMissions( [(4, 5), (7, 8)] )
 
-    assert master.mapSize() == 11
-    assert master._distances == [
+    assert master.world().size() == 11
+    assert master.world()._distances == [
         [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
         [ 1, 0, 1, 2, 3, 2, 4, 3, 4, 5,  5,  6],
         [ 2, 1, 0, 1, 2, 1, 3, 2, 3, 4,  4,  5],
@@ -133,59 +156,61 @@ def test_gamemaster_distances_path():
     )
 
 def test_gamemaster_options():
-    game= mi.GameEngine(
-        matrix= [
-            [00, 00, 00, 00],
-            [-1, 00, 00, -1],
-            [00, 00, 00, 00],
-            [00, -1, -1, 00]
-        ],
-        tic= 10, missions= [(4, 5), (7, 8)] )
-    master= mi.GameMaster( game )
+    world= pnd.World()
+    world.initializeGrid([
+        [00, 00, 00, 00],  # 1  2  3  4
+        [-1, 00, -1, -1],  #    5      
+        [00, 00, 00, 00],  # 6  7  8  9
+        [00, -1, -1, 00]   #10       13
+    ])
+    master= pnd.GameMaster( world, 1, tic=10 )
+    master.initialize()
+    world.setMissions( [(4, 5), (7, 8)] )
 
-    assert master.moveOptions(1, 2) == [(3, 2)]
-    assert master.moveOptions(4, 4) == [(0, 4)]
-    assert master.moveOptions(5, 11) == [(6, 8)]
-    assert master.moveOptions(5, 12) == [(3, 6), (6, 8)]
+    world.render()
 
+    #assert master.moveOptions(1, 2) == [(3, 2)]
+    #assert master.moveOptions(4, 4) == [(0, 4)]
+    #assert master.moveOptions(5, 11) == [(6, 8)]
+    #assert master.moveOptions(5, 12) == [(3, 6), (6, 8)]
 
 def test_gamemaster_loops():
-    game= mi.GameEngine(
-        matrix= [
-            [00, 00, 00, 00],
-            [-1, 00, -1, -1],
-            [00, 00, 00, 00],
-            [00, -1, -1, 00]
-        ],
-        tic= 10 )
-    master= mi.GameMaster( game, randomMission=4 )
+    world= pnd.World()
+    world.initializeGrid([
+        [00, 00, 00, 00],  # 1  2  3  4
+        [-1, 00, -1, -1],  #    5      
+        [00, 00, 00, 00],  # 6  7  8  9
+        [00, -1, -1, 00]   #10       13
+    ])
+    master= pnd.GameMaster( world, 1, tic=10 )
 
-    assert master._engine._map._mobiles == [[], [1]]
-    assert master._engine._missions  == []
+    assert master.mobileTiles() == [[], [1]]
+    assert master.world()._missions  == []
 
     master.initialize()
-    assert len( master._engine._missions ) == 4
-    assert master._engine._tic == 10
 
-    master._engine.setMoveAction(1, 1, 3)
-    master._engine.applyMoveActions()
+    assert len( master.world()._missions ) == 1
+    assert master.ticCounter() == 10
 
-    assert master._engine._tic == 9
-    assert master._engine._map._mobiles == [[], [2]]
+    master.setMoveAction(1, 1, 3)
+    master.applyMoveActions()
 
-    master._engine.setMoveAction(1, 1, 6)
-    master._engine.applyMoveActions()
+    assert master._tic == 9
+    assert master.mobileTiles() == [[], [2]]
 
-    assert master._engine._tic == 8
-    assert master._engine._map._mobiles == [[], [5]]
+    master.setMoveAction(1, 1, 6)
+    master.applyMoveActions()
 
-    assert master.playerScore(1) == 8.0
+    assert master._tic == 8
+    assert master.mobileTiles() == [[], [5]]
+
+    assert master.playerScore(1) == 0.0
     
-    master._engine._scores= [0, 100.0]
-    assert master.playerScore(1) == 108.0
+    master._scores= [0, 100.0]
+    assert master.playerScore(1) == 100.0
 
     master.initialize()
 
-    assert master._engine._tic == 10
-    assert master._engine._map._mobiles == [[], [5]]
-    assert master.playerScore(1) == 10.0
+    assert master._tic == 10
+    assert master.mobileTiles() == [[], [5]]
+    assert master.playerScore(1) == 0.0

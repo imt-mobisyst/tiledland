@@ -1,6 +1,6 @@
 
 from .robot import Robot
-from ... import Float2, Shape, scene, Tile
+from ... import Float2, Shape, Box, scene, Tile, artist
 import random
 
 class Mission:
@@ -20,6 +20,13 @@ class World( scene.Scene ):
     def __init__(self, numberOfPlayers= 1):
         super().__init__(Robot)
         self._missions= []
+        # Initialize Artist :
+        self._artist= artist.Artist().initializePNG( "shot-pickndel.png" )
+        self._artist.flip()
+        self._artist.fitBox( Box([Float2(-0.5, -0.5), Float2(9.5, 6.5)] ), 10 )
+        #self._artist.fitBox( self.box(), 10 )
+        self.marketBrush= self._artist._panel[6]
+        self.marketBrush.width= 8
 
     # Accessor: 
     def missions(self):
@@ -30,14 +37,32 @@ class World( scene.Scene ):
 
     def mission(self, index):
         return self._missions[index-1]
-
+    
+    def missionIndexes(self):
+        l= []
+        i= 1
+        for m in self._missions :
+            if m.start > 0 :
+                l.append(i)
+            i+= 1
+        return l
+    
+    def mobileTiles(self, iPlayer):
+        return [ m.tile() for m in self.agents(iPlayer) ]
+    
     # Construction:
     def initializeMoves(self):
-        for groupMobiles in self.agents() :
-            for mobile in groupMobiles :
+        for group in range( self.numberOfGroups() ) :
+            for mobile in self.agents(group) :
                 mobile.setMove(0)
     
     # Mission :
+    def setMissions( self, aListOfTuples, pay= 10 ):
+        self._missions= [
+            Mission(iFrom, iTo, pay, 0)
+            for iFrom, iTo in aListOfTuples 
+        ]
+    
     def clearMissions(self):
         self._missions= []
         for group in range(self.numberOfGroups()+1) :
@@ -48,6 +73,10 @@ class World( scene.Scene ):
     def addMission( self, iFrom, iTo, pay= 10 ):
         self._missions.append( Mission(iFrom, iTo, pay, 0) )
         return len(self._missions)
+    
+    def addMissionAtRandom( self ):
+        tileIndexes= range( 1, self.size()+1 )
+        return self.addMission( random.choice( tileIndexes ), random.choice(tileIndexes), 10 )
 
     def updateMission(self, iMission, iFrom, iTo, pay, owner):
         self._missions[iMission-1]= Mission(iFrom, iTo, pay, owner)
@@ -116,3 +145,28 @@ class World( scene.Scene ):
                 iRobot= self.tile(t)._pieces[p].flag(2)
                 self._mobiles[iPlayer][iRobot-1]= t
         return self
+    
+    # Rendering :
+    def render(self):
+        self._artist.drawScene( self )
+        # Market:
+        self._artist.drawPolygon(
+            [6.55, 6.55, 9.5, 9.5], [2.45, -0.6, -0.6, 2.45],
+            self.marketBrush
+        )
+        self._artist._fontSize= 20
+        self._artist.write( 6.6, 2.2, "Market Place:", self.marketBrush )
+        self._artist._fontSize= 16
+        sep= 0.0
+        for i in self.missionIndexes() :
+            mFrom, mTo, pay, iPlayer= self.mission(i).asTuple()
+            self._artist.write( 6.8, 1.9-sep, f".{i}", self.marketBrush) 
+            self._artist.write( 7.2, 1.9-sep, f"- {mFrom} to: {mTo}", self.marketBrush )
+            if iPlayer == 0 :
+                self._artist.write( 8.5, 1.9-sep, f"({pay} ¢)", self.marketBrush )
+            else :
+                self._artist.write( 8.4, 1.9-sep, f"(Team-{iPlayer})", self.marketBrush )
+            sep+= 0.24
+        # Finalize:
+        self._artist.flip()
+
