@@ -70,19 +70,19 @@ def test_gamemaster_moves():
     refsFile= open( "tests/refs/41.pickndel-master-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-    assert world.mobileTiles(1) == [1]
+    assert world.carrierTiles(1) == [1]
 
     # Turn 1
     master.playerHand(1)
     master.applyPlayerAction( 1, "go 6" )
 
-    assert str(world.agent(1, 1)) == "Robot-1.1 ⌊(-0.18, 2.02), (0.18, 2.38)⌉ |6, 0|"
+    assert str(world.agent(1, 1)) == "Carrier-1.1 ⌊(-0.18, 2.02), (0.18, 2.38)⌉ |6, 0|"
 
     master.tic()
     assert world.agent(1, 1).tile() == 4
     assert world.agent(1, 1).mission() == 0
     
-    assert str(world.agent(1, 1)) == "Robot-1.1 ⌊(-0.18, 0.92), (0.18, 1.28)⌉ |0, 0|"
+    assert str(world.agent(1, 1)) == "Carrier-1.1 ⌊(-0.18, 0.92), (0.18, 1.28)⌉ |0, 0|"
 
     world.render()
     shotFile= open( "shot-pickndel.png", mode='rb' ).read()
@@ -96,7 +96,7 @@ def test_gamemaster_moves():
 
     assert world.agent(1, 1).tile() == 4
     assert world.agent(1, 1).mission() == 1
-    assert str(world.agent(1, 1)) == "Robot-1.1 ⌊(-0.18, 0.92), (0.18, 1.28)⌉ |0, 1|"
+    assert str(world.agent(1, 1)) == "Carrier-1.1 ⌊(-0.18, 0.92), (0.18, 1.28)⌉ |0, 1|"
 
     # Turn 3-6
     moves= [12, 3, 3, 6]
@@ -184,7 +184,7 @@ def test_gamemaster_loops():
     ])
     master= pnd.GameMaster( world, 1, tic=10 )
 
-    assert master.mobileTiles() == [[], [1]]
+    assert [ master.world().carrierTiles(i) for i in range(2) ] == [[], [1]]
     assert master.world()._missions  == []
 
     master.initialize()
@@ -196,13 +196,13 @@ def test_gamemaster_loops():
     master.applyMoveActions()
 
     assert master._tic == 9
-    assert master.mobileTiles() == [[], [2]]
+    assert master.world().carrierTiles(1) == [2]
 
     master.setMoveAction(1, 1, 6)
     master.applyMoveActions()
 
     assert master._tic == 8
-    assert master.mobileTiles() == [[], [5]]
+    assert master.world().carrierTiles(1) == [5]
 
     assert master.playerScore(1) == 0.0
     
@@ -212,5 +212,5 @@ def test_gamemaster_loops():
     master.initialize()
 
     assert master._tic == 10
-    assert master.mobileTiles() == [[], [5]]
+    assert master.world().carrierTiles(1) == [5]
     assert master.playerScore(1) == 0.0

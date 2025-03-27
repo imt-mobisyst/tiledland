@@ -1,5 +1,5 @@
 
-from .robot import Robot
+from .carrier import Carrier
 from ... import Float2, Shape, Box, scene, Tile, artist
 import hacka.py as hk
 import random
@@ -26,7 +26,7 @@ class Mission:
 
 class World( scene.Scene ):
     def __init__(self, numberOfPlayers= 1):
-        super().__init__(Robot)
+        super().__init__(Carrier)
         self._missions= []
         # Initialize Artist :
         self._artist= artist.Artist().initializePNG( "shot-pickndel.png" )
@@ -55,14 +55,14 @@ class World( scene.Scene ):
             i+= 1
         return l
     
-    def mobileTiles(self, iPlayer):
+    def carrierTiles(self, iPlayer):
         return [ m.tile() for m in self.agents(iPlayer) ]
     
     # Construction:
     def initializeMoves(self):
         for group in range( self.numberOfGroups() ) :
-            for mobile in self.agents(group) :
-                mobile.setMove(0)
+            for car in self.agents(group) :
+                car.setMove(0)
     
     # Mission :
     def setMissions( self, aListOfTuples, pay= 10 ):
@@ -74,8 +74,8 @@ class World( scene.Scene ):
     def clearMissions(self):
         self._missions= []
         for group in range(self.numberOfGroups()+1) :
-            for iRobot in range(1, self.numberOfAgents(group)+1) :
-                self.agent( iRobot, group ).setMission(0)
+            for iCarrier in range(1, self.numberOfAgents(group)+1) :
+                self.agent( iCarrier, group ).setMission(0)
         return self
 
     def addMission( self, iFrom, iTo, pay= 10 ):
@@ -109,33 +109,15 @@ class World( scene.Scene ):
             return False
         # move:
         # Get from iFrom
-        robot= self.tile(iFrom).agent()
+        carrier= self.tile(iFrom).agent()
         self.tile(iFrom).clear()
 
         # Set on iTo
-        self.tile(iTo).append(robot)
-        robot.setTile( iTo )
-        robot.setPosition( self.tile(iTo).position() )
+        self.tile(iTo).append(carrier)
+        carrier.setTile( iTo )
+        carrier.setPosition( self.tile(iTo).position() )
         return iTo
     
-    def bug_tileFromPod(self, aPod):
-        tile= Tile()
-        flags= aPod.flags()
-        tile._num= flags[0]
-        tile._matter= flags[1]
-        tile._adjacencies= flags[2:]
-        # Convert Values:
-        vals= aPod.values()
-        xs= [ vals[i] for i in range( 0, len(vals), 2 ) ]
-        ys= [ vals[i] for i in range( 1, len(vals), 2 ) ]
-        tile._center= Float2( xs[0], ys[0] )
-        tile._points= [ Float2(x, y) for x, y in zip(xs[1:], ys[1:]) ]
-        # Load pices:
-        tile._pieces= [ Robot().fromPod(p) for p in aPod.children() ]
-        tile._piecesBrushId = [ 10+mob.owner() for mob in tile._pieces ]
-        tile._piecesShapeId = [ 0 for mob in tile._pieces ]
-        return tile
-
     # Podable:
     def asPod( self, name= "Pick'n Del" ):
         return hk.Pod().fromLists(
@@ -148,11 +130,11 @@ class World( scene.Scene ):
             return hk.Pod().fromLists( ["Mission"], self.mission(1).asList() )
         return hk.Pod().fromLists( ["Mission"] )
     
-    def mobilesAsPod(self):
-        podMobiles= hk.Pod().fromLists( ["mobiles"] )
+    def carriersAsPod(self):
+        podMobiles= hk.Pod().fromLists( ["Carriers"] )
         for group in range( self.numberOfGroups() ):
-            for mobile in self.agents( group ):
-                mPod= hk.Pod().fromLists( ["robot"], [group, mobile.id(), mobile.tile(), mobile.mission()] )
+            for car in self.agents( group ):
+                mPod= hk.Pod().fromLists( ["carrier"], [group, car.id(), car.tile(), car.mission()] )
                 podMobiles.append(mPod)
         return podMobiles
 
@@ -167,21 +149,21 @@ class World( scene.Scene ):
             self._missions= [ Mission().fromList( aPod.integers() ) ]
         return self._missions
     
-    def mobilesFromPod(self, aPod):
+    def carriersFromPod(self, aPod):
         self.clearAgents()
         for pod in aPod.children() :
             iPlayer= pod.integer(1)
-            iRobot= pod.integer(2)
+            iCarrier= pod.integer(2)
             pos= pod.integer(3)
             mis= pod.integer(4)
-            robot= self.popAgentOn( pos, iPlayer )
-            assert robot.id() == iRobot
-            robot.setMission(mis)
+            carrier= self.popAgentOn( pos, iPlayer )
+            assert carrier.id() == iCarrier
+            carrier.setMission(mis)
         return self._agents
 
     def setOnPodState(self, aPod):
         self.missionsFromPod( aPod.child(1) )
-        self.mobilesFromPod( aPod.child(2) )
+        self.carriersFromPod( aPod.child(2) )
     
     # Rendering :
     def render(self):

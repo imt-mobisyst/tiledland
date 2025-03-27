@@ -3,13 +3,13 @@ import random, hacka.py as hk
 #from .artist import Artist
 #from  ... import tiled
 
-from .robot import Robot
+from .carrier import Carrier
 from .world import World
 
 class GameMaster( hk.AbsSequentialGame ) :
 
     # Initialization:
-    def __init__( self, world, numberOfPlayers=1, numberOfRobots= 1, tic= 100, seed=False ):
+    def __init__( self, world, numberOfPlayers=1, numberOfCarriers= 1, tic= 100, seed=False ):
         super().__init__( numberOfPlayers )
         self._seed= seed
         # GameEngine:
@@ -21,7 +21,7 @@ class GameMaster( hk.AbsSequentialGame ) :
         # Initialize Players:
         iTile= 1
         for pId in range(1, numberOfPlayers+1) :
-            for iRobot in range(numberOfRobots) :
+            for iCarrier in range(numberOfCarriers) :
                 self._model.popAgentOn( iTile, pId )
                 iTile+=1
         self._scores= [ 0.0 for i in range(numberOfPlayers+1) ]
@@ -34,17 +34,11 @@ class GameMaster( hk.AbsSequentialGame ) :
     def score(self, iPlayer):
         return self._scores[iPlayer]
     
-    def numberOfRobots(self, iPlayer=1):
+    def numberOfCarriers(self, iPlayer=1):
         return len( self._model.agents(iPlayer) )
     
     def ticCounter(self):
         return self._tic
-
-    def mobileTiles(self):
-        return [
-            [m.tile() for m in self.world().agents(group) ]
-            for group in range( self.world().numberOfGroups() )
-        ]
 
     # Game interface :
     def initialize(self, mission=None):
@@ -76,61 +70,52 @@ class GameMaster( hk.AbsSequentialGame ) :
         # Missions :
         pod.append( self._model.missionsAsPod() )
         # Mobiles :
-        pod.append( self._model.mobilesAsPod() )
+        pod.append( self._model.carriersAsPod() )
         return pod
     
-    def mobilesFromPod( self, podState ):
-        self._map.clearMobiles()
-        for pod in podState.children() :
-            iPlayer= pod.flag(1)
-            iRobot= pod.flag(2)
-            pos= pod.flag(3)
-            mis= pod.flag(4)
-            self._map.popRobot( iPlayer, pos, mis )
-        return self
 
     def applyPlayerAction( self, iPlayer, action ):
         # Interpret action string
         decompo= action.split(" ")
-        iRobot= 1
-        while len(decompo) > 0 and iRobot <= self.numberOfPlayers() :
+        iCarrier= 1
+        while len(decompo) > 0 and iCarrier <= self.numberOfPlayers() :
             act= decompo.pop(0)
             if act == 'go' :
                 clockDir= int(decompo.pop(0))
-                self.setMoveAction(iPlayer, iRobot, clockDir)
+                self.setMoveAction(iPlayer, iCarrier, clockDir)
             elif act == 'do' :
                 missionId= int(decompo.pop(0))
-                self.setMissionAction(iPlayer, iRobot, missionId)
+                self.setMissionAction(iPlayer, iCarrier, missionId)
             elif act != 'pass' :
                 break
-            iRobot+=1
+            iCarrier+=1
         return True
 
-    def setMoveAction( self, iPlayer, iRobot, clockDir ):
+    def setMoveAction( self, iPlayer, iCarrier, clockDir ):
         # Security:
-        if not(self._model.isAgent(iRobot, iPlayer) and 0 <= clockDir and clockDir <= 12):
+        if not(self._model.isAgent(iCarrier, iPlayer) and 0 <= clockDir and clockDir <= 12):
             return False
-        self._model.agent(iRobot, iPlayer).setMove(clockDir)
+        self._model.agent(iCarrier, iPlayer).setMove(clockDir)
         return True
     
-    def setMissionAction(self, iPlayer, iRobot, iMission):
+    def setMissionAction(self, iPlayer, iCarrier, iMission):
         # Security:
         model= self._model
-        if not( model.isAgent(iPlayer, iRobot) and model.isMission(iMission) ) :
+        if not( model.isAgent(iPlayer, iCarrier) and model.isMission(iMission) ) :
             return False
         # Localvariable:
-        robot= model.agent(iRobot, iPlayer)
+        carrier= model.agent(iCarrier, iPlayer)
         iFrom, iTo, pay, owner= model.mission(iMission).asTuple()
         # Mission start:
-        if robot.mission() == 0 : 
-            if robot.tile() == iFrom and owner == 0 :
-                robot.setMission( iMission )
+        if carrier.mission() == 0 : 
+            if carrier.tile() == iFrom and owner == 0 :
+                carrier.setMission( iMission )
                 model.updateMission(iMission, iFrom, iTo, pay, iPlayer)
                 return True
             return False
         # Mission end:
-        if robot.mission() == iMission and robot.tile() == iTo : 
-            robot.setMission(0)
+        if carrier.mission() == iMission and carrier.tile() == iTo : 
+            carrier.setMission(0)
             self._scores[iPlayer]+= pay
             model.updateMission(iMission, 0, iTo, 0, iPlayer)
             return True

@@ -48,8 +48,8 @@ def test_basicBot_wakeUp():
     print( f">>> {statePod}.")
     assert str(statePod) == """State: [100] [0.0, 0.0]
 - Mission: [1, 2, 10, 0]
-- mobiles:
-  - robot: [1, 1, 1, 0]"""
+- Carriers:
+  - carrier: [1, 1, 1, 0]"""
 
     bot.perceive(statePod)
     assert bot.decide() == "pass"
