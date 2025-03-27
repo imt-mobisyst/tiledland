@@ -119,16 +119,17 @@ class World( scene.Scene ):
         return iTo
     
     # Podable:
-    def asPod( self, name= "Pick'n Del" ):
+    def asPod( self, name= "Pick'nDel" ):
         return hk.Pod().fromLists(
             [name], [], [],
             [ super(World, self).asPod(), self.missionsAsPod() ]
         )
     
     def missionsAsPod(self):
-        if len(self._missions) > 0 :
-            return hk.Pod().fromLists( ["Mission"], self.mission(1).asList() )
-        return hk.Pod().fromLists( ["Mission"] )
+        missionPod= hk.Pod().fromLists( ["Missions"] )
+        for m in self._missions :
+            missionPod.append( hk.Pod().fromLists( ["Mission"], m.asList() ) )
+        return missionPod
     
     def carriersAsPod(self):
         podMobiles= hk.Pod().fromLists( ["Carriers"] )
@@ -145,8 +146,8 @@ class World( scene.Scene ):
     
     def missionsFromPod(self, aPod):
         self._missions= []
-        if aPod.numberOfIntegers() > 3 :
-            self._missions= [ Mission().fromList( aPod.integers() ) ]
+        for childPod in aPod.children() :
+            self._missions.append( Mission().fromList( childPod.integers() ) )
         return self._missions
     
     def carriersFromPod(self, aPod):
@@ -164,6 +165,7 @@ class World( scene.Scene ):
     def setOnPodState(self, aPod):
         self.missionsFromPod( aPod.child(1) )
         self.carriersFromPod( aPod.child(2) )
+        return aPod.integer(1)
     
     # Rendering :
     def render(self):

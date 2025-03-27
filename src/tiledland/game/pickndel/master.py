@@ -9,7 +9,7 @@ from .world import World
 class GameMaster( hk.AbsSequentialGame ) :
 
     # Initialization:
-    def __init__( self, world, numberOfPlayers=1, numberOfCarriers= 1, tic= 100, seed=False ):
+    def __init__( self, world, numberOfPlayers=1, numberOfCarriers= 1, tic= 10, seed=False ):
         super().__init__( numberOfPlayers )
         self._seed= seed
         # GameEngine:
@@ -49,21 +49,8 @@ class GameMaster( hk.AbsSequentialGame ) :
             self._model.addMissionAtRandom()
         else :
             self._model.addMission( mission[0], mission[1] )
-        return hk.Pod( self._model.asPod( "Pick'n Del" ) ) 
-    
-    def moveit_initialize(self):
-        if self._randomMission > 0 :
-        # Clean Up.
-            self._engine.clearMissions()
-            for iOwner in range(self.numberOfPlayers()+1) :
-                for iMob in range( 1, self._engine.numberOfMobiles(iOwner)+1 ) :
-                    self._engine.mobile(iOwner, iMob).setMission(0)
-        # Set missions at random:
-            for i in range( self._randomMission ) :
-                self.addRandomMission()
-        self._engine.reInit( self._gameTic )
-        return hk.Pod( self._engine.asPod("Pick'n Del") )
-    
+        return hk.Pod( self._model.asPod( "Pick'nDel" ) ) 
+        
     def playerHand( self, iPlayer ):
         # Engine :
         pod= hk.Pod().fromLists( ["State"], [self._tic], self._scores )
@@ -73,7 +60,6 @@ class GameMaster( hk.AbsSequentialGame ) :
         pod.append( self._model.carriersAsPod() )
         return pod
     
-
     def applyPlayerAction( self, iPlayer, action ):
         # Interpret action string
         decompo= action.split(" ")
@@ -118,9 +104,10 @@ class GameMaster( hk.AbsSequentialGame ) :
             carrier.setMission(0)
             self._scores[iPlayer]+= pay
             model.updateMission(iMission, 0, iTo, 0, iPlayer)
+            model.addMissionAtRandom()
             return True
         return False
-
+    
     def applyMoveActions(self):
         collision= 0
         reserved= []
@@ -195,27 +182,6 @@ class GameMaster( hk.AbsSequentialGame ) :
         # Return the selected candidates:
         return selectedDir, selectedNext
 
-    def bug_moveOptions(self, iTile, iTarget):
-        world= self.world()
-        # If no need to move:
-        if iTile == iTarget :
-            return [(0, iTile)]
-        # Get candidates:
-        clockdirs= world.clockBearing(iTile)
-        nextTiles= world.adjacencies(iTile)
-        selected= [ (clockdirs[0], nextTiles[0]) ]
-        refDist= world._distances[nextTiles[0]][iTarget]
-        # Test all candidates:
-        for clock, tile in zip( clockdirs[1:], nextTiles[1:] ) :
-            if world._distances[tile][iTarget] == refDist :
-                selected.append( (clock, tile) )
-            elif world._distances[tile][iTarget] < refDist :
-                selected= [ (clock, tile) ]
-                refDist= world._distances[tile][iTarget]
-            
-        # Return the selected candidates:
-        return selected
-
     def path(self, iTile, iTarget):
         clock, tile= self.toward(iTile, iTarget)
         move= [clock]
@@ -226,30 +192,3 @@ class GameMaster( hk.AbsSequentialGame ) :
             path.append( tile )
         return move, path
     
-    # Vips managment: 
-    def initializeVipsBehavior(self):
-        self._vipsGoals= [ p for p in self.vipPositions() ]
-
-    def numberOfVips(self):
-        return self._engine.numberOfMobiles(0)
-
-    def vipPositions(self) :
-        n= self.numberOfVips()
-        return [ self._engine.mobilePosition(0, i) for i in range(1, n+1) ]
-
-    def vipGoals(self) :
-        return self._vipsGoals
-    
-    def vipMoves(self) :
-        moves= []
-        for p, g in zip( self.vipPositions(), self.vipGoals() ) :
-            opts= self.moveOptions( p, g )
-            moves.append( opts[0][0] )
-        return moves
-    
-    def activateVips(self) :
-        vipIds= range( 1, self.numberOfVips()+1 )
-        for i, m in zip( vipIds, self.vipMoves() ) :
-            self._engine.setMoveAction(0, i, m)
-            if m == 0 :
-                self._vipsGoals[i-1] = random.choice( self._vipZones )

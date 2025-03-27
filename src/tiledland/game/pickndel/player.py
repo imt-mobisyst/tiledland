@@ -11,11 +11,15 @@ class BasicBot( AbsPlayer ):
         self._id= 0
         self._sumResult= 0.0
         self._countResult= 0
+        self._tic= 0
 
     # Accessor:
     def model(self):
         return self._model
     
+    def ticCounter(self):
+        return self._tic
+
     def playerId(self):
         return self._id
     
@@ -36,7 +40,7 @@ class BasicBot( AbsPlayer ):
 
     def perceive(self, podState):
         # update the game state:
-        self._model.setOnPodState(podState)
+        self._tic= self._model.setOnPodState(podState)
 
     def decide(self):
         return "pass"
@@ -44,46 +48,32 @@ class BasicBot( AbsPlayer ):
     def sleep(self, result):
         self._sumResult+= result
         self._countResult+= 1
-
-class BlindBot( BasicBot ):
-    def __init__(self, actionsList= ['pass'], numberRobots=1):
-        super().__init__()
-        self._actions= actionsList
-        self._step= -1
-        self._fleetSize= numberRobots
-
-    def decide(self):
-        # Follow the order
-        self._step+= 1
-        if self._step == len(self._actions) :
-            self._step= 0
-        return self._actions[self._step]
     
 class ShellPlayer( BasicBot ):
     def __init__(self):
         super().__init__()
-        self._action= "go"
+        self._action= "pass"
     
     # Player interface :
     def wakeUp(self, playerId, numberOfPlayers, gamePod):
         super().wakeUp(playerId, numberOfPlayers, gamePod)
+        self._action= "pass"
         self.model().render()
-        print( f"Output image : ./shot-moveIt.png" )
-        self._action= "go"
+        print( f"Output image : ./shot-pickndel.png" )
         print( "New game..." )
         print( "Possible Actions:" )
-        print( "   - [mission robotId missionId ...] move robotId clockDirection ... or pass" )
+        print( "   - do missionId" )
+        print( "   - go clockDirection" )
         print( "   - pass" )
         print( "   - stop (will 'pass' until the game ends)" )
-        print( "the mission part is optional and only one action per robot will be achieved" )
 
-    def perceive(self, statePod):
-        super().perceive(statePod)
+    def perceive(self, podState):
+        super().perceive(podState)
         self.model().render()
 
     def decide(self):
         if self._action != "stop" :
-            msg= f'tic-{ self.model().tic() } | score { self.model().score(self._id) }'
+            msg= f'tic-{ self.ticCounter() }'
             msg+= ' - Enter your action: '
             self._action = input(msg)
         if self._action == "stop" :
@@ -93,3 +83,4 @@ class ShellPlayer( BasicBot ):
     def sleep(self, result):
         super().sleep(result)
         print( f"End on result: {result}" )
+

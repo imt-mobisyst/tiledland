@@ -118,6 +118,46 @@ def test_gamemaster_moves():
     assert world.agent(1, 1).mission() == 0
     assert master.score(1) == 10.0
 
+def test_gamemaster_drawMissions():
+    world= pnd.World()
+    world.initializeGrid([
+        [00, 00, 00, 00],
+        [-1, 00, -1, -1],
+        [00, 00, 00, 00],
+        [00, -1, -1, 00]
+    ])
+    master= pnd.GameMaster( world, 1, tic=10 )
+    master.initialize()
+    world.setMissions( [(4, 5), (7, 8)] )
+
+    world.render()
+    shotFile= open( "shot-pickndel.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/41.pickndel-master-03.png", mode='rb' ).read()
+    assert( shotFile == refsFile )
+
+    world.updateMission(1, 4, 5, 10, 1)
+
+    world.render()
+    shotFile= open( "shot-pickndel.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/41.pickndel-master-04.png", mode='rb' ).read()
+    assert( shotFile == refsFile )
+
+    world.updateMission(1, 0, 5, 0, 1)
+
+    world.render()
+    shotFile= open( "shot-pickndel.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/41.pickndel-master-05.png", mode='rb' ).read()
+    assert( shotFile == refsFile )
+
+    world.updateMission(2, 7, 8, 10, 1)
+    world.updateMission(2, 0, 8, 0, 1)
+    world.addMission(3, 6, 12)
+    
+    world.render()
+    shotFile= open( "shot-pickndel.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/41.pickndel-master-06.png", mode='rb' ).read()
+    assert( shotFile == refsFile )
+
 def test_gamemaster_distances_path():
     world= pnd.World()
     world.initializeGrid([
