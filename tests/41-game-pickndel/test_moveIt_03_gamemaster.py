@@ -11,22 +11,25 @@ import src.tiledland.game.pickndel as pnd
 import src.tiledland as tll
 
 def test_gamemaster_method():
-    game= mi.GameEngine( missions=[(1, 2)], tic=20)
-    master= mi.GameMaster( game )
+    world= pnd.World().initializeGrid( [[0, 0], [0, 0]] )
+    master= pnd.GameMaster( world, 1, tic=20 )
 
-    assert( type( master.initialize().asPod() ) is hacka.Pod  )
-    assert( type( master.playerHand(1).asPod() ) is hacka.Pod )
-    assert( master.applyPlayerAction( 1, "move 1 0" )  )
+    assert( len(master._model._agents) == 2 )
+
+    print( f">>> {type( master.initialize().asPod() )} is {hacka.pod.Pod}")
+
+    assert( type( master.initialize() ) is hacka.pod.Pod )
+    assert( type( master.playerHand(1) ) is hacka.pod.Pod )
+    assert( master.applyPlayerAction( 1, "go 0" )  )
+    assert( master.applyPlayerAction( 1, "do 1" )  )
     
     master.tic()
     assert( not master.isEnded() )
-    
-    assert( master.playerScore(1) == 19.0 )
+    assert( master.playerScore(1) == 0.0 )
 
     master.tic()
     assert( not master.isEnded() )
-    
-    assert( master.playerScore(1) == 18.0 )
+    assert( master.playerScore(1) == 0.0 )
 
 def test_gamemaster_live_cycle():
     game= mi.GameEngine( tic= 10, missions=[(1, 2)] )

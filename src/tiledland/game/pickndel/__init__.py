@@ -2,15 +2,14 @@
 MoveIt - an HackaGame game 
 """
 
-from . import robot, scene#, gameengine, gamemaster, player
+from . import robot, master, world#, player
 
 # Game Component:
 Robot= robot.Robot
-Scene= scene.Scene
+World= world.World
 
 # Hackagame Game:
-#GameEngine= gameengine.Engine
-#GameMaster= gamemaster.Master
+GameMaster= master.GameMaster
 
 # Players
 #BasicBot= player.BasicBot

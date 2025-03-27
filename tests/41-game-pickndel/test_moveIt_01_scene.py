@@ -30,12 +30,12 @@ refMatrix= [
     [43, 44, 45, 46, 47,   , 48,   ,   ,   ]
 """
 
-def test_pnd_robot():
+def test_pnd_initRobot():
     robot= pnd.Robot()
-    assert str(mobile) == "Robot-1.0 ⌊(-0.18, -0.18), (0.18, 0.18)⌉"
+    assert str(robot) == "Robot-1.0 ⌊(-0.18, -0.18), (0.18, 0.18)⌉"
 
-def test_pnd_scene():
-    model= pnd.Scene()
+def test_pnd_world():
+    model= pnd.World()
     model.initializeGrid( refMatrix, 0.9, 0.1 )
     artist= tll.Artist().initializePNG( "shot-test.png" )
     artist.fitBox( model.box(), 10 )
@@ -62,16 +62,17 @@ def test_pnd_scene():
     refsFile= open( "tests/refs/41.pickndel-scene-02.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-def test_pnd_neibors():
+def test_pnd_graph():
     # Game MoveIt:
-    model= pnd.Scene()
+    model= pnd.World()
     model.initializeGrid( refMatrix, 0.9, 0.1 )
 
     print( f">>> {model.neighbours(11)}" )
 
-    assert model.neighbours(11) == [3, 11, 12, 18]
+    assert model.adjacencies(11) == [3, 11, 12, 18]
     assert model.directions(11) == [(0.0, 1.0), (0.0, 0.0), (1.0, 0.0), (0.0, -1.0)]
     assert model.clockBearing(11) == [12, 0, 3, 6]
+    assert model.neighbours(11) == [(3, 12), (11, 0), (12, 3), (18, 6)]
     assert model.completeClock(11) == [11,
                              11, 11, 12, 11, 11, 18,
                              11, 11, 11, 11, 11,  3 ]
@@ -83,9 +84,9 @@ def test_pnd_neibors():
 
 def test_pnd_robot():
     # Game MoveIt:
-    model= pnd.Scene( numberOfPlayers=2 )
+    model= pnd.World( numberOfPlayers=2 )
     model.initializeGrid( refMatrix, 0.9, 0.1 )
-
+    
     assert str(model.popAgentOn(1, 1)) == 'Robot-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉'
     assert str(model.popAgentOn(25, 1)) == 'Robot-1.2 ⌊(0.82, 2.82), (1.18, 3.18)⌉'
 

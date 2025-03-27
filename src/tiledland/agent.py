@@ -43,8 +43,9 @@ class Agent(Podable):
     
     def radius(self):
         r= 0.0
+        zero= Float2()
         for p in self._shape._points :
-            d= self._center.distance( p )
+            d= zero.distance( p )
             r= max( d, r )
         return r
 

@@ -20,21 +20,20 @@ class Scene(Podable):
     def tile(self, iCell):
         return self._tiles[iCell-1]
 
-    def agent(self, iAgent, iOwner=0 ):
-        return self._agents[iOwner][iAgent-1]
+    def agent(self, iAgent, group=0 ):
+        return self._agents[group][iAgent-1]
 
-    def numberOfOwner(self):
+    def numberOfGroups(self):
         return len(self._agents)
     
-    def numberOfAgent(self, iOwner):
-        return len( self._agents[iOwner] )
-
-    def neighbours(self, iCell):
-        neibs= [] 
-        for iNei in self.tile(iCell).adjacencies() :
-            dir= self.tile(iCell).clockDirection( self.tile(iNei).position() )
-            neibs.append( (iNei, dir) )
-        return neibs
+    def numberOfAgents(self, group=0):
+        if group < len(self._agents) :
+            return len( self._agents[group] )
+        return 0
+    
+    # Graph:
+    def adjacencies(self, iTile) :
+        return self.tile(iTile).adjacencies()
     
     def edges(self):
         edgeList= []
@@ -42,7 +41,41 @@ class Scene(Podable):
             edgeList+= [ (t.id(), neibor) for neibor in t.adjacencies() ]
         return edgeList
 
+    def neighbours(self, iTile):
+        neibs= [] 
+        for iNei in self.adjacencies(iTile) :
+            clockdir= self.tile(iTile).clockDirection( self.tile(iNei).position() )
+            neibs.append( (iNei, clockdir) )
+        return neibs
+    
+    def directions(self, iTile) : 
+        cx, cy= self.tile(iTile).position().asTuple()
+        neibor= self.adjacencies(iTile)
+        positions= [ self.tile(i).position().asTuple() for i in neibor ]
+        return [ (x-cx, y-cy) for x, y in positions ]
+    
+    def clockBearing(self, iTile):
+        clock= [
+            [ 0,  9,  0],
+            [ 6,  0, 12],
+            [ 0,  3,  0]
+        ]
+        positions= [ (int(round(x, 0)), int(round(y, 0))) for x, y in self.directions(iTile) ]
+        return [ clock[1+x][1+y] for x, y in positions ]
+
+    def completeClock(self, iTile):
+        clock= [ iTile for i in range(13) ]
+        for it, ic in self.neighbours(iTile) :
+            clock[ic]= it
+        return clock
+
+    def clockposition(self, iTile, clockDir):
+        return self.completeClock(iTile)[clockDir]
+
     # Test:
+    def isAgent(self, iAgent, group= 1):
+        return group < len(self._agents)  and iAgent-1 < len(self._agents[group])
+    
     def isTile(self, iTile):
         return 0 < iTile and iTile <= self.size()
     
@@ -133,16 +166,16 @@ class Scene(Podable):
         self._agents= [[]]
         return self
 
-    def popAgentOn(self, iTile=1, owner= 0 ):
+    def popAgentOn(self, iTile=1, group= 0 ):
         if iTile > self.size() :
             return False
-        while len(self._agents) <= owner :
+        while len(self._agents) <= group :
             self._agents.append([])
-        ag= self._factory( len(self._agents[owner])+1, owner )
+        ag= self._factory( len(self._agents[group])+1, group )
         ag.setTile(iTile)
         ag.setPosition( self.tile(iTile).position().copy() )
         self.tile(iTile).append( ag )
-        self._agents[owner].append( ag )
+        self._agents[group].append( ag )
         return ag
 
     def connect(self, iFrom, iTo):
@@ -162,8 +195,41 @@ class Scene(Podable):
                     tilj= self.tile(j)
                     if conditionFromTo( tili, tilj ): # :
                        self.connect( i, j )
+    # Distance :
+    def computeDistances(self):
+        s= self.size()
+        self._distances= [ [ i for i in range(s+1) ] ]
+        for i in range( 1, s+1 ) :
+            dist= self.computeDistancesTo(i)
+            self._distances.append( dist )
 
-    # Agent accessors:
+    def computeDistancesTo(self, iTile):
+        # Initialize distances to 0:
+        dists= [iTile] +  [0 for i in range( self.size() )]
+        # Initialize step from iTile:
+        ringNodes= self.adjacencies(iTile)
+        ringDistance= 1
+        # while theire is nodes to visit
+        while len(ringNodes) > 0 :
+            nextNodes= []
+            # Visit all step nodes:
+            for node in ringNodes :
+                # Update distance information
+                dists[node]= ringDistance
+            for node in ringNodes :
+                # Search for new tile to visit:
+                neighbours= self.adjacencies(node)
+                for candidate in neighbours :
+                    if dists[candidate] == 0 :
+                         nextNodes.append(candidate)
+            # swith to the next step.
+            ringNodes= nextNodes
+            ringDistance+= 1
+        # Correct 0 distance:
+        dists[iTile]= 0
+        return dists
+    
+    # Agent Collection:
     def allAgents( self, iGroup=0 ):
         alls= []
         for ags in self._agents:
@@ -177,9 +243,9 @@ class Scene(Podable):
         return [ ag.tile() for ag in self.agents(iGroup) ]
 
     # Podable:
-    def asPod( self ):
+    def asPod( self, name= "Scene" ):
         return Pod().fromLists(
-            ["Scene"], [], [],
+            [name], [], [],
             [ t.asPod() for t in self.tiles() ]
         )
     

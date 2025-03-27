@@ -1,47 +1,65 @@
 
 from .robot import Robot
 from ... import Float2, Shape, scene, Tile
+import random
 
-class Scene( scene.Scene ):
+class Mission:
+    def __init__( self, start, final, reward, owner ):
+        self.start= start
+        self.final= final
+        self.reward= reward
+        self.owner= owner
+
+    def asList(self):
+        return [self.start, self.final, self.reward, self.owner]
+    
+    def asTuple(self):
+        return self.start, self.final, self.reward, self.owner
+
+class World( scene.Scene ):
     def __init__(self, numberOfPlayers= 1):
         super().__init__(Robot)
-        self._collects= [ [] for i in range( numberOfPlayers+1 ) ]
+        self._missions= []
+
+    # Accessor: 
+    def missions(self):
+        return self._missions
+
+    def isMission(self, iMission):
+        return ( 0 < iMission and iMission <= len(self._missions) )
+
+    def mission(self, index):
+        return self._missions[index-1]
 
     # Construction:
     def initializeMoves(self):
-        for mobilePositions in self._mobiles :
-            for i in mobilePositions :
-                for piece in self.tile(i).pieces():
-                    piece.setMove(0)
-
-    # Graph:
-    def neighbours(self, iTile) :
-        return self.tile(iTile).adjacencies()
+        for groupMobiles in self.agents() :
+            for mobile in groupMobiles :
+                mobile.setMove(0)
     
-    def directions(self, iTile) : 
-        cx, cy= self.tile(iTile).position().asTuple()
-        neibor= self.neighbours(iTile)
-        positions= [ self.tile(i).position().asTuple() for i in neibor ]
-        return [ (x-cx, y-cy) for x, y in positions ]
-    
-    def clockBearing(self, iTile):
-        clock= [
-            [ 0,  9,  0],
-            [ 6,  0, 12],
-            [ 0,  3,  0]
-        ]
-        positions= [ (int(round(x, 0)), int(round(y, 0))) for x, y in self.directions(iTile) ]
-        return [ clock[1+x][1+y] for x, y in positions ]
+    # Mission :
+    def clearMissions(self):
+        self._missions= []
+        for group in range(self.numberOfGroups()+1) :
+            for iRobot in range(1, self.numberOfAgents(group)+1) :
+                self.agent( iRobot, group ).setMission(0)
+        return self
 
-    def completeClock(self, iTile):
-        clock= [ iTile for i in range(13) ]
-        for it, ic in zip( self.neighbours(iTile), self.clockBearing(iTile) ) :
-            clock[ic]= it
-        return clock
+    def addMission( self, iFrom, iTo, pay= 10 ):
+        self._missions.append( Mission(iFrom, iTo, pay, 0) )
+        return len(self._missions)
 
-    def clockposition(self, iTile, clockDir):
-        return self.completeClock(iTile)[clockDir]
-    
+    def updateMission(self, iMission, iFrom, iTo, pay, owner):
+        self._missions[iMission-1]= Mission(iFrom, iTo, pay, owner)
+
+    def addRandomMission(self):
+        bound= self._engine._map.size()+1
+        iFrom= random.randrange(1, bound)
+        iTo= random.randrange(1, bound)
+        pay= 10+random.randrange(bound)
+        self._engine.addMission( iFrom, iTo, pay )
+        return iFrom, iTo, pay
+
     # Moving:
     def move(self, iFrom, clockDir):
         if self.tile(iFrom).count() > 0 and clockDir == 0 :
