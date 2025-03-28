@@ -40,6 +40,12 @@ class World( scene.Scene ):
     def carrierTile(self, iCarrier= 1, iPlayer= 1):
         return self.agent(iCarrier, iPlayer).tile()
     
+    def carrierMission(self, iCarrier= 1, iPlayer= 1):
+        mission= self.agent(iCarrier, iPlayer).mission()
+        if mission != 0 : 
+            return self.mission( mission )
+        return self.missionIndexes()[0]
+
     def carrierGoal(self, iCarrier= 1, iPlayer= 1):
         mission= self.agent(iCarrier, iPlayer).mission()
         if mission != 0 : 
