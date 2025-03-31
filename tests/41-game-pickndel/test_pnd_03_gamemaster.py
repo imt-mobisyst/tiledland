@@ -61,6 +61,7 @@ def test_gamemaster_moves():
     world= pnd.World()
     world.initializeGrid( [[0, 0, 0, -1], [0, -1, 0, 0], [0, 0, 0, 0]] )
     master= pnd.GameMaster( world, 1, tic=20 )
+    world.teleport( world.agent(1, 1,).tile(), 1 )
     master.initialize()
     world.setMissions( [(4, 5), (7, 8)] )
 
@@ -127,6 +128,7 @@ def test_gamemaster_drawMissions():
         [00, -1, -1, 00]
     ])
     master= pnd.GameMaster( world, 1, tic=10 )
+    world.teleport( world.agent(1, 1,).tile(), 1 )
     master.initialize()
     world.setMissions( [(4, 5), (7, 8)] )
 
@@ -223,6 +225,7 @@ def test_gamemaster_loops():
         [00, -1, -1, 00]   #10       13
     ])
     master= pnd.GameMaster( world, 1, tic=10 )
+    world.teleport( world.agent(1, 1,).tile(), 1 )
 
     assert [ master.world().carrierTiles(i) for i in range(2) ] == [[], [1]]
     assert master.world()._missions  == []

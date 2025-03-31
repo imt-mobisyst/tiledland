@@ -156,6 +156,7 @@ class World( scene.Scene ):
 
     # Moving:
     def move(self, iFrom, clockDir):
+        #print( f">>> move {iFrom}, {clockDir} ({self.encumber(iFrom)})" )
         if self.tile(iFrom).count() == 0 or clockDir == 0 :
             return iFrom
         if random.random() < self.encumber(iFrom) :

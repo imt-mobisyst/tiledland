@@ -19,11 +19,9 @@ class GameMaster( hk.AbsSequentialGame ) :
         self._initialTic= tic
         self._tic= 0
         # Initialize Players:
-        iTile= 1
         for pId in range(1, numberOfPlayers+1) :
-            for iCarrier in range(numberOfCarriers) :
-                self._model.popAgentOn( iTile, pId )
-                iTile+=1
+            for tileId in random.choices( range(1, self._model.size()+1 ), k = numberOfCarriers ) :
+                self._model.popAgentOn( tileId, pId )
         self._scores= [ 0.0 for i in range(numberOfPlayers+1) ]
     
 
