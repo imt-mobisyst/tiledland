@@ -30,12 +30,9 @@ refMatrix= [
     [43, 44, 45, 46, 47,   , 48,   ,   ,   ]
 """
 
-def test_pnd_initCarrier():
-    carrier= pnd.Carrier()
-    assert str(carrier) == "Carrier-1.0 ⌊(-0.18, -0.18), (0.18, 0.18)⌉ |0, 0|"
-
 def test_pnd_world():
-    model= pnd.World()
+    model= pnd.World( "Cool" )
+    assert model.name() == "Cool"
     model.initializeGrid( refMatrix, 0.9, 0.1 )
     artist= tll.Artist().initializePNG( "shot-test.png" )
     artist.fitBox( model.box(), 10 )
@@ -82,7 +79,7 @@ def test_pnd_graph():
     assert model.clockposition(11, 3) == 12
     assert model.clockposition(11, 9) == 11
 
-def test_pnd_carrier():
+def test_pnd_withCarrier():
     # Game MoveIt:
     model= pnd.World( numberOfPlayers=2 )
     model.initializeGrid( refMatrix, 0.9, 0.1 )
@@ -99,7 +96,7 @@ def test_pnd_carrier():
 
     assert [ ag.tile() for ag in model.allAgents() ] == [1, 25, 7, 44]
 
-    assert model.move( 11, 12 ) == False
+    assert model.move( 11, 12 ) == 11
     assert model.move( 1, 6 ) == 10
 
     assert model.agentTiles(1) == [10, 25]
@@ -137,3 +134,56 @@ def test_pnd_carrier():
     [38,   , 39,   , 40, 41, 42,   ,   ,   ],
     [43, 44, 45, 46, 47,   , 48,   ,   ,   ]
 """
+
+def test_pnd_emcomber():
+    # Game MoveIt:
+    model= pnd.World( numberOfPlayers=2 )
+    model.initializeGrid( refMatrix, 0.9, 0.1 )
+
+    for i in range(1, 49) :
+        assert model.encumber(i) == 0.0
+
+    # Game MoveIt:
+    model= pnd.World( numberOfPlayers=2 )
+    encumber= [
+        [ 25,  20,  32  ],
+        [ 0.6, 0.5, 0.4 ]
+    ]
+    model.initializeGrid( refMatrix, 0.9, 0.1, encumber )
+
+    for i in range(1, 49) :
+        if i not in encumber[0] :
+            assert model.encumber(i) == 0.0
+    
+    assert model.encumber(20) == 0.5
+    assert model.encumber(25) == 0.6
+    assert model.encumber(32) == 0.4
+
+    model.popAgentOn(25, 1)
+    assert str( model.tile(25).agent() ) == 'Carrier-1.1 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
+
+    encumberCount= 0
+    for i in range(10000) :
+        if model.move(25, 3) == 25 :
+            encumberCount+= 1
+        model.teleport(26, 25)
+    assert round(encumberCount/10000, 1) == 0.6
+
+    model.teleport(25, 20)
+    encumberCount= 0
+    for i in range(10000) :
+        if model.move(20, 6) == 20 :
+            encumberCount+= 1
+        model.teleport(28, 20)
+
+    assert round(encumberCount/10000, 1) == 0.5
+
+    model.teleport(20, 32)
+    assert str( model.tile(32).agent() ) == 'Carrier-1.1 ⌊(8.82, 2.82), (9.18, 3.18)⌉ |0, 0|'
+    encumberCount= 0
+    for i in range(10000) :
+        if model.move(32, 9) == 32 :
+            encumberCount+= 1
+        model.teleport(31, 32)
+
+    assert round(encumberCount/10000, 1) == 0.4

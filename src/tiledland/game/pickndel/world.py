@@ -25,9 +25,11 @@ class Mission:
         return self.start, self.final, self.reward, self.owner
 
 class World( scene.Scene ):
-    def __init__(self, numberOfPlayers= 1):
+    def __init__(self, name="Pick'nDel", numberOfPlayers= 1):
         super().__init__(Carrier)
+        self._name= name
         self._missions= []
+        self._encumbers= []
         # Initialize Artist :
         self._artist= artist.Artist().initializePNG( "shot-pickndel.png" )
         self._artist.flip()
@@ -37,6 +39,9 @@ class World( scene.Scene ):
         self.marketBrush.width= 8
 
     # Accessor: 
+    def name(self):
+        return self._name
+    
     def carrierTile(self, iCarrier= 1, iPlayer= 1):
         return self.agent(iCarrier, iPlayer).tile()
     
@@ -74,14 +79,50 @@ class World( scene.Scene ):
     def carrierTiles(self, iPlayer):
         return [ m.tile() for m in self.agents(iPlayer) ]
     
+    def encumber(self, iTile):
+        return self._encumbers[iTile-1]
+
     # Construction:
     def initializeMoves(self):
         for group in range( self.numberOfGroups() ) :
             for car in self.agents(group) :
                 car.setMove(0)
+
+    def append( self, tile, encumber= 0.0 ):
+        super(World, self).append(tile)
+        self._encumbers.append(encumber)
+
+    def setEncumber( self, iTile, value ):
+        self._encumbers[iTile-1]= value
+        return self
+
+    def resetEncumbers( self, defaultValue= 0.0 ):
+        self._encumbers= [ defaultValue for i in range(self.size()) ]
+        return self
     
+    def initializeLine( self, size, shape= None, distance=1.0, connect=True ):
+        super(World, self).initializeLine(size, shape, distance, connect)
+        self.resetEncumbers()
+        return self
+    
+    def initializeGrid( self, matrix, tileSize= 1.0, separation=0.1, encumbers= [[],[]], connect=True ):
+        super(World, self).initializeGrid(matrix, tileSize, separation, connect)
+        self.resetEncumbers()
+        for iTile, enc in zip( encumbers[0], encumbers[1] ) :
+            self.setEncumber( iTile, enc )
+        return self
+
+    def clear( self ):
+        super(World, self).clear()
+        self._encumbers= []
+
+    def addTile( self, aTile, encumber= 0.0 ):
+        super(World, self).addTile(aTile)
+        self._encumbers.append(encumber)
+        return self._size
+
     # Mission :
-    def setMissions( self, aListOfTuples, pay= 10 ):
+    def setMissions( self, aListOfTuples, pay= 24 ):
         self._missions= [
             Mission(iFrom, iTo, pay, 0)
             for iFrom, iTo in aListOfTuples 
@@ -94,13 +135,13 @@ class World( scene.Scene ):
                 self.agent( iCarrier, group ).setMission(0)
         return self
 
-    def addMission( self, iFrom, iTo, pay= 10 ):
+    def addMission( self, iFrom, iTo, pay= 24 ):
         self._missions.append( Mission(iFrom, iTo, pay, 0) )
         return len(self._missions)
     
     def addMissionAtRandom( self ):
         tileIndexes= range( 1, self.size()+1 )
-        return self.addMission( random.choice( tileIndexes ), random.choice(tileIndexes), 10 )
+        return self.addMission( random.choice( tileIndexes ), random.choice(tileIndexes), 24 )
 
     def updateMission(self, iMission, iFrom, iTo, pay, owner):
         self._missions[iMission-1]= Mission(iFrom, iTo, pay, owner)
@@ -115,7 +156,9 @@ class World( scene.Scene ):
 
     # Moving:
     def move(self, iFrom, clockDir):
-        if self.tile(iFrom).count() > 0 and clockDir == 0 :
+        if self.tile(iFrom).count() == 0 or clockDir == 0 :
+            return iFrom
+        if random.random() < self.encumber(iFrom) :
             return iFrom
         iTo= self.clockposition( iFrom, clockDir ) 
         return self.teleport(iFrom, iTo)
@@ -135,9 +178,9 @@ class World( scene.Scene ):
         return iTo
     
     # Podable:
-    def asPod( self, name= "Pick'nDel" ):
+    def asPod( self ):
         return hk.Pod().fromLists(
-            [name], [], [],
+            [self._name], [], [],
             [ super(World, self).asPod(), self.missionsAsPod() ]
         )
     
@@ -156,6 +199,7 @@ class World( scene.Scene ):
         return podMobiles
 
     def fromPod( self, aPod ):
+        self._name= aPod.word(1)
         super(World, self).fromPod( aPod.child(1) )
         self.missionsFromPod(  aPod.child(2) )
         return self

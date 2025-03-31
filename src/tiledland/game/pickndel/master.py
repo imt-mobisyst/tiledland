@@ -49,7 +49,7 @@ class GameMaster( hk.AbsSequentialGame ) :
             self._model.addMissionAtRandom()
         else :
             self._model.addMission( mission[0], mission[1] )
-        return hk.Pod( self._model.asPod( "Pick'nDel" ) ) 
+        return hk.Pod( self._model.asPod() ) 
         
     def playerHand( self, iPlayer ):
         # Engine :
@@ -107,8 +107,21 @@ class GameMaster( hk.AbsSequentialGame ) :
             model.addMissionAtRandom()
             return True
         return False
-    
+
     def applyMoveActions(self):
+        collision= 0
+        # Visit all agents:
+        for iPlayer in range( 1, self._numberOfPlayers+1 ):
+            for mobile in self._model.agents(iPlayer) :
+                if mobile.move() != 0 :
+                    self._model.move( mobile.tile(), mobile.move() )
+                    self._scores[iPlayer]+= -1
+        # Clean moves:
+        self._model.initializeMoves()
+        self._tic-= 1
+        return collision
+    
+    def applyMoveActionsWithCollide(self):
         collision= 0
         reserved= []
         blocked= []

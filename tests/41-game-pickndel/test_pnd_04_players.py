@@ -11,14 +11,14 @@ import src.tiledland.game.pickndel as pnd
 import src.tiledland as tll
 
 def test_basicBot_wakeUp():
-    world= pnd.World().initializeGrid([[0, 0], [0, 0]])
+    world= pnd.World("BasicWorld").initializeGrid([[0, 0], [0, 0]])
     master= pnd.GameMaster( world )
     bot= pnd.BasicBot()
 
     initPod= master.initialize( (1, 2) )
 
     print( f">>> {initPod}.")
-    assert str(initPod) == """Pick'nDel:
+    assert str(initPod) == """BasicWorld:
 - Scene:
   - Tile: [1, 0, 1, 2, 3] [0.0, 1.1]
     - Shape: [-0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5]
@@ -31,11 +31,11 @@ def test_basicBot_wakeUp():
   - Tile: [4, 0, 2, 3, 4] [1.1, 0.0]
     - Shape: [-0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5]
 - Missions:
-  - Mission: [1, 2, 10, 0]"""
+  - Mission: [1, 2, 24, 0]"""
 
     bot.wakeUp( 1, 1, initPod )
 
-    initBotPod= hk.Pod( bot._model.asPod( "Pick'nDel" ) )
+    initBotPod= hk.Pod( bot._model.asPod() )
 
     assert str(initBotPod) == str(initPod)
 
@@ -48,7 +48,7 @@ def test_basicBot_wakeUp():
     print( f">>> {statePod}.")
     assert str(statePod) == """State: [10] [0.0, 0.0]
 - Missions:
-  - Mission: [1, 2, 10, 0]
+  - Mission: [1, 2, 24, 0]
 - Carriers:
   - carrier: [1, 1, 1, 0]"""
 
@@ -64,7 +64,7 @@ def test_basicBot_wakeUp():
     print( f">>> {statePod}.")
     assert str(statePod) == """State: [10] [0.0, 0.0]
 - Missions:
-  - Mission: [1, 2, 10, 0]
+  - Mission: [1, 2, 24, 0]
   - Mission: [2, 4, 12, 0]
 - Carriers:
   - carrier: [1, 1, 1, 0]"""
