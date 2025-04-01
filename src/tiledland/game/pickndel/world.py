@@ -122,7 +122,7 @@ class World( scene.Scene ):
         return self._size
 
     # Mission :
-    def setMissions( self, aListOfTuples, pay= 24 ):
+    def setMissions( self, aListOfTuples, pay= 124 ):
         self._missions= [
             Mission(iFrom, iTo, pay, 0)
             for iFrom, iTo in aListOfTuples 
@@ -135,13 +135,13 @@ class World( scene.Scene ):
                 self.agent( iCarrier, group ).setMission(0)
         return self
 
-    def addMission( self, iFrom, iTo, pay= 24 ):
+    def addMission( self, iFrom, iTo, pay= 124 ):
         self._missions.append( Mission(iFrom, iTo, pay, 0) )
         return len(self._missions)
     
     def addMissionAtRandom( self ):
         tileIndexes= range( 1, self.size()+1 )
-        return self.addMission( random.choice( tileIndexes ), random.choice(tileIndexes), 24 )
+        return self.addMission( random.choice( tileIndexes ), random.choice(tileIndexes) )
 
     def updateMission(self, iMission, iFrom, iTo, pay, owner):
         self._missions[iMission-1]= Mission(iFrom, iTo, pay, owner)

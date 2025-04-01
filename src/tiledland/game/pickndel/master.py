@@ -15,6 +15,7 @@ class GameMaster( hk.AbsSequentialGame ) :
         # GameEngine:
         assert( type(world) == World )
         self._model= world
+        self._model.clearAgents()
         self._model.computeDistances()
         self._initialTic= tic
         self._tic= 0

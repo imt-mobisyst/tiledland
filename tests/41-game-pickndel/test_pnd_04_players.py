@@ -13,6 +13,8 @@ import src.tiledland as tll
 def test_basicBot_wakeUp():
     world= pnd.World("BasicWorld").initializeGrid([[0, 0], [0, 0]])
     master= pnd.GameMaster( world )
+    world.teleport( world.agent(1, 1).tile(), 4 )
+
     bot= pnd.BasicBot()
 
     initPod= master.initialize( (1, 2) )
@@ -22,16 +24,16 @@ def test_basicBot_wakeUp():
 - Scene:
   - Tile: [1, 0, 1, 2, 3] [0.0, 1.1]
     - Shape: [-0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5]
-    - Agent: [1, 1, 11, 1] [0.0, 1.1]
-      - Shape: [-0.18477590650225736, 0.07653668647301798, -0.07653668647301795, 0.18477590650225736, 0.07653668647301798, 0.18477590650225736, 0.18477590650225736, 0.07653668647301796, 0.18477590650225736, -0.07653668647301796, 0.07653668647301798, -0.18477590650225736, -0.07653668647301795, -0.18477590650225736, -0.18477590650225736, -0.07653668647301798]
   - Tile: [2, 0, 1, 2, 4] [1.1, 1.1]
     - Shape: [-0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5]
   - Tile: [3, 0, 1, 3, 4] [0.0, 0.0]
     - Shape: [-0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5]
   - Tile: [4, 0, 2, 3, 4] [1.1, 0.0]
     - Shape: [-0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5]
+    - Agent: [1, 1, 11, 4] [1.1, 0.0]
+      - Shape: [-0.18477590650225736, 0.07653668647301798, -0.07653668647301795, 0.18477590650225736, 0.07653668647301798, 0.18477590650225736, 0.18477590650225736, 0.07653668647301796, 0.18477590650225736, -0.07653668647301796, 0.07653668647301798, -0.18477590650225736, -0.07653668647301795, -0.18477590650225736, -0.18477590650225736, -0.07653668647301798]
 - Missions:
-  - Mission: [1, 2, 24, 0]"""
+  - Mission: [1, 2, 124, 0]"""
 
     bot.wakeUp( 1, 1, initPod )
 
@@ -48,9 +50,9 @@ def test_basicBot_wakeUp():
     print( f">>> {statePod}.")
     assert str(statePod) == """State: [10] [0.0, 0.0]
 - Missions:
-  - Mission: [1, 2, 24, 0]
+  - Mission: [1, 2, 124, 0]
 - Carriers:
-  - carrier: [1, 1, 1, 0]"""
+  - carrier: [1, 1, 4, 0]"""
 
     bot.perceive(statePod)
     assert bot.ticCounter() == 10
@@ -58,16 +60,16 @@ def test_basicBot_wakeUp():
 
     assert str(bot.model().asPod()) == str(master.world().asPod())
 
-    master.world().addMission(2, 4, 12)
+    master.world().addMission(2, 4, 112)
     
     statePod= master.playerHand(1)
     print( f">>> {statePod}.")
     assert str(statePod) == """State: [10] [0.0, 0.0]
 - Missions:
-  - Mission: [1, 2, 24, 0]
-  - Mission: [2, 4, 12, 0]
+  - Mission: [1, 2, 124, 0]
+  - Mission: [2, 4, 112, 0]
 - Carriers:
-  - carrier: [1, 1, 1, 0]"""
+  - carrier: [1, 1, 4, 0]"""
 
     bot.perceive(statePod)
 

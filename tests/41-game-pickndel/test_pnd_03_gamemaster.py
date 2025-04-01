@@ -36,7 +36,7 @@ def test_gamemaster_method():
 
     world.setMissions( [(1, 2)] )
     assert len( world.missions() ) == 1
-    assert world.mission(1).asTuple() == (1, 2, 24, 0)
+    assert world.mission(1).asTuple() == (1, 2, 124, 0)
 
 def test_gamemaster_live_cycle():
     world= pnd.World()
@@ -54,7 +54,7 @@ def test_gamemaster_live_cycle():
         t-= 1
 
     assert len( world.missions() ) == 1
-    assert world.mission(1).asTuple() == (1, 2, 24, 0)
+    assert world.mission(1).asTuple() == (1, 2, 124, 0)
     assert( master.isEnded() )
     
 def test_gamemaster_moves():
@@ -117,7 +117,7 @@ def test_gamemaster_moves():
 
     assert world.agent(1, 1).tile() == 5
     assert world.agent(1, 1).mission() == 0
-    assert master.score(1) == 19.0
+    assert master.score(1) == 119.0
 
 def test_gamemaster_drawMissions():
     world= pnd.World()
