@@ -1,0 +1,24 @@
+site_name: Tiled-Land
+
+nav:
+  - Home: 'index.md'
+  - Scene: 'scene.md'
+  - webapp: 'web.md'
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.arithmatex:
+      generic: true
+
+theme:
+  name: readthedocs
+  collapse_navigation: True
+  titles_only: True
+  # include_homepage_in_sidebar: False
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+extra_css:
+  - style.css

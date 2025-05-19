@@ -5,7 +5,7 @@
 - [x] Initialize with hackagames.tiled
 - [x] Initialize artist rendering
 - [x] New Structure: core (Scene, Tiles and Agents), geometry and artist
-- [ ] Remove dependancies to hacka.py (no POD at all)
+- [ ] Remove dependancies to hacka.py (no POD at all) (but why ?)
 - [ ] asDico() and fromDico() morphing
 
 
@@ -15,17 +15,13 @@
 - [x] Scene as collection of: group's Agents, structured on Tiles
 - [x] Tiles as collection of: Agents
 - [x] Abstraction on Scene: Agents could be anything...
-
-
-## Scene managment :
-
-- [ ] Basic manipulation: doSomething ... doTeleportOn( tile, agent, group ).
+- [ ] Basic Scene manipulation: doSomething ... doTeleportOn(tile, agent, group).
 
 
 ## Documentation :
 
-- [ ] Presentation of Core components
-- [ ] Presentation of geometry submodule
+- [ ] Presentation of _Core_ components
+- [ ] Presentation of _Geometry_ submodule
 - [ ] Developpers expectation: (template from Shape + class structure + tests)
 
 
@@ -44,7 +40,16 @@ Pick-up and Delivery with hiden random congestion.
 - [ ] Multiple mission and - carrier capacity
 - [ ] encumbered value function of population/directions
 
-## HackaGames - Move-It
+
+## Web Rendering :
+
+- [ ] Identifing a tool _flask_, _streamlit_, _django_...
+- [ ] Visualize map (Static/Dynamic)
+- [ ] Add a monitor/control panel
+- [ ] Make the map clickable...
+
+
+# HackaGames - Move-It
 
 Based on MultiPath solving problem.
 
@@ -56,23 +61,21 @@ Based on MultiPath solving problem.
 - [ ] Handle seral Mobiles.
 - [ ] MultiPlayer version.
 
-## Geometry: 
 
+## Simple, but strong plan geometry
+
+- [ ] decide lib-based or independant ([shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives)
+- [ ] Shape min/max radius, and collision.
+- [ ] Shape update with a radius.
+- [ ] Segment automatic tag.
+- [ ] get a tiles from a position (in max radius, and closest)
 - [ ] Agents: update position and Shape function (auto-centering)
 - [ ] Scene: Generation from graphs, Voroi, gabriel, ....
 - [ ] Shape: Collisions
 
 
-## Simple, but strong and independant plan geometry
+## Explorations
 
-- [ ] Shape min/max radius, and collision.
-- [ ] Shape update with a radius.
-- [ ] Segment automatic tag.
-- [ ] get a tiles from a position (in max radius, and closest)
-
-## Agent Based Model:
-
-Or not ?..
-
-- [ ] Step engine, also in a way compatible to hackagames
+- [ ] decide lib-based or independant - (Explore [igraph](https://python.igraph.org) possibilities)
+- [ ] Agent Based Model (or not ?): Step engine, also in a way compatible to hackagames
  

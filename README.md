@@ -5,15 +5,12 @@ Polygon-based interconnected tiles to model an environment and mobile objects in
 This project targets a map of an environement as a 2.5 dimention model structured as a collection of linked cells with convex borders.
 
 Its is more a sandbox project to test ideas than an optimized, ready-to-use and well documented toolbox.
-Its composed of two module: `tiledland` and `tiledland`.
 
 The project relies on [Cairo](https://pypi.org/project/pycairo/) and [pygame](https://pypi.org/project/pygame/) librairy for rendering example and [shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives.
 
 
-To-do: 
 
-- Explore [igraph](https://python.igraph.org) possibilities.
-
+Its composed of two module: `agent based modeling` and `Convex polygone based geometry`.
 
 ## Install
 
