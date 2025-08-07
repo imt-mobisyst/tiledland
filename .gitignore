@@ -38,6 +38,9 @@ site/
 *.synctex.gz
 *.tex~
 
+# Obsidian:
+#----------------------
+.obsidian/
 
 # python:
 #----------------------

@@ -2,15 +2,19 @@
 
 Polygon-based interconnected tiles to model an environment and mobile objects inside.
 
-This project targets a map of an environement as a 2.5 dimention model structured as a collection of linked cells with convex borders.
+This project targets a map of an environment as a 2.5 dimensions model structured as a collection of linked cells with convex borders.
 
 Its is more a sandbox project to test ideas than an optimized, ready-to-use and well documented toolbox.
 
-The project relies on [Cairo](https://pypi.org/project/pycairo/) and [pygame](https://pypi.org/project/pygame/) librairy for rendering example and [shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives.
-
-
+The project relies on [Cairo](https://pypi.org/project/pycairo/) and [pygame](https://pypi.org/project/pygame/) library for rendering example and [shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives.
 
 Its composed of two module: `agent based modeling` and `Convex polygone based geometry`.
+
+## Not what you looking for ?
+
+- [Box2d]
+- [pygame]
+
 
 ## Install
 
@@ -25,13 +29,22 @@ pytest
 pip install .
 ```
 
-### Pygame/Cairo Examples
+### Get started
 
-PolyMap need to be installed on your computer using `pip`.
+The `example-scene.py` file provides a simple example for _TiledLand_. 
+The command  `python3 example-scene.py` should instantiate a scene from a grid environment and 3 agents.
+The Scene is then rendered into `/shot-example.svg` file.
+ 
+### Bitmap rendering
+
+Rendering can be  generated thanks to  of `cairo`, by switching from a _SVG_ artist initialization to a _PNG_ one. 
 
 ```sh
-pip install cairo pygame
+pip install pycairo
 ```
 
-The 'example-simpleSim.py' file provides a simple example for _MarauBotMap_. The command `python3 example-xx-xxx.py` should instanciate a simulation and open it on a windows.
- 
+To notice that `cairo` rendering is compatible with `pygame` to create a complete interactive game based on _TiledLand_.
+
+### Web rendering
+
+streamlit
