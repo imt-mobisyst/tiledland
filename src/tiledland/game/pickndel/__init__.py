@@ -9,6 +9,7 @@ Carrier= carrier.Carrier
 World= world.World
 
 # Hackagame Game:
+GameEngine= master.GameEngine
 GameMaster= master.GameMaster
 
 # Players

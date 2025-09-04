@@ -1,7 +1,7 @@
 
 from .carrier import Carrier
 from ... import Float2, Shape, Box, scene, Tile, artist
-import hacka.py as hk
+import hacka as hk
 import random
 
 class Mission:
@@ -180,27 +180,24 @@ class World( scene.Scene ):
     
     # Podable:
     def asPod( self ):
-        return hk.Pod().fromLists(
-            [self._name], [], [],
-            [ super(World, self).asPod(), self.missionsAsPod() ]
-        )
+        return hk.Pod( self._name, [], [], [ super(World, self).asPod(), self.missionsAsPod() ] )
     
     def missionsAsPod(self):
-        missionPod= hk.Pod().fromLists( ["Missions"] )
+        missionPod= hk.Pod( "Missions" )
         for m in self._missions :
-            missionPod.append( hk.Pod().fromLists( ["Mission"], m.asList() ) )
+            missionPod.append( hk.Pod( "Mission", m.asList() ) )
         return missionPod
     
     def carriersAsPod(self):
-        podMobiles= hk.Pod().fromLists( ["Carriers"] )
+        podMobiles= hk.Pod( "Carriers" )
         for group in range( self.numberOfGroups() ):
             for car in self.agents( group ):
-                mPod= hk.Pod().fromLists( ["carrier"], [group, car.id(), car.tile(), car.mission()] )
+                mPod= hk.Pod( "carrier", [group, car.id(), car.tile(), car.mission()] )
                 podMobiles.append(mPod)
         return podMobiles
 
     def fromPod( self, aPod ):
-        self._name= aPod.word(1)
+        self._name= aPod.label()
         super(World, self).fromPod( aPod.child(1) )
         self.missionsFromPod(  aPod.child(2) )
         return self

@@ -1,13 +1,15 @@
 # Board V0.1:
 
+- Add shapely dependency to `pyproject.toml`. 
+- Clean Pip project (Ktorz - HackGame).
+
 ## Get Tiledland from Hackagames.tiled
 
 - [x] Initialize with hackagames.tiled
 - [x] Initialize artist rendering
 - [x] New Structure: core (Scene, Tiles and Agents), geometry and artist
-- [ ] Remove dependancies to hacka.py (no POD at all) (but why ?)
+- [ ] Reset dependancies to hacka.py with clean `pip install hacka`
 - [ ] asDico() and fromDico() morphing
-
 
 ## Scene, Tiles and Agents :
 
@@ -17,10 +19,16 @@
 - [x] Abstraction on Scene: Agents could be anything...
 - [ ] Basic Scene manipulation: doSomething ... doTeleportOn(tile, agent, group).
 
+## Web Rendering :
+
+- [ ] Identifing a tool _flask_, _streamlit_, _django_...
+- [ ] Visualize map (Static/Dynamic)
+- [ ] Add a monitor/control panel
+- [ ] Make the map clickable...
 
 ## Documentation :
 
-- [ ] Presentation of _Core_ components
+- [ ] Presentation of _Core_ components (game)
 - [ ] Presentation of _Geometry_ submodule
 - [ ] Developpers expectation: (template from Shape + class structure + tests)
 
@@ -40,13 +48,6 @@ Pick-up and Delivery with hiden random congestion.
 - [ ] Multiple mission and - carrier capacity
 - [ ] encumbered value function of population/directions
 
-
-## Web Rendering :
-
-- [ ] Identifing a tool _flask_, _streamlit_, _django_...
-- [ ] Visualize map (Static/Dynamic)
-- [ ] Add a monitor/control panel
-- [ ] Make the map clickable...
 
 
 # HackaGames - Move-It

@@ -1,4 +1,4 @@
-import sys, hacka.py as hk
+import sys, hacka as hk
 
 """
 Test - Pick'n Del Games Class
@@ -12,15 +12,15 @@ import src.tiledland as tll
 
 def test_basicBot_wakeUp():
     world= pnd.World("BasicWorld").initializeGrid([[0, 0], [0, 0]])
-    master= pnd.GameMaster( world )
+    game= pnd.GameEngine( world )
     world.teleport( world.agent(1, 1).tile(), 4 )
 
     bot= pnd.BasicBot()
 
-    initPod= master.initialize( (1, 2) )
+    initPod= game.initialize( (1, 2) )
 
     print( f">>> {initPod}.")
-    assert str(initPod) == """BasicWorld:
+    assert str(initPod) == """BasicWorld : :
 - Scene:
   - Tile: [1, 0, 1, 2, 3] [0.0, 1.1]
     - Shape: [-0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5]
@@ -32,12 +32,12 @@ def test_basicBot_wakeUp():
     - Shape: [-0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5]
     - Agent: [1, 1, 11, 4] [1.1, 0.0]
       - Shape: [-0.18477590650225736, 0.07653668647301798, -0.07653668647301795, 0.18477590650225736, 0.07653668647301798, 0.18477590650225736, 0.18477590650225736, 0.07653668647301796, 0.18477590650225736, -0.07653668647301796, 0.07653668647301798, -0.18477590650225736, -0.07653668647301795, -0.18477590650225736, -0.18477590650225736, -0.07653668647301798]
-- Missions:
-  - Mission: [1, 2, 124, 0]"""
+- Missions : :
+  - Mission : 1 2 124 0 :"""
 
     bot.wakeUp( 1, 1, initPod )
 
-    initBotPod= hk.Pod( bot._model.asPod() )
+    initBotPod= bot._model.asPod()
 
     assert str(initBotPod) == str(initPod)
 
@@ -46,30 +46,30 @@ def test_basicBot_wakeUp():
     assert bot.playerId() == 1
     assert bot.model().numberOfAgents( bot.playerId() ) == 1
 
-    statePod= master.playerHand(1)
+    statePod= game.playerHand(1)
     print( f">>> {statePod}.")
-    assert str(statePod) == """State: [10] [0.0, 0.0]
-- Missions:
-  - Mission: [1, 2, 124, 0]
-- Carriers:
-  - carrier: [1, 1, 4, 0]"""
+    assert str(statePod) == """State : 10 : 0.0 0.0
+- Missions : :
+  - Mission : 1 2 124 0 :
+- Carriers : :
+  - carrier : 1 1 4 0 :"""
 
     bot.perceive(statePod)
     assert bot.ticCounter() == 10
     assert bot.decide() == "pass"
 
-    assert str(bot.model().asPod()) == str(master.world().asPod())
+    assert str(bot.model().asPod()) == str(game.world().asPod())
 
-    master.world().addMission(2, 4, 112)
+    game.world().addMission(2, 4, 112)
     
-    statePod= master.playerHand(1)
+    statePod= game.playerHand(1)
     print( f">>> {statePod}.")
-    assert str(statePod) == """State: [10] [0.0, 0.0]
-- Missions:
-  - Mission: [1, 2, 124, 0]
-  - Mission: [2, 4, 112, 0]
-- Carriers:
-  - carrier: [1, 1, 4, 0]"""
+    assert str(statePod) == """State : 10 : 0.0 0.0
+- Missions : :
+  - Mission : 1 2 124 0 :
+  - Mission : 2 4 112 0 :
+- Carriers : :
+  - carrier : 1 1 4 0 :"""
 
     bot.perceive(statePod)
 
@@ -80,19 +80,19 @@ def test_basicBot_wakeUp():
 
 def test_basicBot_loop():
     world= pnd.World().initializeGrid([[0, 0], [0, 0]])
-    master= pnd.GameMaster( world, tic= 10 )
+    game= pnd.GameEngine( world, tic= 10 )
 
     bot= pnd.BasicBot()
 
-    assert master.world().missionIndexes() == []
-    assert master.initialize((1, 2))
-    assert master.world().missionIndexes() == [1]
+    assert game.world().missionIndexes() == []
+    assert game.initialize((1, 2))
+    assert game.world().missionIndexes() == [1]
 
     t= 10
     while t > 0 :
-        assert not master.isEnded()
-        assert master.ticCounter() == t
-        master.tic()
+        assert not game.isEnded()
+        assert game.ticCounter() == t
+        game.tic()
         t-= 1
     
-    assert( master.isEnded() )
+    assert( game.isEnded() )

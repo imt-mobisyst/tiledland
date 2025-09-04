@@ -1,4 +1,4 @@
-import sys, hacka.py as hacka
+import sys, hacka
 
 """
 Test - Pick'n Del Games Class
@@ -12,24 +12,24 @@ import src.tiledland as tll
 
 def test_gamemaster_method():
     world= pnd.World().initializeGrid( [[0, 0], [0, 0]] )
-    master= pnd.GameMaster( world, 1, tic=20 )
+    game= pnd.GameEngine( world, 1, tic=20 )
 
-    assert( len(master._model._agents) == 2 )
+    assert( len(game._model._agents) == 2 )
 
-    print( f">>> {type( master.initialize().asPod() )} is {hacka.pod.Pod}")
+    print( f">>> {type( game.initialize() )} is {hacka.Pod}")
 
-    assert( type( master.initialize() ) is hacka.pod.Pod )
-    assert( type( master.playerHand(1) ) is hacka.pod.Pod )
-    assert( master.applyPlayerAction( 1, "go 0" )  )
-    assert( master.applyPlayerAction( 1, "do 1" )  )
+    assert( type( game.initialize() ) is hacka.Pod )
+    assert( type( game.playerHand(1) ) is hacka.Pod )
+    assert( game.applyAction( "go 0", 1 )  )
+    assert( game.applyAction( "do 1", 1 )  )
     
-    master.tic()
-    assert( not master.isEnded() )
-    assert( master.playerScore(1) == 0.0 )
+    game.tic()
+    assert( not game.isEnded() )
+    assert( game.playerScore(1) == 0.0 )
 
-    master.tic()
-    assert( not master.isEnded() )
-    assert( master.playerScore(1) == 0.0 )
+    game.tic()
+    assert( not game.isEnded() )
+    assert( game.playerScore(1) == 0.0 )
 
     world.setMissions( [] )
     assert len( world.missions() ) == 0
@@ -41,28 +41,28 @@ def test_gamemaster_method():
 def test_gamemaster_live_cycle():
     world= pnd.World()
     world.initializeGrid( [[0, 0], [0, 0]] )
-    master= pnd.GameMaster( world, 1, tic=10 )
+    game= pnd.GameEngine( world, 1, tic=10 )
 
-    assert master.initialize()
+    assert game.initialize()
     world.setMissions( [(1, 2)] )
 
     t= 10
     while t > 0 :
-        assert not master.isEnded()
-        assert master.ticCounter() == t
-        master.tic()
+        assert not game.isEnded()
+        assert game.ticCounter() == t
+        game.tic()
         t-= 1
 
     assert len( world.missions() ) == 1
     assert world.mission(1).asTuple() == (1, 2, 124, 0)
-    assert( master.isEnded() )
+    assert( game.isEnded() )
     
 def test_gamemaster_moves():
     world= pnd.World()
     world.initializeGrid( [[0, 0, 0, -1], [0, -1, 0, 0], [0, 0, 0, 0]] )
-    master= pnd.GameMaster( world, 1, tic=20 )
+    game= pnd.GameEngine( world, 1, tic=20 )
     world.teleport( world.agent(1, 1,).tile(), 1 )
-    master.initialize()
+    game.initialize()
     world.setMissions( [(4, 5), (7, 8)] )
 
     world.render()
@@ -74,12 +74,12 @@ def test_gamemaster_moves():
     assert world.carrierTiles(1) == [1]
 
     # Turn 1
-    master.playerHand(1)
-    master.applyPlayerAction( 1, "go 6" )
+    game.playerHand(1)
+    game.applyAction( "go 6", 1 )
 
     assert str(world.agent(1, 1)) == "Carrier-1.1 ⌊(-0.18, 2.02), (0.18, 2.38)⌉ |6, 0|"
 
-    master.tic()
+    game.tic()
     assert world.agent(1, 1).tile() == 4
     assert world.agent(1, 1).mission() == 0
     
@@ -91,9 +91,9 @@ def test_gamemaster_moves():
     assert( shotFile == refsFile )
 
     # Turn 2
-    master.playerHand(1)
-    master.applyPlayerAction( 1, "do 1" )
-    master.tic()
+    game.playerHand(1)
+    game.applyAction( "do 1", 1 )
+    game.tic()
 
     assert world.agent(1, 1).tile() == 4
     assert world.agent(1, 1).mission() == 1
@@ -102,22 +102,22 @@ def test_gamemaster_moves():
     # Turn 3-6
     moves= [12, 3, 3, 6]
     for m in moves :
-        master.playerHand(1)
-        master.applyPlayerAction( 1, f"go {m}" )
-        master.tic()
+        game.playerHand(1)
+        game.applyAction( f"go {m}", 1 )
+        game.tic()
 
     assert world.agent(1, 1).tile() == 5
     assert world.agent(1, 1).mission() == 1
-    assert master.score(1) == -5.0
+    assert game.score(1) == -5.0
 
     # Turn 7
-    master.playerHand(1)
-    master.applyPlayerAction( 1, "do 1 go 1" )
-    master.tic()
+    game.playerHand(1)
+    game.applyAction( "do 1 go 1", 1 )
+    game.tic()
 
     assert world.agent(1, 1).tile() == 5
     assert world.agent(1, 1).mission() == 0
-    assert master.score(1) == 119.0
+    assert game.score(1) == 119.0
 
 def test_gamemaster_drawMissions():
     world= pnd.World()
@@ -127,9 +127,9 @@ def test_gamemaster_drawMissions():
         [00, 00, 00, 00],
         [00, -1, -1, 00]
     ])
-    master= pnd.GameMaster( world, 1, tic=10 )
+    game= pnd.GameEngine( world, 1, tic=10 )
     world.teleport( world.agent(1, 1,).tile(), 1 )
-    master.initialize()
+    game.initialize()
     world.setMissions( [(4, 5), (7, 8)] )
 
     world.render()
@@ -168,12 +168,12 @@ def test_gamemaster_distances_path():
         [00, 00, 00, 00],
         [00, -1, -1, 00]
     ])
-    master= pnd.GameMaster( world, 1, tic=10 )
-    master.initialize()
+    game= pnd.GameEngine( world, 1, tic=10 )
+    game.initialize()
     world.setMissions( [(4, 5), (7, 8)] )
 
-    assert master.world().size() == 11
-    assert master.world()._distances == [
+    assert game.world().size() == 11
+    assert game.world()._distances == [
         [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
         [ 1, 0, 1, 2, 3, 2, 4, 3, 4, 5,  5,  6],
         [ 2, 1, 0, 1, 2, 1, 3, 2, 3, 4,  4,  5],
@@ -188,11 +188,11 @@ def test_gamemaster_distances_path():
         [11, 6, 5, 6, 7, 4, 4, 3, 2, 1,  5,  0]
     ]
 
-    assert master.toward(1, 2) == (3, 2)
-    assert master.toward(4, 4) == (0, 4)
-    assert master.toward(5, 11) == (6, 7)
+    assert game.toward(1, 2) == (3, 2)
+    assert game.toward(4, 4) == (0, 4)
+    assert game.toward(5, 11) == (6, 7)
 
-    assert master.path(1, 11) == (
+    assert game.path(1, 11) == (
         [3, 6, 6, 3, 3, 6],
         [2, 5, 7, 8, 9, 11]
     )
@@ -205,8 +205,8 @@ def test_gamemaster_options():
         [00, 00, 00, 00],  # 6  7  8  9
         [00, -1, -1, 00]   #10       13
     ])
-    master= pnd.GameMaster( world, 1, tic=10 )
-    master.initialize()
+    game= pnd.GameEngine( world, 1, tic=10 )
+    game.initialize()
     world.setMissions( [(4, 5), (7, 8)] )
 
     world.render()
@@ -224,36 +224,36 @@ def test_gamemaster_loops():
         [00, 00, 00, 00],  # 6  7  8  9
         [00, -1, -1, 00]   #10       13
     ])
-    master= pnd.GameMaster( world, 1, tic=10 )
+    game= pnd.GameEngine( world, 1, tic=10 )
     world.teleport( world.agent(1, 1,).tile(), 1 )
 
-    assert [ master.world().carrierTiles(i) for i in range(2) ] == [[], [1]]
-    assert master.world()._missions  == []
+    assert [ game.world().carrierTiles(i) for i in range(2) ] == [[], [1]]
+    assert game.world()._missions  == []
 
-    master.initialize()
+    game.initialize()
 
-    assert len( master.world()._missions ) == 1
-    assert master.ticCounter() == 10
+    assert len( game.world()._missions ) == 1
+    assert game.ticCounter() == 10
 
-    master.setMoveAction(1, 1, 3)
-    master.applyMoveActions()
+    game.setMoveAction(1, 1, 3)
+    game.applyMoveActions()
 
-    assert master._tic == 9
-    assert master.world().carrierTiles(1) == [2]
+    assert game._tic == 9
+    assert game.world().carrierTiles(1) == [2]
 
-    master.setMoveAction(1, 1, 6)
-    master.applyMoveActions()
+    game.setMoveAction(1, 1, 6)
+    game.applyMoveActions()
 
-    assert master._tic == 8
-    assert master.world().carrierTiles(1) == [5]
+    assert game._tic == 8
+    assert game.world().carrierTiles(1) == [5]
 
-    assert master.playerScore(1) == -2.0
+    assert game.playerScore(1) == -2.0
     
-    master._scores= [0, 100.0]
-    assert master.playerScore(1) == 100.0
+    game._scores= [0, 100.0]
+    assert game.playerScore(1) == 100.0
 
-    master.initialize()
+    game.initialize()
 
-    assert master._tic == 10
-    assert master.world().carrierTiles(1) == [5]
-    assert master.playerScore(1) == 0.0
+    assert game._tic == 10
+    assert game.world().carrierTiles(1) == [5]
+    assert game.playerScore(1) == 0.0

@@ -1,4 +1,4 @@
-import random, hacka.py as hk
+import random, hacka as hk
 
 #from .artist import Artist
 #from  ... import tiled
@@ -6,25 +6,71 @@ import random, hacka.py as hk
 from .carrier import Carrier
 from .world import World
 
-class GameMaster( hk.AbsSequentialGame ) :
+class GameEngine( hk.AbsGame ) :
 
     # Initialization:
     def __init__( self, world, numberOfPlayers=1, numberOfCarriers= 1, tic= 10, seed=False ):
-        super().__init__( numberOfPlayers )
+        super().__init__()
         self._seed= seed
         # GameEngine:
         assert( type(world) == World )
+        self._numberOfPlayers= numberOfPlayers
         self._model= world
         self._model.clearAgents()
         self._model.computeDistances()
         self._initialTic= tic
         self._tic= 0
         # Initialize Players:
-        for pId in range(1, numberOfPlayers+1) :
+        for pId in range(1, self._numberOfPlayers+1) :
             for tileId in random.choices( range(1, self._model.size()+1 ), k = numberOfCarriers ) :
                 self._model.popAgentOn( tileId, pId )
-        self._scores= [ 0.0 for i in range(numberOfPlayers+1) ]
+        self._scores= [ 0.0 for i in range(self._numberOfPlayers+1) ]
     
+    # Game interface :
+    def initialize(self):
+        self._msg= [ hk.Pod("Hello player", [i]) for i in range(self._nbPlayer+1) ]
+        self._tic= 0
+        return hk.Pod("EchoGame", [self._nbPlayer, self._nbTics])
+    
+    def playerHand( self, iPlayer=1 ):
+        # Engine :
+        pod= hk.Pod( "State", [self._tic], self._scores )
+        # Missions :
+        pod.append( self._model.missionsAsPod() )
+        # Mobiles :
+        pod.append( self._model.carriersAsPod() )
+        return pod
+
+    def applyAction( self, action, iPlayer=1 ):
+        # Interpret action string
+        decompo= action.split(" ")
+        iCarrier= 1
+        while len(decompo) > 0 and iCarrier <= self.numberOfPlayers() :
+            act= decompo.pop(0)
+            if act == 'go' :
+                clockDir= int(decompo.pop(0))
+                self.setMoveAction(iPlayer, iCarrier, clockDir)
+            elif act == 'do' :
+                missionId= int(decompo.pop(0))
+                self.setMissionAction(iPlayer, iCarrier, missionId)
+            elif act != 'pass' :
+                break
+            iCarrier+=1
+        return True
+
+    def tic( self ):
+        self.applyMoveActions()
+
+    def isEnded( self ):
+        # if the counter reach it final value
+        return self.ticCounter() == 0
+
+    def playerScore( self, iPlayer=1 ):
+        # All players are winners.
+        return self.score(iPlayer)
+
+    def numberOfPlayers(self):
+        return self._numberOfPlayers
 
     # Accessor :
     def world(self):
@@ -48,33 +94,7 @@ class GameMaster( hk.AbsSequentialGame ) :
             self._model.addMissionAtRandom()
         else :
             self._model.addMission( mission[0], mission[1] )
-        return hk.Pod( self._model.asPod() ) 
-        
-    def playerHand( self, iPlayer ):
-        # Engine :
-        pod= hk.Pod().fromLists( ["State"], [self._tic], self._scores )
-        # Missions :
-        pod.append( self._model.missionsAsPod() )
-        # Mobiles :
-        pod.append( self._model.carriersAsPod() )
-        return pod
-    
-    def applyPlayerAction( self, iPlayer, action ):
-        # Interpret action string
-        decompo= action.split(" ")
-        iCarrier= 1
-        while len(decompo) > 0 and iCarrier <= self.numberOfPlayers() :
-            act= decompo.pop(0)
-            if act == 'go' :
-                clockDir= int(decompo.pop(0))
-                self.setMoveAction(iPlayer, iCarrier, clockDir)
-            elif act == 'do' :
-                missionId= int(decompo.pop(0))
-                self.setMissionAction(iPlayer, iCarrier, missionId)
-            elif act != 'pass' :
-                break
-            iCarrier+=1
-        return True
+        return self._model.asPod()
 
     def setMoveAction( self, iPlayer, iCarrier, clockDir ):
         # Security:
@@ -165,16 +185,7 @@ class GameMaster( hk.AbsSequentialGame ) :
         self._tic-= 1
         return collision
 
-    def tic( self ):
-        self.applyMoveActions()
     
-    def isEnded( self ):
-        # if the counter reach it final value
-        return self.ticCounter() == 0
-
-    def playerScore( self, iPlayer ):
-        # All players are winners.
-        return self.score(iPlayer)
     
     def toward(self, iTile, iTarget):
         world= self.world()
@@ -204,3 +215,9 @@ class GameMaster( hk.AbsSequentialGame ) :
             path.append( tile )
         return move, path
     
+class GameMaster( hk.SequentialGameMaster ) :
+    def __init__( self, world, numberOfPlayers=1, numberOfCarriers= 1, tic= 10, seed=False ):
+        super().__init__(
+            GameEngine( world, numberOfPlayers, numberOfCarriers, tic, seed ), 
+            numberOfPlayers
+    )

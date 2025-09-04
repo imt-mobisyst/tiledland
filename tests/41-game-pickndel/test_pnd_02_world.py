@@ -1,4 +1,4 @@
-import sys, hacka.py as hacka
+import sys, hacka
 
 """
 Test - Pick'n Del Games Class

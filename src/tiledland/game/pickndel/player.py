@@ -1,8 +1,8 @@
 import time
-from hacka import AbsPlayer
+from hacka import Player
 from .world import World
 
-class BasicBot( AbsPlayer ):
+class BasicBot( Player ):
 
     # Constructor:
     def __init__(self):

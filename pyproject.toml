@@ -9,8 +9,8 @@ authors = [
   { name="Guillaume Lozenguez", email="guillaume.lozenguez@imt-nord-europe.fr" },
 ]
 description = "Polygon-based interconnected tiles to model an environment and mobile objects inside."
-dependencies = [ "pycairo" ]
-readme = "README.md"
+dependencies = [ "hacka", "pycairo" ]
+readme = "docs/index.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
