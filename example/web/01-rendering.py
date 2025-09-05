@@ -7,22 +7,8 @@ import time, streamlit as st
 
 size= 40
 
-@st.fragment
-def release_the_balloons():
-    global size
-    #st.button("Release the balloons", help="Fragment rerun")
-    st.balloons()
-    time.sleep(10)
-    if size == 40 :
-        size= 20
-    else :
-        size= 20
-    st.rerun()
-
 #with st.spinner("Inflating balloons..."):
 #    time.sleep(5)
-
-#st.button("Inflate more balloons", help="Full rerun")
 
 def svg(circleRadius):
     global size
@@ -33,6 +19,3 @@ def svg(circleRadius):
 
 x = st.slider('x')  # 👈 this is a widget
 st.write(svg(x), unsafe_allow_html=True)
-
-
-release_the_balloons()

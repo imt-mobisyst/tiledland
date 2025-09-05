@@ -1,10 +1,9 @@
-# Tiled-Land: Polygon-based simulation engine.
+# TiledLand: Polygon-based simulation engine.
 
-Polygon-based interconnected tiles to model an environment and mobile objects inside.
-
+The main idea is to model a plan world as a polygon-based interconnected tiles for the environment and to add mobile objects inside.
 This project targets a map of an environment as a 2.5 dimensions model structured as a collection of linked cells with convex borders.
 
-Its is more a sandbox project to test ideas than an optimized, ready-to-use and well documented toolbox.
+Its is more a sandbox project to test approaches than an optimized, ready-to-use and well documented toolbox.
 
 The project relies on [Cairo](https://pypi.org/project/pycairo/) and [pygame](https://pypi.org/project/pygame/) library for rendering example and [shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives.
 
@@ -14,6 +13,7 @@ Its composed of two module: `agent based modeling` and `Convex polygone based ge
 
 - [Box2d]
 - [pygame]
+- [RayLib]
 
 
 ## Install
