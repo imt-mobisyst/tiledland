@@ -93,7 +93,7 @@ def test_artist_load():
 
     print(pablo.render())
     assert( pablo.render() == """<svg width="800" height="600">
-<polygon points="0,0 0,600 800,600 800,0" fill="#ffbb55" />
+<polygon points="0,0 0,600 800,600 800,0" fill="#b86e00" />
 </svg>""" )
 
     pablo.drawFrameGrid()
@@ -102,23 +102,23 @@ def test_artist_load():
     pablo.support().save( "shot-test.svg" )
 
     assert( pablo.render() == """<svg width="800" height="600">
-<polygon points="0,0 0,600 800,600 800,0" fill="#ffbb55" />
-<line x1="100.0" y1="10" x2="100.0" y2="590" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="200.0" y1="10" x2="200.0" y2="590" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="300.0" y1="10" x2="300.0" y2="590" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="400.0" y1="10" x2="400.0" y2="590" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="500.0" y1="10" x2="500.0" y2="590" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="600.0" y1="10" x2="600.0" y2="590" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="700.0" y1="10" x2="700.0" y2="590" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="800.0" y1="10" x2="800.0" y2="590" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="900.0" y1="10" x2="900.0" y2="590" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="10" y1="100.0" x2="790" y2="100.0" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="10" y1="200.0" x2="790" y2="200.0" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="10" y1="300.0" x2="790" y2="300.0" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="10" y1="400.0" x2="790" y2="400.0" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="10" y1="500.0" x2="790" y2="500.0" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="10" y1="600.0" x2="790" y2="600.0" style="stroke:#aa6606;stroke-width:2"/>
-<line x1="10" y1="700.0" x2="790" y2="700.0" style="stroke:#aa6606;stroke-width:2"/>
+<polygon points="0,0 0,600 800,600 800,0" fill="#b86e00" />
+<line x1="100.0" y1="10" x2="100.0" y2="590" style="stroke:#603800;stroke-width:2"/>
+<line x1="200.0" y1="10" x2="200.0" y2="590" style="stroke:#603800;stroke-width:2"/>
+<line x1="300.0" y1="10" x2="300.0" y2="590" style="stroke:#603800;stroke-width:2"/>
+<line x1="400.0" y1="10" x2="400.0" y2="590" style="stroke:#603800;stroke-width:2"/>
+<line x1="500.0" y1="10" x2="500.0" y2="590" style="stroke:#603800;stroke-width:2"/>
+<line x1="600.0" y1="10" x2="600.0" y2="590" style="stroke:#603800;stroke-width:2"/>
+<line x1="700.0" y1="10" x2="700.0" y2="590" style="stroke:#603800;stroke-width:2"/>
+<line x1="800.0" y1="10" x2="800.0" y2="590" style="stroke:#603800;stroke-width:2"/>
+<line x1="900.0" y1="10" x2="900.0" y2="590" style="stroke:#603800;stroke-width:2"/>
+<line x1="10" y1="100.0" x2="790" y2="100.0" style="stroke:#603800;stroke-width:2"/>
+<line x1="10" y1="200.0" x2="790" y2="200.0" style="stroke:#603800;stroke-width:2"/>
+<line x1="10" y1="300.0" x2="790" y2="300.0" style="stroke:#603800;stroke-width:2"/>
+<line x1="10" y1="400.0" x2="790" y2="400.0" style="stroke:#603800;stroke-width:2"/>
+<line x1="10" y1="500.0" x2="790" y2="500.0" style="stroke:#603800;stroke-width:2"/>
+<line x1="10" y1="600.0" x2="790" y2="600.0" style="stroke:#603800;stroke-width:2"/>
+<line x1="10" y1="700.0" x2="790" y2="700.0" style="stroke:#603800;stroke-width:2"/>
 <line x1="400.0" y1="300.0" x2="500.0" y2="300.0" style="stroke:#e26060;stroke-width:6"/>
 <line x1="400.0" y1="300.0" x2="400.0" y2="200.0" style="stroke:#60e260;stroke-width:6"/>
 <circle r="6" cx="400.0" cy="300.0" fill="#0606e2" />

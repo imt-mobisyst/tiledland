@@ -1,21 +1,46 @@
 """
-# My first app
-Here's our first attempt at using data to create a table:
+# Simple Scene rendering using streamlit.
 """
+import streamlit as st
+import tiledland as tll
 
-import time, streamlit as st
+# Create a new TiledMap as a grid:
+scene= tll.Scene()
+scene.initializeGrid(
+    [[0, 1, 1, -1, 0, 0, 0, 0],              #  -1 : means no cell at this location
+    [5, -1, 0, 2, 0, -1, 5, 0],              #  0 - n : give the group identifier of the cell to create.
+    [0, 0, 0, -1, 0, 1, 1, 0],               #  
+    [0, 4, 0, -1, 0, 2, 1, 6],               #  
+    [-1, -1, 0, 0, 0, -1, -1, -1]]           #  
+)
 
-size= 40
+# Connect all close enough tiles: 
+scene.connectAllCondition(
+    lambda tileFrom, tileTo : tileFrom.centerDistance( tileTo ) < 1.2
+)
 
-#with st.spinner("Inflating balloons..."):
-#    time.sleep(5)
+# Add some objects on the scene:
+def newAgent( identifier, group ):
+    return tll.Agent( identifier, group, shape=tll.Shape().initializeRegular(0.7, 6) )
 
-def svg(circleRadius):
-    global size
-    return f"""<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-    <rect width="100" height="100" fill="grey" />
-    <circle cx="{circleRadius}" cy="{circleRadius}" r="{size}" stroke="green" stroke-width="4" fill="yellow" />
-</svg>"""
+scene.setAgentFactory( newAgent )
 
-x = st.slider('x')  # 👈 this is a widget
-st.write(svg(x), unsafe_allow_html=True)
+bod= scene.popAgentOn(9)
+bod.setId(1).setMatter(13)
+
+bod= scene.popAgentOn(14)
+bod.setId(2).setMatter(15)
+
+bod= scene.popAgentOn(26)
+bod.setId(3).setMatter(13)
+
+# Create an artist to render this scene:
+artist= tll.Artist().initializeSVG( filePath= "shot-web-rendering.svg" )
+artist.fitBox( scene.box() )
+artist.drawScene(scene)
+
+# Rendering in a streamlit widget
+widget= st.empty()
+widget.write( artist.render(), unsafe_allow_html=True )
+
+artist.flip()

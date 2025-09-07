@@ -9,3 +9,6 @@ https://docs.streamlit.io
 To test : `streamlit run example-web.py`.
 
 streamlit
+
+Alternative: https://plotly.com/examples/
+
