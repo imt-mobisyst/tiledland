@@ -3,11 +3,13 @@ from .geometry import Float2, Box, Shape
 from .tile import Tile
 from .agent import Agent
 
+import math
+
 class Scene(Podable):
 
     # Constructor:
-    def __init__(self, agentFactory= Agent):
-        self._factory= agentFactory
+    def __init__(self):#, agentFactory= Agent):
+        self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Shape().initializeRegular(0.8, 5) ).setMatter(1)
         self.clear()
 
     # Accessor:
@@ -138,11 +140,38 @@ class Scene(Podable):
         self._size= iTile
 
         if connect :
-            self.connectAllCondition(
-                lambda tileFrom, tileTo :  tileFrom.centerDistance( tileTo ) < (tileSize+separation)*1.1
-            )
+            self.connectAllDistance( dist*1.01 )
         return self
 
+    def initializeHexa( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
+        cosPi06= math.cos(math.pi/6)
+        dist= tileSize*cosPi06 + separation
+        vdist= dist*cosPi06
+        hdelta= dist*0.5
+        self._tiles= []
+        
+        iTile= 0
+        maxLine= len(matrix)-1
+        for i in range( len(matrix) ) :
+            for j in range( len(matrix[i]) ) :
+                if matrix[i][j] >= 0 : 
+                    iTile+= 1
+                    iLine= maxLine-i
+                    delta= (iLine%2) * hdelta
+                    tile= Tile(
+                        iTile,
+                        Float2( delta+dist*j, vdist*iLine ),
+                        Shape().initializeRegular(tileSize, 6),
+                        matrix[i][j]
+                    )
+                    self._tiles.append( tile )
+                    #matrix[i][j]= iTile
+        self._size= iTile
+
+        if connect :
+            self.connectAllDistance( dist*1.01 )
+        return self
+    
     def setAgentFactory(self, agentFactory ):
         self._factory= agentFactory
         return self
@@ -192,7 +221,7 @@ class Scene(Podable):
         for anElt in aList :
             self.connect( anElt[0], anElt[1] )
 
-    def connectAllCondition(self, conditionFromTo=lambda tfrom, tto : True, conditionFrom=lambda tfrom : True ):
+    def connectAllConditions(self, conditionFrom=lambda tfrom : True, conditionFromTo=lambda tfrom, tto : True, ):
         size= self.size()
         for i in range(1, size+1) :
             tili= self.tile(i)
@@ -201,6 +230,10 @@ class Scene(Podable):
                     tilj= self.tile(j)
                     if conditionFromTo( tili, tilj ): # :
                        self.connect( i, j )
+    
+    def connectAllDistance(self, distance= 1.1 ):
+        self.connectAllConditions( conditionFromTo=lambda tileFrom, tileTo : tileFrom.centerDistance( tileTo ) < distance )
+    
     # Distance :
     def computeDistances(self):
         s= self.size()

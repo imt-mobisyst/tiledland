@@ -11,25 +11,16 @@ scene.initializeGrid(
     [-1, -1, 0, 0, 0, -1, -1, -1]]           #  
 )
 
-# Connect all close enough tiles: 
-scene.connectAllCondition(
-    lambda tileFrom, tileTo : tileFrom.centerDistance( tileTo ) < 1.2
-)
+# Agent 1
+agent= scene.popAgentOn(9)
 
-# Add some objects on the scene:
-def newAgent( identifier, group ):
-    return tll.Agent( identifier, group, shape=tll.Shape().initializeRegular(0.7, 6) )
+# Agent 2
+agent= scene.popAgentOn(26)
+agent.setMatter(13)
 
-scene.setAgentFactory( newAgent )
-
-bod= scene.popAgentOn(9)
-bod.setId(1).setMatter(13)
-
-bod= scene.popAgentOn(14)
-bod.setId(2).setMatter(15)
-
-bod= scene.popAgentOn(26)
-bod.setId(3).setMatter(13)
+# Agent 3
+agent= scene.popAgentOn(14)
+agent.setMatter(15)
 
 # Create an artist to render this scene:
 artist= tll.Artist().initializePNG( filePath= "shot-example.png" )
@@ -38,4 +29,4 @@ artist.fitBox( scene.box() )
 artist.drawScene(scene)
 artist.flip() # Uptate the support and return to a blanc page.
 
-print( f"You can open now the '{artist.support().filePath()}' file." )
+print( f"You can open now the './{artist.support().filePath()}' file." )

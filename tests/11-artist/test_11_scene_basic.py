@@ -137,9 +137,9 @@ def test_artist_scene_net():
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-scene-15.svg" ):
         assert( lineShot == lineRef )
 
-    scene.connectAllCondition(
-        lambda tileFrom, tileTo : tileTo.matter() == 0 and tileFrom.centerDistance( tileTo ) < 1.2,
+    scene.connectAllConditions(
         lambda tileFrom : tileFrom.matter() == 0,
+        lambda tileFrom, tileTo : tileTo.matter() == 0 and tileFrom.centerDistance( tileTo ) < 1.2
     )
     pablo.drawScene(scene)
     pablo.flip()
@@ -149,7 +149,7 @@ def test_artist_scene_net():
 
 
 # Test artist on scene
-def test_artist_scene_piece():
+def test_artist_gridscene_piece():
     pablo= tll.Artist().initializeSVG( filePath= shotImg )
     scene= tll.Scene()
     scene.initializeGrid(
@@ -157,11 +157,10 @@ def test_artist_scene_piece():
         [5, -1, 0, 2, 0, -1, 5, 0],
         [0, 0, 0, -1, 0, 1, 1, 0],
         [0, 4, 0, -1, 0, 2, 1, 6],
-        [-1, -1, 0, 0, 0, -1, -1, -1]]
+        [-1, -1, 0, 0, 0, -1, -1, -1]],
+        1.0, 0.1, False
     )
-    scene.connectAllCondition(
-        lambda tileFrom, tileTo : tileFrom.centerDistance( tileTo ) < 1.2,
-    )
+    scene.connectAllDistance( 1.2 )
 
     pablo.fitBox( scene.box() )
     pablo.drawScene(scene)
@@ -210,4 +209,67 @@ def test_artist_scene_piece():
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-01.svg" ):
+        assert( lineShot == lineRef )
+
+# Test artist on scene
+def test_artist_hexascene_piece():
+    pablo= tll.Artist().initializeSVG( filePath= shotImg )
+    scene= tll.Scene()
+    scene.initializeHexa(
+       [[0, 1, 1, -1, 0, 0, 0, 0],
+        [5, -1, 0, 2, 0, -1, 5, 0],
+        [0, 0, 0, -1, 0, 1, 1, 0],
+        [0, 4, 0, -1, 0, 2, 1, 6],
+        [-1, -1, 0, 0, 0, -1, -1, -1]],
+        1.0, 0.1, False
+    )
+    scene.connectAllDistance( 1.2 )
+
+    pablo.fitBox( scene.box() )
+    pablo.drawScene(scene)
+    pablo.flip()
+
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-11.svg" ):
+        assert( lineShot == lineRef )
+
+    def popAgent( iRobot, iTile, iMatter ):
+        bod= tll.Agent( iRobot, 0,
+            tll.Float2(0.1, 0.1)+scene.tile(iTile).position(),
+            tll.Shape().initializeRegular(0.7, 6),
+        )
+        bod.setMatter(iMatter)
+        scene.tile(iTile).append( bod )
+    
+    popAgent(1, 12, 13)
+
+    pablo.drawScene(scene)
+    pablo.flip()
+
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-12.svg" ):
+        assert( lineShot == lineRef )
+    
+    popAgent(2,  9, 13)
+    popAgent(2, 14, 15)
+    popAgent(3, 23, 13)
+    popAgent(1, 20, 15)
+
+    pablo.drawScene(scene)
+    pablo.flip()
+
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-13.svg" ):
+        assert( lineShot == lineRef )
+
+    popAgent(1, 17, 1)
+
+    pablo.drawScene(scene)
+    pablo.flip()
+
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-14.svg" ):
+        assert( lineShot == lineRef )
+
+    scene.clearAgents()
+    pablo.drawScene(scene)
+    pablo.flip()
+
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-11.svg" ):
         assert( lineShot == lineRef )

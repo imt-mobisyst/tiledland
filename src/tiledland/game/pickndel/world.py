@@ -26,7 +26,8 @@ class Mission:
 
 class World( scene.Scene ):
     def __init__(self, name="Pick'nDel", numberOfPlayers= 1):
-        super().__init__(Carrier)
+        super().__init__()
+        self.setAgentFactory(Carrier)
         self._name= name
         self._missions= []
         self._encumbers= []

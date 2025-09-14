@@ -53,7 +53,6 @@ def test_artist_svg_load():
 
     pablo.flip()
     
-
     shotFile= open( shotImg ).read() 
     refsFile= open( "tests/refs/11.04-artist-panel-02.svg" ).read()
     assert( shotFile == refsFile )
