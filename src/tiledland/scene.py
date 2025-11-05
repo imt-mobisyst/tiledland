@@ -9,6 +9,7 @@ class Scene(Podable):
 
     # Constructor:
     def __init__(self):#, agentFactory= Agent):
+        self._tiles= []
         self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Shape().initializeRegular(0.8, 5) ).setMatter(1)
         self.clear()
 

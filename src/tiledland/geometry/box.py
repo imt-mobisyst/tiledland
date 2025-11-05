@@ -21,7 +21,6 @@ class Box():
             if p.y() > self._max.y() :
                 self._max.sety( p.y() )
         return self
-        
 
     # Accessors
     def leftFloor(self):

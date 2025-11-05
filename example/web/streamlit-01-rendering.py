@@ -15,9 +15,7 @@ scene.initializeGrid(
 )
 
 # Connect all close enough tiles: 
-scene.connectAllCondition(
-    lambda tileFrom, tileTo : tileFrom.centerDistance( tileTo ) < 1.2
-)
+scene.connectAllDistance( 1.2 )
 
 # Add some objects on the scene:
 def newAgent( identifier, group ):
