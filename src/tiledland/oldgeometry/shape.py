@@ -71,7 +71,7 @@ class Shape(Podable):
         cpy._points= [ p.copy() for p in self.points() ]
         return cpy
 
-    # to str
+    # String
     def str(self, typeName="Shape"): 
         # Myself :
         s= f"{typeName} {len(self._points)}" 

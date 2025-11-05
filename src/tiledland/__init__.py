@@ -1,6 +1,7 @@
 from .geometry import Point, Polygon, Box
 from .oldgeometry import Shape
 from . import agent, tile, scene, artist
+from .shaped import Shaped
 
 # Geometry:
 #Point= Point
