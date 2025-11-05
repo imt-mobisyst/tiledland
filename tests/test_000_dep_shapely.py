@@ -23,8 +23,5 @@ def test_shapely_polygon() :
     poly= Polygon([(1.0, 0.0), (3.4, 8.7), (6.9, 0.5)])
     print( poly )
     assert( str(poly) == "POLYGON ((1 0, 3.4 8.7, 6.9 0.5, 1 0))" )
-    
 
     print( poly.exterior.xy )
-
-    assert(False)

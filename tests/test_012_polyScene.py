@@ -1,19 +1,73 @@
-# HackaGames UnitTest - `pytest`
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
+from src.tiledland import Point, Box, Shaped, Agent, Tile, Scene 
 
-from src.tiledland.oldgeometry import Float2
-from src.tiledland import Point, Box, Shape, Agent, Tile, Scene 
+from src import tiledland as tll
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
-def test_Scene_init():
+def draw(scene, filePath= "shot-test.png"):
+    pablo= tll.Artist().initializePNG( filePath )
+    
+    pablo.drawFrameGrid()
+    pablo.drawFrameAxes()
+
+    pablo.drawSceneNetwork( scene )
+    pablo.drawSceneTiles( scene )
+
+    pablo.flip()
+
+def test_scene_incremental():
     scene= Scene()
+    
     assert type(scene) == Scene
     assert scene.size() == 0
     assert scene.box() == Box()
+
+    index= scene.append( Tile( shape= Shape() ) )
+    assert index == 1
+    assert scene.size() == 1
+
+    print( scene.tile(1) )
+    assert scene.tile(1).position().asTuple() == (0.0, 0.0)
+    assert scene.tile(1).envelope() == []
+
+    index= scene.append( Tile( shape= Shape() ) )
+    assert index == 2
+    assert scene.size() == 2
+
+def test_scene_clockNeighboring():
+    scene= Scene()
+    tileShape= Shape().fromZipped(
+        [(-1.0, 0.0), (0.0, 1.5), (1.0, 0.0), (0.0, -1.5) ]
+    )
+    scene.append( Tile( shape=tileShape, matter= 1 ) )
+
+    draw(scene)
+
+    assert scene.neighbours(1) == []
+
+    index= scene.append( Tile( shape= tileShape, position=Float2(1.5, 2), matter= 2 ) )
+    scene.connect( 1, index )    
+    assert scene.neighbours(1) == [(2, 1)]
+    draw(scene)
+
+    index= scene.append( Tile( shape= tileShape, position=Float2(-1.5, 2), matter= 2 ) )
+    scene.connect( 1, index )    
+    draw(scene)
+    assert scene.neighbours(1) == [(2, 1), (3, 11)]
+
+    index= scene.append( Tile( shape= tileShape, position=Float2(1.5, -2), matter= 2 ) )
+    scene.connect( 1, index )    
+    index= scene.append( Tile( shape= tileShape, position=Float2(-1.5, -2), matter= 2 ) )
+    scene.connect( 1, index )    
+    draw(scene)
+    assert scene.neighbours(1) == [(2, 1), (3, 11), (4, 5), (5, 7)]
+
+    assert scene.tile(1).adjacencies() == [2, 3, 4, 5]
+    assert scene.edges() == [(1, 2), (1, 3), (1, 4), (1, 5)]
 
 def test_Scene_initLine():
     scene= Scene().initializeLine(3)
@@ -60,7 +114,7 @@ def test_Scene_construction():
 def test_Scene_str():
     scene= Scene().initializeLine(3)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
-    scene.tile(2).append( Agent(1, 1) )
+    scene.tile(2).append( Agent(1) )
 
     print( f">>> {scene}." )
 
@@ -68,7 +122,7 @@ def test_Scene_str():
 Scene:
 - Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] agents(0)
 - Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] agents(1)
-  - Agent-1.1 ⌊(-0.2, -0.2), (0.2, 0.2)⌉
+  - Agent-1 ⌊(-0.2, -0.2), (0.2, 0.2)⌉
 - Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] agents(0)
 """
 
@@ -154,7 +208,7 @@ Scene:
     assert sceneBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
 
 def test_Scene_connection():
-    scene= Scene().initializeLine( 3, connect=False )
+    scene= Scene().initializeLine(3)
     scene.connect(1, 2)
     scene.connect(2, 2)
     scene.connect(2, 3)
@@ -175,49 +229,17 @@ def test_Scene_connection():
     assert not scene.isEdge(2, 1)
     assert not scene.isEdge(1, 3)
     assert not scene.isEdge(3, 1)
-  
-def test_Scene_withAgents():
-    scene= Scene().initializeGrid( [[0, 1],[-1, 0]] )
-    
-    assert scene.testNumberOfAgents() == 0
-    assert scene.tile(1).count() == 0
-    assert scene.tile(2).count() == 0
-    assert scene.tile(3).count() == 0
-    
-    scene.popAgentOn(2)
 
-    assert scene.testNumberOfAgents() == 1
-    assert scene.tile(1).count() == 0
-    assert scene.tile(2).count() == 1
-    assert scene.tile(3).count() == 0
-
-    scene.popAgentOn(1)
-
-    assert scene.testNumberOfAgents() == 2
-    assert scene.tile(1).count() == 1
-    assert scene.tile(2).count() == 1
-    assert scene.tile(3).count() == 0
-
-    bod= scene.popAgentOn(2)
-    bod.setId(4)
-
-    assert scene.testNumberOfAgents() == 3
-    assert scene.tile(1).count() == 1
-    assert scene.tile(2).count() == 2
-    assert scene.tile(3).count() == 0
-
+def test_Scene_hexa():
+    scene= Scene().initializeHexa(
+        [[-1, 0],
+           [1, 0],
+         [0, -1]]
+    )
+    draw(scene)
     print( f"---\n{scene}.")
     assert str(scene) == """Scene:
-- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[1, 2] agents(1)
-  - Agent-2 ⌊(-0.2, 0.9), (0.2, 1.3)⌉
-- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 2, 3] agents(2)
-  - Agent-1 ⌊(0.9, 0.9), (1.3, 1.3)⌉
-  - Agent-4 ⌊(0.9, 0.9), (1.3, 1.3)⌉
-- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] agents(0)"""
-
-    scene.clearAgents()
-
-    assert scene.testNumberOfAgents() == 0
-    assert scene.tile(1).count() == 0
-    assert scene.tile(2).count() == 0
-    assert scene.tile(3).count() == 0
+- Tile-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ adjs[1, 2, 3] agents(0)
+- Tile-2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ adjs[1, 2, 3, 4] agents(0)
+- Tile-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ adjs[1, 2, 3] agents(0)
+- Tile-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ adjs[2, 4] agents(0)"""

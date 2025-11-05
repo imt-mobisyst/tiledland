@@ -1,5 +1,5 @@
-from .oldgeometry import Float2, Shape
-from .geometry import Point, point_fromList, Polygon, Box
+from .geometry import Point, Polygon, Box
+from .shaped import Shaped
 from .pod import Podable, Pod
 
 class Agent(Podable):
@@ -12,7 +12,7 @@ class Agent(Podable):
         self._center= Point( position.x, position.y )
         self._shape= shape
         if self._shape is None :
-            self._shape= Shape().initializeSquare(0.4)
+            self._shape= Shaped().initializeSquare(0.4)
         self._matter= 10+group
 
     # Accessor: 
@@ -103,8 +103,8 @@ class Agent(Podable):
         self.setGroup( integers[1] )
         self.setMatter( integers[2] )
         self.setTile( integers[3] )
-        self.setPosition( point_fromList( aPod.values() ) )
-        self.setShape( Shape().fromPod( aPod.children()[0] ) )
+        self.setPosition( Point( aPod.values()[0], aPod.values()[1] ) )
+        self.setShape( Shaped().fromPod( aPod.children()[0] ) )
         return self
     
     # str:

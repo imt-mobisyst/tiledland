@@ -2,8 +2,20 @@ import math
 from . import geometry
 from .pod import Pod
 from .geometry import Point
-from .oldgeometry import Shape
+from .shaped import Shaped
 from .agent import Agent
+
+
+clockAngles= [ 0.0, 2.0*math.pi/6.0, math.pi/6.0, 0.0,
+               math.pi/-6.0, -2.0*math.pi/6.0, math.pi/-2.0,
+               -2.0*math.pi/3.0, -5.0*math.pi/6.0, math.pi,
+               5.0*math.pi/6.0, 2.0*math.pi/3.0, math.pi/2.0
+               ]
+clockPositions= [
+    geometry.pointFromAngle(x) for x in clockAngles
+]
+clockLenght= 13
+
 
 class Tile(Agent):
 
@@ -52,9 +64,9 @@ class Tile(Agent):
         if center.distance( aPosition ) < radius :
             return 0
         clock= 1
-        distance= aPosition.distance( center + geometry.clockPositions[1] )
-        for i in range( 2, geometry.clockLenght ):
-            option= center + geometry.clockPositions[i]
+        distance= aPosition.distance( Point(center.x+clockPositions[1].x, center.y+clockPositions[1].y) )
+        for i in range( 2, clockLenght ):
+            option= Point(center.x+clockPositions[i].x, center.y+clockPositions[i].y)
             d= aPosition.distance( option )
             if d < distance :
                 clock= i

@@ -1,8 +1,7 @@
 # HackaGames UnitTest - `pytest`
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
-
-from src.tiledland import Point, Agent, Shape
+from src.tiledland import Point, Agent, Shaped
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T

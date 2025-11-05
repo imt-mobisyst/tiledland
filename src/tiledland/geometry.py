@@ -1,30 +1,16 @@
 from shapely.geometry import Point, Polygon
 import math
 
-def point_fromList( aList ):
-    return Point( aList[0], aList[1] )
+def pointFromAngle(aRadAngle, aDistance= 1.0 ):
+    return Point( math.cos( aRadAngle ) * aDistance,
+                    math.sin( aRadAngle ) * aDistance )
 
-def point_fromTrigo(aRadAngle, aDistance= 1.0 ):
-    return Point( 
-        math.cos( aRadAngle ) * aDistance,
-        math.sin( aRadAngle ) * aDistance
-     )
+def pointRounded(aPoint, precision=2):
+    return Point(round( aPoint.x, precision ), round( aPoint.y, precision ))
 
-def point_round(aPoint, precision=0):
-    return Point(
-        round( aPoint.x, precision ),
-        round( aPoint.y, precision )
-    )
-
-clockAngles= [ 0.0, 2.0*math.pi/6.0, math.pi/6.0, 0.0,
-               math.pi/-6.0, -2.0*math.pi/6.0, math.pi/-2.0,
-               -2.0*math.pi/3.0, -5.0*math.pi/6.0, math.pi,
-               5.0*math.pi/6.0, 2.0*math.pi/3.0, math.pi/2.0
-               ]
-clockPositions= [
-    point_fromTrigo(x) for x in clockAngles
-]
-clockLenght= 13
+def pointAddition(aRadAngle, aDistance= 1.0 ):
+    return Point( math.cos( aRadAngle ) * aDistance,
+                    math.sin( aRadAngle ) * aDistance )
 
 class Box():
 
@@ -66,8 +52,8 @@ class Box():
 
     # Construction:
     def round(self, precition=0):
-        self._min= point_round(self._min, precition)
-        self._max= point_round(self._max, precition)
+        self._min= pointRounded(self._min, precition)
+        self._max= pointRounded(self._max, precition)
         return self
     
     def move(self, aPoint):

@@ -3,7 +3,7 @@ import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src import tiledland as tll
-from src.tiledland import Point, Shape, Agent, Tile
+from src.tiledland import Point, Shaped, Agent, Tile
 from src.tiledland.pod import Pod
 
 # ------------------------------------------------------------------------ #
@@ -163,7 +163,7 @@ def test_Tile_clockDirection():
     tile= Tile( position=p, shape=Shape().initializeRegular( 0.2, 12 ) )
 
     assert tile.clockDirection( p ) == 0
-    assert tile.clockDirection( p + Point(  0.0,  2.0 ) ) == 12
-    assert tile.clockDirection( p + Point(  2.0,  0.0 ) ) == 3
-    assert tile.clockDirection( p + Point(  0.0, -2.0 ) ) == 6
-    assert tile.clockDirection( p + Point( -2.0,  0.0 ) ) == 9
+    assert tile.clockDirection( Point(p.x+0.0, p.y+2.0 ) ) == 12
+    assert tile.clockDirection( Point(p.x+2.0, p.y+0.0 ) ) == 3
+    assert tile.clockDirection( Point(p.x+0.0, p.y-2.0 ) ) == 6
+    assert tile.clockDirection( Point(p.x-2.0, p.y+0.0 ) ) == 9

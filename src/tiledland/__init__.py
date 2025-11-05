@@ -1,19 +1,9 @@
 from .geometry import Point, Polygon, Box
-from .oldgeometry import Shape
-from . import agent, tile, scene, artist
 from .shaped import Shaped
-
-# Geometry:
-#Point= Point
-Float2= Point
-#Shape= Polygon
-
-Shape= Shape
-
-# Geometry:
-Tile= tile.Tile
-Scene= scene.Scene
-Agent= agent.Agent
+from .tile import Tile
+from .agent import Agent
+from .scene import Scene
+from . import artist
 
 # Artist:
 SupportVoid= artist.support.SupportVoid

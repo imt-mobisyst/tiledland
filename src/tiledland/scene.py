@@ -1,6 +1,7 @@
 from .pod import Podable, Pod
 from .oldgeometry import Float2, Shape
 from .geometry import Point, Box
+from .shaped import Shaped
 from .tile import Tile
 from .agent import Agent
 

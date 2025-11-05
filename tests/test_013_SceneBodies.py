@@ -1,11 +1,7 @@
 # HackaGames UnitTest - `pytest`
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
-
-from src.tiledland.oldgeometry import Float2
-from src.tiledland import Point, Box, Shape, Agent, Tile, Scene 
-
-from src import tiledland as tll
+from src.tiledland import Point, Box, Shaped, Agent, Tile, Scene 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
