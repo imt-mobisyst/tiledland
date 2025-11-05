@@ -2,8 +2,8 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland.geometry import Float2, Box
-from src.tiledland import Shape, Agent, Tile, Scene 
+from src.tiledland.oldgeometry import Float2
+from src.tiledland import Point, Box, Shape, Agent, Tile, Scene 
 
 from src import tiledland as tll
 

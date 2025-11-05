@@ -1,14 +1,15 @@
-from .geometry import Float2, Shape
+from .oldgeometry import Float2, Shape
+from .geometry import Point, point_fromList, Polygon, Box
 from .pod import Podable, Pod
 
 class Agent(Podable):
 
     # Initialization Destruction:
-    def __init__( self, identifier= 0, group=0, position= Float2(0.0, 0.0), shape= None):
+    def __init__( self, identifier= 0, group=0, position= Point(0.0, 0.0), shape= None):
         self._id= identifier
         self._group= group
         self._tile= 0
-        self._center= Float2( position.x(), position.y() )
+        self._center= Point( position.x, position.y )
         self._shape= shape
         if self._shape is None :
             self._shape= Shape().initializeSquare(0.4)
@@ -31,20 +32,21 @@ class Agent(Podable):
         return self._shape
     
     def position(self):
-        return self._center
+        return self._center 
     
     # Shape accessor : 
     def envelope(self):
-        cx, cy= self._center.asTuple()
+        cx, cy= self._center.x, self._center.y
         return [ (cx+x, cy+y) for x, y in self._shape.asZipped() ]
     
     def box(self):
-        return self.shape().box().move(self.position())
+        return Box().fromShape( self.shape() ).move(self.position())
     
     def radius(self):
         r= 0.0
-        zero= Float2()
+        zero= Point(0.0, 0.0)
         for p in self._shape._points :
+            p= Point( p.x(), p.y() )
             d= zero.distance( p )
             r= max( d, r )
         return r
@@ -61,10 +63,14 @@ class Agent(Podable):
     def setTile(self, aInteger):
         self._tile= aInteger
         return self
-    
-    def setPosition(self, aFloat2):
-        self._center= aFloat2
+
+    def setPosition(self, aPoint):
+        assert( type(aPoint) == Point )
+        self._center= Point( aPoint.x,  aPoint.y )
         return self
+
+    def setPositionOn(self, x, y):
+        return self.setPosition( Point(x, y) )
     
     def setMatter(self, aInteger):
         self._matter= aInteger
@@ -87,7 +93,7 @@ class Agent(Podable):
         return Pod().fromLists( 
             ["Agent"], 
             [self.id(), self.group(), self.matter(), self.tile()],
-            self.position().asList(),
+            [self.position().x, self.position().y],
             [ self.shape().asPod() ]
         )
     
@@ -97,7 +103,7 @@ class Agent(Podable):
         self.setGroup( integers[1] )
         self.setMatter( integers[2] )
         self.setTile( integers[3] )
-        self.setPosition( Float2().fromList( aPod.values() ) )
+        self.setPosition( point_fromList( aPod.values() ) )
         self.setShape( Shape().fromPod( aPod.children()[0] ) )
         return self
     

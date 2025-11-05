@@ -1,10 +1,13 @@
-from .geometry import float2, shape, box
+from .geometry import Point, Polygon, Box
+from .oldgeometry import Shape
 from . import agent, tile, scene, artist
 
 # Geometry:
-Float2= float2.Float2
-Shape= shape.Shape
-Box= box.Box
+#Point= Point
+Float2= Point
+#Shape= Polygon
+
+Shape= Shape
 
 # Geometry:
 Tile= tile.Tile

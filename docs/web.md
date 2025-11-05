@@ -12,12 +12,15 @@ However, if you seak for performances, maibe search with another language (_C_ +
 
 ## Quick overview: 
 
+Studied candidates:
+
 - [Streamlit](https://docs.streamlit.io) - First tested solution. Verry simple to present animated data and add some classical button or other input. It find its limits with huge dashboard or complex interactions.
 - [Dash by plotly](https://dash.plotly.com/tutorial) - Similar philosophy than Streamlit, i.e. orineted toward data visualization.
 - [Remi](https://pypi.org/project/remi/) - For REMote Interface, more oriented as a Web GUI.
 
+To notice that we push aside the web based app solution not focalized on graphicalrendering like _flask_ or _django_.
 
-## Streamlit :
+## Streamlit and Plotly:
 
 Regarding tutorial, _streamlit_ allows for interresting data visualisation and simple interaction.
 Test a first interactive program :

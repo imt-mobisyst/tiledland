@@ -1,48 +1,54 @@
-# Board V0.1:
+# Board V0.2:
 
-## Get Tiledland from Hackagames.tiled
+Board in progress...
 
-- [x] Initialize with hackagames.tiled
-- [x] Initialize artist rendering
-- [x] New Structure: core (Scene, Tiles and Agents), geometry and artist
-- [x] HackaGame compatible
+## Migrate geometry on shapely
+
+- [ ] Remove `Float2` and prefer `Point` from `shapely.geometry`.
+- [ ] Set shape attribut as `shapely.geometry.Polygon` in agent.
 - [ ] asDico() and fromDico() morphing (via Pop)
+- [ ] scene as STRtree ?
+- [ ] Shape min/max radius, and collision.
+- [ ] Shape update with a radius.
+- [ ] Segment automatic tag.
+- [ ] get a tiles from a position (in max radius, and closest)
+- [ ] Agents: update position and Shape function (auto-centering)
+- [ ] Scene: Generation from graphs, Voroi, gabriel, ....
+- [ ] Shape: Collisions
 
-## Scene, Tiles and Agents :
+## Robot compliant :
 
-- [x] Agents: Position, clock-position and Shape
-- [x] Scene as collection of: group's Agents, structured on Tiles
-- [x] Tiles as collection of: Agents
-- [x] Abstraction on Scene: Agents could be anything...
-- [x] Grid and Hexa-grid based scene initilization.
-
-
-## Rendering :
-
-- [x] Artist + support architectur.
-- [x] SVG Support.
-- [x] PNG Support with Cairo.
-- [ ] Add Texure to Shape...
-- [ ] Projection simple : (vertical ratio)
-- [ ] Free Projection : (rotation + translation)
+- [ ] Load a gridmap
+- [ ] Social nav.
 
 
-## Manipulate the scene : 
+## First games : 
 
 - [ ] Basic Scene manipulation: doSomething ... doTeleportOn(tile, agent, group).
 - [ ] Be topological: Clockdir manipulation.
 
 
+## Web IHM - Rendering
+
+- [ ] Visualize map (Static/Dynamic)
+- [ ] Add a monitor/control panel
+- [ ] Make the map clickable...
+- [ ] Validate the choise of remi
+- [ ] Add Texure to Shape...
+- [ ] Projection simple : (vertical ratio)
+- [ ] Free Projection : (rotation + translation)
+
+
 ## Documentation :
 
-- [ ] Presentation of _Core_ components (game)
+- [ ] Presentation of _Core_ components
+- [ ] Presentation of _Hacka Distribution_
 - [ ] Presentation of _Geometry_ submodule
+- [ ] Presentation of _Rendering_ solution
+- [ ] Tuto _Web IHM_
+- [ ] Tuto _pygame IHM_
+- [ ] Tuto _create a game_
 - [ ] Developpers expectation: (template from Shape + class structure + tests)
-
-
-## HackaGames - SocNav
-
-Social complient navigation.
 
 
 ## HackaGames - Pick'n Del
@@ -61,6 +67,8 @@ Pick-up and Delivery with hiden random congestion.
 - [ ] encumbered value function of population/directions
 
 
+---
+
 # HackaGames - Move-It
 
 Based on MultiPath solving problem.
@@ -74,27 +82,7 @@ Based on MultiPath solving problem.
 - [ ] MultiPlayer version.
 
 
-## Web Rendering :
-
-- [ ] Identifing a tool _flask_, _streamlit_, _django_, _dash by plotly_
-- [ ] Visualize map (Static/Dynamic)
-- [ ] Add a monitor/control panel
-- [ ] Make the map clickable...
-
-
-## Simple, but strong plan geometry
-
-- [ ] Decide lib-based or independant ([shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives)
-- [ ] Shape min/max radius, and collision.
-- [ ] Shape update with a radius.
-- [ ] Segment automatic tag.
-- [ ] get a tiles from a position (in max radius, and closest)
-- [ ] Agents: update position and Shape function (auto-centering)
-- [ ] Scene: Generation from graphs, Voroi, gabriel, ....
-- [ ] Shape: Collisions
-
-
 ## Explorations
 
-- [ ] decide lib-based or independant - (Explore [igraph](https://python.igraph.org) possibilities)
+- [ ] Decide lib-based or independant scene graph - (Explore [igraph](https://python.igraph.org) possibilities)
 - [ ] Agent Based Model (or not ?): Step engine, also in a way compatible to hackagames

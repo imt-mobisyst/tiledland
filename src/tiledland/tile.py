@@ -1,12 +1,13 @@
 import math
 from . import geometry
 from .pod import Pod
-from .geometry import Float2, Shape
+from .geometry import Point
+from .oldgeometry import Shape
 from .agent import Agent
 
 class Tile(Agent):
 
-    def __init__( self, identifier= 0, position= Float2(0.0, 0.0), shape= None, matter=0):
+    def __init__( self, identifier= 0, position= Point(0.0, 0.0), shape= None, matter=0):
         shape
         if shape is None :
             shape= Shape().initializeSquare(1.0)
@@ -78,17 +79,18 @@ class Tile(Agent):
         return Pod().fromLists(  
             ["Tile"], 
             [self.id(), self.matter()] + self.adjacencies(),
-            self.position().asList(),
+            [self.position().x, self.position().y],
             [self.shape().asPod()] + [ ag.asPod() for ag in self.agents() ]
         )
     
     def fromPod( self, aPod, agentFactory=Agent ):
         integers= aPod.integers()
+        values= aPod.values()
         children= aPod.children()
         self.setId( integers[0] )
         self.setMatter( integers[1] )
         self.setAdjacencies( integers[2:] )
-        self.setPosition( Float2().fromList( aPod.values() ) )
+        self.setPositionOn( values[0], values[1] )
         self.setShape( Shape().fromPod( aPod.children()[0] ) )
         self.clear()
         for podBod in children[1:] :

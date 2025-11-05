@@ -1,7 +1,7 @@
 import math
 from ..pod import Podable, Pod
 from .float2 import Float2
-from .box import Box
+from ..geometry import Box
 
 class Shape(Podable):
 
@@ -39,11 +39,6 @@ class Shape(Podable):
     def points(self):
         return self._points
     
-    def box(self):
-        if self.size() == 0 :
-            return Box()
-        return Box(self.points())
-    
     # Morphing:
     def asList(self):
         l= []
@@ -80,7 +75,7 @@ class Shape(Podable):
     def str(self, typeName="Shape"): 
         # Myself :
         s= f"{typeName} {len(self._points)}" 
-        s+= str( [(round(x, 2), round(y, 2)) for x, y in self.box().asZip()] )
+        s+= str( [(round(x, 2), round(y, 2)) for x, y in Box().fromShape(self).asZip()] )
         return s
     
     def __str__(self): 

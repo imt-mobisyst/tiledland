@@ -2,7 +2,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland import Shape
+from src.tiledland import Point, Box, Shape
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
@@ -49,7 +49,7 @@ def test_Shape_regular():
         (8.66, -5.0), (0.0, -10.0), (-8.66, -5.0)
     ]
     
-    box= shape.box()
+    box= Box().fromShape( shape )
     box.round(2)
 
     assert box.asList() == [-8.66, -10.0, 8.66, 10.0]
