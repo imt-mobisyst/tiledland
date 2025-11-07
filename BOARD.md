@@ -5,7 +5,7 @@ Board in progress...
 ## Migrate geometry on shapely
 
 - [ ] Remove `Float2` and prefer `Point` from `shapely.geometry`.
-- [ ] Shaped the master Shaped Object 
+- [ ] Shaped (based on `shapely.polygon`) the master Shaped Object 
 - [ ] Set shape attribut as `shapely.geometry.Polygon` in agent.
 - [ ] asDico() and fromDico() morphing (via Pop)
 - [ ] scene as STRtree ?

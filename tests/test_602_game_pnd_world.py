@@ -181,10 +181,9 @@ def test_pnd_emcomber():
     model.teleport(20, 32)
     assert str( model.tile(32).agent() ) == 'Carrier-1.1 ⌊(8.82, 2.82), (9.18, 3.18)⌉ |0, 0|'
     encumberCount= 0
-    for i in range(10000) :
+    for i in range(10000 ) :
         if model.move(32, 9) == 32 :
             encumberCount+= 1
         model.teleport(31, 32)
 
     assert round(encumberCount/10000, 1) == 0.4
-    assert False
