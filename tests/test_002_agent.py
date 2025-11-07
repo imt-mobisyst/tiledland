@@ -18,7 +18,7 @@ def test_Agent_init():
     env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope() ]
     assert env == [(-0.2, 0.2), (0.2, 0.2), (0.2, -0.2), (-0.2, -0.2)]
 
-    agent.setShape( Shape().initializeRegular(0.5, 8) )
+    agent.setShape( Shaped().initializeRegular(0.5, 8) )
     env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope() ]
     assert env == [(-0.23, 0.1), (-0.1, 0.23), (0.1, 0.23), (0.23, 0.1), (0.23, -0.1), (0.1, -0.23), (-0.1, -0.23), (-0.23, -0.1)]
 
@@ -31,7 +31,7 @@ def test_Agent_init():
     assert env == [(0.77, 2.1), (0.9, 2.23), (1.1, 2.23), (1.23, 2.1), (1.23, 1.9), (1.1, 1.77), (0.9, 1.77), (0.77, 1.9)]
 
 def test_Agent_init2():
-    agent= Agent( 42, 0, Point(1.0, 2.0), Shape().initializeRegular(0.5, 8) )
+    agent= Agent( 42, 0, Point(1.0, 2.0), Shaped().initializeRegular(0.5, 8) )
     
     assert agent.id() == 42
     assert agent.position() == Point(1.0, 2.0)
@@ -39,11 +39,11 @@ def test_Agent_init2():
     assert env == [(0.77, 2.1), (0.9, 2.23), (1.1, 2.23), (1.23, 2.1), (1.23, 1.9), (1.1, 1.77), (0.9, 1.77), (0.77, 1.9)]
     
 def test_Agent_str():
-    agent= Agent( 42, 0, Point(1.0, 2.0), Shape().initializeSquare(1.0) )
+    agent= Agent( 42, 0, Point(1.0, 2.0), Shaped().initializeSquare(1.0) )
     print(agent)
     assert str(agent) == "Agent-42 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 
-    agent= Agent( 42, 1, Point(1.0, 2.0), Shape().initializeSquare(1.0) )
+    agent= Agent( 42, 1, Point(1.0, 2.0), Shaped().initializeSquare(1.0) )
     print(agent)
     assert str(agent) == "Agent-1.42 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 

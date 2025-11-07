@@ -68,7 +68,7 @@ class Shape(Podable):
     # Object operator:
     def copy(self):
         cpy= type(self)()
-        cpy._points= [ p.copy() for p in self.points() ]
+        cpy._points= [ p.copy() for p in self.asPoints() ]
         return cpy
 
     # String
@@ -81,7 +81,7 @@ class Shape(Podable):
     def __str__(self): 
         return self.str()
     
-    # Pod interface:
+    # Pod Interface:
     def asPod(self):
         return Pod().fromLists( ["Shape"], [], self.asList(), [] )
     

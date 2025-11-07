@@ -25,14 +25,14 @@ def test_artist_tile():
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-tile-01.svg" ):
         assert( lineShot == lineRef )
     
-    tile= tll.Tile( 3, tll.Float2(1.3, 0.9), tll.Shape().initializeSquare(4.0) )
+    tile= tll.Tile( 3, tll.Point(1.3, 0.9), tll.Shaped().initializeSquare(4.0) )
     pablo.drawTile( tile )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-tile-02.svg" ):
         assert( lineShot == lineRef )
 
-    tile= tll.Tile( 1, matter=1 ).setPosition( tll.Float2(0.4, 0.2) )
+    tile= tll.Tile( 1, matter=1 ).setPosition( tll.Point(0.4, 0.2) )
     tile.shape().initializeRegular( 2.0, 6 )
     pablo.drawTile( tile )
     pablo.flip()
@@ -170,9 +170,10 @@ def test_artist_gridscene_piece():
         assert( lineShot == lineRef )
 
     def popAgent( iRobot, iTile, iMatter ):
+        tilePos= scene.tile(iTile).position()
         bod= tll.Agent( iRobot, 0,
-            tll.Float2(0.1, 0.1)+scene.tile(iTile).position(),
-            tll.Shape().initializeRegular(0.7, 6),
+            tll.Point(tilePos.x+0.1, tilePos.y+0.1),
+            tll.Shaped().initializeRegular(0.7, 6),
         )
         bod.setMatter(iMatter)
         scene.tile(iTile).append( bod )
@@ -233,9 +234,9 @@ def test_artist_hexascene_piece():
         assert( lineShot == lineRef )
 
     def popAgent( iRobot, iTile, iMatter ):
+        tilePos= scene.tile(iTile).position()
         bod= tll.Agent( iRobot, 0,
-            tll.Float2(0.1, 0.1)+scene.tile(iTile).position(),
-            tll.Shape().initializeRegular(0.7, 6),
+            tll.Point(tilePos.x+0.1, tilePos.y+0.1),tll.Shaped().initializeRegular(0.7, 6),
         )
         bod.setMatter(iMatter)
         scene.tile(iTile).append( bod )

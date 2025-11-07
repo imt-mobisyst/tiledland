@@ -26,22 +26,22 @@ def test_scene_incremental():
     assert scene.size() == 0
     assert scene.box() == Box()
 
-    index= scene.append( Tile( shape= Shape() ) )
+    index= scene.append( Tile( shape= Shaped() ) )
     assert index == 1
     assert scene.size() == 1
 
     print( scene.tile(1) )
-    assert scene.tile(1).position().asTuple() == (0.0, 0.0)
+    assert scene.tile(1).position() == Point(0.0, 0.0)
     assert scene.tile(1).envelope() == []
 
-    index= scene.append( Tile( shape= Shape() ) )
+    index= scene.append( Tile( shape= Shaped() ) )
     assert index == 2
     assert scene.size() == 2
 
 def test_scene_clockNeighboring():
     scene= Scene()
-    tileShape= Shape().fromZipped(
-        [(-1.0, 0.0), (0.0, 1.5), (1.0, 0.0), (0.0, -1.5) ]
+    tileShape= Shaped().initializePoints(
+        [ Point(-1.0, 0.0), Point(0.0, 1.5), Point(1.0, 0.0), Point(0.0, -1.5) ]
     )
     scene.append( Tile( shape=tileShape, matter= 1 ) )
 
@@ -49,19 +49,19 @@ def test_scene_clockNeighboring():
 
     assert scene.neighbours(1) == []
 
-    index= scene.append( Tile( shape= tileShape, position=Float2(1.5, 2), matter= 2 ) )
+    index= scene.append( Tile( shape= tileShape, position= Point(1.5, 2), matter= 2 ) )
     scene.connect( 1, index )    
     assert scene.neighbours(1) == [(2, 1)]
     draw(scene)
 
-    index= scene.append( Tile( shape= tileShape, position=Float2(-1.5, 2), matter= 2 ) )
+    index= scene.append( Tile( shape= tileShape, position= Point(-1.5, 2), matter= 2 ) )
     scene.connect( 1, index )    
     draw(scene)
     assert scene.neighbours(1) == [(2, 1), (3, 11)]
 
-    index= scene.append( Tile( shape= tileShape, position=Float2(1.5, -2), matter= 2 ) )
+    index= scene.append( Tile( shape= tileShape, position= Point(1.5, -2), matter= 2 ) )
     scene.connect( 1, index )    
-    index= scene.append( Tile( shape= tileShape, position=Float2(-1.5, -2), matter= 2 ) )
+    index= scene.append( Tile( shape= tileShape, position= Point(-1.5, -2), matter= 2 ) )
     scene.connect( 1, index )    
     draw(scene)
     assert scene.neighbours(1) == [(2, 1), (3, 11), (4, 5), (5, 7)]
@@ -77,14 +77,14 @@ def test_Scene_initLine():
     assert scene.tiles() == [ scene.tile(1), scene.tile(2), scene.tile(3) ]
     assert scene.edges() == []
 
-    assert scene.tile(1).position().asTuple() == (0.0, 0.0)
+    assert scene.tile(1).position() == Point(0.0, 0.0)
     assert scene.tile(1).envelope() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
 
-    assert scene.tile(2).position().asTuple() == (1.0, 0.0)
+    assert scene.tile(2).position() == Point(1.0, 0.0)
     env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(2).envelope() ]
     assert env == [(0.55, 0.45), (1.45, 0.45), (1.45, -0.45), (0.55, -0.45)]
 
-    assert scene.tile(3).position().asTuple() == (2.0, 0.0)
+    assert scene.tile(3).position() == Point(2.0, 0.0)
     env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(3).envelope() ]
     assert env == [(1.55, 0.45), (2.45, 0.45), (2.45, -0.45), (1.55, -0.45)]
     
@@ -132,10 +132,10 @@ def test_Scene_pod():
                        [3, 1], [3, 2], [4, 1], [4, 2]
                         ] )
 
-    scene.tile(1).position().set( 5.0, 3.0 )
-    scene.tile(2).position().set( 5.0, 15.0 )
-    scene.tile(3).position().set( 1.0, 9.0 )
-    scene.tile(4).position().set( 9.0, 9.0 )
+    scene.tile(1).setPosition( Point(5.0, 3.0) )
+    scene.tile(2).setPosition( Point(5.0, 15.0) )
+    scene.tile(3).setPosition( Point(1.0, 9.0) )
+    scene.tile(4).setPosition( Point(9.0, 9.0) )
 
     print(f">>>\n{scene}")
     assert '\n'+ str(scene) +'\n' == """
@@ -148,7 +148,7 @@ Scene:
 
 def test_Scene_box():
     scene= Scene()
-    assert scene.box() == Box( [Float2(0.0, 0.0)] )
+    assert scene.box() == Box( [ Point(0.0, 0.0)] )
 
     scene= Scene().initializeLine(4)
     print( scene.box() )

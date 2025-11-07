@@ -16,6 +16,12 @@ class Podable():
         # Should rebuild self from a Pod instance
         assert "Should be implemented" == None
       
+    # Object operator:
+    def copy(self):
+        cpy= type(self)()
+        cpy.fromPod( self.asPod() )
+        return cpy
+
     # Tools:
     def podCopy(self):
         return type(self)().fromPod( self.asPod() )

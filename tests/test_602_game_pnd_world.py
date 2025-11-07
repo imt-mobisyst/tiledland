@@ -187,3 +187,4 @@ def test_pnd_emcomber():
         model.teleport(31, 32)
 
     assert round(encumberCount/10000, 1) == 0.4
+    assert False

@@ -93,11 +93,11 @@ class Artist():
     
     def fitBox( self, aBox, marge=10 ):
         marge= marge*2
-        minx, miny= aBox.leftFloor().asTuple()
-        maxx, maxy= aBox.rightCeiling().asTuple()
-        self.setCamera( (minx+maxx)*0.5, (miny+maxy)*0.5 )
-        distx= maxx-minx
-        disty= maxy-miny
+        pmin= aBox.leftFloor()
+        pmax= aBox.rightCeiling()
+        self.setCamera( (pmin.x+pmax.x)*0.5, (pmin.y+pmax.y)*0.5 )
+        distx= pmax.x-pmin.x
+        disty= pmax.y-pmin.y
         ratioX, ratioY= 1.0, 1.0
         if distx != 0.0 :
            ratioX= (self._support.width()-marge)/distx
@@ -245,30 +245,29 @@ class Artist():
         )
     
     def writeTile( self, aTile ):
-        minx, miny= aTile.box().leftFloor().asTuple()
-        x, y= aTile.position().asTuple()
-        x= x+(minx-x)*2/3
-        y= y+(miny-y)*2/3
+        pmin= aTile.box().leftFloor()
+        c= aTile.position()
+        x= c.x+(pmin.x-c.x)*2/3
+        y= c.y+(pmin.y-c.y)*2/3
         self.write( x, y, str(aTile.id()), self._panel[ aTile.matter() ] )
 
     def drawAgent( self, agent, brushId ):
         self.fillShape(
             agent.envelope(),
             brushId )
-        minx, miny= agent.box().leftFloor().asTuple()
-        x, y= agent.position().asTuple()
-        self.write( x, y, str(agent.id()), self._panel[brushId] )
+        c= agent.position()
+        self.write( c.x, c.y, str(agent.id()), self._panel[brushId] )
     
     def drawSceneNetwork( self, aScene ):
         for tile in aScene.tiles() :
-            cx, cy= tile.position().asTuple()
-            self.tracePoint( cx, cy, self._panel[ tile.matter() ] )
+            c= tile.position()
+            self.tracePoint( c.x, c.y, self._panel[ tile.matter() ] )
 
         for fromId, toId in aScene.edges() :
-            fromX, fromY= aScene.tile( fromId ).position().asTuple()
+            pfrom= aScene.tile( fromId ).position()
             brush= self._panel[ aScene.tile( fromId ).matter() ]
-            toX, toY= aScene.tile( toId ).position().asTuple()
-            self.traceLine( fromX, fromY, toX, toY, brush )
+            pto= aScene.tile( toId ).position()
+            self.traceLine( pfrom.x, pfrom.y, pto.x, pto.y, brush )
         #    self.tracePoint( aScene.tile(fromId) )
 
     def drawSceneTiles( self, aScene ):
@@ -277,8 +276,6 @@ class Artist():
 
     def drawSceneAgents( self, aScene ):
         for tile in aScene.tiles() :
-            x, y= tile.position().asTuple()
-            position= (x+0.1, y+0.1)
             for agent in tile.agents() :
                 self.drawAgent( agent, agent.matter() )
     

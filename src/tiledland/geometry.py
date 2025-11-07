@@ -37,8 +37,8 @@ class Box():
 
     def fromShape( self, aShape ):
         pList= []
-        for p in aShape.points() :
-            pList.append( Point( p.x(), p.y() ) )
+        for p in aShape.asPoints() :
+            pList.append( Point( p.x, p.y ) )
         if len(pList) == 0 :
             return self.fromList() 
         return self.fromList( pList ) 

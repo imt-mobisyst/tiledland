@@ -37,7 +37,7 @@ class Agent(Podable):
     # Shape accessor : 
     def envelope(self):
         cx, cy= self._center.x, self._center.y
-        return [ (cx+x, cy+y) for x, y in self._shape.asZipped() ]
+        return [ (cx+x, cy+y) for x, y in self._shape.asZip() ]
     
     def box(self):
         return Box().fromShape( self.shape() ).move(self.position())
@@ -45,8 +45,8 @@ class Agent(Podable):
     def radius(self):
         r= 0.0
         zero= Point(0.0, 0.0)
-        for p in self._shape._points :
-            p= Point( p.x(), p.y() )
+        for p in self._shape.asPoints() :
+            p= Point( p.x, p.y )
             d= zero.distance( p )
             r= max( d, r )
         return r
@@ -65,7 +65,6 @@ class Agent(Podable):
         return self
 
     def setPosition(self, aPoint):
-        assert( type(aPoint) == Point )
         self._center= Point( aPoint.x,  aPoint.y )
         return self
 

@@ -1,5 +1,4 @@
 from .pod import Podable, Pod
-from .oldgeometry import Float2, Shape
 from .geometry import Point, Box
 from .shaped import Shaped
 from .tile import Tile
@@ -12,7 +11,7 @@ class Scene(Podable):
     # Constructor:
     def __init__(self):#, agentFactory= Agent):
         self._tiles= []
-        self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Shape().initializeRegular(0.8, 5) ).setMatter(1)
+        self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape= Shaped().initializeRegular(0.8, 5) ).setMatter(1)
         self.clear()
 
     # Accessor:
@@ -54,10 +53,10 @@ class Scene(Podable):
         return neibs
     
     def directions(self, iTile) : 
-        cx, cy= self.tile(iTile).position().asTuple()
+        c= self.tile(iTile).position()
         neibor= self.adjacencies(iTile)
-        positions= [ self.tile(i).position().asTuple() for i in neibor ]
-        return [ (x-cx, y-cy) for x, y in positions ]
+        positions= [ self.tile(i).position() for i in neibor ]
+        return [ (p.x-c.x, p.y-c.y) for p in positions ]
     
     def clockBearing(self, iTile):
         clock= [
@@ -114,9 +113,9 @@ class Scene(Podable):
 
     def initializeLine( self, size, shape= None, distance=1.0, connect=True ):
         if shape is None :
-            shape= Shape().initializeSquare(0.9)
+            shape= Shaped().initializeSquare(0.9)
         self._tiles= [
-            Tile( i+1, Float2(distance*i, 0.0), shape.copy() )
+            Tile( i+1, Point(distance*i, 0.0), shape.copy() )
             for i in range(size)
         ]
         self._size= size
@@ -134,8 +133,8 @@ class Scene(Podable):
                     iTile+= 1
                     tile= Tile(
                         iTile,
-                        Float2( dist*j, dist*(maxLine-i) ),
-                        Shape().initializeSquare(tileSize),
+                        Point( dist*j, dist*(maxLine-i) ),
+                        Shaped().initializeSquare(tileSize),
                         matrix[i][j]
                     )
                     self._tiles.append( tile )
@@ -163,8 +162,8 @@ class Scene(Podable):
                     delta= (iLine%2) * hdelta
                     tile= Tile(
                         iTile,
-                        Float2( delta+dist*j, vdist*iLine ),
-                        Shape().initializeRegular(tileSize, 6),
+                        Point( delta+dist*j, vdist*iLine ),
+                        Shaped().initializeRegular(tileSize, 6),
                         matrix[i][j]
                     )
                     self._tiles.append( tile )
@@ -211,7 +210,7 @@ class Scene(Podable):
             return False
         ag= self._factory( len(self._agents[group])+1, group )
         ag.setTile(iTile)
-        ag.setPosition( self.tile(iTile).position().copy() )
+        ag.setPosition( self.tile(iTile).position() )
         self.tile(iTile).append( ag )
         self.__addAgent(ag)
         return ag

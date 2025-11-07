@@ -68,7 +68,7 @@ class Shaped(Podable):
 
     def matter(self):
         return self._matter
-
+    
     # Morphing
     def asPoints(self):
         xys= self.listXY()

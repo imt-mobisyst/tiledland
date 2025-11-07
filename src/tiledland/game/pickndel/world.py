@@ -1,6 +1,6 @@
 
 from .carrier import Carrier
-from ... import Float2, Shape, Box, scene, Tile, artist
+from ... import Point, Box, Scene, Artist
 import hacka as hk
 import random
 
@@ -24,7 +24,7 @@ class Mission:
     def asTuple(self):
         return self.start, self.final, self.reward, self.owner
 
-class World( scene.Scene ):
+class World( Scene ):
     def __init__(self, name="Pick'nDel", numberOfPlayers= 1):
         super().__init__()
         self.setAgentFactory(Carrier)
@@ -32,9 +32,9 @@ class World( scene.Scene ):
         self._missions= []
         self._encumbers= []
         # Initialize Artist :
-        self._artist= artist.Artist().initializePNG( "shot-pickndel.png" )
+        self._artist= Artist().initializePNG( "shot-pickndel.png" )
         self._artist.flip()
-        self._artist.fitBox( Box([Float2(-0.5, -0.5), Float2(9.5, 6.5)] ), 10 )
+        self._artist.fitBox( Box([ Point(-0.5, -0.5),  Point(9.5, 6.5)] ), 10 )
         #self._artist.fitBox( self.box(), 10 )
         self.marketBrush= self._artist._panel[6]
         self.marketBrush.width= 8

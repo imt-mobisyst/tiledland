@@ -108,3 +108,9 @@ def test_Shaped_podCopy():
     
     shBis= shape.podCopy()
     assert shBis.asZip() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
+
+def test_shaped_copy():
+    shape= Shaped().initializeSquare(0.9)
+    cpy= shape.copy()
+    assert cpy.asZip() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
+    
