@@ -15,34 +15,43 @@
 - [x] Tiles as collection of: Agents
 - [x] Abstraction on Scene: Agents could be anything...
 - [x] Grid and Hexa-grid based scene initilization.
+- [ ] Basic Scene manipulation: doSomething ... doTeleportOn(tile, agent, group).
+- [ ] Be topological: Clockdir manipulation.
 
 
-## Rendering :
+## HackaGames - Robot SocNav
+
+Social complient navigation.
+
+- [ ] Load a gridmap
+- [ ] Social nav.
+
+
+## Web IHM - Rendering
 
 - [x] Artist + support architectur.
 - [x] SVG Support.
 - [x] PNG Support with Cairo.
+- [ ] Visualize map (Static/Dynamic)
+- [ ] Add a monitor/control panel
+- [ ] Make the map clickable...
+- [ ] Validate the choise of remi
 - [ ] Add Texure to Shape...
 - [ ] Projection simple : (vertical ratio)
 - [ ] Free Projection : (rotation + translation)
 
 
-## Manipulate the scene : 
-
-- [ ] Basic Scene manipulation: doSomething ... doTeleportOn(tile, agent, group).
-- [ ] Be topological: Clockdir manipulation.
-
-
 ## Documentation :
 
-- [ ] Presentation of _Core_ components (game)
+- [ ] Presentation of _Core_ components
+- [ ] Presentation of _Hacka Distribution_
 - [ ] Presentation of _Geometry_ submodule
+- [ ] Presentation of _Rendering_ solution
+- [ ] Tuto _Web IHM_
+- [ ] Tuto _pygame IHM_
+- [ ] Tuto _create a game_
 - [ ] Developpers expectation: (template from Shape + class structure + tests)
 
-
-## HackaGames - SocNav
-
-Social complient navigation.
 
 
 ## HackaGames - Pick'n Del
