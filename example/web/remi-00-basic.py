@@ -28,6 +28,7 @@ class MyApp(remi.App):
 
     # listener function
     def on_button_pressed(self, widget):
+        print( "> button pressed !!!" )
         self._i+= 1
         if self._i == len(self._msgs) :
             self._i= 0
