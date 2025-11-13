@@ -32,7 +32,7 @@ class MyApp(remi.App):
             svg+= f'<polygon points="{x1},{y1} {x1},{y2} {x2},{y2} {x2},{y1}" style="fill:none;stroke:#a01010;stroke-width:2" />'
 
         self._frame.add_child( 'content', svg )
-        
+    
     # listener function
     def svg_pressed(self, obj, x, y):
         self._coord= (x, y)

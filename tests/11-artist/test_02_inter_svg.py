@@ -85,7 +85,7 @@ def test_artist_load():
     pablo= tll.Artist()
 
     assert( type( pablo ) ) == tll.Artist
-    assert( type( pablo.support() ) ) == tll.SupportVoid
+    assert( type( pablo.support() ) ) == tll.Support
 
     pablo.initializeSVG("shot-test.svg") 
 

@@ -1,18 +1,11 @@
 from .geometry import float2, shape, box
-from . import agent, tile, scene, artist
+from .agent import Agent
+from .tile import Tile
+from .scene import Scene
+from .artist import Support, SupportSVG, SupportPNG, Artist
 
 # Geometry:
 Float2= float2.Float2
 Shape= shape.Shape
 Box= box.Box
 
-# Geometry:
-Tile= tile.Tile
-Scene= scene.Scene
-Agent= agent.Agent
-
-# Artist:
-SupportVoid= artist.support.SupportVoid
-SupportSVG= artist.support.SupportSVG
-SupportPNG= artist.supportCairo.SupportPNG
-Artist= artist.Artist

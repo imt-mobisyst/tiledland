@@ -1,17 +1,6 @@
-from . import color as smColor, support, supportCairo
-
-# Color function:
-colorRatio= smColor.colorRatio
-rgbColor= smColor.rgbColor
-percentColor= smColor.percentColor
-webColor= smColor.webColor
-colorFromWeb= smColor.colorFromWeb
-color= smColor.color
-
-# Support:
-SupportVoid= support.SupportVoid
-SupportSVG= support.SupportSVG
-SupportPNG= supportCairo.SupportPNG
+from .color import color, colorRatio, colorRatio, rgbColor, percentColor, webColor, colorFromWeb
+from .support import AbsSupport, Support, SupportSVG
+from .supportCairo import SupportPNG
 
 # Artist:
 class Brush():
@@ -23,7 +12,7 @@ class Brush():
 class Artist():
     def __init__(self):
         #  Initialize support:
-        self._support= SupportVoid()
+        self._support= Support()
 
         # Initialize brush :
         self._background= 0xb86e00
@@ -73,6 +62,20 @@ class Artist():
     def support(self):
         return self._support
 
+    def content(self):
+        return self._support.content()
+
+    def clear(self):
+        h= self._support.height()
+        w= self._support.width()
+        self._support.clear()
+        self._support.fillPolygon(
+            [0, 0, w, w],
+            [0, h, h, 0],
+            self._background
+        )
+        return self
+    
     def render( self ):
         return self._support.render()
 
@@ -294,12 +297,6 @@ class Artist():
 
     # Control:
     def flip(self):
-        h= self._support.height()
-        w= self._support.width()
         ref= self._support.flip()
-        self._support.fillPolygon(
-            [0, 0, w, w],
-            [0, h, h, 0],
-            self._background
-        )
+        self.clear()
         return ref

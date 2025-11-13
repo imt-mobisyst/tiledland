@@ -1,10 +1,10 @@
 from .color import percentColor
-from .support import SupportVoid
+from .support import AbsSupport
 
 import math, cairo
 #from .geometry import Coord2, Segment
 
-class SupportPNG( SupportVoid ):
+class SupportPNG( AbsSupport ):
     def __init__(self, width= 800, height= 600, filePath= "shot-hacka.png" ):
         self._canvas= cairo.ImageSurface( cairo.Format.RGB24, width, height )
         self._width= width

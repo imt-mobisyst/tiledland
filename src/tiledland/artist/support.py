@@ -1,6 +1,6 @@
 from .color import webColor
 
-class SupportVoid():
+class AbsSupport():
 
     # Accessor:
     def width(self):
@@ -47,13 +47,12 @@ class SupportVoid():
     def write( self, pixXs, pixYs, text, color, fontSize ):
         pass
 
-class SupportSVG( SupportVoid ):
-    def __init__(self, width= 800, height= 600, filePath= "shot-hacka.svg" ):
+class Support( AbsSupport ):
+
+    def __init__(self, width= 800, height= 600 ):
         self._width= width
         self._height= height
         self._canvas= []
-        self._filePath= filePath
-        self.save( self._filePath )
     
     # Accessor: 
     def width(self):
@@ -65,21 +64,18 @@ class SupportSVG( SupportVoid ):
     def canvas(self):
         return self._canvas
     
-    def filePath(self):
-        return self._filePath
-
     # Control:
     def clear(self):
         self._canvas= []
     
+    def content(self):
+        return '\n'.join(self._canvas) 
+
     def render(self):
         return f'<svg width="{self.width()}" height="{self.height()}">\n' + '\n'.join( self._canvas + ['</svg>'] ) 
 
     def flip(self):
-        if self._filePath :
-            arts= self.save( self._filePath )
-        else :
-            arts= self.render()
+        arts= self.render()
         self.clear()
         return arts
 
@@ -127,4 +123,30 @@ class SupportSVG( SupportVoid ):
     def write( self, pixXs, pixYs, text, color, fontSize ):
         self._canvas.append( f'<text x="{pixXs}" y="{pixYs}" fill="{webColor(color)}" font-family="Verdana" font-size="{fontSize}">{text}</text>" />' )
         return self
+
+class SupportSVG( Support ):
+    
+    def __init__(self, width= 800, height= 600, filePath= "shot-hacka.svg" ):
+        super().__init__(width, height)
+        self._filePath= filePath
+        self.save( self._filePath )
+    
+    # Accessor: 
+    def filePath(self):
+        return self._filePath
+    
+    # Control:
+
+    def flip(self):
+        arts= self.save( self._filePath )
+        self.clear()
+        return arts
+
+    def save( self, filePath ):
+        file = open( filePath, "w")
+        file.write( '<?xml version="1.0" encoding="UTF-8"?>\n' )
+        arts= self.render()
+        file.write( arts )
+        file.close()
+        return arts
     

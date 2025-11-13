@@ -5,7 +5,6 @@ class MyApp(remi.App):
     def __init__(self, *args):
         super(MyApp, self).__init__(*args)
 
-
     def main(self):
         # Mesages...
         self._msgs= [ "Salut", "nounou !" ]
