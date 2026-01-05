@@ -3,7 +3,7 @@ import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src.tiledland import rosi
-import yaml, os.path
+import yaml, os.path, cairo
 
 # ------------------------------------------------------------------------ #
 #         T E S T   R O S I :   R O S 2   I N T E R F A C E
@@ -44,4 +44,27 @@ mode: "trinary"
     assert os.path.isfile( rscPath+data["image"] )
 
 def test_load_map_data():
+    image = cairo.ImageSurface.create_from_png( "tests/rsc/testmap.png" )
+    width= image.get_width()
+    height= image.get_height()
+    assert (width, height) == (10, 10)
+    assert image.get_stride() == 40
+    assert image.get_format() == cairo.Format.RGB24 # RGBA in applicative...
+
+    print( image )
+    pixel_data_mv = image.get_data()  # MemoryView object
+    print( len(pixel_data_mv) )
+    print( pixel_data_mv )
+    pixels_as_bytes = pixel_data_mv.tobytes()  # ByteArray
+    print( pixels_as_bytes )
+    pixels_as_list = list(pixels_as_bytes)
+    print( pixels_as_list )
+    print( pixels_as_list )
+    
+    print( len(pixel_data_mv) )
+    print( pixel_data_mv[26] )
+    pixel_data_mv[26]= 104
+    print( pixel_data_mv[26] )
+    print( pixels_as_bytes[26] )
+
     assert False

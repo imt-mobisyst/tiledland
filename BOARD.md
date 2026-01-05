@@ -1,5 +1,6 @@
 # Board V0.1:
 
+
 ## Get Tiledland from Hackagames.tiled
 
 - [x] Initialize with hackagames.tiled
@@ -7,6 +8,20 @@
 - [x] New Structure: core (Scene, Tiles and Agents), geometry and artist
 - [x] HackaGame compatible
 - [ ] asDico() and fromDico() morphing (via Pop)
+
+
+## Simple, but strong plan geometry
+
+- [ ] Decide: self-dependant (create `lib42deg`) or lib-based 1: [shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives ; 2: [box2d](https://box2d.org/)
+- [ ] Shape min/max radius, and collision.
+- [ ] Shape update with a radius.
+- [ ] Segment automatic tag.
+- [ ] get a tiles from a position (in max radius, and closest)
+- [ ] Agents: update position and Shape function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Scene: `forward(agent, action)` (But on Hacka?) )
+- [ ] Scene: Based on a graph
+- [ ] Scene: Graphs <-> Gridmap
+- [ ] Scene: Generation from Voroi, gabriel, ....
+
 
 ## Scene, Tiles and Agents :
 
@@ -19,12 +34,16 @@
 - [ ] Be topological: Clockdir manipulation.
 
 
+## HackaGames - Multi-Bot Delivery
+
+Simple multiple robots game focused on 1 piece at a time delivery.
+
+
 ## HackaGames - Robot SocNav
 
 Social complient navigation.
 
-- [ ] Load a gridmap
-- [ ] Social nav.
+- [ ] Human simulation model
 
 
 ## Web IHM - Rendering
@@ -56,7 +75,7 @@ Social complient navigation.
 
 ## HackaGames - Pick'n Del
 
-Pick-up and Delivery with hiden random congestion.
+Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 
 - [x] Carrier from Agents and World from Scene.
 - [x] Mission on market place (origin destination)
@@ -89,18 +108,6 @@ Based on MultiPath solving problem.
 - [ ] Visualize map (Static/Dynamic)
 - [ ] Add a monitor/control panel
 - [ ] Make the map clickable...
-
-
-## Simple, but strong plan geometry
-
-- [ ] Decide lib-based or independant ([shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives)
-- [ ] Shape min/max radius, and collision.
-- [ ] Shape update with a radius.
-- [ ] Segment automatic tag.
-- [ ] get a tiles from a position (in max radius, and closest)
-- [ ] Agents: update position and Shape function (auto-centering)
-- [ ] Scene: Generation from graphs, Voroi, gabriel, ....
-- [ ] Shape: Collisions
 
 
 ## Explorations

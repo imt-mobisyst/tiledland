@@ -16,7 +16,6 @@ However, if you seak for performances, maibe search with another language (_C_ +
 - [Dash by plotly](https://dash.plotly.com/tutorial) - Similar philosophy than Streamlit, i.e. orineted toward data visualization.
 - [Remi](https://pypi.org/project/remi/) - For REMote Interface, more oriented as a Web GUI.
 
-
 ## Streamlit :
 
 Regarding tutorial, _streamlit_ allows for interresting data visualisation and simple interaction.
