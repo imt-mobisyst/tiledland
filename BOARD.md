@@ -7,7 +7,7 @@
 - [x] Initialize artist rendering
 - [x] New Structure: core (Scene, Tiles and Agents), geometry and artist
 - [x] HackaGame compatible
-- [ ] asDico() and fromDico() morphing (via Pop)
+- [ ] asDico() and fromDico() morphing (via Pod)
 
 
 ## Simple, but strong plan geometry

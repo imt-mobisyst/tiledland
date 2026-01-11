@@ -3,6 +3,7 @@ from .agent import Agent
 from .tile import Tile
 from .scene import Scene
 from .artist import Support, SupportSVG, SupportPNG, Artist
+from . import rosi
 
 # Geometry:
 Float2= float2.Float2
