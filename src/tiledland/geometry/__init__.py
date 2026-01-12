@@ -1,6 +1,6 @@
 import math
 
-from .point import Point
+from .point import Point, Line
 from .box import Box
 from .shape import Shape
 
