@@ -2,7 +2,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland.geometry import Shape
+from src.tiledland.geometry import Point, Shape
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
@@ -92,3 +92,25 @@ def test_Shape_podCopy():
     
     shapeBis= shape.podCopy()
     assert shapeBis.asZipped() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
+
+def test_Shape_convex():
+    shape= Shape().initializeSquare(0.9)
+    assert shape.asZipped() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45)]
+    
+    convex= shape.asConvex()
+    print( f"Convex : {convex.asZipped()}" )
+    assert convex.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
+    
+    shape= Shape([
+        Point(1.0, 1.0),
+        Point(4.5, 3.0),
+        Point(6.0, 0.5),
+        Point(1.5, 4.0),
+        Point(4.5, 4.5),
+        Point(2.5, 2.0)
+    ])
+
+    convex= shape.asConvex()
+    print( f"Convex : {convex.asZipped()}" )
+    assert convex.asZipped() == [(1.0, 1.0), (1.5, 4.0), (4.5, 4.5), (6.0, 0.5)]
+    

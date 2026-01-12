@@ -82,6 +82,9 @@ class Point():
     def length(self):
         return math.sqrt( self.norm2() )
 
+    def crossProduct(self, another):
+        return (self._x * another._y - self._y * another._x)
+    
     # Collision
     def isCollidePoint(self, point, distance=0.001):
         between= point - self
