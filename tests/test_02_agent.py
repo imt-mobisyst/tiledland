@@ -16,19 +16,19 @@ def test_Agent_init():
     print( f"{agent.position()} == {Float2(0.0, 0.0)}") 
 
     assert agent.position() == Float2(0.0, 0.0)
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope().asZipped() ]
     assert env == [(-0.2, 0.2), (0.2, 0.2), (0.2, -0.2), (-0.2, -0.2)]
 
     agent.setShape( Shape().initializeRegular(0.5, 8) )
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope().asZipped() ]
     assert env == [(-0.23, 0.1), (-0.1, 0.23), (0.1, 0.23), (0.23, 0.1), (0.23, -0.1), (0.1, -0.23), (-0.1, -0.23), (-0.23, -0.1)]
 
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope().asZipped() ]
     assert env == [(-0.23, 0.1), (-0.1, 0.23), (0.1, 0.23), (0.23, 0.1), (0.23, -0.1), (0.1, -0.23), (-0.1, -0.23), (-0.23, -0.1)]
 
     agent.position().set(1.0, 2.0)
     assert agent.position() == Float2(1.0, 2.0)
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope().asZipped() ]
     assert env == [(0.77, 2.1), (0.9, 2.23), (1.1, 2.23), (1.23, 2.1), (1.23, 1.9), (1.1, 1.77), (0.9, 1.77), (0.77, 1.9)]
 
 def test_Agent_init2():
@@ -36,7 +36,7 @@ def test_Agent_init2():
     
     assert agent.id() == 42
     assert agent.position() == Float2(1.0, 2.0)
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope().asZipped() ]
     assert env == [(0.77, 2.1), (0.9, 2.23), (1.1, 2.23), (1.23, 2.1), (1.23, 1.9), (1.1, 1.77), (0.9, 1.77), (0.77, 1.9)]
     
 def test_Agent_str():

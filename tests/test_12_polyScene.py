@@ -34,7 +34,7 @@ def test_scene_incremental():
 
     print( scene.tile(1) )
     assert scene.tile(1).position().asTuple() == (0.0, 0.0)
-    assert scene.tile(1).envelope() == []
+    assert scene.tile(1).envelope().asZipped() == []
 
     index= scene.append( Tile( shape= Shape() ) )
     assert index == 2
@@ -80,14 +80,14 @@ def test_Scene_initLine():
     assert scene.edges() == []
 
     assert scene.tile(1).position().asTuple() == (0.0, 0.0)
-    assert scene.tile(1).envelope() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
+    assert scene.tile(1).envelope().asZipped() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
 
     assert scene.tile(2).position().asTuple() == (1.0, 0.0)
-    env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(2).envelope() ]
+    env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(2).envelope().asZipped() ]
     assert env == [(0.55, 0.45), (1.45, 0.45), (1.45, -0.45), (0.55, -0.45)]
 
     assert scene.tile(3).position().asTuple() == (2.0, 0.0)
-    env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(3).envelope() ]
+    env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(3).envelope().asZipped() ]
     assert env == [(1.55, 0.45), (2.45, 0.45), (2.45, -0.45), (1.55, -0.45)]
     
 def test_Scene_construction():

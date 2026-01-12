@@ -51,8 +51,8 @@ class Shape(Podable):
             l+= [p.x(), p.y()]
         return l
     
-    def asLists(self):
-        return [p.x() for p in self._points], [p.y() for p in self._points]
+    def asLists(self, dx=0.0, dy=0.0):
+        return [p.x()+dx for p in self._points], [p.y()+dy for p in self._points]
     
     def fromLists(self, listX, listY):
         self._points= [ Float2(x, y) for x, y in zip(listX, listY) ]

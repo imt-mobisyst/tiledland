@@ -16,7 +16,7 @@ def test_Tile_init():
     assert tile.id() == 0
     assert tile.matter() == 0
     assert tile.position().asTuple() == (0.0, 0.0)
-    assert tile.envelope() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5)]
+    assert tile.envelope().asZipped() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5)]
     assert tile.adjacencies() == []
     assert tile.agents() == []
     
@@ -24,7 +24,7 @@ def test_Tile_init():
 
     assert tile.id() == 3
     assert tile.position().asTuple() == (10.3, 9.7)
-    assert tile.envelope() == [(-10.7, 30.7), (31.3, 30.7), (31.3, -11.3), (-10.7, -11.3)]
+    assert tile.envelope().asZipped() == [(-10.7, 30.7), (31.3, 30.7), (31.3, -11.3), (-10.7, -11.3)]
     assert tile.adjacencies() == []
     assert tile.agents() == []
 
@@ -34,7 +34,7 @@ def test_Tile_init():
     assert tile.id() == 1
     assert tile.matter() == 8
     assert tile.position().asTuple() == (1.0, 1.0)
-    assert tile.envelope() == [(0.0, 2.0), (2.0, 2.0), (2.0, 0.0), (0.0, 0.0)]
+    assert tile.envelope().asZipped() == [(0.0, 2.0), (2.0, 2.0), (2.0, 0.0), (0.0, 0.0)]
     assert tile.adjacencies() == []
     assert tile.agents() == []
 
@@ -44,8 +44,8 @@ def test_Tile_regular():
     tile.shape().initializeRegular( 20.0, 6 )
     assert tile.id() == 1
     assert tile.position().asTuple() == (10.0, 10.0)
-    assert len(tile.envelope()) == 6
-    limits= [ ( round(x, 2), round(y, 2) ) for x, y in tile.envelope() ]
+    assert tile.envelope().size() == 6
+    limits= [ ( round(x, 2), round(y, 2) ) for x, y in tile.envelope().asZipped() ]
     assert limits == [
         (1.34, 15.0), (10.0, 20.0),
         (18.66, 15.0), (18.66, 5.0),
@@ -76,7 +76,7 @@ def test_Tile_str():
 
     print(f">>> {tile.envelope()}")
     assert tile.position().asTuple() == (0.0, 0.0)
-    assert tile.envelope() == []
+    assert tile.envelope().asZipped() == []
 
 def test_Tile_absobj():
     tile= Tile(8, Float2(18.5, 4.07))

@@ -2,6 +2,8 @@
 # 
 # 
 #----------------------------------------------------------#
+from .geometry import Shape
+
 import yaml, cairo
 
 class GridMap :
@@ -96,6 +98,24 @@ class GridMap :
         for box in boxes :
             self.setBoxOn(box, state)
         return boxes
+
+    # Shaping
+    def boxToShape(self, box):
+        r= self.resolution()
+        epsilon= r/4.0
+        ox, oy= self.position()
+        bx1, by1, bx2, by2= tuple(box)
+        sx1= ox + bx1*r + epsilon
+        sy1= oy + by1*r + epsilon
+        sx2= ox + bx2*r - epsilon
+        sy2= oy + by2*r - epsilon
+        print( f"vars:{(ox, oy, r)} - {box} - {(sx1, sy1)} {(sx2, sy2)}" )
+        return Shape().fromZipped( [(sx1, sy1), (sx1, sy2), (sx2, sy2), (sx2, sy1)] )
+
+    def makeShapes(self, state=0):
+        boxes= self.makeBoxes(state)
+        shapes= [ self.boxToShape(box) for box in boxes ]
+        return shapes
 
 class GridMapStat(GridMap) :
 

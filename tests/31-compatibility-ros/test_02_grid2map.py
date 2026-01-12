@@ -2,6 +2,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
+import src.tiledland as tll
 from src.tiledland.geometry import Float2, Box
 from src.tiledland import Shape, Agent, Tile, Scene 
 
@@ -185,17 +186,67 @@ def test_gridmap_allbox():
 def test_gridmap_asRectangles():
     gridmap= rosi.GridMap()
     gridmap.setGrid([
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
-    r= gridmap.boxToRectangle( [14, 4, 19, 7] )
-    assert r == []
-    rectancles= gridmap.makeRectangles()
-    assert rectancles == [
-        []
+    boxes= gridmap.makeBoxes()
+
+    print( "Boxes" )
+    for box in boxes :
+        print(box)
+    
+    assert boxes == [
+        [0, 0, 10, 7],
+        [10, 0, 16, 3],
+        [13, 3, 16, 12],
+        [0, 7, 5, 12],
+        [5, 9, 13, 12]
     ]
+
+    shape= gridmap.boxToShape( [5, 9, 13, 12] )
+    
+    print( "Shape: " + str(shape) + " - " + str( shape.asZipped() ) )
+    
+    assert shape.asZipped() == [(2.625, 4.625), (2.625, 5.875), (6.375, 5.875), (6.375, 4.625)]
+    shapes= gridmap.makeShapes()
+    shapesAsZipped= [ s.asZipped() for s in shapes ]
+
+    print( "Shapes" )
+    for s in shapesAsZipped :
+        print(s)
+
+    assert shapesAsZipped == [
+        [(0.125, 0.125), (0.125, 3.375), (4.875, 3.375), (4.875, 0.125)],
+        [(5.125, 0.125), (5.125, 1.375), (7.875, 1.375), (7.875, 0.125)],
+        [(6.625, 1.625), (6.625, 5.875), (7.875, 5.875), (7.875, 1.625)],
+        [(0.125, 3.625), (0.125, 5.875), (2.375, 5.875), (2.375, 3.625)],
+        [(2.625, 4.625), (2.625, 5.875), (6.375, 5.875), (6.375, 4.625)]
+    ]
+
+    shotImg= "shot-test.svg"
+    pablo= tll.Artist().initializeSVG(shotImg)
+    pablo.setCamera( 4.0, 3.0 )
+
+    shotFile= open( shotImg ) 
+    refsFile= open( "tests/refs/11.02-svg-flip-00.svg" ) 
+    for lineShot, lineRef in zip( shotFile, refsFile ):
+        assert( lineShot == lineRef )
+
+    for shape in shapes :
+        pablo.drawShape( shape, 0 )
+    pablo.flip()
+
+    shotFile= open( shotImg ) 
+    refsFile= open( "tests/refs/22.01-toshapes-01.svg" ) 
+    for lineShot, lineRef in zip( shotFile, refsFile ):
+        assert( lineShot == lineRef )

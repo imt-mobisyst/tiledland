@@ -13,7 +13,7 @@ def test_artist_svg_load():
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG( filePath= shotImg )
 
-    shape= [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)]
+    shape= tll.Shape().fromZipped( [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
     pablo.drawShape( shape, 1 )
     pablo.flip()
     
@@ -61,7 +61,7 @@ def test_artist_png_load():
     shotImg= "shot-test.png"
     pablo= tll.Artist().initializePNG( filePath= shotImg )
 
-    shape= [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)]
+    shape= tll.Shape().fromZipped([(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
     pablo.drawShape( shape, 1 )
     pablo.flip()
     

@@ -36,7 +36,7 @@ class Agent(Podable):
     # Shape accessor : 
     def envelope(self):
         cx, cy= self._center.asTuple()
-        return [ (cx+x, cy+y) for x, y in self._shape.asZipped() ]
+        return Shape().fromZipped([ (cx+x, cy+y) for x, y in self._shape.asZipped() ])
     
     def box(self):
         return self.shape().box().move(self.position())

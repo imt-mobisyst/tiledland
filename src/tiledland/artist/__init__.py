@@ -225,22 +225,16 @@ class Artist():
         return self
     
     # Drawing map:
-    def drawShape( self, envelop, brushId=0, px=0, py=0 ):
-        self.drawPolygon(
-            [p[0]+px for p in envelop],
-            [p[1]+py for p in envelop],
-            self._panel[ brushId%len(self._panel) ]
-        )
+    def drawShape( self, shape, brushId=0, px=0, py=0 ):
+        listxs, listys= shape.asLists(px, py)
+        self.drawPolygon( listxs, listys, self._panel[ brushId%len(self._panel) ] )
     
-    def fillShape( self, envelop, brushId=0, px=0, py=0 ):
-        self.fillPolygon(
-            [p[0]+px for p in envelop],
-            [p[1]+py for p in envelop],
-            self._panel[ brushId%len(self._panel) ]
-        )
+    def fillShape( self, shape, brushId=0, px=0, py=0 ):
+        listxs, listys= shape.asLists(px, py)
+        self.fillPolygon( listxs, listys, self._panel[ brushId%len(self._panel) ] )
     
     def drawTile( self, aTile ):
-        env= aTile.envelope()
+        env= aTile.envelope().asZipped()
         self.drawPolygon(
             [p[0] for p in env],
             [p[1] for p in env],
