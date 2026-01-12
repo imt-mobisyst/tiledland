@@ -1,14 +1,14 @@
-from .geometry import Float2, Shape
+from .geometry import Point, Shape
 from .pod import Podable, Pod
 
 class Agent(Podable):
 
     # Initialization Destruction:
-    def __init__( self, identifier= 0, group=0, position= Float2(0.0, 0.0), shape= None):
+    def __init__( self, identifier= 0, group=0, position= Point(0.0, 0.0), shape= None):
         self._id= identifier
         self._group= group
         self._tile= 0
-        self._center= Float2( position.x(), position.y() )
+        self._center= Point( position.x(), position.y() )
         self._shape= shape
         if self._shape is None :
             self._shape= Shape().initializeSquare(0.4)
@@ -43,7 +43,7 @@ class Agent(Podable):
     
     def radius(self):
         r= 0.0
-        zero= Float2()
+        zero= Point()
         for p in self._shape._points :
             d= zero.distance( p )
             r= max( d, r )
@@ -62,8 +62,8 @@ class Agent(Podable):
         self._tile= aInteger
         return self
     
-    def setPosition(self, aFloat2):
-        self._center= aFloat2
+    def setPosition(self, aPoint):
+        self._center= aPoint
         return self
     
     def setMatter(self, aInteger):
@@ -97,7 +97,7 @@ class Agent(Podable):
         self.setGroup( integers[1] )
         self.setMatter( integers[2] )
         self.setTile( integers[3] )
-        self.setPosition( Float2().fromList( aPod.values() ) )
+        self.setPosition( Point().fromList( aPod.values() ) )
         self.setShape( Shape().fromPod( aPod.children()[0] ) )
         return self
     

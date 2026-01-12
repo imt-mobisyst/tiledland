@@ -3,6 +3,7 @@ workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
 import src.tiledland as tll
+from src.tiledland.geometry import Point, Shape
 
 # ------------------------------------------------------------------------ #
 #                 T E S T   I N T E R F A C E    A R T I S T
@@ -13,7 +14,7 @@ def test_artist_svg_load():
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG( filePath= shotImg )
 
-    shape= tll.Shape().fromZipped( [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
+    shape= Shape().fromZipped( [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
     pablo.drawShape( shape, 1 )
     pablo.flip()
     
@@ -61,7 +62,7 @@ def test_artist_png_load():
     shotImg= "shot-test.png"
     pablo= tll.Artist().initializePNG( filePath= shotImg )
 
-    shape= tll.Shape().fromZipped([(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
+    shape= Shape().fromZipped([(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
     pablo.drawShape( shape, 1 )
     pablo.flip()
     

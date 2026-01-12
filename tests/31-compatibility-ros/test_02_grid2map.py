@@ -3,16 +3,16 @@ import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tll
-from src.tiledland.geometry import Float2, Box
-from src.tiledland import Shape, Agent, Tile, Scene 
+from src.tiledland.geometry import Point, Box, Shape
+from src.tiledland import Agent, Tile, Scene 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - G R I D   T O   M A P
 # ------------------------------------------------------------------------ #
-from src.tiledland import rosi
+from src.tiledland.interface import ros
 
 def test_gridmap_cells():
-    gridmap= rosi.GridMapStat()
+    gridmap= ros.GridMapStat()
     
     gridmap.setGrid([
         [1.0, 0.5, 0.0, 0.0],
@@ -46,7 +46,7 @@ def test_gridmap_cells():
     ])
 
 def test_gridmap_boxing():
-    gridmap= rosi.GridMap()
+    gridmap= ros.GridMap()
     
     gridmap.setGrid([
         [0, 0, 0, 0],
@@ -92,7 +92,7 @@ def test_gridmap_boxing():
     assert gridmap.box(0, 0) == [0, 0, 2, 3]
 
 def test_gridmap_search():
-    gridmap= rosi.GridMap()
+    gridmap= ros.GridMap()
     gridmap.setGrid([
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -101,7 +101,7 @@ def test_gridmap_search():
     assert gridmap.search() == (0, 0)
     assert gridmap.search(1) == False
 
-    gridmap= rosi.GridMap()
+    gridmap= ros.GridMap()
     gridmap.setGrid([
         [0, 0, 0, 0],
         [0, 0, 1, 0],
@@ -111,7 +111,7 @@ def test_gridmap_search():
     assert gridmap.search(1) == (2, 1)
 
 def test_gridmap_allbox():
-    gridmap= rosi.GridMap()
+    gridmap= ros.GridMap()
     gridmap.setGrid([
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -184,7 +184,7 @@ def test_gridmap_allbox():
     ]
 
 def test_gridmap_asRectangles():
-    gridmap= rosi.GridMap()
+    gridmap= ros.GridMap()
     gridmap.setGrid([
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

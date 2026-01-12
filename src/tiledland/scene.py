@@ -1,5 +1,5 @@
 from .pod import Podable, Pod
-from .geometry import Float2, Box, Shape
+from .geometry import Point, Box, Shape
 from .tile import Tile
 from .agent import Agent
 
@@ -114,7 +114,7 @@ class Scene(Podable):
         if shape is None :
             shape= Shape().initializeSquare(0.9)
         self._tiles= [
-            Tile( i+1, Float2(distance*i, 0.0), shape.copy() )
+            Tile( i+1, Point(distance*i, 0.0), shape.copy() )
             for i in range(size)
         ]
         self._size= size
@@ -132,7 +132,7 @@ class Scene(Podable):
                     iTile+= 1
                     tile= Tile(
                         iTile,
-                        Float2( dist*j, dist*(maxLine-i) ),
+                        Point( dist*j, dist*(maxLine-i) ),
                         Shape().initializeSquare(tileSize),
                         matrix[i][j]
                     )
@@ -161,7 +161,7 @@ class Scene(Podable):
                     delta= (iLine%2) * hdelta
                     tile= Tile(
                         iTile,
-                        Float2( delta+dist*j, vdist*iLine ),
+                        Point( delta+dist*j, vdist*iLine ),
                         Shape().initializeRegular(tileSize, 6),
                         matrix[i][j]
                     )

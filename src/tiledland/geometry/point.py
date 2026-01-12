@@ -1,6 +1,6 @@
 import math
 
-class Float2():
+class Point():
     # Initialization Destruction:
     def __init__( self, x= 0.0, y=0.0 ):
         self._x= x
@@ -54,10 +54,10 @@ class Float2():
     
     # Operator: 
     def __add__(self, another):
-        return Float2( self._x+another._x,  self._y+another._y )
+        return Point( self._x+another._x,  self._y+another._y )
 
     def __sub__(self, another):
-        return Float2( self._x-another._x,  self._y-another._y )
+        return Point( self._x-another._x,  self._y-another._y )
 
     #Comparison:
     def __eq__(self, another):

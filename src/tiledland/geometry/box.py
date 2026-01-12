@@ -1,16 +1,16 @@
 import math
-from .float2 import Float2
+from .point import Point
 
 class Box():
 
     # Initialization Destruction:
-    def __init__( self, listOfPoint=[Float2()] ):
+    def __init__( self, listOfPoint=[Point()] ):
         self.fromList( listOfPoint )
 
     # initialization:
-    def fromList( self, listOfPoint= [Float2()] ):
-        self._min= Float2( listOfPoint[0].x(), listOfPoint[0].y() )
-        self._max= Float2( listOfPoint[0].x(), listOfPoint[0].y() )
+    def fromList( self, listOfPoint= [Point()] ):
+        self._min= Point( listOfPoint[0].x(), listOfPoint[0].y() )
+        self._max= Point( listOfPoint[0].x(), listOfPoint[0].y() )
         for p in listOfPoint :
             if p.x() < self._min.x() :
                 self._min.setx( p.x() )
@@ -35,9 +35,9 @@ class Box():
         self._max.round(precition)
         return self
     
-    def move(self, aFloat2):
-        self._min+= aFloat2
-        self._max+= aFloat2
+    def move(self, aPoint):
+        self._min+= aPoint
+        self._max+= aPoint
         return self
     
     def merge( self, another ):

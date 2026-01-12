@@ -17,7 +17,7 @@ def test_Shape_pod():
     assert str(podBis) == "Shape: [8] [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]"
 
 def test_Tile_pod():
-    tile= Tile( 3, 0, Float2(1.0, 2.0), 2.0 )
+    tile= Tile( 3, 0, Point(1.0, 2.0), 2.0 )
     tile._adjacencies= [1, 2, 4]
     print( tile.envelope() )
     assert tile.envelope() == [(0.0, 3.0), (2.0, 3.0), (2.0, 1.0), (0.0, 1.0)]    
@@ -35,7 +35,7 @@ def test_Tile_pod():
     assert tileBis.asPod() == tile.asPod()
 
 def test_Tile_load():
-    tile= Tile( 3, 9, Float2(1.4, 2.0), 1.0 )
+    tile= Tile( 3, 9, Point(1.4, 2.0), 1.0 )
     assert tile.matter() == 9
     tile.connectAll( [1, 2, 4] )
     tileBis= Tile().load( tile.dump() )

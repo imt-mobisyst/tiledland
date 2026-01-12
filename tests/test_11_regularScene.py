@@ -2,8 +2,8 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland.geometry import Float2, Box
-from src.tiledland import Shape, Agent, Tile, Scene 
+from src.tiledland.geometry import Point, Box, Shape
+from src.tiledland import Agent, Tile, Scene 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
@@ -94,7 +94,7 @@ Scene:
 
 def test_Scene_box():
     scene= Scene()
-    assert scene.box() == Box( [Float2(0.0, 0.0)] )
+    assert scene.box() == Box( [Point(0.0, 0.0)] )
 
     scene= Scene().initializeLine(4)
     print( scene.box() )

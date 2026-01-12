@@ -1,10 +1,10 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland.geometry import Float2, Box
-from src.tiledland import Shape, Agent, Tile, Scene 
-
 from src import tiledland as tll
+from src.tiledland.geometry import Point, Shape, Box
+from src.tiledland import Agent, Tile, Scene 
+
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
@@ -51,19 +51,19 @@ def test_scene_clockNeighboring():
 
     assert scene.neighbours(1) == []
 
-    index= scene.append( Tile( shape= tileShape, position=Float2(1.5, 2), matter= 2 ) )
+    index= scene.append( Tile( shape= tileShape, position=Point(1.5, 2), matter= 2 ) )
     scene.connect( 1, index )    
     assert scene.neighbours(1) == [(2, 1)]
     draw(scene)
 
-    index= scene.append( Tile( shape= tileShape, position=Float2(-1.5, 2), matter= 2 ) )
+    index= scene.append( Tile( shape= tileShape, position=Point(-1.5, 2), matter= 2 ) )
     scene.connect( 1, index )    
     draw(scene)
     assert scene.neighbours(1) == [(2, 1), (3, 11)]
 
-    index= scene.append( Tile( shape= tileShape, position=Float2(1.5, -2), matter= 2 ) )
+    index= scene.append( Tile( shape= tileShape, position=Point(1.5, -2), matter= 2 ) )
     scene.connect( 1, index )    
-    index= scene.append( Tile( shape= tileShape, position=Float2(-1.5, -2), matter= 2 ) )
+    index= scene.append( Tile( shape= tileShape, position=Point(-1.5, -2), matter= 2 ) )
     scene.connect( 1, index )    
     draw(scene)
     assert scene.neighbours(1) == [(2, 1), (3, 11), (4, 5), (5, 7)]
@@ -150,7 +150,7 @@ Scene:
 
 def test_Scene_box():
     scene= Scene()
-    assert scene.box() == Box( [Float2(0.0, 0.0)] )
+    assert scene.box() == Box( [Point(0.0, 0.0)] )
 
     scene= Scene().initializeLine(4)
     print( scene.box() )

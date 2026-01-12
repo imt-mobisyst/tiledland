@@ -1,6 +1,6 @@
 import math
 from ..pod import Podable, Pod
-from .float2 import Float2
+from .point import Point
 from .box import Box
 
 class Shape(Podable):
@@ -13,10 +13,10 @@ class Shape(Podable):
     def initializeSquare(self, size):
         demi= size*0.5
         self._points= [
-            Float2( -demi, +demi ),
-            Float2( +demi, +demi ),
-            Float2( +demi, -demi ),
-            Float2( -demi, -demi )
+            Point( -demi, +demi ),
+            Point( +demi, +demi ),
+            Point( +demi, -demi ),
+            Point( -demi, -demi )
         ]
         return self
 
@@ -27,7 +27,7 @@ class Shape(Podable):
         angle= math.pi  - delta/2
         delta= math.pi/(numberOfVertex/2)
         for i in range(numberOfVertex) :
-            p= Float2( math.cos(angle)*radius, math.sin(angle)*radius)
+            p= Point( math.cos(angle)*radius, math.sin(angle)*radius)
             self._points.append(p)
             angle+= -delta
         return self
@@ -55,14 +55,14 @@ class Shape(Podable):
         return [p.x()+dx for p in self._points], [p.y()+dy for p in self._points]
     
     def fromLists(self, listX, listY):
-        self._points= [ Float2(x, y) for x, y in zip(listX, listY) ]
+        self._points= [ Point(x, y) for x, y in zip(listX, listY) ]
         return self
 
     def asZipped(self):
         return [ (p.x(), p.y()) for p in self._points ]
 
     def fromZipped( self, zipedList ):
-        self._points= [ Float2(x, y) for x, y in zipedList ]
+        self._points= [ Point(x, y) for x, y in zipedList ]
         return self
     
     # Construction:
@@ -93,7 +93,7 @@ class Shape(Podable):
     def fromPod( self, aPod ):
         values= aPod.values()
         self._points= [
-            Float2(x, y)
+            Point(x, y)
             for x, y in zip( values[::2], values[1::2] )
         ]
         return self

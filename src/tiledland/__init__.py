@@ -1,12 +1,13 @@
-from .geometry import float2, shape, box
+# Basement: 
+from .geometry import Point, Box, Shape
+
+# core coponents: 
 from .agent import Agent
 from .tile import Tile
 from .scene import Scene
+
+# rendering:
 from .artist import Support, SupportSVG, SupportPNG, Artist
-from . import rosi
 
-# Geometry:
-Float2= float2.Float2
-Shape= shape.Shape
-Box= box.Box
-
+# interoperability:
+from .interface import ros

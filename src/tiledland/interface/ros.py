@@ -2,7 +2,7 @@
 # 
 # 
 #----------------------------------------------------------#
-from .geometry import Shape
+from ..geometry import Shape
 
 import yaml, cairo
 

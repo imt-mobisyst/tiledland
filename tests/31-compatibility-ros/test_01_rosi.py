@@ -2,7 +2,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland import rosi
+from src.tiledland.interface import ros
 import yaml, os.path, cairo
 
 # ------------------------------------------------------------------------ #
@@ -122,7 +122,7 @@ def test_load_map_yml():
     } # if negate is false, p = (255 - x) / 255.0
     
 def test_load_map_with_rosi():
-    gridmap= rosi.GridMapStat()
+    gridmap= ros.GridMapStat()
 
     assert gridmap.dimention() == (1, 1)
     assert gridmap.grid() == [[0.0]]
@@ -168,7 +168,7 @@ def test_load_map_with_rosi():
     ]
 
 def test_load_partialmap():
-    gridmap= rosi.GridMapStat()
+    gridmap= ros.GridMapStat()
     gridmap.load( "tests/rsc", "testslammap.yaml" )
     
     assert gridmap.position() == (0.0, 0.0)

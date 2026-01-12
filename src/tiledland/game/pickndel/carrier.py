@@ -1,13 +1,13 @@
 """
 Test - MoveIt Robot Class
 """
-
-from ... import Float2, Shape, agent
+from ...geometry import Point, Shape
+from ...agent import Agent
 
 mobileShape= Shape().initializeRegular(0.4, 8)
 
-class Carrier(agent.Agent):
-    def __init__( self, identifier=0, owner=1, position= Float2(0.0, 0.0), mission= 0):
+class Carrier(Agent):
+    def __init__( self, identifier=0, owner=1, position= Point(0.0, 0.0), mission= 0):
         super().__init__(identifier, owner, position, mobileShape)
         self._mission= mission
         self._clockMove= 0

@@ -2,9 +2,9 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src import tiledland as tll
-from src.tiledland import Float2, Shape, Agent, Tile
+from src.tiledland import Agent, Tile
 from src.tiledland.pod import Pod
+from src.tiledland.geometry import Point, Shape
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
@@ -20,7 +20,7 @@ def test_Tile_init():
     assert tile.adjacencies() == []
     assert tile.agents() == []
     
-    tile= Tile( 3, Float2(10.3, 9.7), Shape().initializeSquare(42.0), 0 )
+    tile= Tile( 3, Point(10.3, 9.7), Shape().initializeSquare(42.0), 0 )
 
     assert tile.id() == 3
     assert tile.position().asTuple() == (10.3, 9.7)
@@ -28,7 +28,7 @@ def test_Tile_init():
     assert tile.adjacencies() == []
     assert tile.agents() == []
 
-    tile.setId(1).setMatter(8).setPosition( Float2(1.0, 1.0) )
+    tile.setId(1).setMatter(8).setPosition( Point(1.0, 1.0) )
     tile.shape().initializeSquare( 2.0 )
 
     assert tile.id() == 1
@@ -63,7 +63,7 @@ def test_Tile_adjencies():
     assert tile.adjacencies() == [2, 3, 4]
 
 def test_Tile_str():
-    tile= Tile(8, Float2(18.5, 4.07) )
+    tile= Tile(8, Point(18.5, 4.07) )
     print(f">>> {tile}")
     assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] agents(0)"
     tile.setMatter(2).connectAll( [1, 2, 3] )
@@ -79,7 +79,7 @@ def test_Tile_str():
     assert tile.envelope().asZipped() == []
 
 def test_Tile_absobj():
-    tile= Tile(8, Float2(18.5, 4.07))
+    tile= Tile(8, Point(18.5, 4.07))
     tile.connectAll( [ 1, 3, 7, 19 ] )
     pod= tile.asPod()
 
@@ -128,7 +128,7 @@ def test_Tile_absobj():
 
 
 def test_Tile_podCopy():
-    tile= Tile(8, Float2(18.5, 4.07))
+    tile= Tile(8, Point(18.5, 4.07))
     tile.connectAll( [ 1, 3, 7, 19 ] )
     tile.append( Agent(1) )
 
@@ -147,23 +147,23 @@ def test_Tile_podCopy():
 def test_Tile_clockDirection():
     tile= Tile( shape=Shape().initializeRegular( 0.2, 12 ) )
 
-    assert tile.clockDirection( Float2(  0.0,  0.0 ) ) == 0
-    assert tile.clockDirection( Float2(  0.0,  1.0 ) ) == 12
-    assert tile.clockDirection( Float2(  1.0,  0.0 ) ) == 3
-    assert tile.clockDirection( Float2(  0.0, -1.0 ) ) == 6
-    assert tile.clockDirection( Float2( -1.0,  0.0 ) ) == 9
+    assert tile.clockDirection( Point(  0.0,  0.0 ) ) == 0
+    assert tile.clockDirection( Point(  0.0,  1.0 ) ) == 12
+    assert tile.clockDirection( Point(  1.0,  0.0 ) ) == 3
+    assert tile.clockDirection( Point(  0.0, -1.0 ) ) == 6
+    assert tile.clockDirection( Point( -1.0,  0.0 ) ) == 9
     
-    assert tile.clockDirection( Float2(  0.0,  0.0 ) ) == 0
-    assert tile.clockDirection( Float2(  0.0,  2.0 ) ) == 12
-    assert tile.clockDirection( Float2(  2.0,  0.0 ) ) == 3
-    assert tile.clockDirection( Float2(  0.0, -2.0 ) ) == 6
-    assert tile.clockDirection( Float2( -2.0,  0.0 ) ) == 9
+    assert tile.clockDirection( Point(  0.0,  0.0 ) ) == 0
+    assert tile.clockDirection( Point(  0.0,  2.0 ) ) == 12
+    assert tile.clockDirection( Point(  2.0,  0.0 ) ) == 3
+    assert tile.clockDirection( Point(  0.0, -2.0 ) ) == 6
+    assert tile.clockDirection( Point( -2.0,  0.0 ) ) == 9
     
-    p= Float2( 1.2, -0.5 )
+    p= Point( 1.2, -0.5 )
     tile= Tile( position=p, shape=Shape().initializeRegular( 0.2, 12 ) )
 
     assert tile.clockDirection( p ) == 0
-    assert tile.clockDirection( p + Float2(  0.0,  2.0 ) ) == 12
-    assert tile.clockDirection( p + Float2(  2.0,  0.0 ) ) == 3
-    assert tile.clockDirection( p + Float2(  0.0, -2.0 ) ) == 6
-    assert tile.clockDirection( p + Float2( -2.0,  0.0 ) ) == 9
+    assert tile.clockDirection( p + Point(  0.0,  2.0 ) ) == 12
+    assert tile.clockDirection( p + Point(  2.0,  0.0 ) ) == 3
+    assert tile.clockDirection( p + Point(  0.0, -2.0 ) ) == 6
+    assert tile.clockDirection( p + Point( -2.0,  0.0 ) ) == 9

@@ -1,6 +1,7 @@
 
 from .carrier import Carrier
-from ... import Float2, Shape, Box, scene, Tile, artist
+from ... import scene, Tile, artist
+from ...geometry import Point, Shape, Box
 import hacka as hk
 import random
 
@@ -34,7 +35,7 @@ class World( scene.Scene ):
         # Initialize Artist :
         self._artist= artist.Artist().initializePNG( "shot-pickndel.png" )
         self._artist.flip()
-        self._artist.fitBox( Box([Float2(-0.5, -0.5), Float2(9.5, 6.5)] ), 10 )
+        self._artist.fitBox( Box([Point(-0.5, -0.5), Point(9.5, 6.5)] ), 10 )
         #self._artist.fitBox( self.box(), 10 )
         self.marketBrush= self._artist._panel[6]
         self.marketBrush.width= 8
