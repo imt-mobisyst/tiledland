@@ -121,10 +121,36 @@ class Line :
     def vector(self):
         return self._p2 - self._p1
     
+    def lenght(self):
+        return self.vector().length()
+    
     # Trigo
     def determinant(self):
         return (self.point1()._x * self.point2()._y
                 - self.point1()._y * self.point2()._x)
+    
+    def denominator(self):
+        dx = self._p2._x - self._p1._x
+        dy = self._p2._y - self._p1._y
+        return dx*dx + dy*dy
+
+    def projectionPoint(self, point):
+        dx = self._p2._x - self._p1._x
+        dy = self._p2._y - self._p1._y
+        denom= dx*dx + dy*dy
+
+        if denom == 0:
+            return self._p1.copy()
+
+        t = ((point._x - self._p1._x) * dx + (point._y - self._p1._y) * dy)
+        t/= denom
+        t = max(0.0, min(1.0, t))
+
+        return Point(self._p1._x + t*dx, self._p1._y + t*dy)
+    
+    def distancePoint(self, p):
+        line= Line( p, self.projectionPoint(p) )
+        return line.lenght()
 
     # Collision
     def isCollideLine( self, another, collide= Point(), distance=0.001 ):

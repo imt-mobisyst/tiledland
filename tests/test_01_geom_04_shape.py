@@ -114,3 +114,22 @@ def test_Shape_convex():
     print( f"Convex : {convex.asZipped()}" )
     assert convex.asZipped() == [(1.0, 1.0), (1.5, 4.0), (4.5, 4.5), (6.0, 0.5)]
     
+def test_shape_distance():
+    shape= Shape([
+        Point(1.0, 1.0),
+        Point(1.5, 4.0),
+        Point(4.5, 4.5),
+        Point(6.0, 0.5)
+    ])
+
+    p= Point(0.0, 0.0)
+    distance= round( shape.distancePoint(p), 3 )
+    print( f"distance= {distance}" )
+    assert distance == 0.0
+    assert not shape.isConvexInside(p)
+
+    p= Point(4.5, 3.0)
+    distance= round( shape.distancePoint(p), 3 )
+    print( f"distance= {distance}" )
+    assert distance == 0.0
+    assert shape.isConvexInside(p)

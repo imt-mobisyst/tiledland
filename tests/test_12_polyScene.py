@@ -28,7 +28,7 @@ def test_scene_incremental():
     assert scene.size() == 0
     assert scene.box() == Box()
 
-    index= scene.append( Tile( shape= Shape() ) )
+    index= scene.addTile( Tile( shape= Shape() ) )
     assert index == 1
     assert scene.size() == 1
 
@@ -36,7 +36,7 @@ def test_scene_incremental():
     assert scene.tile(1).position().asTuple() == (0.0, 0.0)
     assert scene.tile(1).envelope().asZipped() == []
 
-    index= scene.append( Tile( shape= Shape() ) )
+    index= scene.addTile( Tile( shape= Shape() ) )
     assert index == 2
     assert scene.size() == 2
 
@@ -45,25 +45,25 @@ def test_scene_clockNeighboring():
     tileShape= Shape().fromZipped(
         [(-1.0, 0.0), (0.0, 1.5), (1.0, 0.0), (0.0, -1.5) ]
     )
-    scene.append( Tile( shape=tileShape, matter= 1 ) )
+    scene.addTile( Tile( shape=tileShape, matter= 1 ) )
 
     draw(scene)
 
     assert scene.neighbours(1) == []
 
-    index= scene.append( Tile( shape= tileShape, position=Point(1.5, 2), matter= 2 ) )
+    index= scene.addTile( Tile( shape= tileShape, position=Point(1.5, 2), matter= 2 ) )
     scene.connect( 1, index )    
     assert scene.neighbours(1) == [(2, 1)]
     draw(scene)
 
-    index= scene.append( Tile( shape= tileShape, position=Point(-1.5, 2), matter= 2 ) )
+    index= scene.addTile( Tile( shape= tileShape, position=Point(-1.5, 2), matter= 2 ) )
     scene.connect( 1, index )    
     draw(scene)
     assert scene.neighbours(1) == [(2, 1), (3, 11)]
 
-    index= scene.append( Tile( shape= tileShape, position=Point(1.5, -2), matter= 2 ) )
+    index= scene.addTile( Tile( shape= tileShape, position=Point(1.5, -2), matter= 2 ) )
     scene.connect( 1, index )    
-    index= scene.append( Tile( shape= tileShape, position=Point(-1.5, -2), matter= 2 ) )
+    index= scene.addTile( Tile( shape= tileShape, position=Point(-1.5, -2), matter= 2 ) )
     scene.connect( 1, index )    
     draw(scene)
     assert scene.neighbours(1) == [(2, 1), (3, 11), (4, 5), (5, 7)]
@@ -72,7 +72,7 @@ def test_scene_clockNeighboring():
     assert scene.edges() == [(1, 2), (1, 3), (1, 4), (1, 5)]
 
 def test_Scene_initLine():
-    scene= Scene().initializeLine(3)
+    scene= Scene().initializeLine(3, connect=False)
     assert scene.tile(1).id() == 1
     assert scene.tile(2).id() == 2
     assert scene.tile(3).id() == 3
@@ -80,18 +80,13 @@ def test_Scene_initLine():
     assert scene.edges() == []
 
     assert scene.tile(1).position().asTuple() == (0.0, 0.0)
-    assert scene.tile(1).envelope().asZipped() == [(-0.45, 0.45), (0.45, 0.45), (0.45, -0.45), (-0.45, -0.45) ]
+    assert scene.tile(1).envelope().asZipped() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5) ]
 
-    assert scene.tile(2).position().asTuple() == (1.0, 0.0)
-    env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(2).envelope().asZipped() ]
-    assert env == [(0.55, 0.45), (1.45, 0.45), (1.45, -0.45), (0.55, -0.45)]
-
-    assert scene.tile(3).position().asTuple() == (2.0, 0.0)
-    env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(3).envelope().asZipped() ]
-    assert env == [(1.55, 0.45), (2.45, 0.45), (2.45, -0.45), (1.55, -0.45)]
+    assert scene.tile(2).position().asTuple() == (1.1, 0.0)
+    assert scene.tile(3).position().asTuple() == (2.2, 0.0)
     
 def test_Scene_construction():
-    scene= Scene().initializeLine(3)
+    scene= Scene().initializeLine(3, connect=False)
     assert scene.tile(1).adjacencies() == []
     assert scene.tile(2).adjacencies() == []
     assert scene.tile(3).adjacencies() == []
@@ -107,29 +102,29 @@ def test_Scene_construction():
     assert scene.tile(3).adjacencies() == [1, 2, 3]
     assert scene.edges() == [ (1, 2), (1, 3), (2, 1), (2, 2), (3, 1), (3, 2), (3, 3) ]
     idScene= id(scene)
-    scene.initializeLine(3)
+    scene.initializeLine(3, connect=False)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
     print(f">>> {scene.edges()}")
     assert( idScene == id(scene) )
     assert scene.edges() == [ (1, 1), (1, 3), (2, 1), (2, 2), (3, 2) ]
 
 def test_Scene_str():
-    scene= Scene().initializeLine(3)
+    scene= Scene().initializeLine(3, connect=False)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
     scene.tile(2).append( Agent(1) )
 
-    print( f">>> {scene}." )
+    print( f">>>\n{scene}." )
 
     assert "\n"+str(scene)+"\n" == """
 Scene:
-- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] agents(1)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(1)
   - Agent-1 ⌊(-0.2, -0.2), (0.2, 0.2)⌉
-- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
 """
 
 def test_Scene_pod():
-    scene= Scene().initializeLine(4)
+    scene= Scene().initializeLine(4, connect=False)
     scene.connectAll( [ [1, 2], [1, 3], [1, 4], [2, 1], [2, 3], [2, 4],
                        [3, 1], [3, 2], [4, 1], [4, 2]
                         ] )
@@ -139,29 +134,31 @@ def test_Scene_pod():
     scene.tile(3).position().set( 1.0, 9.0 )
     scene.tile(4).position().set( 9.0, 9.0 )
 
-    print(f">>>\n{scene}")
+    print(f">>>\n{scene}.")
     assert '\n'+ str(scene) +'\n' == """
 Scene:
-- Tile-1 ⌊(4.55, 2.55), (5.45, 3.45)⌉ adjs[2, 3, 4] agents(0)
-- Tile-2 ⌊(4.55, 14.55), (5.45, 15.45)⌉ adjs[1, 3, 4] agents(0)
-- Tile-3 ⌊(0.55, 8.55), (1.45, 9.45)⌉ adjs[1, 2] agents(0)
-- Tile-4 ⌊(8.55, 8.55), (9.45, 9.45)⌉ adjs[1, 2] agents(0)
+- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] agents(0)
+- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] agents(0)
+- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] agents(0)
+- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] agents(0)
 """
 
 def test_Scene_box():
     scene= Scene()
     assert scene.box() == Box( [Point(0.0, 0.0)] )
 
-    scene= Scene().initializeLine(4)
-    print( scene.box() )
-    assert scene.box().asZip() == [(-0.45, -0.45), (3.45, 0.45)]
+    scene= Scene().initializeLine(4, connect=False)
+    box= scene.box()
+    print(box)
+    box.round(3)
+    assert box.asZip() == [(-0.5, -0.5), (3.8, 0.5)]
     
     scene.initializeGrid( [[0, 1], [0, -1]] )
     print( scene.box() )
     assert scene.box().asZip() == [(-0.5, -0.5), (1.6, 1.6)]
 
 def test_Scene_podable():
-    scene= Scene().initializeLine(3)
+    scene= Scene().initializeLine(3, connect=False)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
 
     pod= scene.asPod()
@@ -180,16 +177,16 @@ def test_Scene_podable():
     assert pod.children() == [ t.asPod() for t in scene.tiles() ]
 
 def test_Scene_podcopy():
-    scene= Scene().initializeLine(3)
+    scene= Scene().initializeLine(3, connect=False)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
 
     assert scene.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
-
+    print( f">>>\n{scene}." )
     assert '\n'+ str(scene) +'\n' == """
 Scene:
-- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] agents(0)
-- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
 """
 
     print("Go for the copying...")
@@ -199,27 +196,29 @@ Scene:
     assert type(scene) == type(sceneBis)
     assert sceneBis.size() == 3
 
-    print(f">>>\n{sceneBis}")
+    print(f">>>\n{sceneBis}.")
     assert '\n'+ str(sceneBis) +'\n' == """
 Scene:
-- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[1, 2] agents(0)
-- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
 """
 
     assert sceneBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
 
 def test_Scene_connection():
-    scene= Scene().initializeLine(3)
+    scene= Scene().initializeLine(3, connect=False)
     scene.connect(1, 2)
     scene.connect(2, 2)
     scene.connect(2, 3)
     scene.connect(3, 2)
-    print( f"---\n{scene}.")
-    assert str(scene) == """Scene:
-- Tile-1 ⌊(-0.45, -0.45), (0.45, 0.45)⌉ adjs[2] agents(0)
-- Tile-2 ⌊(0.55, -0.45), (1.45, 0.45)⌉ adjs[2, 3] agents(0)
-- Tile-3 ⌊(1.55, -0.45), (2.45, 0.45)⌉ adjs[2] agents(0)"""
+    print( f">>>\n{scene}.")
+    assert "\n"+ str(scene) +"\n" == """
+Scene:
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+"""
 
     assert scene.tile(1).adjacencies() == [2]
     assert scene.tile(2).adjacencies() == [2, 3]

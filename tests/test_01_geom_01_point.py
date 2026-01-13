@@ -75,4 +75,21 @@ def test_line_line():
     print( f"Boom: {boom}" )
     
     assert not l1.isCollideLine(l2, boom)
-    
+
+def test_point_projection():
+    p= Point(1.0, 8.0)
+    l= Line( Point(0, 0), Point(12, 8) )
+
+    proj= l.projectionPoint(p)
+    proj.round(3)
+    print(proj)
+
+    assert proj.asTuple() == (4.385, 2.923)
+
+def test_linePoint_distance():
+    p= Point(1.0, 8.0)
+    l= Line( Point(0, 0), Point(12, 8) )
+
+    dist= l.distancePoint(p)
+
+    assert round(dist, 3) == 6.102

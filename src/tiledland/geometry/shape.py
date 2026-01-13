@@ -48,6 +48,11 @@ class Shape(Podable):
             return Box()
         return Box(self.points())
     
+    # Derivated Attributs:
+    def center(self):
+        box= self.box()
+        return box.center()
+
     # Morphing:
     def asList(self):
         l= []
@@ -113,6 +118,12 @@ class Shape(Podable):
     def round(self, precision):
         for p in self._points :
             p.round(precision)
+    
+    def setOnCenter(self):
+        position= self.center()
+        for p in self._points :
+            p.set( p._x-position._x, p._y-position._y,  )
+        return position
     
     # Object operator:
     def copy(self):

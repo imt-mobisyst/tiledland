@@ -102,8 +102,8 @@ class World( scene.Scene ):
         self._encumbers= [ defaultValue for i in range(self.size()) ]
         return self
     
-    def initializeLine( self, size, shape= None, distance=1.0, connect=True ):
-        super(World, self).initializeLine(size, shape, distance, connect)
+    def initializeLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
+        super(World, self).initializeLine(size, tileSize, separation, connect)
         self.resetEncumbers()
         return self
     

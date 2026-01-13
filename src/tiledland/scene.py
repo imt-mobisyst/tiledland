@@ -8,12 +8,16 @@ import math
 class Scene(Podable):
 
     # Constructor:
-    def __init__(self):#, agentFactory= Agent):
+    def __init__(self, resolution= 0.01):#, agentFactory= Agent):
+        self._resolution= resolution
         self._tiles= []
         self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Shape().initializeRegular(0.8, 5) ).setMatter(1)
         self.clear()
 
     # Accessor:
+    def resolution(self):
+        return self._resolution
+    
     def size(self):
         return self._size
     
@@ -104,20 +108,17 @@ class Scene(Podable):
         return nb1
     
     # Construction:
-    def append( self, tile ):
-        self._tiles.append( tile )
-        self._size+= 1
-        self.tile( self._size ).setId( self._size )
-        return self._size
-
-    def initializeLine( self, size, shape= None, distance=1.0, connect=True ):
-        if shape is None :
-            shape= Shape().initializeSquare(0.9)
+    def initializeLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
+        dist= tileSize+separation
+        shape= Shape().initializeSquare(tileSize)
         self._tiles= [
-            Tile( i+1, Point(distance*i, 0.0), shape.copy() )
+            Tile( i+1, Point(dist*i, 0.0), shape.copy() )
             for i in range(size)
         ]
         self._size= size
+        self.setResolution(separation*2)
+        if connect :
+            self.connectAllDistance( dist*1.01 )
         return self
     
     def initializeGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
@@ -138,8 +139,9 @@ class Scene(Podable):
                     )
                     self._tiles.append( tile )
                     #matrix[i][j]= iTile
+        
         self._size= iTile
-
+        self.setResolution(separation*2)
         if connect :
             self.connectAllDistance( dist*1.01 )
         return self
@@ -168,11 +170,27 @@ class Scene(Podable):
                     self._tiles.append( tile )
                     #matrix[i][j]= iTile
         self._size= iTile
-
+        self.setResolution( separation*2 )
         if connect :
             self.connectAllDistance( dist*1.01 )
         return self
     
+    def addTile( self, aTile ):
+        self._size+= 1
+        aTile.setId( self._size )
+        self._tiles.append( aTile )
+        return self._size
+    
+    def createTile( self, aShape ):
+        self._size+= 1
+        position= aShape.setOnCenter()
+        self._tiles.append( Tile( self._size, position, aShape ) )
+        return self._size
+    
+    def setResolution(self, resolution):
+        self._resolution= resolution
+        return self
+
     def setAgentFactory(self, agentFactory ):
         self._factory= agentFactory
         return self
@@ -182,12 +200,6 @@ class Scene(Podable):
         self._agents= [[]]
         self._size= 0
         return self
-
-    def addTile( self, aTile ):
-        self._size+= 1
-        aTile.setId( self._size )
-        self._tiles.append( aTile )
-        return self._size
 
     def clearAgents(self):
         for t in self.tiles() :

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600">
+<polygon points="0,0 0,600 800,600 800,0" fill="#b86e00" />
+<circle r="4" cx="250.0" cy="425.0" fill="#603800" />
+<circle r="4" cx="650.0" cy="525.0" fill="#603800" />
+<circle r="4" cx="725.0" cy="225.0" fill="#603800" />
+<circle r="4" cx="125.0" cy="125.0" fill="#603800" />
+<circle r="4" cx="450.0" cy="75.0" fill="#603800" />
+<polygon points="12.5,587.5 12.5,262.5 487.5,262.5 487.5,587.5" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<polygon points="512.5,587.5 512.5,462.5 787.5,462.5 787.5,587.5" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<polygon points="662.5,437.5 662.5,12.5 787.5,12.5 787.5,437.5" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<polygon points="12.5,237.5 12.5,12.5 237.5,12.5 237.5,237.5" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<polygon points="262.5,137.5 262.5,12.5 637.5,12.5 637.5,137.5" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<text x="91.66666666666669" y="533.3333333333333" fill="#603800" font-family="Verdana" font-size="16">1</text>" />
+<text x="558.3333333333333" y="566.6666666666666" fill="#603800" font-family="Verdana" font-size="16">2</text>" />
+<text x="683.3333333333333" y="366.6666666666667" fill="#603800" font-family="Verdana" font-size="16">3</text>" />
+<text x="50.0" y="200.0" fill="#603800" font-family="Verdana" font-size="16">4</text>" />
+<text x="325.0" y="116.66666666666669" fill="#603800" font-family="Verdana" font-size="16">5</text>" />
+</svg>

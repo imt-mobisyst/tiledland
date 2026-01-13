@@ -29,6 +29,10 @@ class Box():
     def rightCeiling(self):
         return self._max
 
+    def center(self):
+        v= self._max - self._min
+        return self._min + Point( v.x()*0.5, v.y()*0.5 )
+    
     # Construction:
     def round(self, precition=0):
         self._min.round(precition)
