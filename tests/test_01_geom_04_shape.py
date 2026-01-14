@@ -116,20 +116,46 @@ def test_Shape_convex():
     
 def test_shape_distance():
     shape= Shape([
+        Point(5.0, 1.0),
+        Point(5.0, 4.0),
+        Point(12.0, 4.5)
+    ])
+    p= Point(3.0, 2.5)
+    distance= round( shape.distancePoint(p), 3 )
+    assert distance == 2.0
+
+    shape= Shape([
+        Point(8.0, 1.0),
+        Point(5.0, 2.5),
+        Point(8.5, 4.5)
+    ])
+    p= Point(3.0, 2.5)
+    distance= round( shape.distancePoint(p), 3 )
+    assert distance == 2.0
+
+    shape= Shape([
         Point(1.0, 1.0),
         Point(1.5, 4.0),
         Point(4.5, 4.5),
         Point(6.0, 0.5)
     ])
-
     p= Point(0.0, 0.0)
     distance= round( shape.distancePoint(p), 3 )
-    print( f"distance= {distance}" )
-    assert distance == 0.0
-    assert not shape.isConvexInside(p)
+    assert distance == 1.414
 
     p= Point(4.5, 3.0)
     distance= round( shape.distancePoint(p), 3 )
-    print( f"distance= {distance}" )
-    assert distance == 0.0
-    assert shape.isConvexInside(p)
+    assert distance == 0.527
+
+def test_shape_inside():
+    shape= Shape([
+        Point(1.0, 1.0),
+        Point(6.0, 11.0),
+        Point(10.0, 1.5)
+    ])
+    
+    assert not shape.isConvexInside(Point(0.0, 0.0))
+    assert shape.isConvexInside(Point(4.5, 3.0))
+
+def test_shape_union_intersection():
+    pass

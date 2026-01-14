@@ -1,6 +1,6 @@
 import math
 from ..pod import Podable, Pod
-from .point import Point
+from .point import Point, Line
 from .box import Box
 
 class Shape(Podable):
@@ -74,6 +74,7 @@ class Shape(Podable):
         self._points= [ Point(x, y) for x, y in zipedList ]
         return self
     
+    # Inside:   
     def asConvex(self):
         assert self.size() > 0
 
@@ -114,6 +115,17 @@ class Shape(Podable):
         
         return Shape( [ convex[-1] ] + convex[0:-1] )
     
+    def isConvexInside(self, aPoint):
+        # Suppose self is convex...
+        if self.size() < 3 :
+            return False
+        p1= self._points[-1]
+        for p2 in self._points :
+            if (p1-p2).crossProduct( aPoint-p1 ) < 0.0 :
+                return False
+            p1= p2
+        return True
+    
     # Construction:
     def round(self, precision):
         for p in self._points :
@@ -125,6 +137,17 @@ class Shape(Podable):
             p.set( p._x-position._x, p._y-position._y,  )
         return position
     
+    # Distances:
+    def distancePoint(self, aPoint ):
+        minDist= Line( self._points[-1], self._points[0] ).distancePoint(aPoint)
+        p1= self._points[0]
+        for p2 in self._points[1:] :
+            dist= Line( p1, p2 ).distancePoint(aPoint)
+            minDist= min( minDist, dist )
+            p1= p2
+        return minDist
+
+
     # Object operator:
     def copy(self):
         cpy= type(self)()
