@@ -38,44 +38,49 @@ def test_point_init():
     assert p3.asTuple() == (2.0, 0.0)
     assert p3.norm2() == 4.0
     
-    assert not p1.isCollidePoint(p2)
-    assert not p1.isCollidePoint(p3)
-    assert p1.isCollidePoint(p2, 3.0)
-
+    assert not p1.isColliding(p2)
+    assert not p1.isColliding(p3)
+    assert p1.isColliding(p2, 3.0)
 
 def test_point_line():
     a= Point(1.0, 1.5)
     b= Point(7.0, 3.5)
 
-    assert not Point(5.0, 1.6).isCollideLine(a, b)
-    assert Point(5.0, 1.6).isCollideLine(a, b, 3.0)
-    assert Point(4.0, 2.5).isCollideLine(a, b)
+    assert not Point(5.0, 1.6).isCollidingLine(a, b)
+    assert Point(5.0, 1.6).isCollidingLine(a, b, 3.0)
+    assert Point(4.0, 2.5).isCollidingLine(a, b)
 
 def test_line_line():
     l1= Line( Point(1.0, 1.5), Point(7.0, 3.5) )
     l2= Line( Point(5.0, 1.0), Point(3.0, 4.0) )
     boom= Point()
 
-    assert l1.isCollideLine(l2, boom)
+    assert l1.isColliding(l2, boom)
     print( f"Boom: {boom}" )
     assert boom.asTuple() == (4.0, 2.5)
-    assert l2.isCollideLine(l1, boom)
+    assert l2.isColliding(l1, boom)
     print( f"Boom: {boom}" )
     assert boom.asTuple() == (4.0, 2.5)
 
     l1= Line( Point(1.0, 2), Point(7.0, 2) )
-    assert l1.isCollideLine(l2, boom)
+    assert l1.isColliding(l2, boom)
 
     l2= Line( Point(5.0, 1.0), Point(3.0, 1.0) )
-    assert not l1.isCollideLine(l2, boom)
+    assert not l1.isColliding(l2, boom)
+    print( f"Boom: {boom}" )
     
     l1= Line( Point(1.5, 1.5), Point(2.0, 4.0) )
     l2= Line( Point(2.0, 1.0), Point(6.0, 0.5) )
-
+    collide= l1.isColliding(l2, boom)
     print( f"Boom: {boom}" )
+    assert not collide
     
-    assert not l1.isCollideLine(l2, boom)
-
+    l1= Line( Point(0, 0), Point(0, 4.0) )
+    l2= Line( Point(6.0, 0.5), Point(1.0, 1.0) )
+    collide= l1.isColliding(l2, boom)
+    print( f"Boom: {boom}" )
+    assert not collide
+    
 def test_point_projection():
     p= Point(1.0, 8.0)
     l= Line( Point(0, 0), Point(12, 8) )

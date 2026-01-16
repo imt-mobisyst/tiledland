@@ -2,7 +2,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland.geometry import Point, Shape
+from src.tiledland.geometry import Point, Line, Shape, Box
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
@@ -147,15 +147,93 @@ def test_shape_distance():
     distance= round( shape.distancePoint(p), 3 )
     assert distance == 0.527
 
-def test_shape_inside():
+    shape= Shape([
+        Point(1.0, 1.0),
+        Point(5.5, 5.0),
+        Point(6.0, 0.5)
+    ])
+
+    assert round( shape.distancePoint( Point(1.0, 1.0) ), 3 ) == 0.00
+    assert round( shape.distancePoint( Point(0.0, 1.0) ), 3 ) == 1.00
+    assert round( shape.distancePoint( Point(1.0, 5.5) ), 3 ) == 3.363
+    assert round( shape.distancePoint( Point(4.4, 2.5) ), 3 ) == 1.138
+
+    assert round( shape.distanceLine( Line(Point(1.0, 1.0), Point(0.0, 0.0))), 3 ) == 0.00
+    assert round( shape.distanceLine( Line(Point(0.0, 1.0), Point(0.0, 0.0))), 3 ) == 1.00
+    assert round( shape.distanceLine( Line(Point(1.0, 5.5), Point(-3.0, 4.0))), 3 ) == 3.363
+    assert round( shape.distanceLine( Line(Point(4.4, 2.5), Point(0.0, 0.0))), 3 ) == 1.138
+
+    assert round( shape.distance( Shape(
+            [Point(7.0, 1.0), Point(12.5, 5.0), Point(13.0, 0.5)]
+            )
+        ), 3 ) == 1.118
+    
+def test_box_colision():
+    b= Box( [Point(3, 0.5), Point(7, 3.5)] )
+
+    assert not b.isColliding( Box([Point(1, 1.5), Point(2, 5)]) )
+    assert b.isColliding( Box([Point(1.5, 1), Point(5, 4.5)]) )
+    assert b.isColliding( Box([Point(3.5, 1.0), Point(4.5, 2)]) )
+
+    assert not b.isIncluding( Box([Point(1, 1.5), Point(2, 5)]) )
+    assert not b.isIncluding( Box([Point(1.5, 1), Point(5, 4.5)]) )
+    assert b.isIncluding( Box([Point(3.5, 1.0), Point(4.5, 2)]) )
+
+def test_shape_inclusion():
     shape= Shape([
         Point(1.0, 1.0),
         Point(6.0, 11.0),
         Point(10.0, 1.5)
     ])
     
-    assert not shape.isConvexInside(Point(0.0, 0.0))
-    assert shape.isConvexInside(Point(4.5, 3.0))
+    assert not shape.isIncludingPoint( Point(0.0, 0.0) )
+    assert shape.isIncludingPoint( Point(4.5, 3.0) )
+
+    shape= Shape([
+        Point(1.0, 1.0),
+        Point(5.5, 5.0),
+        Point(6.0, 0.5)
+    ])
+    
+    assert not shape.isIncludingPoint( Point(0.0, 0.0) )
+    assert not shape.isIncludingPoint( Point(2.0, 3.0) )
+    assert shape.isIncludingPoint( Point(1.0, 1.0) )
+    assert shape.isIncludingPoint( Point(4.0, 2.0) )
+
+    assert not shape.isIncludingLine(Line( Point(2.0, 3.0), Point(0.0, 0.0) ))
+    assert not shape.isIncludingLine(Line( Point(2.0, 3.0), Point(1.0, 1.0) ))
+    assert shape.isIncludingLine(Line( Point(1.0, 1.0), Point(4.0, 2.0) ))
+
+def test_shape_colision():
+    shape= Shape([
+        Point(1.0, 1.0),
+        Point(5.5, 5.0),
+        Point(6.0, 0.5)
+    ])
+
+    assert not shape.isCollidingLine(Line( Point(0.0, 0.0), Point(0.0, 4.0) ))
+    assert not shape.isCollidingLine(Line( Point(2.0, 3.0), Point(3.5, 4.5) ))
+    assert shape.isCollidingLine(Line( Point(2.0, 3.0), Point(4, 2) ))
+    assert shape.isCollidingLine(Line( Point(2.0, 3.0), Point(7, 4) ))
+
+    assert not shape.isColliding( Shape([
+        Point(7.0, 1.0), Point(12.5, 5.0), Point(13.0, 0.5)
+    ]) )
+    assert not shape.isColliding( Shape([
+        Point(1.0, 2.0), Point(4, 5), Point(0.5, 5.5)
+    ]) )
+    assert shape.isColliding( Shape([
+        Point(1.0, 2.0), Point(4, 5), Point(5, 2.5)
+    ]) )
+    assert shape.isColliding( Shape([
+        Point(1.0, 2.0), Point(4, 5), Point(5, 2.5)
+    ]) )
+    assert shape.isColliding( Shape([
+        Point(1.0, 2.0), Point(4, 5), Point(8, 3)
+    ]) )
+    assert shape.isColliding( Shape([
+        Point(1.0, 1.0), Point(5.5, 5.0), Point(6.0, 0.5)
+    ]) )
 
 def test_shape_union_intersection():
-    pass
+    pass # ToDo

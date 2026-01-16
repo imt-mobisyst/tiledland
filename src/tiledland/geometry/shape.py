@@ -73,8 +73,19 @@ class Shape(Podable):
     def fromZipped( self, zipedList ):
         self._points= [ Point(x, y) for x, y in zipedList ]
         return self
+
+    # Construction:
+    def round(self, precision):
+        for p in self._points :
+            p.round(precision)
     
-    # Inside:   
+    def setOnCenter(self):
+        position= self.center()
+        for p in self._points :
+            p.set( p._x-position._x, p._y-position._y,  )
+        return position
+
+    # Convex
     def asConvex(self):
         assert self.size() > 0
 
@@ -114,8 +125,9 @@ class Shape(Podable):
                 convex.insert(0, points[i])
         
         return Shape( [ convex[-1] ] + convex[0:-1] )
-    
-    def isConvexInside(self, aPoint):
+        
+    # Collision:   
+    def isIncludingPoint(self, aPoint):
         # Suppose self is convex...
         if self.size() < 3 :
             return False
@@ -126,28 +138,85 @@ class Shape(Podable):
             p1= p2
         return True
     
-    # Construction:
-    def round(self, precision):
-        for p in self._points :
-            p.round(precision)
+    def isIncludingLine(self, aLine):
+        return (
+            self.isIncludingPoint( aLine.point1() ) 
+            and self.isIncludingPoint( aLine.point2() )
+        )
+
+    def isCollidingLine(self, aLine):
+        if self.isIncludingPoint( aLine.point1() ) or self.isIncludingPoint( aLine.point2() ) :
+            return True
+        p1= self._points[-1]
+        for p2 in self._points :
+            if aLine.isColliding( Line(p1, p2) ) :
+                return True
+            p1= p2
+        return False
     
-    def setOnCenter(self):
-        position= self.center()
+    def isColliding( self, another ):
+        # Induce a collision at box granulatrity
+        if not self.box().isColliding( another.box() ) :
+            return False
+        # If a point of one of them is included in the other
         for p in self._points :
-            p.set( p._x-position._x, p._y-position._y,  )
-        return position
-    
+            if another.isIncludingPoint(p) :
+                return True
+        for p in another._points :
+            if self.isIncludingPoint(p) :
+                return True
+        # If lines collides
+        p1= self._points[-1]
+        for p2 in self._points :
+            if another.isCollidingLine( Line(p1, p2) ) :
+                return True
+            p1= p2
+        return False
+
     # Distances:
-    def distancePoint(self, aPoint ):
+    def distancePoint(self, aPoint):
         minDist= Line( self._points[-1], self._points[0] ).distancePoint(aPoint)
         p1= self._points[0]
         for p2 in self._points[1:] :
             dist= Line( p1, p2 ).distancePoint(aPoint)
             minDist= min( minDist, dist )
             p1= p2
+        self._tmpLine= Line(p1, p2)
         return minDist
 
+    def distanceLine(self, aLine):
+        dist1= self.distancePoint( aLine.point1() )
+        line1= self._tmpLine
+        minDist= self.distancePoint( aLine.point2() )
+        
+        if dist1 < minDist :
+            minDist= dist1
+            self._tmpLine= line1
+        
+        minDist= min(
+            minDist,
+            aLine.distancePoint( self._tmpLine.point1() ),
+            aLine.distancePoint( self._tmpLine.point2() )
+        )
+        
+        return minDist
 
+    def distance(self, another):
+        p1= self._points[-1]
+        p2= self._points[0]
+        l12= Line(p1, p2)
+        minDist= another.distanceLine(l12)
+        self._tmpLine= l12
+        p1= p2
+        for p2 in self._points[1:] :
+            l12= Line(p1, p2)
+            dist= another.distanceLine(l12)
+            if dist < minDist :
+                minDist= dist
+                self._tmpLine= l12
+            p1= p2
+        return minDist
+    
     # Object operator:
     def copy(self):
         cpy= type(self)()

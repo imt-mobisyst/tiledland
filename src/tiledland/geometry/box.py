@@ -1,13 +1,13 @@
 import math
 from .point import Point
 
-class Box():
+class Box(): # AABB Box
 
     # Initialization Destruction:
     def __init__( self, listOfPoint=[Point()] ):
         self.fromList( listOfPoint )
 
-    # initialization:
+    # Initialization:
     def fromList( self, listOfPoint= [Point()] ):
         self._min= Point( listOfPoint[0].x(), listOfPoint[0].y() )
         self._max= Point( listOfPoint[0].x(), listOfPoint[0].y() )
@@ -64,7 +64,26 @@ class Box():
             and self._max == another.rightCeiling()
         )
 
+    # Collision:
+    def isColliding(self, another):
+        # no separation in anny axis
+        return ( not( 
+                (self._min._x <= another._min._x and self._max._x <= another._min._x )
+                or (self._min._y <= another._min._y and self._max._y <= another._min._y )
+                or (self._min._x > another._min._x and another._max._x < self._min._x )
+                or (self._min._y > another._min._y and another._max._y < self._min._y )
+            )
+        )
 
+    def isIncluding(self, another):
+        # both coordinates are included
+        return ( 
+            ( self._min._x <= another._min._x and another._min._x < another._max._x )
+            and ( self._min._y <= another._min._y and another._min._y < another._max._y )
+            and ( self._min._x < another._max._x and another._max._x <= another._max._x )
+            and ( self._min._y < another._max._y and another._max._y <= another._max._y )
+        )
+    
     # to str
     def str(self): 
         # Myself :

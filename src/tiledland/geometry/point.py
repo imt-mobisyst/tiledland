@@ -86,11 +86,11 @@ class Point():
         return (self._x * another._y - self._y * another._x)
     
     # Collision
-    def isCollidePoint(self, point, distance=0.001):
+    def isColliding(self, point, distance=0.001):
         between= point - self
         return ( between.norm2() < (distance * distance) )
 
-    def isCollideLine(self, a, b, distance=0.001):
+    def isCollidingLine(self, a, b, distance=0.001):
         vab= b-a
         v1= a-self
         v2= b - self
@@ -153,7 +153,7 @@ class Line :
         return line.lenght()
 
     # Collision
-    def isCollideLine( self, another, collide= Point(), distance=0.001 ):
+    def isColliding( self, another, collide= Point(), distance=0.001 ):
         x_diff = Point( self.point1()._x - self.point2()._x, another.point1()._x - another.point2()._x)
         y_diff = Point( self.point1()._y - self.point2()._y, another.point1()._y - another.point2()._y)
 
@@ -165,4 +165,16 @@ class Line :
         collide._x = Line(d, x_diff).determinant() / divisor
         collide._y = Line(d, y_diff).determinant() / divisor
         
-        return collide.isCollideLine( self.point1(), self.point2(), distance )
+        return (
+            collide.isCollidingLine( self.point1(), self.point2(), distance )
+            and collide.isCollidingLine( another.point1(), another.point2(), distance )
+        )
+    
+    # to str
+    def str(self): 
+        # Myself :
+        s= f"{self.point1()}->{self.point2()}"
+        return s
+    
+    def __str__(self): 
+        return self.str()
