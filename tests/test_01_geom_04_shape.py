@@ -163,10 +163,24 @@ def test_shape_distance():
     assert round( shape.distanceLine( Line(Point(1.0, 5.5), Point(-3.0, 4.0))), 3 ) == 3.363
     assert round( shape.distanceLine( Line(Point(4.4, 2.5), Point(0.0, 0.0))), 3 ) == 1.138
 
-    assert round( shape.distance( Shape(
-            [Point(7.0, 1.0), Point(12.5, 5.0), Point(13.0, 0.5)]
-            )
-        ), 3 ) == 1.118
+    assert round( shape.distance( Shape([
+            Point(7.0, 0.5), Point(12.5, 5.0), Point(13.0, 0.5)
+            ])
+        ), 3 ) == 1.0
+    assert round( shape.distance( Shape([
+            Point(6.0, 0.5), Point(12.5, 5.0), Point(13.0, 0.5)
+            ])
+        ), 3 ) == 0.0
+    assert round( shape.distance( Shape([
+            Point(4.5, 2.5), Point(12.5, 5.0), Point(13.0, 0.5)
+            ])
+        ), 3 ) == 0.0
+    
+    assert round( shape.distance( Shape([
+            Point(1.0, 2.0), Point(1.0, 5.5), Point(4.5, 5.0)
+            ])
+        ), 3 ) == 0.664
+    
     
 def test_box_colision():
     b= Box( [Point(3, 0.5), Point(7, 3.5)] )

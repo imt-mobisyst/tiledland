@@ -202,6 +202,8 @@ class Shape(Podable):
         return minDist
 
     def distance(self, another):
+        if self.isColliding(another):
+            return 0.0
         p1= self._points[-1]
         p2= self._points[0]
         l12= Line(p1, p2)
@@ -216,7 +218,7 @@ class Shape(Podable):
                 self._tmpLine= l12
             p1= p2
         return minDist
-    
+
     # Object operator:
     def copy(self):
         cpy= type(self)()
