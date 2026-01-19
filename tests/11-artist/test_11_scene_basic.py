@@ -52,7 +52,9 @@ def test_artist_tile():
 def test_artist_scene_tiles():
     pablo= tll.Artist().initializeSVG( filePath= shotImg )
     scene= tll.Scene()
-    
+
+    assert scene.resolution() == 0.01
+        
     pablo.drawSceneTiles(scene)
     pablo.flip()
 
@@ -60,6 +62,8 @@ def test_artist_scene_tiles():
         assert( lineShot == lineRef )
 
     scene= tll.Scene().initializeLine(3)
+
+    assert scene.resolution() == 0.1
 
     pablo.drawSceneTiles(scene)
     pablo.flip()
@@ -161,7 +165,7 @@ def test_artist_gridscene_piece():
         [-1, -1, 0, 0, 0, -1, -1, -1]],
         1.0, 0.1, False
     )
-    scene.connectAllDistance( 1.2 )
+    scene.connectAllClose()
 
     pablo.fitBox( scene.box() )
     pablo.drawScene(scene)
@@ -224,7 +228,7 @@ def test_artist_hexascene_piece():
         [-1, -1, 0, 0, 0, -1, -1, -1]],
         1.0, 0.1, False
     )
-    scene.connectAllDistance( 1.2 )
+    scene.connectAllClose()
 
     pablo.fitBox( scene.box() )
     pablo.drawScene(scene)

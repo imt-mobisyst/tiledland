@@ -116,9 +116,9 @@ class Scene(Podable):
             for i in range(size)
         ]
         self._size= size
-        self.setResolution(separation*2)
+        self.setResolution( separation )
         if connect :
-            self.connectAllDistance( dist*1.01 )
+            self.connectAllClose()
         return self
     
     def initializeGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
@@ -141,9 +141,9 @@ class Scene(Podable):
                     #matrix[i][j]= iTile
         
         self._size= iTile
-        self.setResolution(separation*2)
+        self.setResolution( separation )
         if connect :
-            self.connectAllDistance( dist*1.01 )
+            self.connectAllClose()
         return self
 
     def initializeHexa( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
@@ -170,9 +170,9 @@ class Scene(Podable):
                     self._tiles.append( tile )
                     #matrix[i][j]= iTile
         self._size= iTile
-        self.setResolution( separation*2 )
+        self.setResolution( separation )
         if connect :
-            self.connectAllDistance( dist*1.01 )
+            self.connectAllClose()
         return self
     
     def addTile( self, aTile ):
@@ -236,6 +236,7 @@ class Scene(Podable):
 
     def connectAllConditions(self, conditionFrom=lambda tfrom : True, conditionFromTo=lambda tfrom, tto : True, ):
         size= self.size()
+        count= 0
         for i in range(1, size+1) :
             tili= self.tile(i)
             if conditionFrom( tili ) :
@@ -243,10 +244,17 @@ class Scene(Podable):
                     tilj= self.tile(j)
                     if conditionFromTo( tili, tilj ): # :
                        self.connect( i, j )
+                       count+= 1
+        return count
+
+    def connectAllClose(self):
+        return self.connectAllDistance(1.1*self._resolution)
     
-    def connectAllDistance(self, distance= 1.1 ):
-        self.connectAllConditions( conditionFromTo=lambda tileFrom, tileTo : tileFrom.centerDistance( tileTo ) < distance )
-    
+    def connectAllDistance(self, distance):
+        if not distance :
+            distance= 1.1*self._resolution
+        return self.connectAllConditions( conditionFromTo=lambda tileFrom, tileTo : tileFrom.bodyDistance( tileTo ) < distance )
+
     # Distance :
     def computeDistances(self):
         s= self.size()

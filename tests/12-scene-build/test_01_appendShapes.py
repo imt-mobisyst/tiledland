@@ -32,6 +32,7 @@ def test_scene_build():
         assert( lineShot == lineRef )
 
     scene= tll.Scene( resolution=0.5 )
+    assert scene.resolution() == 0.5
     assert scene.size() == 0
 
     scene.createTile( shapes[0] )
@@ -56,3 +57,14 @@ def test_scene_build():
     refsFile= open( "tests/refs/12-scene-build-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
+
+    scene.connectAllClose()
+
+    pablo.drawScene(scene)
+    pablo.flip()
+    
+    shotFile= open( shotImg ) 
+    refsFile= open( "tests/refs/12-scene-build-03.svg" ) 
+    for lineShot, lineRef in zip( shotFile, refsFile ):
+        assert( lineShot == lineRef )
+    

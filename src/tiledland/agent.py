@@ -27,11 +27,14 @@ class Agent(Podable):
     def matter(self):
         return self._matter
     
+    def position(self):
+        return self._center
+    
     def shape(self):
         return self._shape
     
-    def position(self):
-        return self._center
+    def body(self):
+        return self._shape.copy(self._center)
     
     # Shape accessor : 
     def envelope(self):
@@ -39,7 +42,7 @@ class Agent(Podable):
         return Shape().fromZipped([ (cx+x, cy+y) for x, y in self._shape.asZipped() ])
     
     def box(self):
-        return self.shape().box().move(self.position())
+        return self.body().box()
     
     def radius(self):
         r= 0.0

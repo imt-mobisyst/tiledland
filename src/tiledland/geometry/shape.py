@@ -220,11 +220,11 @@ class Shape(Podable):
         return minDist
 
     # Object operator:
-    def copy(self):
+    def copy(self, position= Point(0.0, 0.0) ):
         cpy= type(self)()
-        cpy._points= [ p.copy() for p in self.points() ]
+        cpy._points= [ position + p.copy() for p in self.points() ]
         return cpy
-
+    
     # to str
     def str(self, typeName="Shape"): 
         # Myself :

@@ -73,6 +73,9 @@ class Tile(Agent):
     def centerDistance(self, another):
         return self.position().distance( another.position() )
 
+    def bodyDistance(self, another):
+        return self.body().distance( another.body() )
+
     # Pod interface:
     def asPod(self):
         return Pod().fromLists(  
