@@ -250,3 +250,34 @@ def test_gridmap_asRectangles():
     refsFile= open( "tests/refs/22.01-toshapes-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
+
+
+def test_gridmap_convex():
+    shotImg= "shot-test.svg"
+    gridmap= ros.GridMapStat()
+    pablo= tll.Artist().initializeSVG(shotImg)
+
+    gridmap.load( "tests/rsc", "convexmap.yaml" )
+    gridmap= gridmap.asGridMap()
+
+def test_gridmap_large():
+    shotImg= "shot-test.svg"
+    gridmap= ros.GridMapStat()
+    pablo= tll.Artist().initializeSVG(shotImg)
+
+    gridmap.load( "tests/rsc", "large-clean-map.yaml" )
+    gridmap= gridmap.asGridMap()
+
+    shapes= gridmap.makeShapes()
+
+    pablo.setScale( 28 )
+    pablo.setCamera( 16.5, 13.0 )
+    for shape in shapes :
+        pablo.drawShape( shape, 0 )
+    pablo.flip()
+
+    shotFile= open( shotImg ) 
+    refsFile= open( "tests/refs/22.02-grid2Map-01.svg" ) 
+    for lineShot, lineRef in zip( shotFile, refsFile ):
+        assert( lineShot == lineRef )
+    

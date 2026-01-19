@@ -109,7 +109,6 @@ class GridMap :
         sy1= oy + by1*r + epsilon
         sx2= ox + bx2*r - epsilon
         sy2= oy + by2*r - epsilon
-        print( f"vars:{(ox, oy, r)} - {box} - {(sx1, sy1)} {(sx2, sy2)}" )
         return Shape().fromZipped( [(sx1, sy1), (sx1, sy2), (sx2, sy2), (sx2, sy1)] )
 
     def makeShapes(self, state=0):
