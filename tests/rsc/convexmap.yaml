@@ -1,0 +1,7 @@
+image: "convexmap.png"
+resolution: 0.2
+origin: [0.0, 0.0, 1.0]
+occupied_thresh: 0.6
+free_thresh: 0.2
+negate: 0
+mode: "trinary"

@@ -260,6 +260,19 @@ def test_gridmap_convex():
     gridmap.load( "tests/rsc", "convexmap.yaml" )
     gridmap= gridmap.asGridMap()
 
+    shapes= gridmap.makeShapes()
+
+    pablo.setScale( 100 )
+    pablo.setCamera( 3.0, 2.0 )
+    for shape in shapes :
+        pablo.drawShape( shape, 0 )
+    pablo.flip()
+
+    shotFile= open( shotImg ) 
+    refsFile= open( "tests/refs/22.02-convex2map-01.svg" ) 
+    for lineShot, lineRef in zip( shotFile, refsFile ):
+        assert( lineShot == lineRef )
+
 def test_gridmap_large():
     shotImg= "shot-test.svg"
     gridmap= ros.GridMapStat()
