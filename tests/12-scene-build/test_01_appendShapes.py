@@ -74,25 +74,26 @@ def test_scene_mergeOne():
         Convex().fromZipped( [(0.25, 2.65), (0.25, 2.75), (4.95, 2.75), (4.95, 2.65)] )
     ]
 
+    ## verify that the 2 shapes should be merged : 
     shape= shapes[0].copy()
     shapeTmp= shapes[1].copy()
 
-    shape.distance( shapeTmp )
+    assert shape.distance( shapeTmp ) < 0.2
     trace= [ str(s) for s in shape._trace ]
     print( trace )
+    assert trace == ['(0.05, 2.55)->(4.95, 2.55)', '(4.95, 2.65)->(0.25, 2.65)']
     
-    assert trace == ['(0.05, 2.55)->(4.95, 2.55)', '(4.95, 2.65)->(4.95, 2.65)']
-
     print( shape.asZipped() )
-    assert shape.asZipped() == []
+    assert shape.asZipped() == [(0.05, 0.05), (0.05, 2.55), (4.95, 2.55), (4.95, 0.05)]
 
-    shape.simplify(0.2)
+    removed= shape.merge( shapeTmp )
+    assert [(p.x(), p.y()) for p in removed ] == [(0.25, 2.65)]
 
-    assert shape.asZipped() == []
-
-    scene= tll.Scene( resolution=0.2 )
-    for s in shapes :
-        scene.createTile( s )
+    for p in removed :
+        assert shape.distancePoint(p) < 0.2
+    
+    ## Create the scene : 
+    scene= tll.Scene( shapes, 0.2 )
     assert scene.size() == 2
 
     scene.connectAllClose()
@@ -110,7 +111,16 @@ def test_scene_mergeOne():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
     
-    assert False
+    ## Create the scene :
+    scene.mergeAllPossible()
+
+    pablo.drawScene(scene)
+    pablo.flip()
+    
+    shotFile= open( shotImg ) 
+    refsFile= open( "tests/refs/12.01-mergeConvex-one-02.svg" ) 
+    for lineShot, lineRef in zip( shotFile, refsFile ):
+        assert( lineShot == lineRef )
 
 def test_scene_mergeFew():
     shapes= [

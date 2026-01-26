@@ -80,7 +80,7 @@ def test_Scene_initLine():
     assert scene.edges() == []
 
     assert scene.tile(1).position().asTuple() == (0.0, 0.0)
-    assert scene.tile(1).envelope().asZipped() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5) ]
+    assert scene.tile(1).envelope().asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
 
     assert scene.tile(2).position().asTuple() == (1.1, 0.0)
     assert scene.tile(3).position().asTuple() == (2.2, 0.0)

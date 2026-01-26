@@ -12,15 +12,16 @@ class Convex(Podable):
     # Initialization:
     def initialize(self, aListOfPoints):
         self._points= aListOfPoints
+        self.makeConvex()
         return self
     
     def initializeSquare(self, size):
         demi= size*0.5
         self._points= [
+            Point( -demi, -demi ),
             Point( -demi, +demi ),
             Point( +demi, +demi ),
-            Point( +demi, -demi ),
-            Point( -demi, -demi )
+            Point( +demi, -demi )
         ]
         return self
 
@@ -34,6 +35,11 @@ class Convex(Podable):
             p= Point( math.cos(angle)*radius, math.sin(angle)*radius)
             self._points.append(p)
             angle+= -delta
+        self.makeConvex()
+        return self
+    
+    def forcePoints(self, points):
+        self._points= points
         return self
     
     # Accessor:
@@ -64,14 +70,14 @@ class Convex(Podable):
         return [p.x()+dx for p in self._points], [p.y()+dy for p in self._points]
     
     def fromLists(self, listX, listY):
-        self._points= [ Point(x, y) for x, y in zip(listX, listY) ]
+        self.initialize( [ Point(x, y) for x, y in zip(listX, listY) ] )
         return self
 
     def asZipped(self):
         return [ (p.x(), p.y()) for p in self._points ]
 
     def fromZipped( self, zipedList ):
-        self._points= [ Point(x, y) for x, y in zipedList ]
+        self.initialize( [ Point(x, y) for x, y in zipedList ] )
         return self
 
     # Construction:
@@ -86,46 +92,52 @@ class Convex(Podable):
         return position
 
     # Convex
-    def asConvex(self):
-        assert self.size() > 0
+    def makeConvex(self):
+        removed= []
 
-        points= [p for p in self._points]
-        size= len(points)
+        # Safe stop :
+        if self.size() == 0 :
+            return removed
 
         # Find point with minimal x value :
-        for i in range( 1, size ) :
-            ix= points[i]._x
+        for i in range( 1, self.size() ) :
+            ix= self._points[i]._x
             minx= self._points[0]._x
             if ix < minx or ( ix == minx
                              and self._points[i]._y < self._points[0]._y ) :
-                p= points[0]
-                points[0]= points[i]
-                points[i]= p
+                p= self._points[0]
+                self._points[0]= self._points[i]
+                self._points[i]= p
 
         # Trier les points par angle
-        for i in range(1, size) :
-            v1= points[i]
-            for j in range( i+1, size ) :
-                v2= points[j]-points[0]
+        for i in range(1, self.size()) :
+            v1= self._points[i]
+            for j in range( i+1, self.size() ) :
+                v2= self._points[j]-self._points[0]
                 if v1.crossProduct(v2) < 0.0 :
                     # Echange
                     v1= v2
-                    v2= points[i]
-                    points[i]= points[j]
-                    points[j]= v2
-        
+                    v2= self._points[i]
+                    self._points[i]= self._points[j]
+                    self._points[j]= v2
+
         # Build convex list :
-        v1= points[0]
-        convex= [ points[0] ]
-        for i in range( 1, size ) :
+        v1= self._points[0]
+        convex= [ self._points[0] ]
+        for i in range( 1, self.size() ) :
             # Init:
-            if len(convex) < 3 or (v1 - convex[0]).crossProduct( points[i]-convex[0] ) < 0.0 :
-                while( len(convex) > 1) and (convex[0]-convex[1]).crossProduct( points[i]-convex[0] ) < 0.0 :
-                    convex.pop(0)
-                convex.insert(0, points[i])
+            if len(convex) < 3 or (v1 - convex[0]).crossProduct( self._points[i]-convex[0] ) < 0.0 :
+                while( len(convex) > 1) and (convex[0]-convex[1]).crossProduct( self._points[i]-convex[0] ) < 0.0 :
+                    removed.append( 
+                        convex.pop(0)
+                    )
+                convex.insert(0, self._points[i])
+            else :
+                removed.append( self._points[i] )
         
-        return Convex( [ convex[-1] ] + convex[0:-1] )
-        
+        self._points= [ convex[-1] ] + convex[0:-1]
+        return removed
+
     # Collision:   
     def isIncludingPoint(self, aPoint):
         # Suppose self is convex...
@@ -227,11 +239,8 @@ class Convex(Podable):
 
     # Geometry operation
     def merge( self, another ):
-        if self.isColliding(another) :
-            assert( "Convex::merge: Should not Collide..." == False )
-        dist= self.distance(another)
-        print( self._trace )
-        return self
+        self._points+= another.points()
+        return self.makeConvex()
 
     # Object operator:
     def copy(self, position= Point(0.0, 0.0) ):

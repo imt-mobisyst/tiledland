@@ -24,15 +24,15 @@ def test_Scene_initLine():
     assert scene.edges() == []
 
     assert scene.tile(1).position().asTuple() == (0.0, 0.0)
-    assert scene.tile(1).envelope().asZipped() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5) ]
+    assert scene.tile(1).envelope().asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
 
     assert scene.tile(2).position().asTuple() == (1.1, 0.0)
     env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(2).envelope().asZipped() ]
-    assert env == [(0.6, 0.5), (1.6, 0.5), (1.6, -0.5), (0.6, -0.5)]
+    assert env == [(0.6, -0.5), (0.6, 0.5), (1.6, 0.5), (1.6, -0.5)]
 
     assert scene.tile(3).position().asTuple() == (2.2, 0.0)
     env= [ (round(x, 2), round(y, 2)) for x, y in scene.tile(3).envelope().asZipped() ]
-    assert env == [(1.7, 0.5), (2.7, 0.5), (2.7, -0.5), (1.7, -0.5)]
+    assert env == [(1.7, -0.5), (1.7, 0.5), (2.7, 0.5), (2.7, -0.5)]
     
 def test_Scene_construction():
     scene= Scene().initializeLine(3, connect=False)

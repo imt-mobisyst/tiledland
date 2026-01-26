@@ -16,7 +16,7 @@ def test_Tile_init():
     assert tile.id() == 0
     assert tile.matter() == 0
     assert tile.position().asTuple() == (0.0, 0.0)
-    assert tile.envelope().asZipped() == [(-0.5, 0.5), (0.5, 0.5), (0.5, -0.5), (-0.5, -0.5)]
+    assert tile.envelope().asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
     assert tile.adjacencies() == []
     assert tile.agents() == []
     
@@ -24,7 +24,7 @@ def test_Tile_init():
 
     assert tile.id() == 3
     assert tile.position().asTuple() == (10.3, 9.7)
-    assert tile.envelope().asZipped() == [(-10.7, 30.7), (31.3, 30.7), (31.3, -11.3), (-10.7, -11.3)]
+    assert tile.envelope().asZipped() == [(-10.7, -11.3), (-10.7, 30.7), (31.3, 30.7), (31.3, -11.3)]
     assert tile.adjacencies() == []
     assert tile.agents() == []
 
@@ -34,7 +34,7 @@ def test_Tile_init():
     assert tile.id() == 1
     assert tile.matter() == 8
     assert tile.position().asTuple() == (1.0, 1.0)
-    assert tile.envelope().asZipped() == [(0.0, 2.0), (2.0, 2.0), (2.0, 0.0), (0.0, 0.0)]
+    assert tile.envelope().asZipped() == [(0.0, 0.0), (0.0, 2.0), (2.0, 2.0), (2.0, 0.0)]
     assert tile.adjacencies() == []
     assert tile.agents() == []
 

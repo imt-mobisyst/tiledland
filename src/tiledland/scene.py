@@ -8,12 +8,19 @@ import math
 class Scene(Podable):
 
     # Constructor:
-    def __init__(self, resolution= 0.01):#, agentFactory= Agent):
-        self._resolution= resolution
+    def clear( self ):
         self._tiles= []
+        self._agents= [[]]
+        self._size= 0
+        return self
+    
+    def __init__(self, shapes= [], resolution= 0.01):#, agentFactory= Agent):
         self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Convex().initializeRegular(0.8, 5) ).setMatter(1)
         self.clear()
-
+        for s in shapes :
+            self.createTile( s )
+        self._resolution= resolution
+        
     # Accessor:
     def resolution(self):
         return self._resolution
@@ -195,11 +202,6 @@ class Scene(Podable):
         self._factory= agentFactory
         return self
 
-    def clear( self ):
-        self._tiles= []
-        self._agents= [[]]
-        self._size= 0
-        return self
 
     def clearAgents(self):
         for t in self.tiles() :
