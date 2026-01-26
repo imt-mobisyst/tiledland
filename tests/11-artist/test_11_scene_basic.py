@@ -3,7 +3,7 @@ workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
 import src.tiledland as tll
-from src.tiledland.geometry import Point, Shape
+from src.tiledland.geometry import Point, Convex
 
 def zipSvgFile( img1, img2 ):
     shotFile= open( img1 ) 
@@ -26,7 +26,7 @@ def test_artist_tile():
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-tile-01.svg" ):
         assert( lineShot == lineRef )
     
-    tile= tll.Tile( 3, Point(1.3, 0.9), Shape().initializeSquare(4.0) )
+    tile= tll.Tile( 3, Point(1.3, 0.9), Convex().initializeSquare(4.0) )
     pablo.drawTile( tile )
     pablo.flip()
 
@@ -85,12 +85,12 @@ def test_artist_scene_net():
     pablo= tll.Artist( tll.SupportSVG( filePath= shotImg ) )
     scene= tll.Scene()
     
-    assert scene.addTile( tll.Tile().setShapeRegular( (-1.0, 0.0), 0.9, 6 ) ) == 1
-    assert scene.addTile( tll.Tile( matter=1 ).setShapeRegular( (0.0, 0.0), 0.9, 6 ) ) == 2
-    assert scene.addTile( tll.Tile().setShapeRegular( (1.0, 0.0), 0.9, 6 ) ) == 3
+    assert scene.addTile( tll.Tile().setConvexRegular( (-1.0, 0.0), 0.9, 6 ) ) == 1
+    assert scene.addTile( tll.Tile( matter=1 ).setConvexRegular( (0.0, 0.0), 0.9, 6 ) ) == 2
+    assert scene.addTile( tll.Tile().setConvexRegular( (1.0, 0.0), 0.9, 6 ) ) == 3
 
-    assert scene.addTile( tll.Tile().setShapeRegular( (0.5, 0.866), 0.9, 6 ) ) == 4
-    assert scene.addTile( tll.Tile().setShapeRegular( (-0.5, -0.866), 0.9, 6 ) ) == 5
+    assert scene.addTile( tll.Tile().setConvexRegular( (0.5, 0.866), 0.9, 6 ) ) == 4
+    assert scene.addTile( tll.Tile().setConvexRegular( (-0.5, -0.866), 0.9, 6 ) ) == 5
 
     pablo.drawSceneTiles(scene)
     pablo.writeSceneTiles(scene)
@@ -177,7 +177,7 @@ def test_artist_gridscene_piece():
     def popAgent( iRobot, iTile, iMatter ):
         bod= tll.Agent( iRobot, 0,
             Point(0.1, 0.1)+scene.tile(iTile).position(),
-            tll.Shape().initializeRegular(0.7, 6),
+            tll.Convex().initializeRegular(0.7, 6),
         )
         bod.setMatter(iMatter)
         scene.tile(iTile).append( bod )
@@ -240,7 +240,7 @@ def test_artist_hexascene_piece():
     def popAgent( iRobot, iTile, iMatter ):
         bod= tll.Agent( iRobot, 0,
             Point(0.1, 0.1)+scene.tile(iTile).position(),
-            tll.Shape().initializeRegular(0.7, 6),
+            tll.Convex().initializeRegular(0.7, 6),
         )
         bod.setMatter(iMatter)
         scene.tile(iTile).append( bod )

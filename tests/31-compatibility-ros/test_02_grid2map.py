@@ -3,7 +3,7 @@ import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tll
-from src.tiledland.geometry import Point, Box, Shape
+from src.tiledland.geometry import Point, Box, Convex
 from src.tiledland import Agent, Tile, Scene 
 
 # ------------------------------------------------------------------------ #
@@ -213,15 +213,15 @@ def test_gridmap_asRectangles():
         [5, 9, 13, 12]
     ]
 
-    shape= gridmap.boxToShape( [5, 9, 13, 12] )
+    shape= gridmap.boxToConvex( [5, 9, 13, 12] )
     
-    print( "Shape: " + str(shape) + " - " + str( shape.asZipped() ) )
+    print( "Convex: " + str(shape) + " - " + str( shape.asZipped() ) )
     
     assert shape.asZipped() == [(2.625, 4.625), (2.625, 5.875), (6.375, 5.875), (6.375, 4.625)]
-    shapes= gridmap.makeShapes()
+    shapes= gridmap.makeConvexs()
     shapesAsZipped= [ s.asZipped() for s in shapes ]
 
-    print( "Shapes" )
+    print( "Convexs" )
     for s in shapesAsZipped :
         print(s)
 
@@ -243,7 +243,7 @@ def test_gridmap_asRectangles():
         assert( lineShot == lineRef )
 
     for shape in shapes :
-        pablo.drawShape( shape, 0 )
+        pablo.drawConvex( shape, 0 )
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -260,18 +260,21 @@ def test_gridmap_convex():
     gridmap.load( "tests/rsc", "convexmap.yaml" )
     gridmap= gridmap.asGridMap()
 
-    shapes= gridmap.makeShapes()
+    shapes= gridmap.makeConvexs()
 
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
     for shape in shapes :
-        pablo.drawShape( shape, 0 )
+        pablo.drawConvex( shape, 0 )
+        print( shape.asZipped() )
     pablo.flip()
 
     shotFile= open( shotImg ) 
     refsFile= open( "tests/refs/22.02-convex2map-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
+    
+    assert False
 
 def test_gridmap_large():
     shotImg= "shot-test.svg"
@@ -281,12 +284,12 @@ def test_gridmap_large():
     gridmap.load( "tests/rsc", "large-clean-map.yaml" )
     gridmap= gridmap.asGridMap()
 
-    shapes= gridmap.makeShapes()
+    shapes= gridmap.makeConvexs()
 
     pablo.setScale( 28 )
     pablo.setCamera( 16.5, 13.0 )
     for shape in shapes :
-        pablo.drawShape( shape, 0 )
+        pablo.drawConvex( shape, 0 )
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -294,3 +297,4 @@ def test_gridmap_large():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
     
+

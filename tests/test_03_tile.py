@@ -4,14 +4,14 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src.tiledland import Agent, Tile
 from src.tiledland.pod import Pod
-from src.tiledland.geometry import Point, Shape
+from src.tiledland.geometry import Point, Convex
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
 def test_Tile_init():
-    tile= Tile( shape=Shape().initializeSquare(1.0) )
+    tile= Tile( shape=Convex().initializeSquare(1.0) )
 
     assert tile.id() == 0
     assert tile.matter() == 0
@@ -20,7 +20,7 @@ def test_Tile_init():
     assert tile.adjacencies() == []
     assert tile.agents() == []
     
-    tile= Tile( 3, Point(10.3, 9.7), Shape().initializeSquare(42.0), 0 )
+    tile= Tile( 3, Point(10.3, 9.7), Convex().initializeSquare(42.0), 0 )
 
     assert tile.id() == 3
     assert tile.position().asTuple() == (10.3, 9.7)
@@ -70,7 +70,7 @@ def test_Tile_str():
     print(f">>> {tile}")
     assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] agents(0)"
 
-    tile= Tile( shape= Shape() )
+    tile= Tile( shape= Convex() )
     print(f">>> {tile}")
     assert str(tile) == "Tile-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] agents(0)"
 
@@ -145,7 +145,7 @@ def test_Tile_podCopy():
 
 
 def test_Tile_clockDirection():
-    tile= Tile( shape=Shape().initializeRegular( 0.2, 12 ) )
+    tile= Tile( shape=Convex().initializeRegular( 0.2, 12 ) )
 
     assert tile.clockDirection( Point(  0.0,  0.0 ) ) == 0
     assert tile.clockDirection( Point(  0.0,  1.0 ) ) == 12
@@ -160,7 +160,7 @@ def test_Tile_clockDirection():
     assert tile.clockDirection( Point( -2.0,  0.0 ) ) == 9
     
     p= Point( 1.2, -0.5 )
-    tile= Tile( position=p, shape=Shape().initializeRegular( 0.2, 12 ) )
+    tile= Tile( position=p, shape=Convex().initializeRegular( 0.2, 12 ) )
 
     assert tile.clockDirection( p ) == 0
     assert tile.clockDirection( p + Point(  0.0,  2.0 ) ) == 12

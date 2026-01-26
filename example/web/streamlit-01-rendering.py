@@ -19,7 +19,7 @@ scene.connectAllDistance( 1.2 )
 
 # Add some objects on the scene:
 def newAgent( identifier, group ):
-    return tll.Agent( identifier, group, shape=tll.Shape().initializeRegular(0.7, 6) )
+    return tll.Agent( identifier, group, shape=tll.Convex().initializeRegular(0.7, 6) )
 
 scene.setAgentFactory( newAgent )
 

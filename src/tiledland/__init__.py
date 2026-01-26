@@ -1,5 +1,5 @@
 # Basement: 
-from .geometry import Point, Box, Shape
+from .geometry import Point, Line, Box, Convex
 
 # core coponents: 
 from .agent import Agent

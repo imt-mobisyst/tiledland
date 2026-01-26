@@ -1,5 +1,5 @@
 import math
-from .point import Point
+from .basic import Point
 
 class Box(): # AABB Box
 

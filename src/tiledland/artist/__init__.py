@@ -225,11 +225,11 @@ class Artist():
         return self
     
     # Drawing map:
-    def drawShape( self, shape, brushId=0, px=0, py=0 ):
+    def drawConvex( self, shape, brushId=0, px=0, py=0 ):
         listxs, listys= shape.asLists(px, py)
         self.drawPolygon( listxs, listys, self._panel[ brushId%len(self._panel) ] )
     
-    def fillShape( self, shape, brushId=0, px=0, py=0 ):
+    def fillConvex( self, shape, brushId=0, px=0, py=0 ):
         listxs, listys= shape.asLists(px, py)
         self.fillPolygon( listxs, listys, self._panel[ brushId%len(self._panel) ] )
     
@@ -249,7 +249,7 @@ class Artist():
         self.write( x, y, str(aTile.id()), self._panel[ aTile.matter() ] )
 
     def drawAgent( self, agent, brushId ):
-        self.fillShape(
+        self.fillConvex(
             agent.envelope(),
             brushId )
         minx, miny= agent.box().leftFloor().asTuple()

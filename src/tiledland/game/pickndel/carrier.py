@@ -1,14 +1,14 @@
 """
 Test - MoveIt Robot Class
 """
-from ...geometry import Point, Shape
+from ...geometry import Point, Convex
 from ...agent import Agent
 
-mobileShape= Shape().initializeRegular(0.4, 8)
+mobileConvex= Convex().initializeRegular(0.4, 8)
 
 class Carrier(Agent):
     def __init__( self, identifier=0, owner=1, position= Point(0.0, 0.0), mission= 0):
-        super().__init__(identifier, owner, position, mobileShape)
+        super().__init__(identifier, owner, position, mobileConvex)
         self._mission= mission
         self._clockMove= 0
 

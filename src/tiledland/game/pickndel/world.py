@@ -1,7 +1,7 @@
 
 from .carrier import Carrier
 from ... import scene, Tile, artist
-from ...geometry import Point, Shape, Box
+from ...geometry import Point, Convex, Box
 import hacka as hk
 import random
 

@@ -1,4 +1,4 @@
-from .geometry import Point, Shape
+from .geometry import Point, Convex
 from .pod import Podable, Pod
 
 class Agent(Podable):
@@ -11,7 +11,7 @@ class Agent(Podable):
         self._center= Point( position.x(), position.y() )
         self._shape= shape
         if self._shape is None :
-            self._shape= Shape().initializeSquare(0.4)
+            self._shape= Convex().initializeSquare(0.4)
         self._matter= 10+group
 
     # Accessor: 
@@ -36,10 +36,10 @@ class Agent(Podable):
     def body(self):
         return self._shape.copy(self._center)
     
-    # Shape accessor : 
+    # Convex accessor : 
     def envelope(self):
         cx, cy= self._center.asTuple()
-        return Shape().fromZipped([ (cx+x, cy+y) for x, y in self._shape.asZipped() ])
+        return Convex().fromZipped([ (cx+x, cy+y) for x, y in self._shape.asZipped() ])
     
     def box(self):
         return self.body().box()
@@ -73,15 +73,15 @@ class Agent(Podable):
         self._matter= aInteger
         return self
     
-    def setShape(self, aShape):
-        self._shape= aShape
+    def setConvex(self, aConvex):
+        self._shape= aConvex
         return self
     
-    def setShapeRegular(self, size= 1.0):
+    def setConvexRegular(self, size= 1.0):
         self._shape.initializeSquare(size)
         return self
 
-    def setShapeRegular(self, numberOfVertex= 6, size= 1.0):
+    def setConvexRegular(self, numberOfVertex= 6, size= 1.0):
         self._shape.initializeRegular( numberOfVertex, size)
         return self
 
@@ -101,7 +101,7 @@ class Agent(Podable):
         self.setMatter( integers[2] )
         self.setTile( integers[3] )
         self.setPosition( Point().fromList( aPod.values() ) )
-        self.setShape( Shape().fromPod( aPod.children()[0] ) )
+        self.setConvex( Convex().fromPod( aPod.children()[0] ) )
         return self
     
     # str:

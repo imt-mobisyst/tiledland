@@ -2,7 +2,7 @@ import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src import tiledland as tll
-from src.tiledland.geometry import Point, Shape, Box
+from src.tiledland.geometry import Point, Convex, Box
 from src.tiledland import Agent, Tile, Scene 
 
 
@@ -28,7 +28,7 @@ def test_scene_incremental():
     assert scene.size() == 0
     assert scene.box() == Box()
 
-    index= scene.addTile( Tile( shape= Shape() ) )
+    index= scene.addTile( Tile( shape= Convex() ) )
     assert index == 1
     assert scene.size() == 1
 
@@ -36,34 +36,34 @@ def test_scene_incremental():
     assert scene.tile(1).position().asTuple() == (0.0, 0.0)
     assert scene.tile(1).envelope().asZipped() == []
 
-    index= scene.addTile( Tile( shape= Shape() ) )
+    index= scene.addTile( Tile( shape= Convex() ) )
     assert index == 2
     assert scene.size() == 2
 
 def test_scene_clockNeighboring():
     scene= Scene()
-    tileShape= Shape().fromZipped(
+    tileConvex= Convex().fromZipped(
         [(-1.0, 0.0), (0.0, 1.5), (1.0, 0.0), (0.0, -1.5) ]
     )
-    scene.addTile( Tile( shape=tileShape, matter= 1 ) )
+    scene.addTile( Tile( shape=tileConvex, matter= 1 ) )
 
     draw(scene)
 
     assert scene.neighbours(1) == []
 
-    index= scene.addTile( Tile( shape= tileShape, position=Point(1.5, 2), matter= 2 ) )
+    index= scene.addTile( Tile( shape= tileConvex, position=Point(1.5, 2), matter= 2 ) )
     scene.connect( 1, index )    
     assert scene.neighbours(1) == [(2, 1)]
     draw(scene)
 
-    index= scene.addTile( Tile( shape= tileShape, position=Point(-1.5, 2), matter= 2 ) )
+    index= scene.addTile( Tile( shape= tileConvex, position=Point(-1.5, 2), matter= 2 ) )
     scene.connect( 1, index )    
     draw(scene)
     assert scene.neighbours(1) == [(2, 1), (3, 11)]
 
-    index= scene.addTile( Tile( shape= tileShape, position=Point(1.5, -2), matter= 2 ) )
+    index= scene.addTile( Tile( shape= tileConvex, position=Point(1.5, -2), matter= 2 ) )
     scene.connect( 1, index )    
-    index= scene.addTile( Tile( shape= tileShape, position=Point(-1.5, -2), matter= 2 ) )
+    index= scene.addTile( Tile( shape= tileConvex, position=Point(-1.5, -2), matter= 2 ) )
     scene.connect( 1, index )    
     draw(scene)
     assert scene.neighbours(1) == [(2, 1), (3, 11), (4, 5), (5, 7)]

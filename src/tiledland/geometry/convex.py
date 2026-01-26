@@ -1,9 +1,9 @@
 import math
 from ..pod import Podable, Pod
-from .point import Point, Line
+from .basic import Point, Line
 from .box import Box
 
-class Shape(Podable):
+class Convex(Podable):
 
     # Constructor/Destructor:
     def __init__( self, aListOfPoints= [] ):
@@ -124,7 +124,7 @@ class Shape(Podable):
                     convex.pop(0)
                 convex.insert(0, points[i])
         
-        return Shape( [ convex[-1] ] + convex[0:-1] )
+        return Convex( [ convex[-1] ] + convex[0:-1] )
         
     # Collision:   
     def isIncludingPoint(self, aPoint):
@@ -175,28 +175,32 @@ class Shape(Podable):
 
     # Distances:
     def distancePoint(self, aPoint):
-        minDist= Line( self._points[-1], self._points[0] ).distancePoint(aPoint)
+        minLine= Line( self._points[-1], self._points[0] )
+        minDist= minLine.distancePoint(aPoint)
         p1= self._points[0]
         for p2 in self._points[1:] :
-            dist= Line( p1, p2 ).distancePoint(aPoint)
-            minDist= min( minDist, dist )
+            line= Line( p1, p2 )
+            dist= line.distancePoint(aPoint)
+            if dist < minDist :
+                minDist= dist
+                minLine= line
             p1= p2
-        self._tmpLine= Line(p1, p2)
+        self._trace= minLine
         return minDist
 
     def distanceLine(self, aLine):
         dist1= self.distancePoint( aLine.point1() )
-        line1= self._tmpLine
+        line1= self._trace
         minDist= self.distancePoint( aLine.point2() )
         
         if dist1 < minDist :
             minDist= dist1
-            self._tmpLine= line1
+            self._trace= line1
         
         minDist= min(
             minDist,
-            aLine.distancePoint( self._tmpLine.point1() ),
-            aLine.distancePoint( self._tmpLine.point2() )
+            aLine.distancePoint( self._trace.point1() ),
+            aLine.distancePoint( self._trace.point2() )
         )
         
         return minDist
@@ -208,16 +212,26 @@ class Shape(Podable):
         p2= self._points[0]
         l12= Line(p1, p2)
         minDist= another.distanceLine(l12)
-        self._tmpLine= l12
+        trace= [l12, another._trace]
+        
         p1= p2
         for p2 in self._points[1:] :
             l12= Line(p1, p2)
             dist= another.distanceLine(l12)
             if dist < minDist :
                 minDist= dist
-                self._tmpLine= l12
+                trace= [l12, another._trace]
             p1= p2
+        self._trace= trace
         return minDist
+
+    # Geometry operation
+    def merge( self, another ):
+        if self.isColliding(another) :
+            assert( "Convex::merge: Should not Collide..." == False )
+        dist= self.distance(another)
+        print( self._trace )
+        return self
 
     # Object operator:
     def copy(self, position= Point(0.0, 0.0) ):
@@ -226,7 +240,7 @@ class Shape(Podable):
         return cpy
     
     # to str
-    def str(self, typeName="Shape"): 
+    def str(self, typeName="Convex"): 
         # Myself :
         s= f"{typeName} {len(self._points)}" 
         s+= str( [(round(x, 2), round(y, 2)) for x, y in self.box().asZip()] )
@@ -237,7 +251,7 @@ class Shape(Podable):
     
     # Pod interface:
     def asPod(self):
-        return Pod().fromLists( ["Shape"], [], self.asList(), [] )
+        return Pod().fromLists( ["Convex"], [], self.asList(), [] )
     
     def fromPod( self, aPod ):
         values= aPod.values()

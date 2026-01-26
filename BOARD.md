@@ -13,11 +13,11 @@
 ## Simple, but strong plan geometry
 
 - [ ] Decide: self-dependant (create `lib42deg`) or lib-based 1: [shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives ; 2: [box2d](https://box2d.org/)
-- [ ] Shape min/max radius, and collision.
-- [ ] Shape update with a radius.
+- [ ] Convex min/max radius, and collision.
+- [ ] Convex update with a radius.
 - [ ] Segment automatic tag.
 - [ ] get a tiles from a position (in max radius, and closest)
-- [ ] Agents: update position and Shape function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Scene: `forward(agent, action)` (But on Hacka?) )
+- [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Scene: `forward(agent, action)` (But on Hacka?) )
 - [ ] Scene: Based on a graph
 - [ ] Scene: Graphs <-> Gridmap
 - [ ] Scene: Generation from Voroi, gabriel, ....
@@ -25,7 +25,7 @@
 
 ## Scene, Tiles and Agents :
 
-- [x] Agents: Position, clock-position and Shape
+- [x] Agents: Position, clock-position and Convex
 - [x] Scene as collection of: group's Agents, structured on Tiles
 - [x] Tiles as collection of: Agents
 - [x] Abstraction on Scene: Agents could be anything...
@@ -55,7 +55,7 @@ Social complient navigation.
 - [ ] Add a monitor/control panel
 - [ ] Make the map clickable...
 - [ ] Validate the choise of remi
-- [ ] Add Texure to Shape...
+- [ ] Add Texure to Convex...
 - [ ] Projection simple : (vertical ratio)
 - [ ] Free Projection : (rotation + translation)
 
@@ -69,7 +69,7 @@ Social complient navigation.
 - [ ] Tuto _Web IHM_
 - [ ] Tuto _pygame IHM_
 - [ ] Tuto _create a game_
-- [ ] Developpers expectation: (template from Shape + class structure + tests)
+- [ ] Developpers expectation: (template from Convex + class structure + tests)
 
 
 

@@ -3,7 +3,7 @@ import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tll
-from src.tiledland.geometry import Shape, Point
+from src.tiledland.geometry import Convex, Point
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
@@ -20,7 +20,7 @@ def test_Agent_init():
     env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope().asZipped() ]
     assert env == [(-0.2, 0.2), (0.2, 0.2), (0.2, -0.2), (-0.2, -0.2)]
 
-    agent.setShape( Shape().initializeRegular(0.5, 8) )
+    agent.setConvex( Convex().initializeRegular(0.5, 8) )
     env= [ ( round(x, 2), round(y, 2) ) for x, y in agent.envelope().asZipped() ]
     assert env == [(-0.23, 0.1), (-0.1, 0.23), (0.1, 0.23), (0.23, 0.1), (0.23, -0.1), (0.1, -0.23), (-0.1, -0.23), (-0.23, -0.1)]
 
@@ -33,7 +33,7 @@ def test_Agent_init():
     assert env == [(0.77, 2.1), (0.9, 2.23), (1.1, 2.23), (1.23, 2.1), (1.23, 1.9), (1.1, 1.77), (0.9, 1.77), (0.77, 1.9)]
 
 def test_Agent_init2():
-    agent= tll.Agent( 42, 0, Point(1.0, 2.0), Shape().initializeRegular(0.5, 8) )
+    agent= tll.Agent( 42, 0, Point(1.0, 2.0), Convex().initializeRegular(0.5, 8) )
     
     assert agent.id() == 42
     assert agent.position() == Point(1.0, 2.0)
@@ -41,11 +41,11 @@ def test_Agent_init2():
     assert env == [(0.77, 2.1), (0.9, 2.23), (1.1, 2.23), (1.23, 2.1), (1.23, 1.9), (1.1, 1.77), (0.9, 1.77), (0.77, 1.9)]
     
 def test_Agent_str():
-    agent= tll.Agent( 42, 0, Point(1.0, 2.0), Shape().initializeSquare(1.0) )
+    agent= tll.Agent( 42, 0, Point(1.0, 2.0), Convex().initializeSquare(1.0) )
     print(agent)
     assert str(agent) == "Agent-42 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 
-    agent= tll.Agent( 42, 1, Point(1.0, 2.0), Shape().initializeSquare(1.0) )
+    agent= tll.Agent( 42, 1, Point(1.0, 2.0), Convex().initializeSquare(1.0) )
     print(agent)
     assert str(agent) == "Agent-1.42 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 

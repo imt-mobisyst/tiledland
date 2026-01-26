@@ -1,5 +1,5 @@
 from .pod import Podable, Pod
-from .geometry import Point, Box, Shape
+from .geometry import Point, Box, Convex
 from .tile import Tile
 from .agent import Agent
 
@@ -11,7 +11,7 @@ class Scene(Podable):
     def __init__(self, resolution= 0.01):#, agentFactory= Agent):
         self._resolution= resolution
         self._tiles= []
-        self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Shape().initializeRegular(0.8, 5) ).setMatter(1)
+        self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Convex().initializeRegular(0.8, 5) ).setMatter(1)
         self.clear()
 
     # Accessor:
@@ -110,7 +110,7 @@ class Scene(Podable):
     # Construction:
     def initializeLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
         dist= tileSize+separation
-        shape= Shape().initializeSquare(tileSize)
+        shape= Convex().initializeSquare(tileSize)
         self._tiles= [
             Tile( i+1, Point(dist*i, 0.0), shape.copy() )
             for i in range(size)
@@ -134,7 +134,7 @@ class Scene(Podable):
                     tile= Tile(
                         iTile,
                         Point( dist*j, dist*(maxLine-i) ),
-                        Shape().initializeSquare(tileSize),
+                        Convex().initializeSquare(tileSize),
                         matrix[i][j]
                     )
                     self._tiles.append( tile )
@@ -164,7 +164,7 @@ class Scene(Podable):
                     tile= Tile(
                         iTile,
                         Point( delta+dist*j, vdist*iLine ),
-                        Shape().initializeRegular(tileSize, 6),
+                        Convex().initializeRegular(tileSize, 6),
                         matrix[i][j]
                     )
                     self._tiles.append( tile )
@@ -181,10 +181,10 @@ class Scene(Podable):
         self._tiles.append( aTile )
         return self._size
     
-    def createTile( self, aShape ):
+    def createTile( self, aConvex ):
         self._size+= 1
-        position= aShape.setOnCenter()
-        self._tiles.append( Tile( self._size, position, aShape ) )
+        position= aConvex.setOnCenter()
+        self._tiles.append( Tile( self._size, position, aConvex ) )
         return self._size
     
     def setResolution(self, resolution):
@@ -248,11 +248,9 @@ class Scene(Podable):
         return count
 
     def connectAllClose(self):
-        return self.connectAllDistance(1.1*self._resolution)
+        return self.connectAllDistance( 1.001*self._resolution )
     
     def connectAllDistance(self, distance):
-        if not distance :
-            distance= 1.1*self._resolution
         return self.connectAllConditions( conditionFromTo=lambda tileFrom, tileTo : tileFrom.bodyDistance( tileTo ) < distance )
 
     # Distance :

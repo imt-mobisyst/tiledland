@@ -1,8 +1,8 @@
 import math
 
-from .point import Point, Line
+from .basic import Point, Line
 from .box import Box
-from .shape import Shape
+from .convex import Convex
 
 clockAngles= [ 0.0, 2.0*math.pi/6.0, math.pi/6.0, 0.0,
                math.pi/-6.0, -2.0*math.pi/6.0, math.pi/-2.0,

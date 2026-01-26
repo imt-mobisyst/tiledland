@@ -1,7 +1,7 @@
 import math
 from . import geometry
 from .pod import Pod
-from .geometry import Point, Shape
+from .geometry import Point, Convex
 from .agent import Agent
 
 class Tile(Agent):
@@ -9,7 +9,7 @@ class Tile(Agent):
     def __init__( self, identifier= 0, position= Point(0.0, 0.0), shape= None, matter=0):
         shape
         if shape is None :
-            shape= Shape().initializeSquare(1.0)
+            shape= Convex().initializeSquare(1.0)
         self._adjacencies= []
         self._agents= []
         super(Tile, self).__init__(identifier, 0, position, shape)
@@ -78,7 +78,7 @@ class Tile(Agent):
 
     # Pod interface:
     def asPod(self):
-        return Pod().fromLists(  
+        return Pod().fromLists(   
             ["Tile"], 
             [self.id(), self.matter()] + self.adjacencies(),
             self.position().asList(),
@@ -92,11 +92,16 @@ class Tile(Agent):
         self.setMatter( integers[1] )
         self.setAdjacencies( integers[2:] )
         self.setPosition( Point().fromList( aPod.values() ) )
-        self.setShape( Shape().fromPod( aPod.children()[0] ) )
+        self.setConvex( Convex().fromPod( aPod.children()[0] ) )
         self.clear()
         for podBod in children[1:] :
             self.append( agentFactory().fromPod( podBod ) )
         return self
+    
+    # Classical Class
+    def copy(self):
+        cpy= type(self)()
+        return cpy.fromPod( self.asPod() )
     
     # to str
     def str(self, typeName="Tile"): 

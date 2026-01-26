@@ -1,20 +1,20 @@
 import src.tiledland as tll
 
 '''
-def test_Shape_pod():
-    shape= tll.Shape(8, 10.0)
+def test_Convex_pod():
+    shape= tll.Convex(8, 10.0)
     
     pod= hk.Pod().initializeFrom( shape )
     print(f">>> {pod}")
     
-    assert str(pod) == "Shape: [8] [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]"
+    assert str(pod) == "Convex: [8] [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]"
 
-    shapeBis= tll.Shape().initializeFrom(pod)
+    shapeBis= tll.Convex().initializeFrom(pod)
     
     podBis= hk.Pod().initializeFrom( shapeBis )
     print(f">>> {podBis}")
 
-    assert str(podBis) == "Shape: [8] [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]"
+    assert str(podBis) == "Convex: [8] [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]"
 
 def test_Tile_pod():
     tile= Tile( 3, 0, Point(1.0, 2.0), 2.0 )
@@ -44,9 +44,9 @@ def test_Tile_load():
     assert tileBis.asPod() == tile.asPod()
     
 def test_Tile_load():
-    shape= Shape(8).initializeRegular( 12.0, 7 )
+    shape= Convex(8).initializeRegular( 12.0, 7 )
     
-    shapeBis= Shape().load( shape.dump() )
+    shapeBis= Convex().load( shape.dump() )
     print( shape )
     print( shapeBis )
     assert shapeBis.asPod() == shape.asPod()
@@ -78,7 +78,7 @@ def test_Scene_pod():
     print(f">>>1 {scenePod}")
     assert '\n'+ str(scenePod) +'\n' == """
 Scene:
-- Shape: [0] [-0.25, 0.1, -0.1, 0.25, 0.1, 0.25, 0.25, 0.1, 0.25, -0.1, 0.1, -0.25, -0.1, -0.25, -0.25, -0.1]
+- Convex: [0] [-0.25, 0.1, -0.1, 0.25, 0.1, 0.25, 0.25, 0.1, 0.25, -0.1, 0.1, -0.25, -0.1, -0.25, -0.25, -0.1]
 - Tile: [1, 0, 2, 3, 4] [5.0, 3.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 - Tile: [2, 0, 1, 3, 4] [5.0, 15.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 - Tile: [3, 0, 1, 2] [1.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
@@ -89,7 +89,7 @@ Scene:
     print(f">>>2 {scenePod}")
     assert '\n'+ str(scenePod) +'\n' == """
 Scene:
-- Shape: [0] [-0.25, 0.1, -0.1, 0.25, 0.1, 0.25, 0.25, 0.1, 0.25, -0.1, 0.1, -0.25, -0.1, -0.25, -0.25, -0.1]
+- Convex: [0] [-0.25, 0.1, -0.1, 0.25, 0.1, 0.25, 0.25, 0.1, 0.25, -0.1, 0.1, -0.25, -0.1, -0.25, -0.25, -0.1]
 - Tile: [1, 0, 2, 3, 4] [5.0, 3.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 - Tile: [2, 0, 1, 3, 4] [5.0, 15.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 - Tile: [3, 0, 1, 2] [1.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
@@ -99,7 +99,7 @@ Scene:
     print(f">>> {scenePod.dump()}")
     assert '\n'+ scenePod.dump() +'\n' == """
 Scene - 0 0 0 5 :
-Shape - 0 1 16 0 : 0 -0.25 0.1 -0.1 0.25 0.1 0.25 0.25 0.1 0.25 -0.1 0.1 -0.25 -0.1 -0.25 -0.25 -0.1
+Convex - 0 1 16 0 : 0 -0.25 0.1 -0.1 0.25 0.1 0.25 0.25 0.1 0.25 -0.1 0.1 -0.25 -0.1 -0.25 -0.25 -0.1
 Tile - 0 5 10 0 : 1 0 2 3 4 5.0 3.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45
 Tile - 0 5 10 0 : 2 0 1 3 4 5.0 15.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45
 Tile - 0 4 10 0 : 3 0 1 2 1.0 9.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45

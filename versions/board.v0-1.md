@@ -11,7 +11,7 @@
 
 ## Scene, Tiles and Agents :
 
-- [x] Agents: Position, clock-position and Shape
+- [x] Agents: Position, clock-position and Convex
 - [x] Scene as collection of: group's Agents, structured on Tiles
 - [x] Tiles as collection of: Agents
 - [x] Abstraction on Scene: Agents could be anything...
@@ -23,7 +23,7 @@
 - [x] Artist + support architectur.
 - [x] SVG Support.
 - [x] PNG Support with Cairo.
-- [ ] Add Texure to Shape...
+- [ ] Add Texure to Convex...
 - [ ] Projection simple : (vertical ratio)
 - [ ] Free Projection : (rotation + translation)
 
@@ -38,7 +38,7 @@
 
 - [ ] Presentation of _Core_ components (game)
 - [ ] Presentation of _Geometry_ submodule
-- [ ] Developpers expectation: (template from Shape + class structure + tests)
+- [ ] Developpers expectation: (template from Convex + class structure + tests)
 
 
 ## HackaGames - SocNav
@@ -86,13 +86,13 @@ Based on MultiPath solving problem.
 ## Simple, but strong plan geometry
 
 - [ ] Decide lib-based or independant ([shapely](https://pypi.org/project/shapely), itself based on [geos](https://pypi.org/project/pygame/) for geometric primitives)
-- [ ] Shape min/max radius, and collision.
-- [ ] Shape update with a radius.
+- [ ] Convex min/max radius, and collision.
+- [ ] Convex update with a radius.
 - [ ] Segment automatic tag.
 - [ ] get a tiles from a position (in max radius, and closest)
-- [ ] Agents: update position and Shape function (auto-centering)
+- [ ] Agents: update position and Convex function (auto-centering)
 - [ ] Scene: Generation from graphs, Voroi, gabriel, ....
-- [ ] Shape: Collisions
+- [ ] Convex: Collisions
 
 
 ## Explorations
