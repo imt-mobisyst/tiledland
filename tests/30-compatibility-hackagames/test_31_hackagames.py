@@ -19,8 +19,8 @@ def test_Convex_pod():
 def test_Tile_pod():
     tile= Tile( 3, 0, Point(1.0, 2.0), 2.0 )
     tile._adjacencies= [1, 2, 4]
-    print( tile.envelope() )
-    assert tile.envelope() == [(0.0, 3.0), (2.0, 3.0), (2.0, 1.0), (0.0, 1.0)]    
+    print( tile.body() )
+    assert tile.body() == [(0.0, 3.0), (2.0, 3.0), (2.0, 1.0), (0.0, 1.0)]    
     
     pod= tile.asPod()
     print(f">>> {pod}")
@@ -30,7 +30,7 @@ def test_Tile_pod():
     tileBis= Tile().fromPod(pod)
     assert tileBis.id() == 3
     assert tileBis.center().tuple() == (1.0, 2.0)
-    assert tile.envelope() == [(0.0, 3.0), (2.0, 3.0), (2.0, 1.0), (0.0, 1.0)]
+    assert tile.body() == [(0.0, 3.0), (2.0, 3.0), (2.0, 1.0), (0.0, 1.0)]
     assert tileBis.adjacencies() == [1, 2, 4]
     assert tileBis.asPod() == tile.asPod()
 

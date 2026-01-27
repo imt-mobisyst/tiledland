@@ -37,10 +37,6 @@ class Agent(Podable):
         return self._shape.copy(self._center)
     
     # Convex accessor : 
-    def envelope(self):
-        cx, cy= self._center.asTuple()
-        return Convex().fromZipped([ (cx+x, cy+y) for x, y in self._shape.asZipped() ])
-    
     def box(self):
         return self.body().box()
     

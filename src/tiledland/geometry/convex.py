@@ -9,6 +9,11 @@ class Convex(Podable):
     def __init__( self, aListOfPoints= [] ):
         self.initialize( aListOfPoints )
     
+    def copy(self, position= Point(0.0, 0.0) ):
+        cpy= type(self)()
+        cpy._points= [ position + p.copy() for p in self.points() ]
+        return cpy
+    
     # Initialization:
     def initialize(self, aListOfPoints):
         self._points= aListOfPoints
@@ -242,12 +247,6 @@ class Convex(Podable):
         self._points+= another.points()
         return self.makeConvex()
 
-    # Object operator:
-    def copy(self, position= Point(0.0, 0.0) ):
-        cpy= type(self)()
-        cpy._points= [ position + p.copy() for p in self.points() ]
-        return cpy
-    
     # to str
     def str(self, typeName="Convex"): 
         # Myself :

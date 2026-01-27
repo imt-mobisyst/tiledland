@@ -42,6 +42,14 @@ def test_Convex_initRegular():
     assert box.asList() == [-8.66, -10.0, 8.66, 10.0]
     assert box.asZip() == [ (-8.66, -10.0), (8.66, 10.0) ]
 
+    convex=  Convex().initializeRegular(0.7, 6)
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in convex.asZipped() ]
+    print( env )
+    assert env == [
+        (-0.3, 0.17), (-0.0, 0.35), (0.3, 0.18),
+        (0.3, -0.17), (0.0, -0.35), (-0.3, -0.18)
+    ]
+    
 def test_Convex_forcePoint():
     convex= Convex().forcePoints([
         Point(-0.4, 0.6), Point(0.2, 0.8), Point(0.6, -0.6), Point(-0.5, -0.5)

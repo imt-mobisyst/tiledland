@@ -7,6 +7,7 @@ from src.tiledland.geometry import Point, Convex
 
 def zipSvgFile( img1, img2 ):
     shotFile= open( img1 ) 
+
     refsFile= open( img2 )
     return zip( shotFile, refsFile )
 
@@ -174,15 +175,40 @@ def test_artist_gridscene_piece():
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-01.svg" ):
         assert( lineShot == lineRef )
 
-    def popAgent( iRobot, iTile, iMatter ):
-        bod= tll.Agent( iRobot, 0,
+    def popAgent( iRobot, iMatter, iTile ):
+        bob= tll.Agent( iRobot, 0,
             Point(0.1, 0.1)+scene.tile(iTile).position(),
             tll.Convex().initializeRegular(0.7, 6),
         )
-        bod.setMatter(iMatter)
-        scene.tile(iTile).append( bod )
+        bob.setMatter(iMatter)
+        scene.tile(iTile).append( bob )
+        return bob
     
-    popAgent(1, 12, 13)
+    bob= popAgent(1, 13, 12)
+
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.shape().asZipped() ]
+    print( env )
+    assert env == [
+        (-0.3, 0.17), (-0.0, 0.35), (0.3, 0.18),
+        (0.3, -0.17), (0.0, -0.35), (-0.3, -0.18)
+    ]
+
+    bob= scene.tile(12).agent()
+
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.body().asZipped() ]
+    print( env )
+    assert env == [
+        (6.4, 3.58), (6.7, 3.75), (7.0, 3.58),
+        (7.0, 3.23), (6.7, 3.05), (6.4, 3.23)
+    ]
+
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.body().asZipped() ]
+    print( env )
+    assert env == [
+        (6.4, 3.58), (6.7, 3.75), (7.0, 3.58),
+        (7.0, 3.23), (6.7, 3.05), (6.4, 3.23)
+    ]
+    
 
     pablo.drawScene(scene)
     pablo.flip()
@@ -190,10 +216,10 @@ def test_artist_gridscene_piece():
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-02.svg" ):
         assert( lineShot == lineRef )
     
-    popAgent(2,  9, 13)
-    popAgent(2, 14, 15)
-    popAgent(3, 23, 13)
-    popAgent(1, 20, 15)
+    popAgent(2, 13, 9)
+    popAgent(2, 15, 14)
+    popAgent(3, 13, 23)
+    popAgent(1, 15, 20)
 
     pablo.drawScene(scene)
     pablo.flip()
@@ -201,8 +227,8 @@ def test_artist_gridscene_piece():
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-03.svg" ):
         assert( lineShot == lineRef )
 
-    popAgent(1, 17, 1)
-
+    popAgent(1, 1, 17)
+    
     pablo.drawScene(scene)
     pablo.flip()
 

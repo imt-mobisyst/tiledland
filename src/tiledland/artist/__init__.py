@@ -234,7 +234,7 @@ class Artist():
         self.fillPolygon( listxs, listys, self._panel[ brushId%len(self._panel) ] )
     
     def drawTile( self, aTile ):
-        env= aTile.envelope().asZipped()
+        env= aTile.body().asZipped()
         self.drawPolygon(
             [p[0] for p in env],
             [p[1] for p in env],
@@ -250,7 +250,7 @@ class Artist():
 
     def drawAgent( self, agent, brushId ):
         self.fillConvex(
-            agent.envelope(),
+            agent.body(),
             brushId )
         minx, miny= agent.box().leftFloor().asTuple()
         x, y= agent.position().asTuple()

@@ -3,6 +3,8 @@ import math
 from .basic import Point, Line
 from .box import Box
 from .convex import Convex
+from .grid import Grid
+#ToDo: from .plan import Plan
 
 clockAngles= [ 0.0, 2.0*math.pi/6.0, math.pi/6.0, 0.0,
                math.pi/-6.0, -2.0*math.pi/6.0, math.pi/-2.0,
