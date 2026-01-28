@@ -46,10 +46,11 @@ def test_Tile_regular():
     assert tile.position().asTuple() == (10.0, 10.0)
     assert tile.body().size() == 6
     limits= [ ( round(x, 2), round(y, 2) ) for x, y in tile.body().asZipped() ]
+    print( limits )
     assert limits == [
-        (1.34, 15.0), (10.0, 20.0),
-        (18.66, 15.0), (18.66, 5.0),
-        (10.00, 0.0), (1.34, 5.0)]
+        (1.34, 5.0), (1.34, 15.0), (10.0, 20.0),
+        (18.66, 15.0), (18.66, 5.0), (10.00, 0.0)
+    ]
     
     box= tile.box().round(2)
     assert box.asZip() == [ (1.34, 0.0), (18.66, 20.0) ]

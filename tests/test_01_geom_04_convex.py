@@ -443,15 +443,16 @@ def test_convex_mergeOnlyOne():
         Point(6.5, 3.0)
     ])
 
+    print("\nAnd merge ..." )
     removed= convbis.merge(convex)
 
     print( convbis.asZipped() )
     assert convbis.asZipped() == [
         (1.0, 1.0), (5.5, 5.0),
-        (8.0, 5.5),
-        (6.0, 0.5)
+        (8.0, 5.5), (6.0, 0.5)
     ]
-    assert [(p.x(), p.y()) for p in removed] == [(6.5, 3.0), (6.0, 4.5)]
+    assert ( [(p.x(), p.y()) for p in removed]
+            == [(6.0, 4.5), (6.5, 3.0)] )
 
 
 def test_convex_mergeNoOne():
@@ -474,16 +475,22 @@ def test_convex_mergeNoOne():
         (1.0, 1.0), (5.5, 5.0), (6.0, 0.5)
     ]
     assert( [(p.x(), p.y()) for p in removed]
-           == [(3.0, 1.5), (5.0, 1.0), (4.5, 2.5)] )
+           == [(4.5, 2.5), (5.0, 1.0), (3.0, 1.5)] )
 
-    for p, ref in zip( removed, [0.697, 0.398, 1.204] ) :
+    for p, ref in zip( removed, [1.204, 0.398, 0.697] ) :
         dist= convbis.distancePoint(p)
         assert round(dist, 3) == ref
 
 def test_Convex_merge() :
 
-    conv1= Convex().fromZipped( [(5, 0.5), (5, 3), (5.5, 3), (5.5, 0.5)] )
-    conv2= Convex().fromZipped( [(6, 1), (6, 3), (6.5, 3), (6.5, 1)] )
+    conv1= Convex([
+        Point(5, 0.5), Point(5, 3),
+        Point(5.5, 3), Point(5.5, 0.5)
+    ])
+    conv2= Convex([
+        Point(6, 1), Point(6, 3),
+        Point(6.5, 3), Point(6.5, 1)
+    ])
     merged= conv1.copy()
     removed= merged.merge(conv2)
     removed= [(p.x(), p.y()) for p in removed]
@@ -491,11 +498,13 @@ def test_Convex_merge() :
 
     points= [ (round(x, 2), round(y, 2)) for x, y in  merged.asZipped()]
     print( f"{points}" )
-    
+
+    assert (6, 1) in removed 
     assert (6.5, 1) in points 
     assert (6.5, 3) in points 
     
-    refDist= round(Line( Point(5.55, 0.65), Point(5.35, 0.45) ).distancePoint( Point(5.45, 0.65) ), 4)
-    print( f"{merged.distancePoint( Point(5.45, 0.65) )} VS {refDist}" )
-    assert merged.distancePoint( Point(5.45, 0.65) ) == refDist
+    pRemov= Point(6, 1)
+    refDist= Line( Point(5.5, 0.5), Point(6.5, 1) ).distancePoint( pRemov )
+    print( f"{merged.distancePoint( pRemov )} VS {refDist}" )
+    assert round(merged.distancePoint( pRemov ), 4) == round(refDist, 4)
 

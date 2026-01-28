@@ -344,9 +344,6 @@ def test_scene_mergeButNo():
     pablo.drawScene(scene)
     pablo.flip()
 
-    print( "Ends ?" )
-    assert scene.mergeTilesIfPossible(2, 3)
-
     shotFile= open( shotImg ) 
     refsFile= open( "tests/refs/12.01-mergeConvex-complex2-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):

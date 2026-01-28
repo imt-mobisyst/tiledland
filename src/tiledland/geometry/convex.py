@@ -102,37 +102,37 @@ class Convex(Podable):
 
         # Safe stop :
         if self.size() == 0 :
-            print( f"makeConvex. Empty" )
+            # print( f"makeConvex. Empty" )
             return removed
 
-        print( f"makeConvex..." )
+        # print( f"makeConvex..." )
 
         # Sort points arround a center :
         center= self.center()
-        center.sortRadial( self._points )
+        self._points= center.sortRadial( self._points )
 
-        print( f"points: {', '.join( [str(x) for x in self._points]) } Center({center})" )
+        # print( f"points: {', '.join( [str(x) for x in self._points]) } Center({center})" )
 
         # Build convex list :
         convex= [ self._points[0] ]
         i= 0
         for p in self._points[1:] + [self._points[0]] :
-            print( f"convex: {', '.join( [str(x) for x in convex]) } ({i})" )
+            # print( f"convex: {', '.join( [str(x) for x in convex]) } ({i})" )
             # Init:
-            print( f"test: {p}" )
+            # print( f"test: {p}" )
 
             while (i > 0) and (convex[i] - convex[i-1]).isCounterClockwise( p - convex[i-1] ) :
                 removed.append( 
                     convex.pop(i)
                 )
                 i-= 1
-                print( f"remove: {[ p.asTuple() for p in removed ]} ({i})" )
+                # print( f"remove: {[ p.asTuple() for p in removed ]} ({i})" )
             # push
             convex.append(p)
             i+= 1
         
         #self._points= [ convex[-1] ] + convex[0:-1]
-        print( f"final convex: {', '.join( [str(x) for x in convex]) }" )
+        # print( f"final convex: {', '.join( [str(x) for x in convex]) }" )
         self._points= convex[:-1]
         return removed
 

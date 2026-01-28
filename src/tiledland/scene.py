@@ -307,7 +307,6 @@ class Scene(Podable):
     
     # Tile operation :
     def mergeTilesIfPossible(self, iTile1, iTile2):
-        print( f"merge {iTile1, iTile2} ?" )
         if iTile1 == iTile2 :
             return False
         if iTile2 < iTile1 :
@@ -319,9 +318,7 @@ class Scene(Podable):
         removed= newConvex.merge( convex2 )
 
         # Merge ok ?
-        print( f"convex: {newConvex.asZipped()}" )
         for p in removed :
-            print( f"Point {p} distance: {newConvex.distancePoint(p)}" )
             if newConvex.distancePoint(p) > self.resolution() :
                 return False
         
@@ -354,7 +351,6 @@ class Scene(Podable):
                         notok= True
                         break
         return count
-
 
     # Agent Collection:
     def allAgents( self, iGroup=0 ):

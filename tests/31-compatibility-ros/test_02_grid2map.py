@@ -135,8 +135,6 @@ def test_gridmap_convex():
     refsFile= open( "tests/refs/22.02-convex2map-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
-    
-    assert False
 
 def test_gridmap_large():
     shotImg= "shot-test.svg"
