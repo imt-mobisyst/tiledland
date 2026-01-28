@@ -64,7 +64,7 @@ def test_artist_scene_tiles():
 
     scene= tll.Scene().initializeLine(3)
 
-    assert scene.resolution() == 0.1
+    assert scene.resolution() == 0.01
 
     pablo.drawSceneTiles(scene)
     pablo.flip()
@@ -164,9 +164,8 @@ def test_artist_gridscene_piece():
         [0, 0, 0, -1, 0, 1, 1, 0],
         [0, 4, 0, -1, 0, 2, 1, 6],
         [-1, -1, 0, 0, 0, -1, -1, -1]],
-        1.0, 0.1, False
+        1.0, 0.1
     )
-    scene.connectAllClose()
 
     pablo.fitBox( scene.box() )
     pablo.drawScene(scene)
@@ -252,9 +251,8 @@ def test_artist_hexascene_piece():
         [0, 0, 0, -1, 0, 1, 1, 0],
         [0, 4, 0, -1, 0, 2, 1, 6],
         [-1, -1, 0, 0, 0, -1, -1, -1]],
-        1.0, 0.1, False
+        1.0, 0.1
     )
-    scene.connectAllClose()
 
     pablo.fitBox( scene.box() )
     pablo.drawScene(scene)

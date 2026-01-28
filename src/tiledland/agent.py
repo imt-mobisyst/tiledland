@@ -69,18 +69,24 @@ class Agent(Podable):
         self._matter= aInteger
         return self
     
-    def setConvex(self, aConvex):
+    def setShape(self, aConvex):
         self._shape= aConvex
         return self
     
-    def setConvexRegular(self, size= 1.0):
+    def setShapeRegular(self, size= 1.0):
         self._shape.initializeSquare(size)
         return self
 
-    def setConvexRegular(self, numberOfVertex= 6, size= 1.0):
+    def setShapeRegular(self, numberOfVertex= 6, size= 1.0):
         self._shape.initializeRegular( numberOfVertex, size)
         return self
 
+    def setBody(self, aConvex):
+        self._center= aConvex.center()
+        subCenter= Point( -self._center.x(), -self._center.y() )
+        self._shape= aConvex.copy(subCenter) 
+        return self
+    
     # Pod interface:
     def asPod(self):
         return Pod().fromLists( 
@@ -97,7 +103,7 @@ class Agent(Podable):
         self.setMatter( integers[2] )
         self.setTile( integers[3] )
         self.setPosition( Point().fromList( aPod.values() ) )
-        self.setConvex( Convex().fromPod( aPod.children()[0] ) )
+        self.setShape( Convex().fromPod( aPod.children()[0] ) )
         return self
     
     # str:

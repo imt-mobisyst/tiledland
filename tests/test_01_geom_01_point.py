@@ -1,9 +1,9 @@
 # HackaGames UnitTest - `pytest`
-import sys
+import sys, math
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src.tiledland import geometry
-from src.tiledland.geometry import Point, Line
+from src.tiledland.geometry import Point
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - G E O M E T R Y
@@ -49,3 +49,58 @@ def test_point_line():
     assert not Point(5.0, 1.6).isCollidingLine(a, b)
     assert Point(5.0, 1.6).isCollidingLine(a, b, 3.0)
     assert Point(4.0, 2.5).isCollidingLine(a, b)
+
+def test_point_angle():
+    # angle
+    assert (round( Point(0, -1).angle( Point(0, 1) ), 4 )
+            == round( math.pi, 4 ) )
+    
+    assert (round( Point(0, 1).angle( Point(0, -1) ), 4 )
+            == round( -math.pi, 4 ) )
+    
+    assert (round( Point(0, 1).angle( Point(1, 0) ), 4 )
+            == round( -math.pi/2.0, 4 ) )
+    
+    assert (round( Point(0, 1).angle( Point(-1, 0) ), 4 )
+            == round( math.pi/2.0, 4 ) )
+    
+    assert (round( Point(0, -12).angle( Point(0, 0.1) ), 4 )
+            == round( math.pi, 4 ) )
+    
+    assert (round( Point(0, 71).angle( Point(0, -51) ), 4 )
+            == round( -math.pi, 4 ) )
+    
+    assert (round( Point(0, 2).angle( Point(14, 0) ), 4 )
+            == round( -math.pi/2.0, 4 ) )
+    
+    assert (round( Point(0, 0.08).angle( Point(-24, 0) ), 4 )
+            == round( math.pi/2.0, 4 ) )
+    
+    # angle (positive)
+    assert (round( Point(0, -1).angleClockwise( Point(0, 1) ), 4 )
+            == round( math.pi, 4 ) )
+    
+    assert (round( Point(0, 1).angleClockwise( Point(0, -1) ), 4 )
+            == round( math.pi, 4 ) )
+    
+    assert (round( Point(0, 1).angleClockwise( Point(1, 0) ), 4 )
+            == round( math.pi/2.0, 4 ) )
+    
+    assert (round( Point(0, 1).angleClockwise( Point(-1, 0) ), 4 )
+            == round( 3*math.pi/2.0, 4 ) )
+    
+    assert (round( Point(0, -12).angleClockwise( Point(0, 0.1) ), 4 )
+            == round( math.pi, 4 ) )
+    
+    assert (round( Point(0, 71).angleClockwise( Point(0, -51) ), 4 )
+            == round( math.pi, 4 ) )
+    
+    assert (round( Point(0, 2).angleClockwise( Point(14, 0) ), 4 )
+            == round( math.pi/2.0, 4 ) )
+    
+    assert (round( Point(0, 0.08).angleClockwise( Point(-24, 0) ), 4 )
+            == round( 3*math.pi/2.0, 4 ) )
+
+    # random angle: 
+    assert round( (Point(1.5, 1.0)-Point(3.5, 2)).angleClockwise(Point(2.5, 3.5)-Point(3.5, 2)),
+            3) == 1.446

@@ -31,10 +31,7 @@ def test_Convex_initRegular():
     assert len(convex.asZipped()) == 6
     env= [ ( round(x, 2), round(y, 2) ) for x, y in convex.asZipped() ]
     print( env )
-    assert env == [
-        (-8.66, 5.0), (-0.0, 10.0), (8.66, 5.0),
-        (8.66, -5.0), (0.0, -10.0), (-8.66, -5.0)
-    ]
+    assert env == [(-8.66, -5.0), (-8.66, 5.0), (-0.0, 10.0), (8.66, 5.0), (8.66, -5.0), (0.0, -10.0)]
     
     box= convex.box()
     box.round(2)
@@ -45,10 +42,7 @@ def test_Convex_initRegular():
     convex=  Convex().initializeRegular(0.7, 6)
     env= [ ( round(x, 2), round(y, 2) ) for x, y in convex.asZipped() ]
     print( env )
-    assert env == [
-        (-0.3, 0.17), (-0.0, 0.35), (0.3, 0.18),
-        (0.3, -0.17), (0.0, -0.35), (-0.3, -0.18)
-    ]
+    assert env == [(-0.3, -0.18), (-0.3, 0.17), (-0.0, 0.35), (0.3, 0.18), (0.3, -0.17), (0.0, -0.35)]
     
 def test_Convex_forcePoint():
     convex= Convex().forcePoints([
@@ -96,10 +90,14 @@ def test_Convex_podCopy():
     assert convexBis.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
 
 def test_Convex_convex():
+    print( f"Go convex ..." )
     convex= Convex().initializeSquare(0.9)
     assert convex.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
 
+    assert not (Point(0.45, 0.45)-Point(-0.45, 0.45)).isCounterClockwise(Point(-0.45, -0.45)-Point(-0.45, 0.45))
+
     removed= convex.makeConvex()
+
     assert removed == []
     assert convex.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
     
@@ -417,15 +415,19 @@ def test_convex_mergeInsideBis():
         Point(8.5, 1.5)
     ])
 
+    # Merge :
+    
     removed= convbis.merge(convex)
 
     print( convbis.asZipped() )
+    
+    assert [(p.x(), p.y()) for p in removed] == [(4.5, 2.5)]
+
     assert convbis.asZipped() == [
         (1.0, 1.0), (5.5, 5.0),
         (9.0, 4.5), (8.5, 1.5),
         (6.0, 0.5)
     ]
-    assert [(p.x(), p.y()) for p in removed] == [(4.5, 2.5)]
 
 
 def test_convex_mergeOnlyOne():
@@ -478,4 +480,22 @@ def test_convex_mergeNoOne():
         dist= convbis.distancePoint(p)
         assert round(dist, 3) == ref
 
+def test_Convex_merge() :
+
+    conv1= Convex().fromZipped( [(5, 0.5), (5, 3), (5.5, 3), (5.5, 0.5)] )
+    conv2= Convex().fromZipped( [(6, 1), (6, 3), (6.5, 3), (6.5, 1)] )
+    merged= conv1.copy()
+    removed= merged.merge(conv2)
+    removed= [(p.x(), p.y()) for p in removed]
+    print(f"Removed: {removed}")
+
+    points= [ (round(x, 2), round(y, 2)) for x, y in  merged.asZipped()]
+    print( f"{points}" )
     
+    assert (6.5, 1) in points 
+    assert (6.5, 3) in points 
+    
+    refDist= round(Line( Point(5.55, 0.65), Point(5.35, 0.45) ).distancePoint( Point(5.45, 0.65) ), 4)
+    print( f"{merged.distancePoint( Point(5.45, 0.65) )} VS {refDist}" )
+    assert merged.distancePoint( Point(5.45, 0.65) ) == refDist
+

@@ -61,7 +61,7 @@ class Scene(Podable):
             clockdir= self.tile(iTile).clockDirection( self.tile(iNei).position() )
             neibs.append( (iNei, clockdir) )
         return neibs
-    
+        
     def directions(self, iTile) : 
         cx, cy= self.tile(iTile).position().asTuple()
         neibor= self.adjacencies(iTile)
@@ -123,9 +123,8 @@ class Scene(Podable):
             for i in range(size)
         ]
         self._size= size
-        self.setResolution( separation )
         if connect :
-            self.connectAllClose()
+            self.connectAllClose(1.1*separation)
         return self
     
     def initializeGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
@@ -148,9 +147,8 @@ class Scene(Podable):
                     #matrix[i][j]= iTile
         
         self._size= iTile
-        self.setResolution( separation )
         if connect :
-            self.connectAllClose()
+            self.connectAllClose(1.1*separation)
         return self
 
     def initializeHexa( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
@@ -177,9 +175,8 @@ class Scene(Podable):
                     self._tiles.append( tile )
                     #matrix[i][j]= iTile
         self._size= iTile
-        self.setResolution( separation )
         if connect :
-            self.connectAllClose()
+            self.connectAllClose(1.1*separation)
         return self
     
     def addTile( self, aTile ):
@@ -194,6 +191,26 @@ class Scene(Podable):
         self._tiles.append( Tile( self._size, position, aConvex ) )
         return self._size
     
+    def removeTile( self, iTile ):
+        for t in self._tiles :
+            if t.isConnecting(iTile) :
+                t.disconnect(iTile)
+        for jTile in range( iTile+1, self.size()+1 ) :
+            self.changeTileID( jTile, jTile-1 )
+        self._tiles.pop(iTile-1)
+        self._size-=1
+        return self
+    
+    def changeTileID( self, iTile, newID ):
+        # Change connection :
+        for t in self._tiles :
+            if t.isConnecting(iTile) :
+                t.disconnect(iTile)
+                t.connect(newID)
+        # Change iTile :
+        self.tile(iTile).setId(newID)
+        return self
+
     def setResolution(self, resolution):
         self._resolution= resolution
         return self
@@ -201,7 +218,6 @@ class Scene(Podable):
     def setAgentFactory(self, agentFactory ):
         self._factory= agentFactory
         return self
-
 
     def clearAgents(self):
         for t in self.tiles() :
@@ -249,10 +265,10 @@ class Scene(Podable):
                        count+= 1
         return count
 
-    def connectAllClose(self):
-        return self.connectAllDistance( 1.001*self._resolution )
+    def connectAllClose(self, distance):
+    #    return self.connectAllDistance( self._resolution )
     
-    def connectAllDistance(self, distance):
+    #def connectAllDistance(self, distance):
         return self.connectAllConditions( conditionFromTo=lambda tileFrom, tileTo : tileFrom.bodyDistance( tileTo ) < distance )
 
     # Distance :
@@ -289,6 +305,57 @@ class Scene(Podable):
         dists[iTile]= 0
         return dists
     
+    # Tile operation :
+    def mergeTilesIfPossible(self, iTile1, iTile2):
+        print( f"merge {iTile1, iTile2} ?" )
+        if iTile1 == iTile2 :
+            return False
+        if iTile2 < iTile1 :
+            return self.mergeTilesIfPossible(iTile2, iTile1)
+        
+        tile= self.tile(iTile1)
+        newConvex= tile.body().copy()
+        convex2= self.tile(iTile2).body()
+        removed= newConvex.merge( convex2 )
+
+        # Merge ok ?
+        print( f"convex: {newConvex.asZipped()}" )
+        for p in removed :
+            print( f"Point {p} distance: {newConvex.distancePoint(p)}" )
+            if newConvex.distancePoint(p) > self.resolution() :
+                return False
+        
+        # Do merge:
+        newConvex.simplify( self._resolution )
+        tile.setBody(newConvex)
+        deadTile= self.tile(iTile2)
+        # merge all agents
+        for ag in deadTile.agents() :
+            tile.append( ag )
+        
+        # merge connections
+        tile.connectAll( deadTile.adjacencies() )
+        for t in self._tiles :
+            if t.isConnecting(iTile2) :
+                t.connect(iTile1)
+        
+        self.removeTile(iTile2)
+        return True
+    
+    def mergeAllPossible(self):
+        notok= True
+        count= 0
+        while notok :
+            notok= False
+            for iTile in range( self.size(), 0, -1 ) :
+                for candidate in self.tile(iTile).adjacencies() :
+                    if candidate < iTile and self.mergeTilesIfPossible(candidate, iTile ) :
+                        count+= 1
+                        notok= True
+                        break
+        return count
+
+
     # Agent Collection:
     def allAgents( self, iGroup=0 ):
         alls= []

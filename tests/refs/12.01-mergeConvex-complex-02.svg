@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600">
+<polygon points="0,0 0,600 800,600 800,0" fill="#b86e00" />
+<circle r="4" cx="380.0" cy="280.0" fill="#603800" />
+<line x1="380.0" y1="280.0" x2="380.0" y2="280.0" style="stroke:#603800;stroke-width:4"/>
+<polygon points="105.0,495.0 105.0,245.0 285.0,65.00000000000003 655.0,65.00000000000003 655.0,435.0 595.0,495.0" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<text x="196.66666666666669" y="423.33333333333337" fill="#603800" font-family="Verdana" font-size="16">1</text>" />
+</svg>

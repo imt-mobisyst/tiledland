@@ -70,6 +70,11 @@ class Point():
             and self.y() == another.y()
         )
 
+    def distanceSquare(self, another):
+        delta= another - self
+        dx, dy = delta.asTuple()
+        return dx*dx + dy*dy
+     
     def distance(self, another):
         delta= another - self
         dx, dy = delta.asTuple()
@@ -85,6 +90,38 @@ class Point():
     def crossProduct(self, another):
         return (self._x * another._y - self._y * another._x)
     
+    def dotProduct(self, another):
+        return (self._x * another._x + self._y * another._y)
+    
+    def angleAbs(self, another):
+        dot = self.dotProduct(another)
+        n1 = self.length()
+        n2 = another.length()
+        cos_theta = dot / (n1 * n2)
+        cos_theta = max( min(cos_theta, 1.0), -1.0)
+        return  math.acos(cos_theta)
+    
+    def angle(self, another):
+        dot = self.dotProduct(another)
+        cross = self.crossProduct(another)
+        angle = math.atan2(cross, dot)  # retourne [-pi, pi]
+        return angle
+
+        dot = self.dotProduct(another)
+        n1 = self.length()
+        n2 = another.length()
+        cos_theta = dot / (n1 * n2)
+        cos_theta = max( min(cos_theta, 1.0), -1.0)
+        return  math.acos(cos_theta)
+    
+    def angleClockwise(self, another):
+        a= self.angle(another)
+        if a == 0.0 :
+            return a
+        if a < 0.0 :
+            return -a
+        return 2*math.pi-a
+    
     # Collision
     def isColliding(self, point, distance=0.001):
         between= point - self
@@ -95,6 +132,49 @@ class Point():
         v1= a-self
         v2= b - self
         return ( v1.length() + v2.length() ) < vab.length() + distance
+
+    # list of points:
+    def isClockwise(self, another):
+        return self.crossProduct(another) < 0.0
+    
+    def isCounterClockwise(self, another):
+        return self.crossProduct(another) > 0.0
+    
+    def sortRadial( self, points ):
+        size= len(points)
+        
+        # Find point minimal distance to the left-bottom corner :
+        corner= Point(
+            min( [ p.x() for p in points ] ),
+            min( [ p.y() for p in points ] )
+        )
+        minDist2= corner.distanceSquare( points[0] )
+        for i in range(1, size) :
+            dist2= corner.distanceSquare( points[i] )
+            if dist2 < minDist2 :
+                p= points[0]
+                points[0]= points[i]
+                points[i]= p
+                minDist2= dist2
+
+        # compute angles :
+        ref= points[0]-self
+        angles= [ ref.angleClockwise( p-self ) for p in points ]
+        
+        # Sort points by angles
+        notok= True
+        while notok :
+            notok= False
+            for i in range(size-2, 0, -1) :
+                if angles[i] > angles[i+1] :
+                    a= angles[i+1]
+                    p= points[i+1]
+                    angles[i+1]= angles[i]
+                    points[i+1]= points[i]
+                    angles[i]= a
+                    points[i]= p
+                    notok= True
+        return points
 
     # to str
     def str(self): 

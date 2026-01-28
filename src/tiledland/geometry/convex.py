@@ -40,7 +40,7 @@ class Convex(Podable):
             p= Point( math.cos(angle)*radius, math.sin(angle)*radius)
             self._points.append(p)
             angle+= -delta
-        self.makeConvex()
+        self._points= self.center().sortRadial( self._points )
         return self
     
     def forcePoints(self, points):
@@ -102,45 +102,38 @@ class Convex(Podable):
 
         # Safe stop :
         if self.size() == 0 :
+            print( f"makeConvex. Empty" )
             return removed
 
-        # Find point with minimal x value :
-        for i in range( 1, self.size() ) :
-            ix= self._points[i]._x
-            minx= self._points[0]._x
-            if ix < minx or ( ix == minx
-                             and self._points[i]._y < self._points[0]._y ) :
-                p= self._points[0]
-                self._points[0]= self._points[i]
-                self._points[i]= p
+        print( f"makeConvex..." )
 
-        # Trier les points par angle
-        for i in range(1, self.size()) :
-            v1= self._points[i]
-            for j in range( i+1, self.size() ) :
-                v2= self._points[j]-self._points[0]
-                if v1.crossProduct(v2) < 0.0 :
-                    # Echange
-                    v1= v2
-                    v2= self._points[i]
-                    self._points[i]= self._points[j]
-                    self._points[j]= v2
+        # Sort points arround a center :
+        center= self.center()
+        center.sortRadial( self._points )
+
+        print( f"points: {', '.join( [str(x) for x in self._points]) } Center({center})" )
 
         # Build convex list :
-        v1= self._points[0]
         convex= [ self._points[0] ]
-        for i in range( 1, self.size() ) :
+        i= 0
+        for p in self._points[1:] + [self._points[0]] :
+            print( f"convex: {', '.join( [str(x) for x in convex]) } ({i})" )
             # Init:
-            if len(convex) < 3 or (v1 - convex[0]).crossProduct( self._points[i]-convex[0] ) < 0.0 :
-                while( len(convex) > 1) and (convex[0]-convex[1]).crossProduct( self._points[i]-convex[0] ) < 0.0 :
-                    removed.append( 
-                        convex.pop(0)
-                    )
-                convex.insert(0, self._points[i])
-            else :
-                removed.append( self._points[i] )
+            print( f"test: {p}" )
+
+            while (i > 0) and (convex[i] - convex[i-1]).isCounterClockwise( p - convex[i-1] ) :
+                removed.append( 
+                    convex.pop(i)
+                )
+                i-= 1
+                print( f"remove: {[ p.asTuple() for p in removed ]} ({i})" )
+            # push
+            convex.append(p)
+            i+= 1
         
-        self._points= [ convex[-1] ] + convex[0:-1]
+        #self._points= [ convex[-1] ] + convex[0:-1]
+        print( f"final convex: {', '.join( [str(x) for x in convex]) }" )
+        self._points= convex[:-1]
         return removed
 
     # Collision:   
@@ -232,7 +225,7 @@ class Convex(Podable):
         trace= [l12, another._trace]
         
         p1= p2
-        for p2 in self._points[1:] :
+        for p2 in self ._points[1:] :
             l12= Line(p1, p2)
             dist= another.distanceLine(l12)
             if dist < minDist :
@@ -246,6 +239,23 @@ class Convex(Podable):
     def merge( self, another ):
         self._points+= another.points()
         return self.makeConvex()
+    
+    def simplify(self, epsilon):
+        removed= []
+        notok= True
+        while notok and self.size() > 3 :
+            notok= False
+            i = self.size()-1
+            i1= i-2
+            for i2 in range( self.size() ) :
+                line= Line( self._points[i1], self._points[i2] )
+                if line.distancePoint( self._points[i] ) < epsilon :
+                    notok= True
+                    removed.append( self._points.pop(i) )
+                    break
+                i1= i
+                i= i2
+        return removed
 
     # to str
     def str(self, typeName="Convex"): 

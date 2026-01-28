@@ -34,10 +34,17 @@ class Tile(Agent):
         return self
     
     # Connection:
+    def isConnecting(self, iTile):
+        return (iTile in self.adjacencies())
+    
     def connect(self, iTo):
         if iTo not in self._adjacencies :
             self._adjacencies.append(iTo)
             self._adjacencies.sort()
+        return self
+
+    def disconnect(self, iTo):
+        self._adjacencies.remove(iTo)
         return self
 
     def connectAll( self, aList ):
@@ -92,7 +99,7 @@ class Tile(Agent):
         self.setMatter( integers[1] )
         self.setAdjacencies( integers[2:] )
         self.setPosition( Point().fromList( aPod.values() ) )
-        self.setConvex( Convex().fromPod( aPod.children()[0] ) )
+        self.setShape( Convex().fromPod( aPod.children()[0] ) )
         self.clear()
         for podBod in children[1:] :
             self.append( agentFactory().fromPod( podBod ) )

@@ -266,7 +266,6 @@ class Artist():
             brush= self._panel[ aScene.tile( fromId ).matter() ]
             toX, toY= aScene.tile( toId ).position().asTuple()
             self.traceLine( fromX, fromY, toX, toY, brush )
-        #    self.tracePoint( aScene.tile(fromId) )
 
     def drawSceneTiles( self, aScene ):
         for tile in aScene.tiles() :

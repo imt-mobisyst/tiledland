@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600">
+<polygon points="0,0 0,600 800,600 800,0" fill="#b86e00" />
+<circle r="4" cx="350.0" cy="370.0" fill="#603800" />
+<circle r="4" cx="435.0" cy="230.0" fill="#603800" />
+<line x1="350.0" y1="370.0" x2="350.0" y2="370.0" style="stroke:#603800;stroke-width:4"/>
+<line x1="350.0" y1="370.0" x2="435.0" y2="230.0" style="stroke:#603800;stroke-width:4"/>
+<line x1="435.0" y1="230.0" x2="350.0" y2="370.0" style="stroke:#603800;stroke-width:4"/>
+<line x1="435.0" y1="230.0" x2="435.0" y2="230.0" style="stroke:#603800;stroke-width:4"/>
+<polygon points="105.0,495.0 105.0,245.0 595.0,245.0 595.0,495.0" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<polygon points="275.0,235.0 275.0,225.0 595.0,225.0 595.0,235.0" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<text x="186.66666666666663" y="453.3333333333333" fill="#603800" font-family="Verdana" font-size="16">1</text>" />
+<text x="328.3333333333333" y="233.33333333333334" fill="#603800" font-family="Verdana" font-size="16">2</text>" />
+</svg>
