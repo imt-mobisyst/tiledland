@@ -31,8 +31,8 @@ def test_scene_fromConvex():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    scene= tll.Scene( resolution=0.5 )
-    assert scene.resolution() == 0.5
+    scene= tll.Scene( epsilon=0.1 )
+    assert scene.epsilon() == 0.1
     assert scene.size() == 0
 
     scene.createTile( shapes[0] )
@@ -112,7 +112,7 @@ def test_scene_mergeOne():
         assert( lineShot == lineRef )
     
     ## Merge :
-    ok= scene.mergeTilesIfPossible(1, 2)
+    ok= scene.mergeTilesIfPossible(1, 2,  0.09)
 
     assert ok
 
@@ -148,7 +148,7 @@ def test_scene_mergeNoOne():
         assert( lineShot == lineRef )
 
     ## Merge :
-    ok= scene.mergeTilesIfPossible(1, 2)
+    ok= scene.mergeTilesIfPossible(1, 2, 0.09)
 
     assert not ok
 
@@ -169,7 +169,7 @@ def test_scene_mergeNoOne():
     scene= tll.Scene( shapes, 0.09 )
     scene.connectAllClose(0.11)
     ## Merge :
-    assert not scene.mergeTilesIfPossible(1, 2)
+    assert not scene.mergeTilesIfPossible(1, 2, 0.09)
 
 def test_scene_mergeFew():
     shapes= [
@@ -188,7 +188,7 @@ def test_scene_mergeFew():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    scene= tll.Scene( resolution=0.0999 )
+    scene= tll.Scene( epsilon=0.0999 )
     for s in shapes :
         scene.createTile( s )
     
@@ -210,7 +210,7 @@ def test_scene_mergeFew():
         assert( lineShot == lineRef )
 
     ## Merge 1-2 :
-    ok= scene.mergeTilesIfPossible(1, 2)
+    ok= scene.mergeTilesIfPossible(1, 2, 0.09)
 
     assert ok
     assert len( scene.tiles() ) == 9
@@ -225,7 +225,7 @@ def test_scene_mergeFew():
         assert( lineShot == lineRef )
 
     ## Merge 8-9 :
-    assert scene.mergeTilesIfPossible(8, 9)
+    assert scene.mergeTilesIfPossible(8, 9, 0.09)
 
     pablo.drawScene(scene)
     pablo.flip()
@@ -267,7 +267,7 @@ def test_scene_mergeConplex():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    scene= tll.Scene( resolution=0.0999 )
+    scene= tll.Scene( epsilon=0.0999 )
     for s in shapes :
         scene.createTile( s )
     
@@ -318,7 +318,7 @@ def test_scene_mergeButNo():
         Convex().fromZipped( [(5.45, 0.65), (5.45, 3.35), (5.55, 3.35), (5.55, 0.65)] )
     ]
 
-    scene= tll.Scene( resolution=0.0999 )
+    scene= tll.Scene( epsilon=0.0999 )
     for s in shapes :
         scene.createTile( s )
     
@@ -339,7 +339,6 @@ def test_scene_mergeButNo():
 
     ## Merge all :
     scene.mergeAllPossible()
-
 
     pablo.drawScene(scene)
     pablo.flip()

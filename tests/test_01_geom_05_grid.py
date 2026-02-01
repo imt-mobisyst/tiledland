@@ -45,6 +45,8 @@ def test_grid_init2():
     assert grid.cell(2, 2) == 0
     assert grid.cell(3, 2) == 1
 
+    assert grid.valueMinMax() == (0, 2)
+
     grid.setCell(1, 2, 4)
 
     assert grid.values() == [

@@ -2,6 +2,12 @@ from .color import color, colorRatio, colorRatio, rgbColor, percentColor, webCol
 from .support import AbsSupport, Support, SupportSVG
 from .supportCairo import SupportPNG
 
+def draw(scene, filePath= "shot.png"):
+    pablo= Artist().initializePNG( filePath )
+    pablo.fit(scene)
+    pablo.drawScene(scene)
+    pablo.flip()
+
 # Artist:
 class Brush():
     def __init__(self, fill= 0xff6644, stroke= 0x991100, width= 4 ):
@@ -94,6 +100,9 @@ class Artist():
         self._scale= scale
         return self
     
+    def fit(self, anObj):
+        return self.fitBox( anObj.box() )
+
     def fitBox( self, aBox, marge=10 ):
         marge= marge*2
         minx, miny= aBox.leftFloor().asTuple()

@@ -14,16 +14,59 @@ class Scene(Podable):
         self._size= 0
         return self
     
-    def __init__(self, shapes= [], resolution= 0.01):#, agentFactory= Agent):
+    def __init__(self, shapes= [], epsilon= 0.01):
         self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Convex().initializeRegular(0.8, 5) ).setMatter(1)
         self.clear()
         for s in shapes :
             self.createTile( s )
-        self._resolution= resolution
+        self._epsilon= epsilon
+    
+    # Initialization:
+    def fromGrid(self, aGrid):
+        # Clean basis:
+        self.clear()
+        self._epsilon= aGrid.resolution() * 0.4
+
+        # Foreach value possibility:
+        minMatter, maxMatter= aGrid.valueMinMax()
+        i= 0
+        for matter in range( minMatter, maxMatter+1 ):
+            # Add all shapes
+            shapes= aGrid.makeConvexes(matter)
+            for s in shapes :
+                i+= 1
+                assert self.createTile(s, matter) == i
         
+        # Connect all elements:
+        self.connectAllClose( aGrid.resolution() )
+
+        # Optimize the definition:
+        self.mergeAllPossible( aGrid.resolution() * 0.2 )
+        self.mergeAllPossible( aGrid.resolution() * 0.4 )
+        self.mergeAllPossible( aGrid.resolution() * 0.6 )
+        self.mergeAllPossible( aGrid.resolution() * 0.8 )
+        self.mergeAllPossible( aGrid.resolution() )
+        """
+        for i in range( 1, self.size()+1 ) :
+            for j in self.tile(i).adjacencies() :
+                bodI= self.tile(i).body()
+                bodJ= self.tile(j).body()
+                if bodI.box().isColliding( bodJ.box() ):
+                    ip= 0
+                    while ip < bodI.size() :
+                        p = bodI._points[ip]
+                        if bodJ.isIncludingPoint(p) :
+                            print( f" {i} {p} colide {j}" )
+                            self.tile(i).shape()._points.pop(ip)
+                            bodI= self.tile(i).body()
+                        else :
+                            ip+= 1
+        """
+        return self
+    
     # Accessor:
-    def resolution(self):
-        return self._resolution
+    def epsilon(self):
+        return self._epsilon
     
     def size(self):
         return self._size
@@ -185,10 +228,10 @@ class Scene(Podable):
         self._tiles.append( aTile )
         return self._size
     
-    def createTile( self, aConvex ):
+    def createTile( self, aConvex, matter= 0 ):
         self._size+= 1
         position= aConvex.setOnCenter()
-        self._tiles.append( Tile( self._size, position, aConvex ) )
+        self._tiles.append( Tile( self._size, position, aConvex, matter ) )
         return self._size
     
     def removeTile( self, iTile ):
@@ -211,8 +254,8 @@ class Scene(Podable):
         self.tile(iTile).setId(newID)
         return self
 
-    def setResolution(self, resolution):
-        self._resolution= resolution
+    def setEpsilon(self, epsilon):
+        self._epsilon= epsilon
         return self
 
     def setAgentFactory(self, agentFactory ):
@@ -266,10 +309,8 @@ class Scene(Podable):
         return count
 
     def connectAllClose(self, distance):
-    #    return self.connectAllDistance( self._resolution )
-    
-    #def connectAllDistance(self, distance):
-        return self.connectAllConditions( conditionFromTo=lambda tileFrom, tileTo : tileFrom.bodyDistance( tileTo ) < distance )
+        return self.connectAllConditions(
+            conditionFromTo=lambda tileFrom, tileTo : tileFrom != tileTo and tileFrom.bodyDistance( tileTo ) < distance )
 
     # Distance :
     def computeDistances(self):
@@ -306,12 +347,12 @@ class Scene(Podable):
         return dists
     
     # Tile operation :
-    def mergeTilesIfPossible(self, iTile1, iTile2):
+    def mergeTilesIfPossible(self, iTile1, iTile2, acceptedDistance):
         if iTile1 == iTile2 :
             return False
         if iTile2 < iTile1 :
-            return self.mergeTilesIfPossible(iTile2, iTile1)
-        
+            return self.mergeTilesIfPossible(iTile2, iTile1, acceptedDistance)
+
         tile= self.tile(iTile1)
         newConvex= tile.body().copy()
         convex2= self.tile(iTile2).body()
@@ -319,11 +360,11 @@ class Scene(Podable):
 
         # Merge ok ?
         for p in removed :
-            if newConvex.distancePoint(p) > self.resolution() :
+            if newConvex.distancePoint(p) > acceptedDistance :
                 return False
         
         # Do merge:
-        newConvex.simplify( self._resolution )
+        newConvex.simplify( self.epsilon() )
         tile.setBody(newConvex)
         deadTile= self.tile(iTile2)
         # merge all agents
@@ -331,22 +372,29 @@ class Scene(Podable):
             tile.append( ag )
         
         # merge connections
-        tile.connectAll( deadTile.adjacencies() )
+        adjs= deadTile.adjacencies()
+        adjs.remove(iTile1)
+        tile.connectAll( adjs )
         for t in self._tiles :
-            if t.isConnecting(iTile2) :
+            if t != self.tile(iTile1) and t.isConnecting(iTile2) :
                 t.connect(iTile1)
         
         self.removeTile(iTile2)
         return True
     
-    def mergeAllPossible(self):
+    def mergeAllPossible(self, acceptedDistance= False):
+        if not acceptedDistance :
+            acceptedDistance= self.epsilon()
         notok= True
         count= 0
         while notok :
             notok= False
             for iTile in range( self.size(), 0, -1 ) :
                 for candidate in self.tile(iTile).adjacencies() :
-                    if candidate < iTile and self.mergeTilesIfPossible(candidate, iTile ) :
+                    if ( candidate < iTile
+                        and self.tile(candidate).matter() == self.tile(iTile).matter()
+                        and self.mergeTilesIfPossible( candidate, iTile, acceptedDistance )
+                    ) :
                         count+= 1
                         notok= True
                         break
@@ -368,12 +416,13 @@ class Scene(Podable):
     # Podable:
     def asPod( self, name= "Scene" ):
         return Pod().fromLists(
-            [name], [], [],
+            [name], [], [self._epsilon],
             [ t.asPod() for t in self.tiles() ]
         )
     
     def fromPod( self, aPod ):
         self.clear()
+        self._epsilon= aPod.value(1)
         allAgents= []
         for absTile in aPod.children() :
             t= Tile().fromPod( absTile, self._factory )

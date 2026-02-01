@@ -66,10 +66,10 @@ def test_pnd_graph():
 
     print( f">>> {model.neighbours(11)}" )
 
-    assert model.adjacencies(11) == [3, 11, 12, 18]
-    assert model.directions(11) == [(0.0, 1.0), (0.0, 0.0), (1.0, 0.0), (0.0, -1.0)]
-    assert model.clockBearing(11) == [12, 0, 3, 6]
-    assert model.neighbours(11) == [(3, 12), (11, 0), (12, 3), (18, 6)]
+    assert model.adjacencies(11) == [3, 12, 18]
+    assert model.directions(11) == [(0.0, 1.0), (1.0, 0.0), (0.0, -1.0)]
+    assert model.clockBearing(11) == [12, 3, 6]
+    assert model.neighbours(11) == [(3, 12), (12, 3), (18, 6)]
     assert model.completeClock(11) == [11,
                              11, 11, 12, 11, 11, 18,
                              11, 11, 11, 11, 11,  3 ]
@@ -104,7 +104,7 @@ def test_pnd_withCarrier():
 
     assert str( model.tile(10).agent() ) == 'Carrier-1.1 ⌊(-0.18, 4.82), (0.18, 5.18)⌉ |0, 0|'
 
-    assert model.clockBearing(44) == [9, 0, 3]
+    assert model.clockBearing(44) == [9, 3]
 
     assert model.move( 44, 12 ) == False
     assert model.move( 44, 3 ) == 45

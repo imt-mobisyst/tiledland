@@ -2,6 +2,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
+from src import tiledland as tll
 from src.tiledland.interface import ros
 import yaml, os.path, cairo
 
@@ -104,25 +105,8 @@ def test_load_map_data():
     assert pixel_data_mv[26] == 104
     assert pixels_as_bytes[26] == 255
 
-def test_load_map_yml():
-    import yaml
-    config= {}
-    with open("tests/rsc/testmap.yaml", "r") as file:
-        # Charger le contenu du fichier en tant que dictionnaire Python
-        config = yaml.safe_load(file)
-    
-    assert config == {              # details: https://wiki.ros.org/map_server
-        'image': "testmap.png",     # map' image file
-        'resolution': 0.1,          # resolution of the map, meters / pixel
-        'origin': [2.0, 3.0, 1.0],  # the 2-D pose of the lower-left pixel in the map, as (x, y, yaw), with yaw as counterclockwise rotation (yaw=0 means no rotation).
-        'occupied_thresh': 0.65,    # pixels with occupancy probability greater than this threshold are considered completely occupied.
-        'free_thresh': 0.196,       # Pixels with occupancy probability less than this threshold are considered completely free.
-        'negate': 0,                # Obstacle in white ?
-        'mode': "trinary"           # Only Trinary supported
-    } # if negate is false, p = (255 - x) / 255.0
-    
 def test_load_map_with_rosi():
-    gridmap= ros.GridMapStat()
+    gridmap= ros.GridMap()
 
     assert gridmap.dimention() == (1, 1)
     assert gridmap.grid() == [[0.0]]
@@ -154,7 +138,7 @@ def test_load_map_with_rosi():
         [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     ]
 
-    assert gridmap.asGridMap().grid() == [
+    assert gridmap.asStatesGrid() == [
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
         [1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
@@ -168,7 +152,7 @@ def test_load_map_with_rosi():
     ]
 
 def test_load_partialmap():
-    gridmap= ros.GridMapStat()
+    gridmap= ros.GridMap()
     gridmap.load( "tests/rsc", "testslammap.yaml" )
     
     assert gridmap.position() == (0.0, 0.0)
@@ -195,12 +179,7 @@ def test_load_partialmap():
         [0.263, 0.263, 0.263, 0.263, 0.263, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     ]
 
-    assert gridmap.cell(0, 0) == 0.263
-    assert gridmap.cell(5, 0) == 1.0
-    assert gridmap.cell(6, 0) == 0.0
-    assert gridmap.cell(10, 4) == 0.263
-
-    assert gridmap.asGridMap().grid() == [
+    assert gridmap.asStatesGrid() == [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0],
         [0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0],

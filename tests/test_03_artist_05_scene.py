@@ -54,7 +54,7 @@ def test_artist_scene_tiles():
     pablo= tll.Artist().initializeSVG( filePath= shotImg )
     scene= tll.Scene()
 
-    assert scene.resolution() == 0.01
+    assert scene.epsilon() == 0.01
         
     pablo.drawSceneTiles(scene)
     pablo.flip()
@@ -64,7 +64,7 @@ def test_artist_scene_tiles():
 
     scene= tll.Scene().initializeLine(3)
 
-    assert scene.resolution() == 0.01
+    assert scene.epsilon() == 0.01
 
     pablo.drawSceneTiles(scene)
     pablo.flip()
@@ -136,7 +136,7 @@ def test_artist_scene_net():
     box.round(2)
     assert box.asZip() == [(-0.5, -0.5), (8.2, 4.9)] 
 
-    pablo.fitBox( scene.box() )
+    pablo.fit( scene )
     pablo.drawScene(scene)
     pablo.flip()
 

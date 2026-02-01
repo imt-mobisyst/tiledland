@@ -5,10 +5,9 @@ from src import tiledland as tll
 from src.tiledland.geometry import Point, Convex, Box
 from src.tiledland import Agent, Tile, Scene 
 
-
-# ------------------------------------------------------------------------ #
-#         T E S T   H A C K A G A M E S - C O M P O N E N T
-# ------------------------------------------------------------------------ #
+# ----------------------------------------------------------------------- #
+#           T E S T   T I L E D L A N D - I N T E G R A T E D   
+# ----------------------------------------------------------------------- #
 
 def draw(scene, filePath= "shot-test.png"):
     pablo= tll.Artist().initializePNG( filePath )
@@ -16,8 +15,8 @@ def draw(scene, filePath= "shot-test.png"):
     pablo.drawFrameGrid()
     pablo.drawFrameAxes()
 
-    pablo.drawSceneNetwork( scene )
-    pablo.drawSceneTiles( scene )
+    pablo.drawSceneNetwork(scene)
+    pablo.drawSceneTiles(scene)
 
     pablo.flip()
 
@@ -170,8 +169,8 @@ def test_Scene_podable():
     assert pod.numberOfIntegers() == 0
     assert pod.integers() == []
     
-    assert pod.numberOfValues() == 0
-    assert pod.values() == []
+    assert pod.numberOfValues() == 1
+    assert pod.values() == [0.01]
     
     assert pod.numberOfChildren() == 3
     assert pod.children() == [ t.asPod() for t in scene.tiles() ]
@@ -240,7 +239,7 @@ def test_Scene_hexa():
     draw(scene)
     print( f"---\n{scene}.")
     assert str(scene) == """Scene:
-- Tile-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ adjs[1, 2, 3] agents(0)
-- Tile-2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ adjs[1, 2, 3, 4] agents(0)
-- Tile-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ adjs[1, 2, 3] agents(0)
-- Tile-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ adjs[2, 4] agents(0)"""
+- Tile-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ adjs[2, 3] agents(0)
+- Tile-2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ adjs[1, 3, 4] agents(0)
+- Tile-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ adjs[1, 2] agents(0)
+- Tile-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ adjs[2] agents(0)"""

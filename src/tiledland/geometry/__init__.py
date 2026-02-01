@@ -4,6 +4,7 @@ from .basic import Point, Line
 from .box import Box
 from .convex import Convex
 from .grid import Grid
+
 #ToDo: from .plane import Plane
 
 clockAngles= [ 0.0, 2.0*math.pi/6.0, math.pi/6.0, 0.0,

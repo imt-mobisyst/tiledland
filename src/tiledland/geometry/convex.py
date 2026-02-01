@@ -89,6 +89,7 @@ class Convex(Podable):
     def round(self, precision):
         for p in self._points :
             p.round(precision)
+        return self
     
     def setOnCenter(self):
         position= self.center()

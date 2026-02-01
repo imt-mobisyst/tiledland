@@ -1,7 +1,8 @@
 import math
 from ..pod import Podable, Pod
 from .basic import Point, Line
-from .box import Box
+from .convex import Point, Convex
+#from .box import Box
 
 class Grid() : # ToDo: Podable
     # Initialization
@@ -49,6 +50,18 @@ class Grid() : # ToDo: Podable
     def resolution(self):
         return self._resolution
 
+    def valueMinMax(self):
+        if self.height() == 0 :
+            return (0, 0)
+        minMatter= self.cell(1, 1)
+        maxMatter= minMatter
+
+        for ix in range(1, self.width()+1):
+            for iy in range(1, self.height()+1):
+                matter= self.cell(ix, iy)
+                minMatter= min(minMatter, matter)
+                maxMatter= max(maxMatter, matter) 
+        return (minMatter, maxMatter)
     # Tests
     def isCell(self, x, y, state):
         return ( self.cell(x, y) == state )
@@ -69,7 +82,6 @@ class Grid() : # ToDo: Podable
         return rectangles
     
     def maxRectangle(self, x, y):
-        print( f"getRectangle : {(x, y)}" )
         state= self.cell(x, y)
         width, height= self.dimention()
         x2= x+1
@@ -80,17 +92,14 @@ class Grid() : # ToDo: Podable
             # Increase on x:
             iy= y
             while xOk and iy < y2 :
-                print( f"test y: {(x2, iy)}: {self.cell( x2, iy ) == state}" )
                 xOk= xOk and (self.cell( x2, iy ) == state)
                 iy+= 1
             if xOk :
                 x2+= 1
-                print( f"new x2: {x2}" )
             # Increase on y:
             yOk= yOk and y2 <= height
             ix= x
             while yOk and ix < x2 :
-                print( f"test x: {(ix, y2)}: {self.cell( ix, y2 ) == state}" )
                 yOk= yOk and (self.cell( ix, y2 ) == state)
                 ix+= 1
             if yOk :
@@ -118,20 +127,20 @@ class Grid() : # ToDo: Podable
         return self
 
     # Shaping
-    def rectangleToConvex(self, box):
+    def rectangleToConvex(self, rect):
         r= self.resolution()
-        epsilon= r/4.0
-        ox, oy= self.position()
-        bx1, by1, bx2, by2= tuple(box)
-        sx1= ox + bx1*r + epsilon
-        sy1= oy + by1*r + epsilon
-        sx2= ox + bx2*r - epsilon
-        sy2= oy + by2*r - epsilon
+        e= r*0.1
+        ox, oy= self.position().asTuple()
+        bx1, by1, bx2, by2= tuple(rect)
+        sx1= ox + (bx1-1)*r + e
+        sy1= oy + (by1-1)*r + e
+        sx2= ox + bx2*r - e
+        sy2= oy + by2*r - e
         return Convex().fromZipped( [(sx1, sy1), (sx1, sy2), (sx2, sy2), (sx2, sy1)] )
 
-    def makeConvexs(self, state=0):
-        boxes= self.makeBoxes(state)
-        shapes= [ self.boxToConvex(box) for box in boxes ]
+    def makeConvexes(self, state=0):
+        rectangles= self.clusterRectangles(state)
+        shapes= [ self.rectangleToConvex(rect) for rect in rectangles ]
         return shapes
     
     # to str

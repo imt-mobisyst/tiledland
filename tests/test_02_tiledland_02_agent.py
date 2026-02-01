@@ -6,7 +6,7 @@ import src.tiledland as tll
 from src.tiledland.geometry import Convex, Point
 
 # ------------------------------------------------------------------------ #
-#         T E S T   H A C K A G A M E S - C O M P O N E N T
+#         T E S T   T I L E D L A N D - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
 def test_Agent_init():

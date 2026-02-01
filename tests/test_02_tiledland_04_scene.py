@@ -6,7 +6,7 @@ from src.tiledland.geometry import Point, Box, Convex
 from src.tiledland import Agent, Tile, Scene 
 
 # ------------------------------------------------------------------------ #
-#         T E S T   H A C K A G A M E S - C O M P O N E N T
+#         T E S T   T I L E D L A N D - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
 def test_Scene_init():
@@ -117,8 +117,8 @@ def test_Scene_podable():
     assert pod.numberOfIntegers() == 0
     assert pod.integers() == []
     
-    assert pod.numberOfValues() == 0
-    assert pod.values() == []
+    assert pod.numberOfValues() == 1
+    assert pod.values() == [0.01]
     
     assert pod.numberOfChildren() == 3
     assert pod.children() == [ t.asPod() for t in scene.tiles() ]
@@ -212,12 +212,65 @@ def test_Scene_withAgents():
 
     print( f"---\n{scene}.")
     assert str(scene) == """Scene:
-- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[1, 2] agents(1)
+- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] agents(1)
   - Agent-2 ⌊(-0.2, 0.9), (0.2, 1.3)⌉
-- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 2, 3] agents(2)
+- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] agents(2)
   - Agent-1 ⌊(0.9, 0.9), (1.3, 1.3)⌉
   - Agent-4 ⌊(0.9, 0.9), (1.3, 1.3)⌉
-- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] agents(0)"""
+- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] agents(0)"""
+
+    scene.clearAgents()
+
+    assert scene.testNumberOfAgents() == 0
+    assert scene.tile(1).count() == 0
+    assert scene.tile(2).count() == 0
+    assert scene.tile(3).count() == 0
+
+def test_Scene_popAgents():
+    scene= Scene().initializeGrid( [[0, 1],[-1, 0]] )
+    
+    assert scene.testNumberOfAgents() == 0
+    assert scene.tile(1).count() == 0
+    assert scene.tile(2).count() == 0
+    assert scene.tile(3).count() == 0
+    
+    bod= scene.popAgentOn(2)
+
+    assert type(bod) == Agent
+    assert bod.id() == 1
+    assert scene.agent(1) == bod
+
+    assert scene.testNumberOfAgents() == 1
+    assert scene.tile(1).count() == 0
+    assert scene.tile(2).count() == 1
+    assert scene.tile(3).count() == 0
+
+    bod= scene.popAgentOn(1)
+
+    assert type(bod) == Agent
+    assert bod.id() == 2
+    assert scene.agent(2) == bod
+
+    assert scene.testNumberOfAgents() == 2
+    assert scene.tile(1).count() == 1
+    assert scene.tile(2).count() == 1
+    assert scene.tile(3).count() == 0
+
+    bod= scene.popAgentOn(2)
+
+    assert scene.testNumberOfAgents() == 3
+    assert scene.tile(1).count() == 1
+    assert scene.tile(2).count() == 2
+    assert scene.tile(3).count() == 0
+
+    print( f"---\n{scene}.")
+    assert str(scene) == """Scene:
+- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] agents(1)
+  - Agent-2 ⌊(-0.2, 0.9), (0.2, 1.3)⌉
+- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] agents(2)
+  - Agent-1 ⌊(0.9, 0.9), (1.3, 1.3)⌉
+  - Agent-3 ⌊(0.9, 0.9), (1.3, 1.3)⌉
+- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] agents(0)"""
 
     scene.clearAgents()
 
