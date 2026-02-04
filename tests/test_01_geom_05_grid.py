@@ -64,42 +64,42 @@ def test_grid_boxing():
         [0, 1, 0, 0]
     ])
 
-    assert grid.maxRectangle(1, 1) == [1, 1, 1, 1]
+    assert grid.maxRectangle(1, 1, 10) == [1, 1, 1, 1]
 
     grid.initialize([
         [1, 1, 1, 0],
         [1, 1, 1, 0],
         [0, 0, 1, 0]
     ])
-    assert grid.maxRectangle(1, 1) == [1, 1, 2, 1]
+    assert grid.maxRectangle(1, 1, 10) == [1, 1, 2, 1]
 
     grid.initialize([
         [1, 1, 1, 0],
         [0, 0, 1, 0],
         [0, 0, 1, 0]
     ])
-    assert grid.maxRectangle(1, 1) == [1, 1, 2, 2]
+    assert grid.maxRectangle(1, 1, 10) == [1, 1, 2, 2]
 
     grid.initialize([
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ])
-    assert grid.maxRectangle(1, 1) == [1, 1, 4, 3]
+    assert grid.maxRectangle(1, 1, 10) == [1, 1, 4, 3]
 
     grid.initialize([
         [0, 0, 1, 0],
         [0, 0, 1, 0],
         [0, 0, 1, 0]
     ])
-    assert grid.maxRectangle(1, 1) == [1, 1, 2, 3]
+    assert grid.maxRectangle(1, 1, 10) == [1, 1, 2, 3]
 
     grid.initialize([
         [0, 0, 1, 0],
         [0, 0, 1, 0],
         [0, 0, 1, 0]
     ])
-    assert grid.maxRectangle(1, 1) == [1, 1, 2, 3]
+    assert grid.maxRectangle(1, 1, 10) == [1, 1, 2, 3]
 
 def test_grid_search():
     grid= Grid()
@@ -128,7 +128,7 @@ def test_grid_allrectangle():
         [0, 0, 0, 0]
     ])
 
-    cluster= grid.clusterRectangles()
+    cluster= grid.clusterRectangles(0, 100)
     assert cluster == [ [1, 1, 4, 3] ]
 
     print( "Grid" )
@@ -147,7 +147,7 @@ def test_grid_allrectangle():
         [0, 0, 0, 0]
     ])
 
-    cluster= grid.clusterRectangles()
+    cluster= grid.clusterRectangles(0, 10)
 
     print( "Cluster" )
     for rect in cluster :
@@ -180,7 +180,7 @@ def test_grid_allrectangle():
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
     ])
 
-    cluster= grid.clusterRectangles()
+    cluster= grid.clusterRectangles(0, 10)
 
     print( "Cluster" )
     for rect in cluster :

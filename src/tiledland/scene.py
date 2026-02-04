@@ -22,8 +22,13 @@ class Scene(Podable):
         self._epsilon= epsilon
     
     # Initialization:
-    def fromGrid(self, aGrid):
+    def fromShapes(self, shapes, matter):
         # Clean basis:
+        self.clear()
+        for s in shapes :
+            self.createTile(s, matter)
+     
+    def fromGrid(self, aGrid, tileSize= 1.0):
         self.clear()
         self._epsilon= aGrid.resolution() * 0.4
 
@@ -32,7 +37,7 @@ class Scene(Podable):
         i= 0
         for matter in range( minMatter, maxMatter+1 ):
             # Add all shapes
-            shapes= aGrid.makeConvexes(matter)
+            shapes= aGrid.makeConvexes(matter, tileSize)
             for s in shapes :
                 i+= 1
                 assert self.createTile(s, matter) == i
@@ -41,11 +46,8 @@ class Scene(Podable):
         self.connectAllClose( aGrid.resolution() )
 
         # Optimize the definition:
-        self.mergeAllPossible( aGrid.resolution() * 0.2 )
-        self.mergeAllPossible( aGrid.resolution() * 0.4 )
-        self.mergeAllPossible( aGrid.resolution() * 0.6 )
-        self.mergeAllPossible( aGrid.resolution() * 0.8 )
-        self.mergeAllPossible( aGrid.resolution() )
+        for factor in [0.2, 0.4, 0.6, 0.8] :
+            self.mergeAllPossible( aGrid.resolution() * factor, tileSize)
         """
         for i in range( 1, self.size()+1 ) :
             for j in self.tile(i).adjacencies() :
@@ -228,10 +230,11 @@ class Scene(Podable):
         self._tiles.append( aTile )
         return self._size
     
-    def createTile( self, aConvex, matter= 0 ):
+    def createTile( self, aBody, matter= 0 ):
         self._size+= 1
-        position= aConvex.setOnCenter()
-        self._tiles.append( Tile( self._size, position, aConvex, matter ) )
+        aShape= aBody.copy()
+        position= aShape.setOnCenter()
+        self._tiles.append( Tile( self._size, position, aShape, matter ) )
         return self._size
     
     def removeTile( self, iTile ):
@@ -345,7 +348,23 @@ class Scene(Podable):
         # Correct 0 distance:
         dists[iTile]= 0
         return dists
+    # Tile selection : 
+    def selectId(self, tileCondition):
+        selection= []
+        for i in range(1, self.size()+1):
+            if tileCondition( self.tile(i) ) :
+                selection.append(i)
+        return selection
     
+    def selectIdSmallbox(self, maxSize):
+        selection= []
+        for i in range(1, self.size()+1):
+            t= self.tile(i)
+            tb= t.box()
+            if (tb.width() < maxSize or tb.height() < maxSize) :
+                selection.append(i)
+        return selection
+        
     # Tile operation :
     def mergeTilesIfPossible(self, iTile1, iTile2, acceptedDistance):
         if iTile1 == iTile2 :
@@ -382,22 +401,32 @@ class Scene(Podable):
         self.removeTile(iTile2)
         return True
     
-    def mergeAllPossible(self, acceptedDistance= False):
+    def mergeTile(self, iTile, acceptedDistance):
+        t= self.tile(iTile)
+        tb= t.box()
+        neighborhood= [ (i, (tb + self.tile(i).box()).perimeter() ) for i in t.adjacencies() ]
+        neighborhood.sort(key=lambda tup: tup[1])
+        for neighbor, val in neighborhood :
+            if ( self.tile(neighbor).matter() == t.matter()
+                and self.mergeTilesIfPossible( neighbor, iTile, acceptedDistance )
+            ) :
+                return True
+        return False
+
+    def mergeAllPossible(self, acceptedDistance= False, exepectedSize= 1.0):
         if not acceptedDistance :
             acceptedDistance= self.epsilon()
         notok= True
         count= 0
+
         while notok :
             notok= False
-            for iTile in range( self.size(), 0, -1 ) :
-                for candidate in self.tile(iTile).adjacencies() :
-                    if ( candidate < iTile
-                        and self.tile(candidate).matter() == self.tile(iTile).matter()
-                        and self.mergeTilesIfPossible( candidate, iTile, acceptedDistance )
-                    ) :
-                        count+= 1
-                        notok= True
-                        break
+            for iTile in self.selectIdSmallbox(exepectedSize*0.5) :
+                if self.mergeTile(iTile, acceptedDistance) :
+                    count+= 1
+                    notok= True
+                    break
+        
         return count
 
     # Agent Collection:

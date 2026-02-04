@@ -2,7 +2,7 @@ from .color import color, colorRatio, colorRatio, rgbColor, percentColor, webCol
 from .support import AbsSupport, Support, SupportSVG
 from .supportCairo import SupportPNG
 
-def draw(scene, filePath= "shot.png"):
+def draw(scene, filePath= "shot-tl.png"):
     pablo= Artist().initializePNG( filePath )
     pablo.fit(scene)
     pablo.drawScene(scene)

@@ -53,26 +53,39 @@ class Grid() : # ToDo: Podable
     def valueMinMax(self):
         if self.height() == 0 :
             return (0, 0)
-        minMatter= self.cell(1, 1)
-        maxMatter= minMatter
+        minMatter= -1
+        maxMatter= self.cell(1, 1)
 
         for ix in range(1, self.width()+1):
             for iy in range(1, self.height()+1):
                 matter= self.cell(ix, iy)
-                minMatter= min(minMatter, matter)
-                maxMatter= max(maxMatter, matter) 
+                if minMatter == -1 :
+                    minMatter= matter
+                if matter >= 0 :
+                    minMatter= min(minMatter, matter)
+                    maxMatter= max(maxMatter, matter)
         return (minMatter, maxMatter)
+    
     # Tests
     def isCell(self, x, y, state):
         return ( self.cell(x, y) == state )
     
+    # Cleaning :
+    def filter(self, value, modif):
+        for i in range( self.height() ) :
+            for j in range( self.width() ) :
+                if self._grid[i][j] == value :
+                    self._grid[i][j]= modif
+
     # Clustering :
-    def clusterRectangles(self, state=0):
+    def clusterRectangles(self, state, expectedLenght):
         pos= self.search(state)
         rectangles= []
+        cellsSize= int( expectedLenght/self.resolution() )
+        
         while pos :
             x, y= pos
-            rect= self.maxRectangle(x, y)
+            rect= self.maxRectangle(x, y, cellsSize)
             self.setRectangleOn( rect, -1 )
             rectangles.append( rect )
             pos= self.search(state)
@@ -81,14 +94,14 @@ class Grid() : # ToDo: Podable
             self.setRectangleOn(rect, state)
         return rectangles
     
-    def maxRectangle(self, x, y):
+    def maxRectangle(self, x, y, expectedCellsLenght):
         state= self.cell(x, y)
         width, height= self.dimention()
         x2= x+1
         y2= y+1
         xOk, yOk= True, True
         while xOk or yOk :
-            xOk= xOk and x2 <= width
+            xOk= xOk and x2 <= width and (x2-x) < expectedCellsLenght
             # Increase on x:
             iy= y
             while xOk and iy < y2 :
@@ -97,7 +110,7 @@ class Grid() : # ToDo: Podable
             if xOk :
                 x2+= 1
             # Increase on y:
-            yOk= yOk and y2 <= height
+            yOk= yOk and y2 <= height and (y2-y) < expectedCellsLenght
             ix= x
             while yOk and ix < x2 :
                 yOk= yOk and (self.cell( ix, y2 ) == state)
@@ -138,8 +151,8 @@ class Grid() : # ToDo: Podable
         sy2= oy + by2*r - e
         return Convex().fromZipped( [(sx1, sy1), (sx1, sy2), (sx2, sy2), (sx2, sy1)] )
 
-    def makeConvexes(self, state=0):
-        rectangles= self.clusterRectangles(state)
+    def makeConvexes(self, state, expectedSize=1.0):
+        rectangles= self.clusterRectangles(state, expectedSize)
         shapes= [ self.rectangleToConvex(rect) for rect in rectangles ]
         return shapes
     

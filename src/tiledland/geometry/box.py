@@ -7,6 +7,12 @@ class Box(): # AABB Box
     def __init__( self, listOfPoint=[Point()] ):
         self.fromList( listOfPoint )
 
+    def copy(self):
+        cpy= Box()
+        cpy._min= self._min.copy()
+        cpy._max= self._max.copy()
+        return cpy
+     
     # Initialization:
     def fromList( self, listOfPoint= [Point()] ):
         self._min= Point( listOfPoint[0].x(), listOfPoint[0].y() )
@@ -28,10 +34,19 @@ class Box(): # AABB Box
     
     def rightCeiling(self):
         return self._max
-
+    
+    def width(self) :
+        return self._max.x() - self._min.x()
+    
+    def height(self) :
+        return self._max.y() - self._min.y()
+        
     def center(self):
         v= self._max - self._min
         return self._min + Point( v.x()*0.5, v.y()*0.5 )
+    
+    def perimeter(self):
+        return self.width()*2 + self.height()*2
     
     # Construction:
     def round(self, precition=0):
@@ -84,6 +99,12 @@ class Box(): # AABB Box
             and ( self._min._y < another._max._y and another._max._y <= another._max._y )
         )
     
+    # operator:
+    def __add__(self, another):
+        b= self.copy()
+        b.merge(another)
+        return b
+
     # to str
     def str(self): 
         # Myself :

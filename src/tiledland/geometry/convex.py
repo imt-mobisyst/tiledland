@@ -247,7 +247,7 @@ class Convex(Podable):
         while notok and self.size() > 3 :
             notok= False
             i = self.size()-1
-            i1= i-2
+            i1= i-1
             for i2 in range( self.size() ) :
                 line= Line( self._points[i1], self._points[i2] )
                 if line.distancePoint( self._points[i] ) < epsilon :

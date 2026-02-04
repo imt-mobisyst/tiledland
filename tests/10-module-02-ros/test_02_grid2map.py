@@ -34,7 +34,7 @@ def test_gridmap_asGrid():
 def test_gridmap_convexMap():
     gridmap= ros.GridMap().load( "tests/rsc", "convexmap.yaml" )
     grid= gridmap.asTllGrid()
-    scene= tll.Scene().fromGrid( grid )
+    scene= tll.Scene().fromGrid(grid)
 
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG(shotImg)
@@ -63,6 +63,16 @@ def test_gridmap_smallMap():
 
     shotFile= open( shotImg ) 
     refsFile= open( "tests/refs/interface-ros-02-small-01.svg" ) 
+    for lineShot, lineRef in zip( shotFile, refsFile ):
+        assert( lineShot == lineRef )
+
+    scene.mergeAllPossible( 0.4 )
+
+    pablo.drawScene(scene)
+    pablo.flip()
+
+    shotFile= open( shotImg ) 
+    refsFile= open( "tests/refs/interface-ros-02-small-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -100,6 +110,3 @@ def test_gridmap_largeMap():
     refsFile= open( "tests/refs/interface-ros-02-large-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
-
-    
-
