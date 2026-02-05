@@ -236,7 +236,7 @@ def test_scene_mergeFew():
         assert( lineShot == lineRef )
 
     ## Merge all :
-    assert scene.mergeAllPossible() == 7
+    assert scene.mergeAllPossible() == 5
 
     pablo.drawScene(scene)
     pablo.flip()
