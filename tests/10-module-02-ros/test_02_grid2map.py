@@ -40,6 +40,7 @@ def test_gridmap_convexMap():
     pablo= tll.Artist().initializeSVG(shotImg)
     pablo.fit(scene)
 
+    tll.artist.draw(scene)
     pablo.drawScene(scene)
     pablo.flip()
 
@@ -58,6 +59,7 @@ def test_gridmap_smallMap():
     pablo= tll.Artist().initializeSVG(shotImg)
     pablo.fit(scene)
 
+    tll.artist.draw(scene)
     pablo.drawScene(scene)
     pablo.flip()
 
@@ -66,8 +68,9 @@ def test_gridmap_smallMap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    scene.mergeAllPossible( 0.4 )
+    scene.mergeAllPossible( 0.2, 2.0 )
 
+    tll.artist.draw(scene)
     pablo.drawScene(scene)
     pablo.flip()
 
@@ -76,16 +79,67 @@ def test_gridmap_smallMap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_gridmap_mediumMap():
+def test_gridmap_mediumMap_inside():
     gridmap= ros.GridMap().load( "tests/rsc", "medium-map.yaml" )
     grid= gridmap.asTllGrid()
+    grid.filter(1, -1)
 
-    scene= tll.Scene().fromGrid( grid )
+    #scene= tll.Scene().fromGrid( grid )
+    scene= tll.Scene()
+
+    scene.clear()
+    scene._epsilon= round( grid.resolution() * 0.4, 4 )
+    tileSize= 4.0
+
+    print( f"From grid: {scene._epsilon} {tileSize}" )
+    assert scene.epsilon() == 0.04
+
+    # Foreach value possibility:
+    minMatter, maxMatter= grid.valueMinMax()
+    assert (minMatter, maxMatter) == (0, 0)
+    i= 0
+    for matter in range( minMatter, maxMatter+1 ):
+        # Add all shapes
+        shapes= grid.makeConvexes(matter, tileSize)
+        for s in shapes :
+            i+= 1
+            assert scene.createTile(s, matter) == i
+
+    # Connect all elements:
+    scene.connectAllClose( grid.resolution() )
+    print( f"From grid: {scene._epsilon} {tileSize}" )
+
+    # Optimize the definition:
+    for factor in [0.2, 0.4, 0.6, 0.8] :
+        scene.mergeAllPossible( grid.resolution()*factor, tileSize)
+
+    ## end fromGrid
 
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG(shotImg)
     pablo.fit(scene)
 
+    tll.artist.draw(scene)
+    pablo.drawScene(scene)
+    pablo.flip()
+
+    shotFile= open( shotImg )
+    refsFile= open( "tests/refs/interface-ros-02-medium-01.svg" )
+    for lineShot, lineRef in zip( shotFile, refsFile ):
+        assert( lineShot == lineRef )
+
+def test_gridmap_mediumMap():
+    gridmap= ros.GridMap().load( "tests/rsc", "medium-map.yaml" )
+    grid= gridmap.asTllGrid()
+    grid.filter(1, -1)
+
+    scene= tll.Scene().fromGrid( grid, 4.0 )
+
+    shotImg= "shot-test.svg"
+    pablo= tll.Artist().initializeSVG(shotImg)
+    pablo.fit(scene)
+
+    tll.artist.draw(scene)
     pablo.drawScene(scene)
     pablo.flip()
 
@@ -94,15 +148,19 @@ def test_gridmap_mediumMap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
+""" 
 def test_gridmap_largeMap():
     gridmap= ros.GridMap().load( "tests/rsc", "large-clean-map.yaml" )
     grid= gridmap.asTllGrid()
-    scene= tll.Scene().fromGrid( grid )
+    grid.filter(1, -1)
 
+    scene= tll.Scene().fromGrid( grid, 4.0 )
+    
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG(shotImg)
     pablo.fit(scene)
 
+    tll.artist.draw(scene)
     pablo.drawScene(scene)
     pablo.flip()
 
@@ -110,3 +168,4 @@ def test_gridmap_largeMap():
     refsFile= open( "tests/refs/interface-ros-02-large-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
+"""

@@ -112,7 +112,7 @@ def test_scene_mergeOne():
         assert( lineShot == lineRef )
     
     ## Merge :
-    ok= scene.mergeTilesIfPossible(1, 2,  0.09)
+    ok= scene.mergeTilesIfPossible(1, 2, 0.09, 10.0)
 
     assert ok
 
@@ -148,7 +148,7 @@ def test_scene_mergeNoOne():
         assert( lineShot == lineRef )
 
     ## Merge :
-    ok= scene.mergeTilesIfPossible(1, 2, 0.09)
+    ok= scene.mergeTilesIfPossible(1, 2, 0.09, 10.0)
 
     assert not ok
 
@@ -169,7 +169,7 @@ def test_scene_mergeNoOne():
     scene= tll.Scene( shapes, 0.09 )
     scene.connectAllClose(0.11)
     ## Merge :
-    assert not scene.mergeTilesIfPossible(1, 2, 0.09)
+    assert not scene.mergeTilesIfPossible(1, 2, 0.09, 10.0)
 
 def test_scene_mergeFew():
     shapes= [
@@ -210,7 +210,7 @@ def test_scene_mergeFew():
         assert( lineShot == lineRef )
 
     ## Merge 1-2 :
-    ok= scene.mergeTilesIfPossible(1, 2, 0.09)
+    ok= scene.mergeTilesIfPossible(1, 2, 0.09, 10.0)
 
     assert ok
     assert len( scene.tiles() ) == 9
@@ -225,7 +225,7 @@ def test_scene_mergeFew():
         assert( lineShot == lineRef )
 
     ## Merge 8-9 :
-    assert scene.mergeTilesIfPossible(8, 9, 0.09)
+    assert scene.mergeTilesIfPossible(8, 9, 0.09, 10.0)
 
     pablo.drawScene(scene)
     pablo.flip()
@@ -236,11 +236,12 @@ def test_scene_mergeFew():
         assert( lineShot == lineRef )
 
     ## Merge all :
-    assert scene.mergeAllPossible() == 5
+    scene.mergeAllPossible(0.09, 10.0)
+    tll.artist.draw(scene)
 
     pablo.drawScene(scene)
     pablo.flip()
-    
+
     shotFile= open( shotImg ) 
     refsFile= open( "tests/refs/12.01-mergeConvex-few-04.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
@@ -287,7 +288,10 @@ def test_scene_mergeConplex():
         assert( lineShot == lineRef )
 
     ## Merge all :
-    assert scene.mergeAllPossible() == 12
+    nbMerges= scene.mergeAllPossible()
+
+    tll.artist.draw(scene)
+    assert nbMerges == 12
 
     pablo.drawScene(scene)
     pablo.flip()

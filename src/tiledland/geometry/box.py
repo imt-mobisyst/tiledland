@@ -40,13 +40,20 @@ class Box(): # AABB Box
     
     def height(self) :
         return self._max.y() - self._min.y()
-        
+    
+    def dimention(self):
+        return ( self.width(), self.height() )
+    
     def center(self):
         v= self._max - self._min
         return self._min + Point( v.x()*0.5, v.y()*0.5 )
     
     def perimeter(self):
         return self.width()*2 + self.height()*2
+    
+    def score(self):
+        w, h= self.width(), self.height()
+        return (self.width() + self.height()) * 1 + abs(w-h)
     
     # Construction:
     def round(self, precition=0):

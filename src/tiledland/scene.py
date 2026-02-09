@@ -48,22 +48,7 @@ class Scene(Podable):
         # Optimize the definition:
         for factor in [0.2, 0.4, 0.6, 0.8] :
             self.mergeAllPossible( aGrid.resolution() * factor, tileSize)
-        """
-        for i in range( 1, self.size()+1 ) :
-            for j in self.tile(i).adjacencies() :
-                bodI= self.tile(i).body()
-                bodJ= self.tile(j).body()
-                if bodI.box().isColliding( bodJ.box() ):
-                    ip= 0
-                    while ip < bodI.size() :
-                        p = bodI._points[ip]
-                        if bodJ.isIncludingPoint(p) :
-                            print( f" {i} {p} colide {j}" )
-                            self.tile(i).shape()._points.pop(ip)
-                            bodI= self.tile(i).body()
-                        else :
-                            ip+= 1
-        """
+
         return self
     
     # Accessor:
@@ -366,20 +351,23 @@ class Scene(Podable):
         return selection
         
     # Tile operation :
-    def mergeTilesIfPossible(self, iTile1, iTile2, acceptedDistance):
+    def mergeTilesIfPossible(self, iTile1, iTile2, maxError, maxSize):
         if iTile1 == iTile2 :
             return False
         if iTile2 < iTile1 :
-            return self.mergeTilesIfPossible(iTile2, iTile1, acceptedDistance)
+            return self.mergeTilesIfPossible(iTile2, iTile1, maxError, maxSize)
 
         tile= self.tile(iTile1)
         newConvex= tile.body().copy()
         convex2= self.tile(iTile2).body()
         removed= newConvex.merge( convex2 )
+        w, h= newConvex.box().dimention()
+        if w > maxSize or h > maxSize :
+            return False
 
         # Merge ok ?
         for p in removed :
-            if newConvex.distancePoint(p) > acceptedDistance :
+            if newConvex.distancePoint(p) > maxError :
                 return False
         
         # Do merge:
@@ -401,28 +389,32 @@ class Scene(Podable):
         self.removeTile(iTile2)
         return True
     
-    def mergeTile(self, iTile, acceptedDistance):
+    def mergeTile(self, iTile, maxError, maxSize):
         t= self.tile(iTile)
         tb= t.box()
-        neighborhood= [ (i, (tb + self.tile(i).box()).perimeter() ) for i in t.adjacencies() ]
+        neighborhood= [ (i, (tb + self.tile(i).box()).score() ) for i in t.adjacencies() ]
         neighborhood.sort(key=lambda tup: tup[1])
         for neighbor, val in neighborhood :
             if ( self.tile(neighbor).matter() == t.matter()
-                and self.mergeTilesIfPossible( neighbor, iTile, acceptedDistance )
+                and self.mergeTilesIfPossible( neighbor, iTile, maxError, maxSize )
             ) :
                 return True
         return False
 
-    def mergeAllPossible(self, acceptedDistance= False, exepectedSize= 1.0):
-        if not acceptedDistance :
-            acceptedDistance= self.epsilon()
+    def mergeAllPossible(self, maxError= False, exepectedSize= False):
+        if not maxError :
+            maxError= self.epsilon()
+        if not exepectedSize :
+            w, h= self.box().dimention()
+            exepectedSize= max(w, h)
         notok= True
         count= 0
-
+        minSize= exepectedSize*0.5
+        maxSize= exepectedSize*1.5
         while notok :
             notok= False
-            for iTile in self.selectIdSmallbox(exepectedSize*0.5) :
-                if self.mergeTile(iTile, acceptedDistance) :
+            for iTile in self.selectIdSmallbox(minSize) :
+                if self.mergeTile(iTile, maxError, maxSize) :
                     count+= 1
                     notok= True
                     break

@@ -66,10 +66,9 @@ Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 
 ## Go efficient :
 
-- [ ] Migrate geometry module on a _C_ library (`lib42deg` - a lib. for 2D Euclidean Geom.)
+- [ ] Migrate geometry module on a _C_ library (`lib42deg` - a lib. for 2D Euclidean Geom. `LibEGG` Euclidean Graspable Geometry.
 - [ ] Encapsulate Convex in Modif object (ie. one or several join convexes)
 - [ ] Migrade Scene geometry function into a Texture dedicated object.
-
 
 
 ## HackaGames - Multi-Bot Delivery
