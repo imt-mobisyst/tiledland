@@ -58,6 +58,11 @@ class Point():
         return cpy
     
     # Operator: 
+    def add(self, another):
+        self._x+=another._x
+        self._y+=another._y
+        return self
+
     def __add__(self, another):
         return Point( self._x+another._x,  self._y+another._y )
 

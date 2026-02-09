@@ -2,6 +2,7 @@ import math
 
 from .basic import Point, Line
 from .box import Box
+from .mesh import Mesh
 from .convex import Convex
 from .grid import Grid
 

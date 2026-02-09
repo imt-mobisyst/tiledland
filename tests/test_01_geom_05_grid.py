@@ -108,17 +108,17 @@ def test_grid_search():
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ])
-    assert grid.search() == (1, 1)
-    assert grid.search(1) == False
+    assert grid.searchLine() == (1, 1)
+    assert grid.searchLine(1) == False
 
     grid.initialize([
         [0, 0, 0, 3],
         [0, 0, 1, 0],
         [2, 2, 0, 0]
     ])
-    assert grid.search() == (3, 1)
-    assert grid.search(1) == (3, 2)
-    assert grid.search(3) == (4, 3)
+    assert grid.searchLine() == (3, 1)
+    assert grid.searchLine(1) == (3, 2)
+    assert grid.searchLine(3) == (4, 3)
 
 def test_grid_allrectangle():
     grid= Grid()
@@ -128,7 +128,7 @@ def test_grid_allrectangle():
         [0, 0, 0, 0]
     ])
 
-    cluster= grid.clusterRectangles(0, 100)
+    cluster= grid.cutingRectangles(0, 100)
     assert cluster == [ [1, 1, 4, 3] ]
 
     print( "Grid" )
@@ -147,7 +147,7 @@ def test_grid_allrectangle():
         [0, 0, 0, 0]
     ])
 
-    cluster= grid.clusterRectangles(0, 10)
+    cluster= grid.cutingRectangles(0, 10)
 
     print( "Cluster" )
     for rect in cluster :
@@ -180,7 +180,7 @@ def test_grid_allrectangle():
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
     ])
 
-    cluster= grid.clusterRectangles(0, 10)
+    cluster= grid.cutingRectangles(0, 10)
 
     print( "Cluster" )
     for rect in cluster :
@@ -212,12 +212,12 @@ def test_grid_str():
     print(grid)
     assert "\n"+ str(grid) +"\n" == """
 Grid 10x7
-| 3 3 3 0 0 0 0 0 0 0
-| 3 3 3 0 0 0 0 0 0 0
-| 3 3 0 0 0 0 0 0 1 1
-| 0 0 0 2 0 0 0 0 1 1
-| 0 0 2 2 0 0 0 0 1 1
-| 0 0 0 0 0 0 0 0 0 0
-| 1 1 0 0 0 1 1 0 0 0
+| 3 3 3 · · · · · · ·
+| 3 3 3 · · · · · · ·
+| 3 3 · · · · · · 1 1
+| · · · 2 · · · · 1 1
+| · · 2 2 · · · · 1 1
+| · · · · · · · · · ·
+| 1 1 · · · 1 1 · · ·
 0 -------------------
 """

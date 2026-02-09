@@ -3,7 +3,7 @@ import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src.tiledland import geometry
-from src.tiledland.geometry import Point, Line
+from src.tiledland.geometry import Point, Mesh
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - G E O M E T R Y
@@ -67,3 +67,18 @@ def test_geometry_sortRadial():
             == [(1.0, 1.0), (5.5, 5.0), (9.0, 4.5),
                 (8.5, 1.5), (6.0, 0.5), (4.5, 2.5)] )
     
+def test_geometry_mesh_init():
+    c= Mesh()
+    assert type(c) == Mesh
+    assert c.size() == 0
+
+    c.append( Point() )
+
+    assert c.size() == 1
+    assert c.point(1).asTuple() == (0.0, 0.0)
+    
+    c= Mesh( [Point(1, 2), Point(3, 4), Point(5, 6)] )
+
+    assert c.size() == 3
+    assert c.point(1).asTuple() == (1.0, 2.0)
+    assert c.asTuples() == [(1.0, 2.0), (3.0, 4.0), (5.0, 6.0)]
