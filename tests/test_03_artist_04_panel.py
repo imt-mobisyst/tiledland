@@ -12,7 +12,7 @@ from src.tiledland.geometry import Point, Convex
 # Test firstAI launch
 def test_artist_svg_load():
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG( filePath= shotImg )
+    pablo= tll.Artist().initializeSVG( shotImg, 800, 600 )
 
     shape= Convex().fromZipped( [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
     pablo.drawConvex( shape, 1 )
@@ -60,7 +60,7 @@ def test_artist_svg_load():
 
 def test_artist_png_load():
     shotImg= "shot-test.png"
-    pablo= tll.Artist().initializePNG( filePath= shotImg )
+    pablo= tll.Artist().initializePNG(shotImg, 800, 600)
 
     shape= Convex().fromZipped([(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
     pablo.drawConvex( shape, 1 )

@@ -37,10 +37,10 @@ def test_gridmap_convexMap():
     scene= tll.Scene().fromGrid(grid)
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg)
+    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
     pablo.drawScene(scene)
     pablo.flip()
 
@@ -56,10 +56,10 @@ def test_gridmap_smallMap():
     scene= tll.Scene().fromGrid( grid )
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg)
+    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
     pablo.drawScene(scene)
     pablo.flip()
 
@@ -70,7 +70,7 @@ def test_gridmap_smallMap():
 
     scene.mergeAllPossible( 0.2, 2.0 )
 
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
     pablo.drawScene(scene)
     pablo.flip()
 
@@ -100,7 +100,7 @@ def test_gridmap_mediumMap_inside():
     i= 0
     for matter in range( minMatter, maxMatter+1 ):
         # Add all shapes
-        shapes= grid.makeConvexes(matter, tileSize)
+        shapes= grid.makeRectangles(matter, tileSize)
         for s in shapes :
             i+= 1
             assert scene.createTile(s, matter) == i
@@ -116,10 +116,10 @@ def test_gridmap_mediumMap_inside():
     ## end fromGrid
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg)
+    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
     pablo.drawScene(scene)
     pablo.flip()
 
@@ -136,10 +136,10 @@ def test_gridmap_mediumMap():
     scene= tll.Scene().fromGrid( grid, 4.0 )
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg)
+    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
     pablo.drawScene(scene)
     pablo.flip()
 
@@ -157,10 +157,10 @@ def test_gridmap_largeMap():
     scene= tll.Scene().fromGrid( grid, 4.0 )
     
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg)
+    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
     pablo.drawScene(scene)
     pablo.flip()
 

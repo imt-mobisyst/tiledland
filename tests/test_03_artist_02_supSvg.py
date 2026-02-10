@@ -87,7 +87,7 @@ def test_artist_load():
     assert( type( pablo ) ) == tll.Artist
     assert( type( pablo.support() ) ) == tll.Support
 
-    pablo.initializeSVG("shot-test.svg") 
+    pablo.initializeSVG("shot-test.svg", 800, 600) 
 
     assert( type( pablo.support() ) ) == tll.SupportSVG
 
@@ -95,7 +95,7 @@ def test_artist_load():
     assert( pablo.render() == """<svg width="800" height="600">
 <polygon points="0,0 0,600 800,600 800,0" fill="#b86e00" />
 </svg>""" )
-
+    
     pablo.drawFrameGrid()
     pablo.drawFrameAxes()
 
@@ -127,7 +127,7 @@ def test_artist_load():
 
 def test_artist_flip():
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG( filePath=shotImg )
+    pablo= tll.Artist().initializeSVG( shotImg, 800, 600 )
 
     assert( pablo.support().filePath() == shotImg )
 

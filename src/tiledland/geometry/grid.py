@@ -325,7 +325,7 @@ class Grid() : # ToDo: Podable
     def rectangleToConvex(self, rect):
         r= self.resolution()
         e= r*0.1
-        ox, oy= self.position().asTuple()
+        ox, oy= self.bottomleft().asTuple()
         bx1, by1, bx2, by2= tuple(rect)
         sx1= ox + (bx1-1)*r + e
         sy1= oy + (by1-1)*r + e

@@ -10,7 +10,7 @@ from src.tiledland import Agent, Tile, Scene
 # ----------------------------------------------------------------------- #
 
 def draw(scene, filePath= "shot-test.png"):
-    pablo= tll.Artist().initializePNG( filePath )
+    pablo= tll.Artist().initializePNG( filePath, 800, 600 )
     
     pablo.drawFrameGrid()
     pablo.drawFrameAxes()

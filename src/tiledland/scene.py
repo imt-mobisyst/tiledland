@@ -37,7 +37,7 @@ class Scene(Podable):
         i= 0
         for matter in range( minMatter, maxMatter+1 ):
             # Add all shapes
-            shapes= aGrid.makeConvexes(matter, tileSize)
+            shapes= aGrid.makeRectangles(matter, tileSize)
             for s in shapes :
                 i+= 1
                 assert self.createTile(s, matter) == i

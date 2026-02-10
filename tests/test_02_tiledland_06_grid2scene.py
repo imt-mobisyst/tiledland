@@ -7,7 +7,7 @@ from src import tiledland as tll
 #         T E S T   T I L E D L A N D - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
-def test_g2s_makeConvexes_small():
+def test_g2s_makeRectangles_small():
     grid= tll.Grid()
     grid.initialize([
         [1, 1, 0,  0, 0],
@@ -21,7 +21,7 @@ def test_g2s_makeConvexes_small():
 
     assert grid.resolution() == 0.1 # dm
     assert grid.bottomleft().asTuple() == (0.0, 0.0)
-    shapes= grid.makeConvexes(0)
+    shapes= grid.makeRectangles(0)
 
     assert len(shapes) == 2
     
@@ -37,7 +37,7 @@ def test_g2s_makeConvexes_small():
 
     # Scene Construction :
     scene= tll.Scene( epsilon=0.06 )
-    shapes= grid.makeConvexes(0)
+    shapes= grid.makeRectangles(0)
     i= 0
     for s in shapes :
         i+= 1
@@ -56,7 +56,7 @@ Scene: [0.06]
   - Convex: [-0.14, -0.09, -0.14, 0.09, 0.14, 0.09, 0.14, -0.09]
 """
 
-    shapes= grid.makeConvexes(1)
+    shapes= grid.makeRectangles(1)
     for s in shapes :
         i+= 1
         assert scene.createTile(s, 1) == i
@@ -103,7 +103,7 @@ Scene: [0.06]
     print( '-'*10 )
     print( scene.asPod() )
 
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
 
     assert True or "\n"+ str(scene.asPod()) +"\n" =="""
 Scene: [0.06]
@@ -115,7 +115,7 @@ Scene: [0.06]
   - Convex: [-0.09, -0.09, -0.09, 0.09, 0.09, 0.09, 0.09, -0.09]
 """
 
-def test_g2s_makeConvexes_medium():
+def test_g2s_makeRectangles_medium():
     grid= tll.Grid()
     grid.initialize([
         [1, 1, 1,  0, 0, 0,  0, 0, 0],
@@ -131,7 +131,7 @@ def test_g2s_makeConvexes_medium():
         [0, 0, 0,  0, 0, 0,  0, 0, 0]
     ])
 
-    shapes= grid.makeConvexes(0)
+    shapes= grid.makeRectangles(0)
 
     assert len(shapes) == 6
     referes= [
@@ -148,7 +148,7 @@ def test_g2s_makeConvexes_medium():
         print( shape.round(2).asZipped() )
         assert shape.asZipped() ==  ref
     
-    shapes= grid.makeConvexes(1)
+    shapes= grid.makeRectangles(1)
 
     assert len(shapes) == 4
     referes= [
@@ -173,7 +173,7 @@ def test_g2s_makeConvexes_medium():
     print( '-'*10 )
     print( scene.asPod() )
 
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
 
     assert "\n"+ str(scene.asPod()) +"\n" == """
 Scene: [0.04000000000000001]
@@ -191,7 +191,7 @@ Scene: [0.04000000000000001]
   - Convex: [-0.14, -0.14, -0.14, 0.14, 0.14, 0.14, 0.14, 0.06]
 """
 
-def test_g2s_makeConvexes_medium_limit():
+def test_g2s_makeRectangles_medium_limit():
     scene= tll.Scene()
     grid= tll.Grid()
     grid.initialize([
@@ -208,12 +208,12 @@ def test_g2s_makeConvexes_medium_limit():
         [0, 0, 0,  0, 0, 0,  0, 0, 0]
     ])
 
-    shapes= grid.makeConvexes(0, 0.31)
+    shapes= grid.makeRectangles(0, 0.31)
 
     scene.fromShapes(shapes, 0)
     scene.connectAllClose( 0.021 )
 
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
     
     assert len(shapes) == 11
     referes= [
@@ -242,13 +242,13 @@ def test_g2s_makeConvexes_medium_limit():
     assert scene.selectIdSmallbox(0.16) == [5, 7, 10, 11]
 
     assert( scene.mergeTile(5, 0.06, 1.0) )
-    #tll.artist.draw(scene, "shot-1.png")
+    #tll.artist.drawScene(scene, "shot-1.png")
     body4= scene.tile(4).body().round(2).asZipped()
     print( body4 )
     assert body4 ==  [(0.01, 0.31), (0.01, 0.59), (0.39, 0.59), (0.39, 0.31)]
     
     assert( scene.mergeTile(6, 0.06, 1.0) )
-    #tll.artist.draw(scene, "shot-2.png")
+    #tll.artist.drawScene(scene, "shot-2.png")
     body6= scene.tile(6).body().round(2).asZipped()
     print(body6)
     assert body6 ==  [(0.11, 0.61), (0.11, 0.69), (0.21, 0.79), (0.39, 0.79), (0.39, 0.61)]
@@ -257,7 +257,7 @@ def test_g2s_makeConvexes_medium_limit():
     for t in scene.tiles() :
         t.position().round(2)
         t.shape().round(2)
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
 
     print( f"---\n{scene.asPod()}." )
     assert "\n"+ str(scene.asPod()) +"\n" == """
@@ -280,7 +280,7 @@ Scene: [0.01]
   - Convex: [-0.09, -0.14, -0.09, 0.14, 0.09, 0.14, 0.09, -0.14]
 """
 
-def test_g2s_makeConvexes_large():
+def test_g2s_makeRectangles_large():
     grid= tll.Grid()
     grid.initialize([
         [1, 1, 1, 0, 0,  0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0],
@@ -332,7 +332,7 @@ def test_g2s_makeConvexes_large():
     print( '-'*10 )
     print( scene.asPod() )
 
-    tll.artist.draw(scene)
+    tll.artist.drawScene(scene)
 
     assert "\n"+ str(scene.asPod()) +"\n" == """
 Scene: [0.04000000000000001]
