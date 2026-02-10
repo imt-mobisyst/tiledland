@@ -34,7 +34,7 @@ def test_gridmap_asGrid():
 def test_gridmap_convexMap():
     gridmap= ros.GridMap().load( "tests/rsc", "convexmap.yaml" )
     grid= gridmap.asTllGrid()
-    scene= tll.Scene().fromGrid(grid)
+    scene= tll.Scene().fromGridRectangles(grid)
 
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
@@ -53,7 +53,7 @@ def test_gridmap_smallMap():
     gridmap= ros.GridMap().load( "tests/rsc", "small-map.yaml" )
     grid= gridmap.asTllGrid()
 
-    scene= tll.Scene().fromGrid( grid )
+    scene= tll.Scene().fromGridRectangles( grid )
 
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
@@ -84,7 +84,7 @@ def test_gridmap_mediumMap_inside():
     grid= gridmap.asTllGrid()
     grid.filter(1, -1)
 
-    #scene= tll.Scene().fromGrid( grid )
+    #scene= tll.Scene().fromGridRectangles( grid )
     scene= tll.Scene()
 
     scene.clear()
@@ -133,7 +133,7 @@ def test_gridmap_mediumMap():
     grid= gridmap.asTllGrid()
     grid.filter(1, -1)
 
-    scene= tll.Scene().fromGrid( grid, 4.0 )
+    scene= tll.Scene().fromGridRectangles( grid, 4.0 )
 
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
@@ -154,7 +154,7 @@ def test_gridmap_largeMap():
     grid= gridmap.asTllGrid()
     grid.filter(1, -1)
 
-    scene= tll.Scene().fromGrid( grid, 4.0 )
+    scene= tll.Scene().fromGridRectangles( grid, 4.0 )
     
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG(shotImg, 800, 600)

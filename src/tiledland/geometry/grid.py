@@ -77,7 +77,71 @@ class Grid() : # ToDo: Podable
     def isCell(self, x, y, state):
         return ( self.cell(x, y) == state )
     
-    # Cleaning :
+    # Filling :
+    def fill(self, x, y, matter):
+        w, h= self.dimention()
+        old= self.cell(x, y)
+        toFill= [(x, y)]
+        cumul= Point()
+        count= 0
+        while len(toFill) > 0 :
+            for cx, cy in toFill :
+                self.setCell(x, y, matter)
+                cumul.add( Point(x, y) )
+                count+= 1
+            
+            nextToFill= []
+            for cx, cy in toFill :
+                for nx, ny in [(cx-1, cy), (cx+1, cy), (cx, cy-1), (cx, cy+1)] :
+                    if 0 < nx and nx <= w and 0 < ny and ny <= h and self.cell(nx, ny) == old :
+                        nextToFill.append( (nx, ny) )
+            
+            toFill= nextToFill
+        return Point( cumul.x()/count, cumul.y()/count,  )
+
+    def fill(self, ix, iy, matter):
+        w, h= self.dimention()
+        old= self.cell(ix, iy)
+        if old == matter :
+            return Point(ix, iy)
+        toFill= [(ix, iy)]
+        cumul= Point()
+        count= 0
+        while len(toFill) > 0 :
+            for cx, cy in toFill :
+                self.setCell(cx, cy, matter)
+                cumul.add( Point(cx, cy) )
+                count+= 1
+
+            nextToFill= []
+            for cx, cy in toFill :
+                for nx, ny in [(cx-1, cy), (cx+1, cy), (cx, cy-1), (cx, cy+1)] :
+                    if 0 < nx and nx <= w and 0 < ny and ny <= h and self.cell(nx, ny) == old :
+                        nextToFill.append( (nx, ny) )
+            toFill= nextToFill
+        return Point( cumul.x()/count, cumul.y()/count )
+
+    def fillMasks(self, masks, ix, iy, iCluster):
+        w, h= self.dimention()
+        ref= self.cell(ix, iy)
+        toFill= [(ix, iy)]
+        cumul= Point()
+        count= 0
+        while len(toFill) > 0 :
+            for cx, cy in toFill :
+                masks.setCell(cx, cy, iCluster)
+                cumul.add( Point(cx, cy) )
+                count+= 1
+            
+            nextToFill= []
+            for cx, cy in toFill :
+                for nx, ny in [(cx-1, cy), (cx+1, cy), (cx, cy-1), (cx, cy+1)] :
+                    if (0 < nx and nx <= w and 0 < ny and ny <= h
+                        and masks.cell(nx, ny) != iCluster and self.cell(nx, ny) == ref ):
+                        nextToFill.append( (nx, ny) )
+            toFill= nextToFill
+        return Point( cumul.x()/count, cumul.y()/count )
+
     def filter(self, value, modif):
         for i in range( self.height() ) :
             for j in range( self.width() ) :
@@ -86,10 +150,9 @@ class Grid() : # ToDo: Podable
 
     # Clustering :
     def clustering(self, matter, radius):
-        print( self )
-        means= self.clusterInit(matter, radius)
+        marks, means= self.clusterInit(matter, radius)
         minDistance= 1.0
-        while minDistance > 0.001 :
+        while means.size() > 0 and minDistance > 0.001 :
             marks, newMeans= self.clusterIterate(matter, means, radius)
             for p, np in zip( means.points(), newMeans.points() ) :
                 minDistance= min(minDistance, p.distance(np))
@@ -97,13 +160,25 @@ class Grid() : # ToDo: Podable
         return marks, means
     
     def clusterInit(self, matter, radius):
+        means= self.clusterInitMeans(radius)
+        marks, newMeans= self.clusterIterate(matter, means, radius)
+        # Search free cluster...
+        w, h= self.dimention()
+        for x in range(1, w+1) :
+            for y in range(1, h+1) :
+                if marks.cell(x, y) == 0 and self.cell(x, y) == matter :
+                    iCluster= means.size()+1
+                    center= self.fillMasks( marks, x, y, iCluster )
+                    means.append(center)
+        return marks, means
+    
+    def clusterInitMeans(self, radius):
         cosPi6= 0.86602540378
         distance= radius*2
         pi6Distance= cosPi6*distance
         w, h= self.dimention()
         nbWidth= int(max(w//(distance), 1))
         nbHeight= int(max(h//(pi6Distance), 1))
-        print( f"so: {nbWidth} x {nbHeight}" )
         means= []
         wMarge= w - nbWidth*distance + radius
         hMarge= h - nbHeight*pi6Distance + radius
@@ -115,7 +190,6 @@ class Grid() : # ToDo: Podable
                 lineSize-= 1
             for j in range(lineSize):
                 means.append( Point(marge+j*distance, hMarge+i*pi6Distance) )
-            
         return Mesh( means )
     
     def localPointToCoordinate(self, aPoint):
@@ -306,7 +380,7 @@ class Grid() : # ToDo: Podable
         frontiers[matter].append( self.point(x, y) )
         return frontSize
 
-    def makeTileHulls(self, matter, radius):
+    def makeConvexes(self, matter, radius):
         marks, means= self.clustering(matter, radius)
         frontiers= marks.computeFrontiers()
         convs= []

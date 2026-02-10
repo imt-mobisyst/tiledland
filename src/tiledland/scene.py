@@ -27,8 +27,17 @@ class Scene(Podable):
         self.clear()
         for s in shapes :
             self.createTile(s, matter)
-     
-    def fromGrid(self, aGrid, tileSize= 1.0):
+    
+    def fromGridConvexes(self, aGrid, tileSize):
+        self.clear()
+        seam= aGrid.resolution()
+        self._epsilon= seam * 0.001
+        gridConvexRadius= min(2, round( (tileSize/seam)/2.0 ))
+
+        # Foreach value possibility:
+        minMatter, maxMatter= aGrid.valueMinMax()
+
+    def fromGridRectangles(self, aGrid, tileSize= 1.0):
         self.clear()
         self._epsilon= aGrid.resolution() * 0.4
 
