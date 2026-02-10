@@ -28,14 +28,26 @@ class Scene(Podable):
         for s in shapes :
             self.createTile(s, matter)
     
-    def fromGridConvexes(self, aGrid, tileSize):
+    def fromGridConvexes(self, aGrid, tileSize=1.0, matters= False):
         self.clear()
-        seam= aGrid.resolution()
-        self._epsilon= seam * 0.001
-        gridConvexRadius= min(2, round( (tileSize/seam)/2.0 ))
+        seam= aGrid.resolution() * 1.001
+        self._epsilon= aGrid.resolution() * 0.001
+        gridConvexRadius= max(2, round( (tileSize/seam)/2.0 ))
 
+        if not matters :
+            minMatter, maxMatter= aGrid.valueMinMax()
+            matters= range(minMatter, maxMatter+1)
+        
         # Foreach value possibility:
-        minMatter, maxMatter= aGrid.valueMinMax()
+        for matter in matters :
+            convexes= aGrid.makeConvexes(matter, gridConvexRadius)
+            for conv in convexes :
+                self.createTile(conv, matter)
+
+        # Connect all elements:
+        self.connectAllClose( seam )
+
+        return self
 
     def fromGridRectangles(self, aGrid, tileSize= 1.0):
         self.clear()

@@ -66,10 +66,10 @@ def test_Scene_str():
 
     assert "\n"+str(scene)+"\n" == """
 Scene:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(1)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ matter-0 adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ matter-0 adjs[1, 2] agents(1)
   - Agent-1.1 ⌊(-0.2, -0.2), (0.2, 0.2)⌉
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ matter-0 adjs[2] agents(0)
 """
 
 def test_Scene_pod():
@@ -86,10 +86,10 @@ def test_Scene_pod():
     print(f">>>\n{scene}")
     assert '\n'+ str(scene) +'\n' == """
 Scene:
-- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] agents(0)
-- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] agents(0)
-- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] agents(0)
-- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] agents(0)
+- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ matter-0 adjs[2, 3, 4] agents(0)
+- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ matter-0 adjs[1, 3, 4] agents(0)
+- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ matter-0 adjs[1, 2] agents(0)
+- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ matter-0 adjs[1, 2] agents(0)
 """
 
 def test_Scene_box():
@@ -133,9 +133,9 @@ def test_Scene_podcopy():
 
     assert '\n'+ str(scene) +'\n' == """
 Scene:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ matter-0 adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ matter-0 adjs[1, 2] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ matter-0 adjs[2] agents(0)
 """
 
     print("Go for the copying...")
@@ -148,9 +148,9 @@ Scene:
     print(f">>>\n{sceneBis}")
     assert '\n'+ str(sceneBis) +'\n' == """
 Scene:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ matter-0 adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ matter-0 adjs[1, 2] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ matter-0 adjs[2] agents(0)
 """
 
     assert sceneBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
@@ -164,9 +164,9 @@ def test_Scene_connection():
     print( f">>>\n{scene}\n---")
     assert "\n"+ str(scene) +"\n"  == """
 Scene:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ matter-0 adjs[2] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ matter-0 adjs[2, 3] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ matter-0 adjs[2] agents(0)
 """
 
     assert scene.tile(1).adjacencies() == [2]
@@ -212,12 +212,12 @@ def test_Scene_withAgents():
 
     print( f"---\n{scene}.")
     assert str(scene) == """Scene:
-- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] agents(1)
+- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ matter-0 adjs[2] agents(1)
   - Agent-2 ⌊(-0.2, 0.9), (0.2, 1.3)⌉
-- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] agents(2)
+- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ matter-1 adjs[1, 3] agents(2)
   - Agent-1 ⌊(0.9, 0.9), (1.3, 1.3)⌉
   - Agent-4 ⌊(0.9, 0.9), (1.3, 1.3)⌉
-- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] agents(0)"""
+- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ matter-0 adjs[2] agents(0)"""
 
     scene.clearAgents()
 
@@ -265,12 +265,12 @@ def test_Scene_popAgents():
 
     print( f"---\n{scene}.")
     assert str(scene) == """Scene:
-- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] agents(1)
+- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ matter-0 adjs[2] agents(1)
   - Agent-2 ⌊(-0.2, 0.9), (0.2, 1.3)⌉
-- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] agents(2)
+- Tile-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ matter-1 adjs[1, 3] agents(2)
   - Agent-1 ⌊(0.9, 0.9), (1.3, 1.3)⌉
   - Agent-3 ⌊(0.9, 0.9), (1.3, 1.3)⌉
-- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] agents(0)"""
+- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ matter-0 adjs[2] agents(0)"""
 
     scene.clearAgents()
 

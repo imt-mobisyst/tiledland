@@ -31,7 +31,7 @@ def test_gridmap_asGrid():
         [0, 0, 0, 0]
     ]
 
-def test_gridmap_convexMap():
+def test_gridmap_rectanglemap():
     gridmap= ros.GridMap().load( "tests/rsc", "convexmap.yaml" )
     grid= gridmap.asTllGrid()
     scene= tll.Scene().fromGridRectangles(grid)

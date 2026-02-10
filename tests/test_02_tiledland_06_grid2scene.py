@@ -282,6 +282,47 @@ Scene: [0.01]
 
 def test_makeConvexes_small():
     grid= tll.Grid([
+        [0, 0, 0, 0, 1,  1, 1, 1, 1, 1 ],
+        [0, 0, 0, 0, 0,  1, 1, 0, 0, 0 ],
+        [0, 0, 0, 0, 0,  1, 1, 0, 0, 0 ],
+        [0, 0, 0, 0, 0,  1, 1, 0, 0, 0 ],
+        [0, 0, 1, 0, 0,  1, 1, 0, 0, 0 ],
+
+        [0, 0, 1, 0, 0,  0, 1, 0, 0, 0 ],
+        [0, 0, 1, 0, 0,  0, 0, 0, 0, 0 ],
+        [0, 0, 1, 0, 0,  0, 0, 0, 0, 0 ],
+        [0, 0, 0, 0, 0,  0, 0, 0, 0, 0 ],
+        [0, 0, 0, 0, 0,  0, 0, 0, 0, 0 ]
+    ], tll.Point(0.5, 0.5), 1.0 )
+    print(grid)
+    
+    scene= tll.Scene().fromGridConvexes(grid, 1.0, [0])
+    tll.artist.drawScene( scene )
+
+    print('\n'+ str(scene) +'.')
+    assert '\n'+str(scene) == """
+Scene:
+- Tile-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ matter-0 adjs[2, 3, 4] agents(0)
+- Tile-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ matter-0 adjs[1] agents(0)
+- Tile-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ matter-0 adjs[1, 4] agents(0)
+- Tile-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ matter-0 adjs[1, 3] agents(0)"""
+
+    scene= tll.Scene().fromGridConvexes(grid, 1.0)
+    tll.artist.drawScene( scene )
+
+    print('\n'+ str(scene) +'.')
+    assert '\n'+str(scene) == """
+Scene:
+- Tile-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ matter-0 adjs[2, 3, 4, 5, 6] agents(0)
+- Tile-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ matter-0 adjs[1, 6, 7] agents(0)
+- Tile-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ matter-0 adjs[1, 4, 5, 6, 7] agents(0)
+- Tile-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ matter-0 adjs[1, 3, 5] agents(0)
+- Tile-5 ⌊(3.5, 3.5), (3.5, 6.5)⌉ matter-1 adjs[1, 3, 4] agents(0)
+- Tile-6 ⌊(6.5, 5.5), (7.5, 7.5)⌉ matter-1 adjs[1, 2, 3, 7] agents(0)
+- Tile-7 ⌊(5.5, 8.5), (10.5, 10.5)⌉ matter-1 adjs[2, 3, 6] agents(0)"""
+ 
+def test_makeConvexes_medium():
+    grid= tll.Grid([
         [0, 0, 0, 0, 1,  1, 1, 1, 1, 1,  1, 1, 1, 1, 1,  1, 1, 1, 1, 1,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  1, 1, 1, 1, 1 ],
         [0, 0, 0, 0, 0,  1, 1, 0, 0, 0,  1, 1, 1, 1, 1,  1, 1, 1, 1, 1,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  1, 1, 1, 1, 1 ],
         [1, 0, 0, 0, 0,  1, 1, 0, 0, 0,  0, 0, 0, 0, 0,  1, 1, 1, 1, 1,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  1, 1, 1, 1, 1 ],
@@ -318,27 +359,61 @@ def test_makeConvexes_small():
         [0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 1,  1, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0 ],
         [0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 1,  1, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0 ]
     ], tll.Point(0.5, 0.5), 1.0 )
-    grid.filter(1, -1)
+    print(grid)
     
-    scene= tll.Scene().fromGridConvexes(grid, 8.0)
-
+    scene= tll.Scene().fromGridConvexes(grid, 8.0, [0])
     tll.artist.drawScene( scene )
 
-    print('\n'+'\n'.join( [str(c) for c in scene.convexes() ])+'.')
-    assert '\n'+'\n'.join( [str(c) for c in scene.convexes() ]) == """
-    Convex 6[(1.5, 1.5), (9.5, 10.5)]
-    Convex 8[(10.5, 1.5), (19.5, 11.5)]
-    Convex 8[(21.5, 1.5), (28.5, 10.5)]
-    Convex 5[(29.5, 1.5), (35.5, 9.5)]
-    Convex 8[(1.5, 10.5), (13.5, 19.5)]
-    Convex 11[(14.5, 8.5), (25.5, 18.5)]
-    Convex 6[(27.5, 10.5), (35.5, 17.5)]
-    Convex 8[(1.5, 20.5), (8.5, 30.5)]
-    Convex 11[(9.5, 13.5), (18.5, 23.5)]
-    Convex 5[(24.5, 16.5), (29.5, 24.5)]
-    Convex 6[(30.5, 18.5), (35.5, 25.5)]
-    Convex 9[(8.5, 22.5), (16.5, 29.5)]
-    Convex 10[(17.5, 21.5), (24.5, 30.5)]
-    Convex 6[(23.5, 25.5), (30.5, 30.5)]"""
+    print('\n'+ str(scene) +'.')
+    assert '\n'+str(scene) == """
+Scene:
+- Tile-1 ⌊(1.5, 1.5), (9.5, 10.5)⌉ matter-0 adjs[2, 5] agents(0)
+- Tile-2 ⌊(10.5, 1.5), (19.5, 11.5)⌉ matter-0 adjs[1, 5, 6] agents(0)
+- Tile-3 ⌊(21.5, 1.5), (28.5, 10.5)⌉ matter-0 adjs[4, 6] agents(0)
+- Tile-4 ⌊(29.5, 1.5), (35.5, 10.5)⌉ matter-0 adjs[3, 7] agents(0)
+- Tile-5 ⌊(1.5, 10.5), (13.5, 16.5)⌉ matter-0 adjs[1, 2, 6, 8, 9] agents(0)
+- Tile-6 ⌊(14.5, 9.5), (25.5, 18.5)⌉ matter-0 adjs[2, 3, 5, 9] agents(0)
+- Tile-7 ⌊(27.5, 10.5), (35.5, 17.5)⌉ matter-0 adjs[4, 10, 11] agents(0)
+- Tile-8 ⌊(1.5, 15.5), (10.5, 22.5)⌉ matter-0 adjs[5, 9, 12, 15] agents(0)
+- Tile-9 ⌊(11.5, 14.5), (19.5, 24.5)⌉ matter-0 adjs[5, 6, 8, 12, 13] agents(0)
+- Tile-10 ⌊(24.5, 17.5), (29.5, 24.5)⌉ matter-0 adjs[7, 11, 13, 14] agents(0)
+- Tile-11 ⌊(30.5, 18.5), (35.5, 25.5)⌉ matter-0 adjs[7, 10, 14] agents(0)
+- Tile-12 ⌊(8.5, 22.5), (16.5, 29.5)⌉ matter-0 adjs[8, 9, 13, 15] agents(0)
+- Tile-13 ⌊(17.5, 21.5), (24.5, 30.5)⌉ matter-0 adjs[9, 10, 12, 14] agents(0)
+- Tile-14 ⌊(23.5, 25.5), (31.5, 30.5)⌉ matter-0 adjs[10, 11, 13] agents(0)
+- Tile-15 ⌊(1.5, 20.5), (7.5, 30.5)⌉ matter-0 adjs[8, 12] agents(0)"""
 
-    assert False
+    
+    scene= tll.Scene().fromGridConvexes(grid, 8.0)
+    tll.artist.drawScene( scene )
+
+    print('\n'+ str(scene) +'.')
+    assert '\n'+str(scene) == """
+Scene:
+- Tile-1 ⌊(1.5, 1.5), (9.5, 10.5)⌉ matter-0 adjs[2, 5, 16] agents(0)
+- Tile-2 ⌊(10.5, 1.5), (19.5, 11.5)⌉ matter-0 adjs[1, 5, 6, 16, 17, 18] agents(0)
+- Tile-3 ⌊(21.5, 1.5), (28.5, 10.5)⌉ matter-0 adjs[4, 6, 17, 19] agents(0)
+- Tile-4 ⌊(29.5, 1.5), (35.5, 10.5)⌉ matter-0 adjs[3, 7, 19] agents(0)
+- Tile-5 ⌊(1.5, 10.5), (13.5, 16.5)⌉ matter-0 adjs[1, 2, 6, 8, 9, 16, 18] agents(0)
+- Tile-6 ⌊(14.5, 9.5), (25.5, 18.5)⌉ matter-0 adjs[2, 3, 5, 9, 17, 19, 21, 22] agents(0)
+- Tile-7 ⌊(27.5, 10.5), (35.5, 17.5)⌉ matter-0 adjs[4, 10, 11, 19] agents(0)
+- Tile-8 ⌊(1.5, 15.5), (10.5, 22.5)⌉ matter-0 adjs[5, 9, 12, 15, 20] agents(0)
+- Tile-9 ⌊(11.5, 14.5), (19.5, 24.5)⌉ matter-0 adjs[5, 6, 8, 12, 13, 21] agents(0)
+- Tile-10 ⌊(24.5, 17.5), (29.5, 24.5)⌉ matter-0 adjs[7, 11, 13, 14, 22] agents(0)
+- Tile-11 ⌊(30.5, 18.5), (35.5, 25.5)⌉ matter-0 adjs[7, 10, 14, 25] agents(0)
+- Tile-12 ⌊(8.5, 22.5), (16.5, 29.5)⌉ matter-0 adjs[8, 9, 13, 15, 23, 24] agents(0)
+- Tile-13 ⌊(17.5, 21.5), (24.5, 30.5)⌉ matter-0 adjs[9, 10, 12, 14, 21, 22, 24] agents(0)
+- Tile-14 ⌊(23.5, 25.5), (31.5, 30.5)⌉ matter-0 adjs[10, 11, 13, 25] agents(0)
+- Tile-15 ⌊(1.5, 20.5), (7.5, 30.5)⌉ matter-0 adjs[8, 12, 20, 23, 26] agents(0)
+- Tile-16 ⌊(5.5, 5.5), (10.5, 10.5)⌉ matter-1 adjs[1, 2, 5, 18] agents(0)
+- Tile-17 ⌊(20.5, 1.5), (21.5, 9.5)⌉ matter-1 adjs[2, 3, 6] agents(0)
+- Tile-18 ⌊(7.5, 8.5), (12.5, 12.5)⌉ matter-1 adjs[2, 5, 16] agents(0)
+- Tile-19 ⌊(25.5, 9.5), (30.5, 16.5)⌉ matter-1 adjs[3, 4, 6, 7, 22] agents(0)
+- Tile-20 ⌊(1.5, 17.5), (6.5, 21.5)⌉ matter-1 adjs[8, 15] agents(0)
+- Tile-21 ⌊(16.5, 19.5), (20.5, 21.5)⌉ matter-1 adjs[6, 9, 13, 22] agents(0)
+- Tile-22 ⌊(21.5, 16.5), (26.5, 22.5)⌉ matter-1 adjs[6, 10, 13, 19, 21] agents(0)
+- Tile-23 ⌊(5.5, 25.5), (13.5, 30.5)⌉ matter-1 adjs[12, 15, 24] agents(0)
+- Tile-24 ⌊(14.5, 26.5), (20.5, 30.5)⌉ matter-1 adjs[12, 13, 23] agents(0)
+- Tile-25 ⌊(30.5, 23.5), (35.5, 30.5)⌉ matter-1 adjs[11, 14] agents(0)
+- Tile-26 ⌊(1.5, 26.5), (2.5, 28.5)⌉ matter-1 adjs[15] agents(0)"""
+

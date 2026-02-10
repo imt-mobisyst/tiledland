@@ -66,14 +66,14 @@ def test_Tile_adjencies():
 def test_Tile_str():
     tile= Tile(8, Point(18.5, 4.07) )
     print(f">>> {tile}")
-    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] agents(0)"
+    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ matter-0 adjs[] agents(0)"
     tile.setMatter(2).connectAll( [1, 2, 3] )
     print(f">>> {tile}")
-    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] agents(0)"
+    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ matter-2 adjs[1, 2, 3] agents(0)"
 
     tile= Tile( shape= Convex() )
     print(f">>> {tile}")
-    assert str(tile) == "Tile-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] agents(0)"
+    assert str(tile) == "Tile-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ matter-0 adjs[] agents(0)"
 
     print(f">>> {tile.body()}")
     assert tile.position().asTuple() == (0.0, 0.0)
@@ -141,7 +141,7 @@ def test_Tile_podCopy():
     assert type(tile) == type(tileBis)
     assert tileBis.adjacencies() == [ 1, 3, 7, 19 ]
 
-    assert str(tileBis) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 3, 7, 19] agents(1)"
+    assert str(tileBis) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ matter-0 adjs[1, 3, 7, 19] agents(1)"
     assert str(tileBis.agent()) == str(tile.agent())
 
 

@@ -114,6 +114,7 @@ class Tile(Agent):
     def str(self, typeName="Tile"): 
         # Myself :
         s= super(Tile, self).str(typeName)
+        s+= " matter-"+ str(self._matter)
         s+= " adjs"+ str(self._adjacencies)
         s+= f" agents({ len(self.agents()) })"
         return s

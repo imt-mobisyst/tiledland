@@ -78,27 +78,6 @@ class Grid() : # ToDo: Podable
         return ( self.cell(x, y) == state )
     
     # Filling :
-    def fill(self, x, y, matter):
-        w, h= self.dimention()
-        old= self.cell(x, y)
-        toFill= [(x, y)]
-        cumul= Point()
-        count= 0
-        while len(toFill) > 0 :
-            for cx, cy in toFill :
-                self.setCell(x, y, matter)
-                cumul.add( Point(x, y) )
-                count+= 1
-            
-            nextToFill= []
-            for cx, cy in toFill :
-                for nx, ny in [(cx-1, cy), (cx+1, cy), (cx, cy-1), (cx, cy+1)] :
-                    if 0 < nx and nx <= w and 0 < ny and ny <= h and self.cell(nx, ny) == old :
-                        nextToFill.append( (nx, ny) )
-            
-            toFill= nextToFill
-        return Point( cumul.x()/count, cumul.y()/count,  )
-
     def fill(self, ix, iy, matter):
         w, h= self.dimention()
         old= self.cell(ix, iy)
@@ -121,23 +100,25 @@ class Grid() : # ToDo: Podable
             toFill= nextToFill
         return Point( cumul.x()/count, cumul.y()/count )
 
-    def fillMasks(self, masks, ix, iy, iCluster):
+    def fillMasks(self, masks, ix, iy, iCluster, radius):
         w, h= self.dimention()
         ref= self.cell(ix, iy)
+        masks.setCell(ix, iy, iCluster)
         toFill= [(ix, iy)]
         cumul= Point()
         count= 0
-        while len(toFill) > 0 :
-            for cx, cy in toFill :
-                masks.setCell(cx, cy, iCluster)
-                cumul.add( Point(cx, cy) )
-                count+= 1
-            
+        diameter= radius+radius
+        it= 0
+        while it <= diameter and len(toFill) > 0 :
+            it+=1
             nextToFill= []
             for cx, cy in toFill :
+                cumul.add( Point(cx, cy) )
+                count+= 1
                 for nx, ny in [(cx-1, cy), (cx+1, cy), (cx, cy-1), (cx, cy+1)] :
                     if (0 < nx and nx <= w and 0 < ny and ny <= h
                         and masks.cell(nx, ny) != iCluster and self.cell(nx, ny) == ref ):
+                        masks.setCell(nx, ny, iCluster)
                         nextToFill.append( (nx, ny) )
             toFill= nextToFill
         return Point( cumul.x()/count, cumul.y()/count )
@@ -159,7 +140,7 @@ class Grid() : # ToDo: Podable
             means= newMeans
         return marks, means
     
-    def clusterInit(self, matter, radius):
+    def clusterInitOld(self, matter, radius):
         means= self.clusterInitMeans(radius)
         marks, newMeans= self.clusterIterate(matter, means, radius)
         # Search free cluster...
@@ -168,8 +149,42 @@ class Grid() : # ToDo: Podable
             for y in range(1, h+1) :
                 if marks.cell(x, y) == 0 and self.cell(x, y) == matter :
                     iCluster= means.size()+1
-                    center= self.fillMasks( marks, x, y, iCluster )
+                    center= self.fillMasks( marks, x, y, iCluster, radius )
                     means.append(center)
+        return marks, means
+    
+
+    def clusterInit(self, matter, radius):
+        means= self.clusterInitMeans(radius)
+        w, h= self.dimention()
+
+        # Initialize marks on 0 :
+        marks= Grid(
+            [ [ 0 for j in range(w)]  for i in range(h) ],
+            self.bottomleft(), self.resolution()
+        )
+        
+        # Color the marks :
+        maxRadius= int(radius*1.6)
+        gridMeans= []
+        count= 0
+        for i in range(means.size()) :
+            x, y= self.localPointToCoordinate( means.point(i+1) )
+            x, y, dist= self.searchClosest(matter, x, y)
+            if dist <= radius :
+                count+= 1
+                center= self.fillMasks( marks, x, y, count, maxRadius )
+                gridMeans.append( center )
+    
+        # Search free cluster...
+        w, h= self.dimention()
+        for x in range(1, w+1) :
+            for y in range(1, h+1) :
+                if marks.cell(x, y) == 0 and self.cell(x, y) == matter :
+                    iCluster= means.size()+1
+                    center= self.fillMasks( marks, x, y, iCluster, maxRadius )
+                    means.append(center)
+        
         return marks, means
     
     def clusterInitMeans(self, radius):
