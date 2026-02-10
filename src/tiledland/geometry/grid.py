@@ -7,9 +7,9 @@ from .mesh import Mesh
 
 class Grid() : # ToDo: Podable
     # Initialization
-    def __init__(self, values= [[0]], position= Point(0.0, 0.0), resolution=0.1):
+    def __init__(self, values= [[0]], bottomleft= Point(0.0, 0.0), resolution=0.1):
         self.initialize(values)
-        self._position= position
+        self._bottomleft= bottomleft
         self._resolution= resolution
 
     # Construction
@@ -45,11 +45,17 @@ class Grid() : # ToDo: Podable
         i, j = self.inTable(x, y)
         return self._grid[i][j]
 
-    def position(self):
-        return self._position
+    def bottomleft(self):
+        return self._bottomleft
 
     def resolution(self):
         return self._resolution
+
+    def point(self, x, y):
+        #return Point(x, y)
+        p= self._bottomleft
+        r= self._resolution
+        return Point( p.x() + x*r, p.y() + y*r )
 
     def valueMinMax(self):
         if self.height() == 0 :
@@ -80,6 +86,7 @@ class Grid() : # ToDo: Podable
 
     # Clustering :
     def clustering(self, matter, radius):
+        print( self )
         means= self.clusterInit(matter, radius)
         minDistance= 1.0
         while minDistance > 0.001 :
@@ -136,7 +143,7 @@ class Grid() : # ToDo: Podable
         # Initialize marks on 0 :
         marks= Grid(
             [ [ 0 for j in range(w)]  for i in range(h) ],
-            self.position(), self.resolution()
+            self.bottomleft(), self.resolution()
         )
 
         # Initialize newMeans :
@@ -266,6 +273,55 @@ class Grid() : # ToDo: Podable
         return self
 
     # Shaping
+    def computeFrontiers(self):
+        frontiers= []
+        frontSize= 0
+        w, h = self.dimention()
+        w1, h1= w+1, h+1
+        # horizontal border :
+        for x in range(1, w):
+            frontSize= self.updateFrontiers(frontiers, frontSize, x, 1)
+            frontSize= self.updateFrontiers(frontiers, frontSize, w1-x, h)
+        # vertical border :
+        for y in range(2, h):
+            frontSize= self.updateFrontiers(frontiers, frontSize, 1, y)
+            frontSize= self.updateFrontiers(frontiers, frontSize, w, h1-y)
+        # middle cells :
+        for x in range(2, w):
+            for y in range(2, h):
+                m= self.cell(x, y)
+                if ( self.cell(x-1, y) != m or self.cell(x+1, y) != m 
+                        or self.cell(x, y-1) != m or self.cell(x, y+1) != m ) :
+                    frontSize= self.updateFrontiers(frontiers, frontSize, x, y)
+        return frontiers
+    
+    def updateFrontiers(self, frontiers, frontSize, x, y ):
+        matter= self.cell(x, y)
+        if matter < 0 :
+            return frontSize
+        if matter >= frontSize :
+            frontiers+= [ [] for i in range( frontSize, matter+1 ) ]
+            frontSize= matter+1
+            assert len(frontiers) == frontSize
+        frontiers[matter].append( self.point(x, y) )
+        return frontSize
+
+    def makeTileHulls(self, matter, radius):
+        marks, means= self.clustering(matter, radius)
+        frontiers= marks.computeFrontiers()
+        convs= []
+        epsilon= self.resolution()*0.001
+        for points in frontiers[1:] :
+            c= Convex( points )
+            c.simplify( epsilon )
+            convs.append(c)
+        return convs
+
+    def makeRectangles(self, state, expectedSize=1.0):
+        rectangles= self.cutingRectangles(state, expectedSize)
+        shapes= [ self.rectangleToConvex(rect) for rect in rectangles ]
+        return shapes
+    
     def rectangleToConvex(self, rect):
         r= self.resolution()
         e= r*0.1
@@ -277,11 +333,6 @@ class Grid() : # ToDo: Podable
         sy2= oy + by2*r - e
         return Convex().fromZipped( [(sx1, sy1), (sx1, sy2), (sx2, sy2), (sx2, sy1)] )
 
-    def makeConvexes(self, state, expectedSize=1.0):
-        rectangles= self.cutingRectangles(state, expectedSize)
-        shapes= [ self.rectangleToConvex(rect) for rect in rectangles ]
-        return shapes
-    
     # to str
     def str(self, typeName="Grid"): 
         # Myself :

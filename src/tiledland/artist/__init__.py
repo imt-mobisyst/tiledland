@@ -1,12 +1,17 @@
 from .color import color, colorRatio, colorRatio, rgbColor, percentColor, webColor, colorFromWeb
 from .support import AbsSupport, Support, SupportSVG
 from .supportCairo import SupportPNG
+from ..scene import Scene 
 
-def draw(scene, filePath= "shot-tl.png"):
-    pablo= Artist().initializePNG( filePath )
+def drawScene(scene, filePath= "shot-tiled.png", width= 1600, height= 1200):
+    pablo= Artist().initializePNG( filePath, width, height )
     pablo.fit(scene)
     pablo.drawScene(scene)
     pablo.flip()
+
+def drawConvexes(convexes, filePath= "shot-tiled.png", width= 1600, height= 1200):
+    scene= Scene(convexes)
+    drawScene(scene,filePath, width, height) 
 
 # Artist:
 class Brush():
@@ -54,13 +59,13 @@ class Artist():
         self.flip()
 
     # Construction:
-    def initializeSVG(self, filePath):
-        self._support= SupportSVG( filePath=filePath )
+    def initializeSVG(self, filePath, width= 1600, height= 1200):
+        self._support= SupportSVG( width, height, filePath )
         self.flip()
         return self
     
-    def initializePNG(self, filePath):
-        self._support= SupportPNG( filePath=filePath )
+    def initializePNG(self, filePath, width= 1600, height= 1200):
+        self._support= SupportPNG( width, height, filePath )
         self.flip()
         return self
 

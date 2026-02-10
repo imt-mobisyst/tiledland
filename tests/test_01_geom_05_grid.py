@@ -17,7 +17,7 @@ def test_grid_init():
     assert grid.dimention() == (1, 1)
     assert grid.values() == [[0]]
     
-    assert grid.position().asTuple() == (0.0, 0.0)
+    assert grid.bottomleft().asTuple() == (0.0, 0.0)
     assert grid.resolution() == 0.1
 
 def test_grid_init2():
@@ -30,7 +30,7 @@ def test_grid_init2():
     assert grid.height() == 2
     assert grid.width() == 3
     assert grid.dimention() == (3, 2)
-    assert grid.position().asTuple() == (0.0, 0.0)
+    assert grid.bottomleft().asTuple() == (0.0, 0.0)
     assert grid.resolution() == 0.1
 
     assert grid.values() == [

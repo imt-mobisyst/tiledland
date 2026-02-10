@@ -20,7 +20,7 @@ def test_g2s_makeConvexes_small():
     ])
 
     assert grid.resolution() == 0.1 # dm
-    assert grid.position().asTuple() == (0.0, 0.0)
+    assert grid.bottomleft().asTuple() == (0.0, 0.0)
     shapes= grid.makeConvexes(0)
 
     assert len(shapes) == 2

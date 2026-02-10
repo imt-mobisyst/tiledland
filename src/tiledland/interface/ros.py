@@ -101,8 +101,9 @@ class GridMap :
     
     def asTllGrid(self):
         px, py= self.position()
+        d= self.resolution() * 0.5
         return Grid(
             self.asStatesGrid(),
-            Point(px, py),
+            Point(px-d, py-d),
             self.resolution()
         )
