@@ -23,8 +23,7 @@ agent= scene.popAgentOn(14)
 agent.setMatter(15)
 
 # Create an artist to render this scene:
-artist= tll.Artist().initializePNG( "shot-example.png", 600, 800 )
-# artist= tll.Artist().initializePNG( filePath= "shot-example.png" )  ## Require cairo (pip install pycairo)
+artist= tll.Artist().initializePNG( "shot-example.png", 800, 600 )
 artist.fitBox( scene.box() )
 artist.drawScene(scene)
 artist.flip() # Uptate the support and return to a blanc page.

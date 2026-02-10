@@ -33,7 +33,7 @@ class World( scene.Scene ):
         self._missions= []
         self._encumbers= []
         # Initialize Artist :
-        self._artist= artist.Artist().initializePNG( "shot-pickndel.png" )
+        self._artist= artist.Artist().initializePNG( "shot-pickndel.png", 800, 600 )
         self._artist.flip()
         self._artist.fitBox( Box([Point(-0.5, -0.5), Point(9.5, 6.5)] ), 10 )
         #self._artist.fitBox( self.box(), 10 )
