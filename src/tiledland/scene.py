@@ -236,6 +236,10 @@ class Scene(Podable):
         self._tiles.append( aTile )
         return self._size
     
+    def createSeveralTiles(self, convexes, matter):
+        for c in convexes :
+            self.createTile( c, matter)
+        
     def createTile( self, aBody, matter= 0 ):
         self._size+= 1
         aShape= aBody.copy()

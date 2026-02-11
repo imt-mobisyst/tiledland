@@ -4,10 +4,10 @@ import tiledland as tll
 # Create a new TiledMap as a grid:
 scene= tll.Scene()
 scene.initializeHexa(
-    [[0, 0, 0, -1, 0, 0, 0, 0],              #  -1 : means no cell at this location
-       [0, -1, 0, 0, 0, -1, 0, 0],              #  0 - n : give the group identifier of the cell to create.
-     [0, 0, 0, -1, 0, 0, 0, 0],               #  
-       [0, 0, 0, -1, 0, 0, 0, 0],               #  
+    [[0, 0, 0, -1, 0, 0, 0, 0],              #   -1   : means no cell at this location
+       [0, -1, 0, 0, 0, -1, 0, 0],           #  0 - n : give the group identifier of the cell to create.
+     [0, 0, 0, -1, 0, 0, 0, 0],              #  
+       [0, 0, 0, -1, 0, 0, 0, 0],            #  
     [-1, -1, 0, 0, 0, -1, -1, -1]]           #  
 )
 
@@ -29,7 +29,7 @@ bod.setMatter(15)
 
 
 # Create an artist to render this scene:
-artist= tll.Artist().initializePNG( "shot-example.png", 800, 600 )
+artist= tll.Artist().initializePNG( "shot-demo.png", 800, 600 )
 artist.fitBox( scene.box() )
 artist.drawScene(scene)
 artist.flip() # Uptate the support and return to a blanc page.

@@ -5,8 +5,11 @@
 from ..geometry import Point, Grid
 import yaml, cairo
 
-def loadGrid() :
-    return Grid()
+def loadGridMap( path, file ) :
+    if path == "" :
+        path= "."
+    gridmap= GridMap().load( path, file )
+    return gridmap.asTllGrid()
 
 class GridMap :
     # Initialization

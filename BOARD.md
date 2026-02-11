@@ -1,6 +1,6 @@
 # Board:
 
-**-- Board V0.1 --**
+**-- Board V1.0 --**
 
 ## Get Tiledland from Hackagames.tiled
 
@@ -8,7 +8,6 @@
 - [x] Initialize artist rendering
 - [x] New Structure: core (Scene, Tiles and Agents), geometry and artist
 - [x] HackaGame compatible
-- [ ] asDico() and fromDico() morphing (via Pod)
 
 
 ## Simple, but strong plan geometry
@@ -17,22 +16,9 @@
 - [x] Scene: Gridmap to Tiled Scenes 
 - [x] Fast position requestest : add a grid canvas to Scene get a tiles from a position (getTile at, closest, inRadius ...)
 - [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Scene: `forward(agent, action)` (But on Hacka?) )
+- [ ] Scene: Apply a grid and use it on connectClose...
 - [ ] Scene: Generation from Voroi, gabriel, ....
-
-
-## Web IHM - Rendering
-
-- [x] Artist + support architectur.
-- [x] SVG Support.
-- [x] PNG Support with Cairo.
-- [ ] Visualize map (Static/Dynamic)
-- [ ] Add a monitor/control panel
-- [ ] Make the map clickable...
-- [ ] Validate the choise of remi
-- [ ] Add Texure to Convex...
-- [ ] Projection simple : (vertical ratio)
-- [ ] Free Projection : (rotation + translation)
-
+- [ ] Tile: Search for text zones (header, body, footer)
 
 ## Scene, Tiles and Agents :
 
@@ -43,6 +29,27 @@
 - [x] Grid and Hexa-grid based scene initilization.
 - [ ] Basic Scene manipulation: doSomething ... doTeleportOn(tile, agent, group).
 - [ ] Be topological: Clockdir manipulation.
+- [ ] Generate scene from point-graph (mesh).
+
+
+## Web IHM - Rendering
+
+- [x] Artist + support architectur.
+- [x] SVG Support.
+- [x] PNG Support with Cairo.
+- [ ] Visualize map (Static/Dynamic)
+- [ ] Add a monitor/control panel
+- [ ] Make the map clickable...
+
+
+## Robotique
+
+- [x] Transform GridMap to scene.
+- [ ] Integrate TiledLand in a TiledNav ROS package.
+- [ ] Be resilent hugly maps
+- [ ] Be resilent on ".png" format. 
+- [ ] Cloud point on frontiere cell (position on frontiers not cell center).
+- [ ] Correction on colliding convexes paving a matter.
 
 
 ## HackaGames - Pick'n Del
@@ -61,14 +68,33 @@ Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 - [ ] encumbered value function of population/directions
 
 
-**-- Board V0.2 --**
+## Documentaion :
+
+- [ ] Push tiled-land on pypip
+- [ ] Specific pages.
+- [ ] Write doc contents...
+
+
+**-- Board V2.0 --**
 
 
 ## Go efficient :
 
-- [ ] Migrate geometry module on a _C_ library (`lib42deg` - a lib. for 2D Euclidean Geom. `LibEGG` Euclidean Graspable Geometry.
-- [ ] Encapsulate Convex in Modif object (ie. one or several join convexes)
-- [ ] Migrade Scene geometry function into a Texture dedicated object.
+- [ ] Migrate geometry module on a _C_ library (from `box2d` or new `LibEGG` Euclidean Graspable Geometry).
+- [ ] Encapsulate _Convex_ in _Motif_ object (ie. one or several join convexes)
+- [ ] Migrade Scene geometry function into a Texture dedicated object (collection of _Motif_).
+
+
+## Rendering :
+
+- [ ] Play 2.5D world.
+- [ ] Projection simple : (vertical ratio)
+- [ ] Free Projection : (rotation + translation)
+
+
+## Scene, Tiles and Agents :
+
+- [ ] scene with _epsilon_ and _seam_ distance
 
 
 ## HackaGames - Multi-Bot Delivery
@@ -93,8 +119,6 @@ Social complient navigation.
 - [ ] Tuto _pygame IHM_
 - [ ] Tuto _create a game_
 - [ ] Developpers expectation: (template from Convex + class structure + tests)
-
-
 
 
 # HackaGames - Move-It
