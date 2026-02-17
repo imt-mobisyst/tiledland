@@ -1,10 +1,19 @@
-# Light Submodules
-#----------------------
-ovl-*
-output*
+# Local configuration
+#-----------------
+config.toml
+
+# Submodules
+#-----------------
+
+# Generated
+#-----------------
+site/
+dist/
+shot-*
+log-*
 
 # System
-#----------------------
+#-----------------
 *.log
 .vscode
 build
@@ -13,18 +22,10 @@ external
 lost+found
 *~
 ~*
-
-# Outputs
-#----------------------
-shot-*
-*.log
-
-# MkDocs
-#----------------------
-site/
+.obsidian
 
 # Latex:
-#----------------------
+#-----------------
 *.aux
 *.bbl
 *.bcf
@@ -38,27 +39,17 @@ site/
 *.synctex.gz
 *.tex~
 
-# Obsidian:
-#----------------------
-.obsidian/
-
 # python:
-#----------------------
+#-----------------
 *.pyc
 __pycache__/
 
-
 # c/c++:
-#----------------------
+#-----------------
 *.o
 
-
-# java:
-#----------------------
-
-
 # pharo:
-#----------------------
+#-----------------
 pharo
 pharo-ui
 pharo-vm

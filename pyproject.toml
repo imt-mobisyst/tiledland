@@ -1,16 +1,16 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["flit_core >= 3.4"]
+build-backend = "flit_core.buildapi"
 
 [project]
 name = "tiledland"
-version = "0.1.00"
+version = "0.1.0"
 authors = [
   { name="Guillaume Lozenguez", email="guillaume.lozenguez@imt-nord-europe.fr" },
 ]
 description = "Polygon-based interconnected tiles to model an environment and mobile objects inside."
 dependencies = [ "hacka", "pycairo", "pyyaml" ]
-readme = "docs/index.md"
+readme = "docs/pypip-index.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",

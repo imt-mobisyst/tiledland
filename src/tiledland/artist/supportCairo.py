@@ -125,7 +125,6 @@ class SupportPNG( AbsSupport ):
         ctx.stroke()
         return self
 
-
     # Writting primitives:
     def write( self, pixX, pixY, text, color, fontSize ):
         ctx = cairo.Context( self._canvas )
@@ -136,3 +135,5 @@ class SupportPNG( AbsSupport ):
         ctx.show_text(text)
         ctx.stroke()
         return self
+
+    # Writting primitives:

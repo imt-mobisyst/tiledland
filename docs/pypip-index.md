@@ -7,9 +7,6 @@ Its is more a sandbox project to test approaches than an optimized, ready-to-use
 
 The project relies on [Cairo](https://pypi.org/project/pycairo/) library for rendering example, [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
 
-- On github: [imt-mobisyst/tiledland](https://github.com/imt-mobisyst/tiledland)
-- On PyPip: [projct tiledland](https://pypi.org/project/tiledland/)
-
 ## Not what are you looking for ?
 
 You can look at concurrent/complementary projects:
@@ -24,21 +21,21 @@ You can look at concurrent/complementary projects:
 ## Install
 
 The _Tiled-Land_ project can be installed with _pip_.
-To notice that, the project is based on _pytest_ for testing.
 
 ```sh
-git clone git@github.com:imt-mobisyst/tiled-land.git
-cd tiled-land
-pytest
-pip install .
+pip install tiledland
 ```
+
+
+For in-dev version, refer to github repository : [imt-mobisyst/tiled-land](https://www.github.com/imt-mobisyst/tiled-land).
+
 
 ### Get started
 
 The `demo` directory include simple examples for _TiledLand_.
 Most of the demonstrations generate a scene, rendered in a `shot-demo.png` file.
 
-In VisualStudio Code terminal for instance:
+In _VisualStudio Code_ terminal for instance:
 
 ```shell
 cd demo
