@@ -257,6 +257,17 @@ class Convex():
                 i= i2
         return removed
 
+    # Artist drawing:
+    def draw( self, artist, brushId=0, px=0, py=0 ):
+        listxs, listys= self.asLists(px, py)
+        artist.drawPolygon( listxs, listys, artist.colorPalette( brushId ) )
+        return self
+    
+    def fill( self, artist, brushId=0, px=0, py=0 ):
+        listxs, listys= self.asLists(px, py)
+        artist.fillPolygon( listxs, listys, artist.colorPalette( brushId ) )
+        return self
+
     # to str
     def str(self, typeName="Convex"): 
         # Myself :

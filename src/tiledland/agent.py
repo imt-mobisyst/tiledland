@@ -72,6 +72,15 @@ class Agent(Entity):
         self.setShape( Convex().fromDataTree( aDataTree.children()[0] ) )
         return self
     
+    # Artist drawing:
+
+    def draw( self, artist ):
+        self.body().fill( artist, self._matter )
+        minx, miny= self.box().leftFloor().asTuple()
+        x, y= self.position().asTuple()
+        artist.write( x, y, str(self.id()), artist.colorPalette(self._matter) )
+        return self
+    
     # str:
     def str(self, typeName= "Agent"): 
         if self.group() :

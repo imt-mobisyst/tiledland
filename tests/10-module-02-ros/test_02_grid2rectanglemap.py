@@ -41,7 +41,7 @@ def test_gridmap_rectanglemap():
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -60,7 +60,7 @@ def test_gridmap_smallMap():
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -71,7 +71,7 @@ def test_gridmap_smallMap():
     scene.mergeAllPossible( 0.2, 2.0 )
 
     tll.artist.drawScene(scene)
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -120,7 +120,7 @@ def test_gridmap_mediumMap_inside():
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg )
@@ -140,7 +140,7 @@ def test_gridmap_mediumMap():
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -161,7 +161,7 @@ def test_gridmap_largeMap():
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 

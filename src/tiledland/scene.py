@@ -478,6 +478,45 @@ class Scene(Entity):
                 self.__addAgent(ag)
         return self
     
+    
+    # Artist drawing:
+    
+    def drawNetwork( self, artist ):
+        for tile in self.tiles() :
+            cx, cy= tile.position().asTuple()
+            artist.tracePoint( cx, cy, artist.colorPalette( tile.matter() ) )
+        for fromId, toId in self.edges() :
+            fromX, fromY= self.tile( fromId ).position().asTuple()
+            brush= artist.colorPalette( self.tile( fromId ).matter() )
+            toX, toY= self.tile( toId ).position().asTuple()
+            artist.traceLine( fromX, fromY, toX, toY, brush )
+        return self
+
+    def drawTiles( self, artist):
+        for tile in self.tiles() :
+            tile.draw( artist )
+        return self
+
+    def writeTiles( self, artist ):
+        for tile in self.tiles() :
+            tile.write( artist )
+        return self
+    
+    def drawAgents( self, artist ):
+        for tile in self.tiles() :
+            x, y= tile.position().asTuple()
+            position= (x+0.1, y+0.1)
+            for agent in tile.agents() :
+                agent.draw( artist )
+        return self
+
+    def draw( self, artist ):
+        self.drawNetwork(artist)
+        self.drawTiles(artist)
+        self.writeTiles(artist)
+        self.drawAgents(artist)
+        return self
+
     # string:
     def str(self, name="Scene"):
         eltStrs =[]
@@ -489,3 +528,4 @@ class Scene(Entity):
     
     def __str__(self):
         return self.str()
+    

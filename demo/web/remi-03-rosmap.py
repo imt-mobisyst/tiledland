@@ -56,7 +56,7 @@ class MyApp(remi.App):
         return container
 
     def draw(self):
-        self._artist.drawScene(self._scene)
+        self._scene.draw( self._artist )
         svg= self._artist.content()
         self._frame.add_child( 'content', svg )
         self._artist.clear()

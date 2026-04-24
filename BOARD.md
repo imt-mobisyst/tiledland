@@ -1,13 +1,14 @@
 # Board:
 
-**-- Board V1.0 --**
+**-- Board V0.1.x --**
 
 ## Tiledland Core Structures
 
-- [ ] `Entity` the root class with group, id and shape. 
+- [x] `Entity` the root class with group, id and shape.
 - [x] Initialize artist rendering
+- [ ] Drawing as `Entities` methods (with no matters)
 - [ ] New Structure: core (Tiles, Land and Agents), geometry and artist
-- [ ] HackaGame (DataTree) compatible
+- [x] HackaGame (DataTree) compatible
 
 
 ## Simple, but strong plan geometry
@@ -20,10 +21,10 @@
 - [ ] Scene: Generation from Voroi, gabriel, ....
 - [ ] Tile: Search for text zones (header, body, footer)
 
-## Scene, Tiles and Agents :
+## Land, Tiles and Agents :
 
 - [x] Agents: Position, clock-position and Convex
-- [x] Scene as collection of: group's Agents, structured on Tiles
+- [x] Land as collection of: group's Agents, structured on Tiles
 - [x] Tiles as collection of: Agents
 - [x] Abstraction on Scene: Agents could be anything...
 - [x] Grid and Hexa-grid based scene initilization.

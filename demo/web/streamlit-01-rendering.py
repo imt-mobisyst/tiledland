@@ -33,12 +33,12 @@ bod= scene.popAgentOn(26)
 bod.setId(3).setMatter(13)
 
 # Create an artist to render this scene:
-artist= tll.Artist().initializeSVG( filePath= "shot-web-rendering.svg" )
-artist.fitBox( scene.box() )
-artist.drawScene(scene)
+pablo= tll.Artist().initializeSVG( filePath= "shot-web-rendering.svg" )
+pablo.fitBox( scene.box() )
+scene.draw(pablo)
 
 # Rendering in a streamlit widget
 widget= st.empty()
-widget.write( artist.render(), unsafe_allow_html=True )
+widget.write( pablo.render(), unsafe_allow_html=True )
 
-artist.flip()
+pablo.flip()

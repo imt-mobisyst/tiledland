@@ -15,8 +15,8 @@ def draw(scene, filePath= "shot-test.png"):
     pablo.drawFrameGrid()
     pablo.drawFrameAxes()
 
-    pablo.drawSceneNetwork(scene)
-    pablo.drawSceneTiles(scene)
+    scene.drawNetwork(pablo)
+    scene.drawTiles(pablo)
 
     pablo.flip()
 

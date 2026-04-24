@@ -52,10 +52,10 @@ agent= scene.popAgentOn(14)
 agent.setMatter(15)
 
 # Create an artist to render this scene:
-artist= tll.Artist().initializePNG( "shot-demo.png", 800, 600 )
-artist.fitBox( scene.box() )
-artist.drawScene(scene)
-artist.flip() # Uptate the support and return to a blanc page.
+pablo= tll.Artist().initializePNG( "shot-demo.png", 800, 600 )
+pablo.fitBox( scene.box() )
+scene.draw(pablo)
+pablo.flip() # Uptate the support and return to a blanc page.
 
 print( f"You can open now the './{artist.support().filePath()}' file." )
 ```

@@ -34,11 +34,11 @@ def test_pnd_world():
     model= pnd.World( "Cool" )
     assert model.name() == "Cool"
     model.initializeGrid( refMatrix, 0.9, 0.1 )
-    artist= tll.Artist().initializePNG("shot-test.png", 800, 600)
-    artist.fitBox( model.box(), 10 )
+    pablo= tll.Artist().initializePNG("shot-test.png", 800, 600)
+    pablo.fitBox( model.box(), 10 )
 
-    artist.drawScene( model )
-    artist.flip()
+    model.draw(pablo)
+    pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
     refsFile= open( "tests/refs/41.pickndel-scene-01.png", mode='rb' ).read()
@@ -52,8 +52,8 @@ def test_pnd_world():
     assert model.popAgentOn(7).id() == 3
     assert model.popAgentOn(44).id() == 4
 
-    artist.drawScene( model )
-    artist.flip()
+    model.draw(pablo)
+    pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
     refsFile= open( "tests/refs/41.pickndel-scene-02.png", mode='rb' ).read()
@@ -112,11 +112,11 @@ def test_pnd_withCarrier():
     assert model.move( 39,  0 ) == 39
     assert model.move( 39,  3 ) == False
     
-    artist= tll.Artist().initializePNG("shot-test.png", 800, 600)
-    artist.fitBox( model.box(), 10 )
+    pablo= tll.Artist().initializePNG("shot-test.png", 800, 600)
+    pablo.fitBox( model.box(), 10 )
     
-    artist.drawScene( model )
-    artist.flip()
+    model.draw(pablo)
+    pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
     refsFile= open( "tests/refs/41.pickndel-scene-03.png", mode='rb' ).read()

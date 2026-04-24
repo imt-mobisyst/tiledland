@@ -36,7 +36,7 @@ class World( scene.Scene ):
         self._artist.flip()
         self._artist.fitBox( Box([Point(-0.5, -0.5), Point(9.5, 6.5)] ), 10 )
         #self._artist.fitBox( self.box(), 10 )
-        self.marketBrush= self._artist._panel[6]
+        self.marketBrush= self._artist.colorPalette(6)
         self.marketBrush.width= 8
 
     # Accessor: 
@@ -228,7 +228,7 @@ class World( scene.Scene ):
     
     # Rendering :
     def render(self):
-        self._artist.drawScene( self )
+        self.draw( self._artist )
         # Market:
         self._artist.drawPolygon(
             [6.55, 6.55, 9.5, 9.5], [2.45, -0.6, -0.6, 2.45],

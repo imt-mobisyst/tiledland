@@ -6,7 +6,7 @@ from ..scene import Scene
 def drawScene(scene, filePath= "shot-tiled.png", width= 1600, height= 1200):
     pablo= Artist().initializePNG( filePath, width, height )
     pablo.fit(scene)
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
 def drawConvexes(convexes, filePath= "shot-tiled.png", width= 1600, height= 1200):
@@ -27,7 +27,7 @@ class Artist():
 
         # Initialize brush :
         self._background= 0xb86e00
-        self._panel= [
+        self._colors= [
             Brush(0xffcd80, 0x603800, 4), # 0-Free
             Brush(0xff6644, 0x991100, 4), # 1-Red
             Brush(0x70f050, 0x20770a, 4), # 2-Green
@@ -96,6 +96,9 @@ class Artist():
     def scale( self ):
         return (self._scale)
     
+    def colorPalette( self, idColor ):
+        return self._colors[ idColor%len(self._colors) ]
+
     # Setters:
     def setCamera( self, x, y ):
         self._x, self._y= x, y
@@ -219,7 +222,7 @@ class Artist():
         height= self._support.height()
 
         if not color :
-            color= self._panel[0].stroke
+            color= self._colors[0].stroke
         
         # Vertical
         for i in range( (int)(width/pixStep)+1 ) :
@@ -237,70 +240,6 @@ class Artist():
         brush.stroke= 0x0606E2
         self.tracePoint( 0, 0, brush )
         return self
-    
-    # Drawing map:
-    def drawConvex( self, shape, brushId=0, px=0, py=0 ):
-        listxs, listys= shape.asLists(px, py)
-        self.drawPolygon( listxs, listys, self._panel[ brushId%len(self._panel) ] )
-    
-    def fillConvex( self, shape, brushId=0, px=0, py=0 ):
-        listxs, listys= shape.asLists(px, py)
-        self.fillPolygon( listxs, listys, self._panel[ brushId%len(self._panel) ] )
-    
-    def drawTile( self, aTile ):
-        env= aTile.body().asZipped()
-        self.drawPolygon(
-            [p[0] for p in env],
-            [p[1] for p in env],
-            self._panel[ aTile.matter() ]
-        )
-    
-    def writeTile( self, aTile ):
-        minx, miny= aTile.box().leftFloor().asTuple()
-        x, y= aTile.position().asTuple()
-        x= x+(minx-x)*2/3
-        y= y+(miny-y)*2/3
-        self.write( x, y, str(aTile.id()), self._panel[ aTile.matter() ] )
-
-    def drawAgent( self, agent, brushId ):
-        self.fillConvex(
-            agent.body(),
-            brushId )
-        minx, miny= agent.box().leftFloor().asTuple()
-        x, y= agent.position().asTuple()
-        self.write( x, y, str(agent.id()), self._panel[brushId] )
-    
-    def drawSceneNetwork( self, aScene ):
-        for tile in aScene.tiles() :
-            cx, cy= tile.position().asTuple()
-            self.tracePoint( cx, cy, self._panel[ tile.matter() ] )
-
-        for fromId, toId in aScene.edges() :
-            fromX, fromY= aScene.tile( fromId ).position().asTuple()
-            brush= self._panel[ aScene.tile( fromId ).matter() ]
-            toX, toY= aScene.tile( toId ).position().asTuple()
-            self.traceLine( fromX, fromY, toX, toY, brush )
-
-    def drawSceneTiles( self, aScene ):
-        for tile in aScene.tiles() :
-            self.drawTile( tile )
-
-    def drawSceneAgents( self, aScene ):
-        for tile in aScene.tiles() :
-            x, y= tile.position().asTuple()
-            position= (x+0.1, y+0.1)
-            for agent in tile.agents() :
-                self.drawAgent( agent, agent.matter() )
-    
-    def writeSceneTiles( self, aScene ):
-        for tile in aScene.tiles() :
-            self.writeTile( tile )
-
-    def drawScene( self, aScene ):
-        self.drawSceneNetwork(aScene)
-        self.drawSceneTiles(aScene)
-        self.writeSceneTiles(aScene)
-        self.drawSceneAgents(aScene)
 
     # Control:
     def flip(self):

@@ -108,6 +108,22 @@ class Tile(Agent):
         cpy= type(self)()
         return cpy.fromDataTree( self.asDataTree() )
     
+    # Artist drawing:
+    def draw(self, artist):
+        env= self.body().asZipped()
+        artist.drawPolygon(
+            [p[0] for p in env],
+            [p[1] for p in env],
+            artist.colorPalette( self.matter() )
+        )
+
+    def write(self, artist):
+        minx, miny= self.box().leftFloor().asTuple()
+        x, y= self.position().asTuple()
+        x= x+(minx-x)*2/3
+        y= y+(miny-y)*2/3
+        artist.write( x, y, str(self.id()), artist.colorPalette( self.matter() ) )
+
     # to str
     def str(self, typeName="Tile"): 
         # Myself :

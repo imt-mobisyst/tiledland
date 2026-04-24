@@ -31,7 +31,7 @@ def test_gridmap_smallMap():
 
     tll.artist.drawScene(scene)
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -43,7 +43,7 @@ def test_gridmap_smallMap():
 
     tll.artist.drawScene(scene)
     
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -65,7 +65,7 @@ def test_gridmap_largeMap():
     tll.artist.drawScene(scene)
 
     pablo.fit(scene)
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -78,7 +78,7 @@ def test_gridmap_largeMap():
     tll.artist.drawScene(scene)
     
     pablo.fit(scene)
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 

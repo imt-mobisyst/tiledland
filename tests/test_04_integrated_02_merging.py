@@ -23,7 +23,7 @@ def test_scene_fromConvex():
     pablo.setCamera( 4.0, 3.0 )
 
     for shape in shapes :
-        pablo.drawConvex( shape, 0 )
+        shape.draw(pablo, 0)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -38,7 +38,7 @@ def test_scene_fromConvex():
     scene.createTile( shapes[0] )
     assert scene.size() == 1
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -50,7 +50,7 @@ def test_scene_fromConvex():
         scene.createTile( s )
     assert scene.size() == 5
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -60,7 +60,7 @@ def test_scene_fromConvex():
 
     scene.connectAllClose(0.5)
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -103,7 +103,7 @@ def test_scene_mergeOne():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -116,7 +116,7 @@ def test_scene_mergeOne():
 
     assert ok
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -139,7 +139,7 @@ def test_scene_mergeNoOne():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -152,7 +152,7 @@ def test_scene_mergeNoOne():
 
     assert not ok
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -201,7 +201,7 @@ def test_scene_mergeFew():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -216,7 +216,7 @@ def test_scene_mergeFew():
     assert len( scene.tiles() ) == 9
     assert scene.size() == 9
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -227,7 +227,7 @@ def test_scene_mergeFew():
     ## Merge 8-9 :
     assert scene.mergeTilesIfPossible(8, 9, 0.09, 10.0)
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -239,7 +239,7 @@ def test_scene_mergeFew():
     scene.mergeAllPossible(0.09, 10.0)
     tll.artist.drawScene(scene)
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -279,7 +279,7 @@ def test_scene_mergeConplex():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -293,7 +293,7 @@ def test_scene_mergeConplex():
     tll.artist.drawScene(scene)
     assert nbMerges == 12
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -333,7 +333,7 @@ def test_scene_mergeButNo():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -344,7 +344,7 @@ def test_scene_mergeButNo():
     ## Merge all :
     scene.mergeAllPossible()
 
-    pablo.drawScene(scene)
+    scene.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
