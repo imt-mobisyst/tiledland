@@ -1,25 +1,14 @@
+import hacka
 from .geometry import Point, Convex
-from .pod import Podable, Pod
+from .entity import Entity
 
-class Agent(Podable):
-
-    # Initialization Destruction:
+class Agent(Entity):
     def __init__( self, identifier= 0, group=0, position= Point(0.0, 0.0), shape= None):
-        self._id= identifier
-        self._group= group
+        super().__init__(identifier, group, shape)
         self._tile= 0
         self._center= Point( position.x(), position.y() )
-        self._shape= shape
-        if self._shape is None :
-            self._shape= Convex().initializeSquare(0.4)
         self._matter= 10+group
 
-    # Accessor: 
-    def group(self):
-        return self._group
-    
-    def id(self):
-        return self._id
     
     def tile(self):
         return self._tile
@@ -30,12 +19,9 @@ class Agent(Podable):
     def position(self):
         return self._center
     
-    def shape(self):
-        return self._shape
-    
     def body(self):
         return self._shape.copy(self._center)
-    
+
     # Convex accessor : 
     def box(self):
         return self.body().box()
@@ -48,15 +34,7 @@ class Agent(Podable):
             r= max( d, r )
         return r
 
-    # Construction:
-    def setId(self, aInteger):
-        self._id= aInteger
-        return self
-    
-    def setGroup(self, aInteger):
-        self._group= aInteger
-        return self
-    
+    # Construction:    
     def setTile(self, aInteger):
         self._tile= aInteger
         return self
@@ -69,41 +47,29 @@ class Agent(Podable):
         self._matter= aInteger
         return self
     
-    def setShape(self, aConvex):
-        self._shape= aConvex
-        return self
-    
-    def setShapeRegular(self, size= 1.0):
-        self._shape.initializeSquare(size)
-        return self
-
-    def setShapeRegular(self, numberOfVertex= 6, size= 1.0):
-        self._shape.initializeRegular( numberOfVertex, size)
-        return self
-
     def setBody(self, aConvex):
         self._center= aConvex.center()
         subCenter= Point( -self._center.x(), -self._center.y() )
         self._shape= aConvex.copy(subCenter) 
         return self
-    
-    # Pod interface:
-    def asPod(self):
-        return Pod().fromLists( 
+
+    # Hacka.DataTree interface:
+    def asDataTree(self):
+        return hacka.DataTree().fromLists( 
             ["Agent"], 
             [self.id(), self.group(), self.matter(), self.tile()],
             self.position().asList(),
-            [ self.shape().asPod() ]
+            [ self.shape().asDataTree() ]
         )
     
-    def fromPod( self, aPod ):
-        integers= aPod.integers()
-        self.setId( integers[0] )
-        self.setGroup( integers[1] )
-        self.setMatter( integers[2] )
-        self.setTile( integers[3] )
-        self.setPosition( Point().fromList( aPod.values() ) )
-        self.setShape( Convex().fromPod( aPod.children()[0] ) )
+    def fromDataTree( self, aDataTree ):
+        digits= aDataTree.digits()
+        self.setId( digits[0] )
+        self.setGroup( digits[1] )
+        self.setMatter( digits[2] )
+        self.setTile( digits[3] )
+        self.setPosition( Point().fromList( aDataTree.values() ) )
+        self.setShape( Convex().fromDataTree( aDataTree.children()[0] ) )
         return self
     
     # str:

@@ -15,6 +15,7 @@ def test_load_local_geometry():
     # plane= localTll.Plane()
 
 def test_load_local_tllcore():
+    entity= tll.Entity()
     agent= tll.Agent()
     tile= tll.Tile()
     scene= tll.Scene()
@@ -25,25 +26,7 @@ def test_load_local_tllihm():
     support3= tll.SupportPNG()
     artist= tll.Artist()
 
-import tiledland as tll
-
 # ------------------------------------------------------------------------ #
-#         T E S T   H A C K A G A M E S - C O M P O N E N T
+#         T E S T   H A C K A G A M E S - E N T I T Y
 # ------------------------------------------------------------------------ #
 
-def test_load_geometry():
-    point= tll.Point()
-    line= tll.Line()
-    convex= tll.Convex()
-    grid= tll.Grid()
-
-def test_load_tllcore():
-    agent= tll.Agent()
-    tile= tll.Tile()
-    scene= tll.Scene()
-
-def test_load_local_tllihm():
-    support= tll.Support()
-    support2= tll.SupportSVG()
-    support3= tll.SupportPNG()
-    artist= tll.Artist()

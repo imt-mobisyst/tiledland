@@ -47,8 +47,8 @@ def test_g2s_makeRectangles_small():
     assert scene.size() == i
     assert i == 2
 
-    print( scene.asPod() )
-    assert "\n"+ str(scene.asPod()) +"\n" =="""
+    print( scene.asDataTree() )
+    assert "\n"+ str(scene.asDataTree()) +"\n" =="""
 Scene: [0.06]
 - Tile: [1, 0] [0.25, 0.2]
   - Convex: [-0.24, -0.19, -0.24, 0.19, 0.24, 0.19, 0.24, -0.19]
@@ -65,9 +65,9 @@ Scene: [0.06]
     assert scene.size() == 3
 
     print( '-'*10 )
-    print( scene.asPod() )
+    print( scene.asDataTree() )
 
-    assert "\n"+ str(scene.asPod()) +"\n" =="""
+    assert "\n"+ str(scene.asDataTree()) +"\n" =="""
 Scene: [0.06]
 - Tile: [1, 0] [0.25, 0.2]
   - Convex: [-0.24, -0.19, -0.24, 0.19, 0.24, 0.19, 0.24, -0.19]
@@ -80,9 +80,9 @@ Scene: [0.06]
     scene.connectAllClose( grid.resolution() )
 
     print( '-'*10 )
-    print( scene.asPod() )
+    print( scene.asDataTree() )
 
-    assert "\n"+ str(scene.asPod()) +"\n" =="""
+    assert "\n"+ str(scene.asDataTree()) +"\n" =="""
 Scene: [0.06]
 - Tile: [1, 0, 2, 3] [0.25, 0.2]
   - Convex: [-0.24, -0.19, -0.24, 0.19, 0.24, 0.19, 0.24, -0.19]
@@ -101,11 +101,11 @@ Scene: [0.06]
         t.shape().round(2)
     
     print( '-'*10 )
-    print( scene.asPod() )
+    print( scene.asDataTree() )
 
     tll.artist.drawScene(scene)
 
-    assert True or "\n"+ str(scene.asPod()) +"\n" =="""
+    assert True or "\n"+ str(scene.asDataTree()) +"\n" =="""
 Scene: [0.06]
 - Tile: [1, 0, 2, 3] [0.25, 0.2]
   - Convex: [-0.24, -0.19, -0.24, 0.19, 0.24, 0.19, 0.24, -0.19]
@@ -171,11 +171,11 @@ def test_g2s_makeRectangles_medium():
         t.shape().round(2)
     
     print( '-'*10 )
-    print( scene.asPod() )
+    print( scene.asDataTree() )
 
     tll.artist.drawScene(scene)
 
-    assert "\n"+ str(scene.asPod()) +"\n" == """
+    assert "\n"+ str(scene.asDataTree()) +"\n" == """
 Scene: [0.04000000000000001]
 - Tile: [1, 0, 2, 4, 5, 6] [0.2, 0.3]
   - Convex: [-0.19, -0.29, -0.19, 0.29, 0.19, 0.29, 0.19, -0.29]
@@ -259,8 +259,8 @@ def test_g2s_makeRectangles_medium_limit():
         t.shape().round(2)
     tll.artist.drawScene(scene)
 
-    print( f"---\n{scene.asPod()}." )
-    assert "\n"+ str(scene.asPod()) +"\n" == """
+    print( f"---\n{scene.asDataTree()}." )
+    assert "\n"+ str(scene.asDataTree()) +"\n" == """
 Scene: [0.01]
 - Tile: [1, 0, 2, 4] [0.15, 0.15]
   - Convex: [-0.14, -0.14, -0.14, 0.14, 0.14, 0.14, 0.14, -0.14]

@@ -108,7 +108,7 @@ def test_Scene_podable():
     scene= Scene().initializeLine(3, connect=False)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
 
-    pod= scene.asPod()
+    pod= scene.asDataTree()
 
     assert pod.numberOfWords() == 1
     assert pod.words() == ["Scene"]
@@ -121,7 +121,7 @@ def test_Scene_podable():
     assert pod.values() == [0.01]
     
     assert pod.numberOfChildren() == 3
-    assert pod.children() == [ t.asPod() for t in scene.tiles() ]
+    assert pod.children() == [ t.asDataTree() for t in scene.tiles() ]
 
 def test_Scene_podcopy():
     scene= Scene().initializeLine(3, connect=False)

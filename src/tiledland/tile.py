@@ -1,6 +1,5 @@
-import math
+import math, hacka
 from . import geometry
-from .pod import Pod
 from .geometry import Point, Convex
 from .agent import Agent
 
@@ -68,8 +67,8 @@ class Tile(Agent):
         return clock
 
     # Agent managment
-    def append(self, aPod, brushId=0, shapeId=0 ): 
-        self._agents.append( aPod )
+    def append(self, aDataTree, brushId=0, shapeId=0 ): 
+        self._agents.append( aDataTree )
         return self
     
     def clear(self):
@@ -83,32 +82,32 @@ class Tile(Agent):
     def bodyDistance(self, another):
         return self.body().distance( another.body() )
 
-    # Pod interface:
-    def asPod(self):
-        return Pod().fromLists(   
+    # hacka.DataTree Interface:
+    def asDataTree(self):
+        return hacka.DataTree().fromLists(   
             ["Tile"], 
             [self.id(), self.matter()] + self.adjacencies(),
             self.position().asList(),
-            [self.shape().asPod()] + [ ag.asPod() for ag in self.agents() ]
+            [self.shape().asDataTree()] + [ ag.asDataTree() for ag in self.agents() ]
         )
     
-    def fromPod( self, aPod, agentFactory=Agent ):
-        integers= aPod.integers()
-        children= aPod.children()
+    def fromDataTree( self, aDataTree, agentFactory=Agent ):
+        integers= aDataTree.integers()
+        children= aDataTree.children()
         self.setId( integers[0] )
         self.setMatter( integers[1] )
         self.setAdjacencies( integers[2:] )
-        self.setPosition( Point().fromList( aPod.values() ) )
-        self.setShape( Convex().fromPod( aPod.children()[0] ) )
+        self.setPosition( Point().fromList( aDataTree.values() ) )
+        self.setShape( Convex().fromDataTree( aDataTree.children()[0] ) )
         self.clear()
         for podBod in children[1:] :
-            self.append( agentFactory().fromPod( podBod ) )
+            self.append( agentFactory().fromDataTree( podBod ) )
         return self
     
     # Classical Class
     def copy(self):
         cpy= type(self)()
-        return cpy.fromPod( self.asPod() )
+        return cpy.fromDataTree( self.asDataTree() )
     
     # to str
     def str(self, typeName="Tile"): 

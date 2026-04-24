@@ -62,7 +62,7 @@ def test_Convex_str():
 
 def test_Convex_podable():
     convex= Convex().initializeSquare( 10.0 )
-    pod= convex.asPod()
+    pod= convex.asDataTree()
 
     assert pod.words() == ["Convex"]
     assert pod.integers() == []
@@ -72,7 +72,7 @@ def test_Convex_podable():
     convexBis= Convex()
     assert convexBis.asZipped() == []
 
-    convexBis.fromPod( convex.asPod() )
+    convexBis.fromDataTree( convex.asDataTree() )
     assert convexBis.asZipped() == [(-5.0, -5.0), (-5.0, 5.0), (5.0, 5.0), (5.0, -5.0)]
 
 def test_Convex_podCopy():

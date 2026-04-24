@@ -2,12 +2,12 @@
 
 **-- Board V1.0 --**
 
-## Get Tiledland from Hackagames.tiled
+## Tiledland Core Structures
 
-- [x] Initialize with hackagames.tiled
+- [ ] `Entity` the root class with group, id and shape. 
 - [x] Initialize artist rendering
-- [x] New Structure: core (Scene, Tiles and Agents), geometry and artist
-- [x] HackaGame compatible
+- [ ] New Structure: core (Tiles, Land and Agents), geometry and artist
+- [ ] HackaGame (DataTree) compatible
 
 
 ## Simple, but strong plan geometry
@@ -52,6 +52,18 @@
 - [ ] Correction on colliding convexes paving a matter.
 
 
+## HackaGames - Chopes
+
+Catch-me if you can, from RIP-Astrid.
+
+
+
+## HackaGames - Cofee Fleet
+
+Multi-Path planning problem (with uncertainty).
+
+
+
 ## HackaGames - Pick'n Del
 
 Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
@@ -87,6 +99,7 @@ Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 
 ## Rendering :
 
+- [ ] Sprites...
 - [ ] Play 2.5D world.
 - [ ] Projection simple : (vertical ratio)
 - [ ] Free Projection : (rotation + translation)

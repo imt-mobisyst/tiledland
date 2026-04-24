@@ -33,14 +33,14 @@ class BasicBot( Player ):
         return self
 
     # Player interface :
-    def wakeUp(self, playerId, numberOfPlayers, gamePod):
-        # Initialize from gamePod:
-        self._model.fromPod(gamePod)
+    def wakeUp(self, playerId, numberOfPlayers, gameConf):
+        # Initialize from gameConf:
+        self._model.fromDataTree(gameConf)
         self._id= playerId
 
-    def perceive(self, podState):
+    def perceive(self, stateDataTree):
         # update the game state:
-        self._tic= self._model.setOnPodState(podState)
+        self._tic= self._model.setOnDataTree(stateDataTree)
 
     def decide(self):
         return "pass"
@@ -55,8 +55,8 @@ class ShellPlayer( BasicBot ):
         self._action= "pass"
     
     # Player interface :
-    def wakeUp(self, playerId, numberOfPlayers, gamePod):
-        super().wakeUp(playerId, numberOfPlayers, gamePod)
+    def wakeUp(self, playerId, numberOfPlayers, gameConf):
+        super().wakeUp(playerId, numberOfPlayers, gameConf)
         self._action= "pass"
         self.model().render()
         print( f"Output image : ./shot-pickndel.png" )

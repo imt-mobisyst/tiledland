@@ -64,7 +64,7 @@ def test_Agent_str():
 
 def test_Agent_podable():
     agent= tll.Agent( 42, 4, Point(1.0, 2.0) )
-    pod= agent.asPod()
+    pod= agent.asDataTree()
 
     assert pod.numberOfWords() == 1
     assert pod.words() == ["Agent"]
@@ -80,9 +80,9 @@ def test_Agent_podable():
     assert pod.value(1) == 1.0
     assert pod.value(2) == 2.0
     assert pod.numberOfChildren() == 1
-    assert pod.children() == [ agent.shape().asPod() ]
+    assert pod.children() == [ agent.shape().asDataTree() ]
 
-    agent2= tll.Agent().fromPod(pod)
-    pod2= agent2.asPod()
+    agent2= tll.Agent().fromDataTree(pod)
+    pod2= agent2.asDataTree()
 
     assert str(pod2) == str(pod)

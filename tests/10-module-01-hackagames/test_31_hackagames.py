@@ -22,17 +22,17 @@ def test_Tile_pod():
     print( tile.body() )
     assert tile.body() == [(0.0, 3.0), (2.0, 3.0), (2.0, 1.0), (0.0, 1.0)]    
     
-    pod= tile.asPod()
+    pod= tile.asDataTree()
     print(f">>> {pod}")
     
     assert str(pod) == "Tile: [3, 0, 1, 2, 4] [1.0, 2.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0]"
     
-    tileBis= Tile().fromPod(pod)
+    tileBis= Tile().fromDataTree(pod)
     assert tileBis.id() == 3
     assert tileBis.center().tuple() == (1.0, 2.0)
     assert tile.body() == [(0.0, 3.0), (2.0, 3.0), (2.0, 1.0), (0.0, 1.0)]
     assert tileBis.adjacencies() == [1, 2, 4]
-    assert tileBis.asPod() == tile.asPod()
+    assert tileBis.asDataTree() == tile.asDataTree()
 
 def test_Tile_load():
     tile= Tile( 3, 9, Point(1.4, 2.0), 1.0 )
@@ -41,7 +41,7 @@ def test_Tile_load():
     tileBis= Tile().load( tile.dump() )
     print( tile )
     print( tileBis )
-    assert tileBis.asPod() == tile.asPod()
+    assert tileBis.asDataTree() == tile.asDataTree()
     
 def test_Tile_load():
     shape= Convex(8).initializeRegular( 12.0, 7 )
@@ -49,7 +49,7 @@ def test_Tile_load():
     shapeBis= Convex().load( shape.dump() )
     print( shape )
     print( shapeBis )
-    assert shapeBis.asPod() == shape.asPod()
+    assert shapeBis.asDataTree() == shape.asDataTree()
 
 def test_Tile_agents():
     tile= Tile(1)
@@ -74,7 +74,7 @@ def test_Scene_pod():
     scene.tile(3).setCenter( 1.0, 9.0 )
     scene.tile(4).setCenter( 9.0, 9.0 )
     
-    scenePod= scene.asPod()
+    scenePod= scene.asDataTree()
     print(f">>>1 {scenePod}")
     assert '\n'+ str(scenePod) +'\n' == """
 Scene:
@@ -85,7 +85,7 @@ Scene:
 - Tile: [4, 0, 1, 2] [9.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 """
 
-    scenePod= Scene().fromPod( scene.asPod() ).asPod()
+    scenePod= Scene().fromDataTree( scene.asDataTree() ).asDataTree()
     print(f">>>2 {scenePod}")
     assert '\n'+ str(scenePod) +'\n' == """
 Scene:

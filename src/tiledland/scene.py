@@ -1,11 +1,11 @@
-from .pod import Podable, Pod
+import hacka
 from .geometry import Point, Box, Convex
 from .tile import Tile
 from .agent import Agent
 
 import math
 
-class Scene(Podable):
+class Scene():
 
     # Constructor:
     def clear( self ):
@@ -459,19 +459,19 @@ class Scene(Podable):
     def agentTiles( self, iGroup=0 ):
         return [ ag.tile() for ag in self.agents(iGroup) ]
 
-    # Podable:
-    def asPod( self, name= "Scene" ):
-        return Pod().fromLists(
+    # Hacka.DataTree interface:
+    def asDataTree( self, name= "Scene" ):
+        return hacka.DataTree().fromLists(
             [name], [], [self._epsilon],
-            [ t.asPod() for t in self.tiles() ]
+            [ t.asDataTree() for t in self.tiles() ]
         )
     
-    def fromPod( self, aPod ):
+    def fromDataTree( self, aDataTree ):
         self.clear()
-        self._epsilon= aPod.value(1)
+        self._epsilon= aDataTree.value(1)
         allAgents= []
-        for absTile in aPod.children() :
-            t= Tile().fromPod( absTile, self._factory )
+        for absTile in aDataTree.children() :
+            t= Tile().fromDataTree( absTile, self._factory )
             self.addTile(t)
             for ag in t.agents() :
                 self.__addAgent(ag)

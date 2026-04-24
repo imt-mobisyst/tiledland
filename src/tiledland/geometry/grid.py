@@ -1,11 +1,10 @@
-import math
-from ..pod import Podable, Pod
+import math, hacka
 from .basic import Point, Line
 from .convex import Point, Convex
 from .mesh import Mesh
 #from .box import Box
 
-class Grid() : # ToDo: Podable
+class Grid() : # ToDo: DataTree
     # Initialization
     def __init__(self, values= [[0]], bottomleft= Point(0.0, 0.0), resolution=0.1):
         self.initialize(values)

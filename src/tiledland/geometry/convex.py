@@ -1,9 +1,8 @@
-import math
-from ..pod import Podable, Pod
+import math, hacka
 from .basic import Point, Line
 from .box import Box
 
-class Convex(Podable):
+class Convex():
 
     # Constructor/Destructor:
     def __init__( self, aListOfPoints= [] ):
@@ -268,12 +267,12 @@ class Convex(Podable):
     def __str__(self): 
         return self.str()
     
-    # Pod interface:
-    def asPod(self):
-        return Pod().fromLists( ["Convex"], [], self.asList(), [] )
+    # Hacka.DataTree interface:
+    def asDataTree(self):
+        return hacka.DataTree().fromLists( ["Convex"], [], self.asList(), [] )
     
-    def fromPod( self, aPod ):
-        values= aPod.values()
+    def fromDataTree( self, aDataTree ):
+        values= aDataTree.values()
         self._points= [
             Point(x, y)
             for x, y in zip( values[::2], values[1::2] )

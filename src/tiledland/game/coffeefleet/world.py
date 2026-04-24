@@ -1,33 +1,13 @@
 import random, hacka
 
-from .carrier import Carrier
+from .bot import Bot
 from ... import scene, Tile, artist
 from ...geometry import Point, Convex, Box
-
-class Mission:
-    def __init__( self, start= 0, final= 0, reward= 0, owner= 0 ):
-        self.start= start
-        self.final= final
-        self.reward= reward
-        self.owner= owner
-
-    def fromList(self, aList):
-        self.start= aList[0]
-        self.final= aList[1]
-        self.reward= aList[2]
-        self.owner= aList[3]
-        return self
-
-    def asList(self):
-        return [self.start, self.final, self.reward, self.owner]
-    
-    def asTuple(self):
-        return self.start, self.final, self.reward, self.owner
 
 class World( scene.Scene ):
     def __init__(self, name="Pick'nDel", numberOfPlayers= 1):
         super().__init__()
-        self.setAgentFactory(Carrier)
+        self.setAgentFactory(Bot)
         self._name= name
         self._missions= []
         self._encumbers= []

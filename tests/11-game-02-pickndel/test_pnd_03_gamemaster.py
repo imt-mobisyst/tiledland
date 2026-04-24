@@ -16,10 +16,10 @@ def test_gamemaster_method():
 
     assert( len(game._model._agents) == 2 )
 
-    print( f">>> {type( game.initialize() )} is {hacka.Pod}")
+    print( f">>> {type( game.initialize() )} is {hacka.DataTree}")
 
-    assert( type( game.initialize() ) is hacka.Pod )
-    assert( type( game.playerHand(1) ) is hacka.Pod )
+    assert( type( game.initialize() ) is hacka.DataTree )
+    assert( type( game.playerHand(1) ) is hacka.DataTree )
     assert( game.applyAction( "go 0", 1 )  )
     assert( game.applyAction( "do 1", 1 )  )
     

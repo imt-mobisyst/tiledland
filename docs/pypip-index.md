@@ -7,6 +7,7 @@ Its is more a sandbox project to test approaches than an optimized, ready-to-use
 
 The project relies on [Cairo](https://pypi.org/project/pycairo/) library for rendering example, [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
 
+
 ## Not what are you looking for ?
 
 You can look at concurrent/complementary projects:
@@ -25,7 +26,6 @@ The _Tiled-Land_ project can be installed with _pip_.
 ```sh
 pip install tiledland
 ```
-
 
 For in-dev version, refer to github repository : [imt-mobisyst/tiled-land](https://www.github.com/imt-mobisyst/tiled-land).
 

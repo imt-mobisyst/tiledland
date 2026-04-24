@@ -1,9 +1,8 @@
 # HackaGames UnitTest - `pytest`
-import sys
+import sys, hacka
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src.tiledland import Agent, Tile
-from src.tiledland.pod import Pod
 from src.tiledland.geometry import Point, Convex
 
 # ------------------------------------------------------------------------ #
@@ -82,7 +81,7 @@ def test_Tile_str():
 def test_Tile_absobj():
     tile= Tile(8, Point(18.5, 4.07))
     tile.connectAll( [ 1, 3, 7, 19 ] )
-    pod= tile.asPod()
+    pod= tile.asDataTree()
 
     assert pod.numberOfWords() == 1
     assert pod.words() == ["Tile"]
@@ -95,24 +94,24 @@ def test_Tile_absobj():
     assert pod.values() == [18.5, 4.07]
     
     assert pod.numberOfChildren() == 1
-    assert pod.children() == [ tile.shape().asPod() ]
+    assert pod.children() == [ tile.shape().asDataTree() ]
 
     bod= Agent()
     tile.append( bod )
-    pod= tile.asPod()
+    pod= tile.asDataTree()
 
     assert pod.numberOfChildren() == 2
     for child in pod.children():
-        assert type(child) == Pod
-    assert pod.children() == [ tile.shape().asPod(), bod.asPod() ]
+        assert type(child) == hacka.DataTree
+    assert pod.children() == [ tile.shape().asDataTree(), bod.asDataTree() ]
 
-    tileBis= Tile().fromPod( pod )
+    tileBis= Tile().fromDataTree( pod )
 
     assert type( tileBis.agent(1) ) is Agent
     assert not ( tileBis.agent(1) is bod )
 
     print( tileBis )
-    pod= tileBis.asPod()
+    pod= tileBis.asDataTree()
 
     assert pod.numberOfWords() == 1
     assert pod.words() == ["Tile"]
@@ -125,7 +124,7 @@ def test_Tile_absobj():
     assert pod.values() == [18.5, 4.07]
     
     assert pod.numberOfChildren() == 2
-    assert pod.children() == [ tile.shape().asPod(), bod.asPod() ]
+    assert pod.children() == [ tile.shape().asDataTree(), bod.asDataTree() ]
 
 
 def test_Tile_podCopy():
