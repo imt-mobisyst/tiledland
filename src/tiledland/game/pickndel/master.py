@@ -34,12 +34,12 @@ class GameEngine( hacka.AbsGame ) :
     
     def playerHand( self, iPlayer=1 ):
         # Engine :
-        pod= hacka.DataTree( "State", [self._tic], self._scores )
+        data= hacka.DataTree( "State", [self._tic], self._scores )
         # Missions :
-        pod.append( self._model.missionsAsDataTree() )
+        data.append( self._model.missionsAsDataTree() )
         # Mobiles :
-        pod.append( self._model.carriersAsDataTree() )
-        return pod
+        data.append( self._model.carriersAsDataTree() )
+        return data
 
     def applyAction( self, action, iPlayer=1 ):
         # Interpret action string
@@ -215,7 +215,7 @@ class GameEngine( hacka.AbsGame ) :
             path.append( tile )
         return move, path
     
-class GameMaster( hk.SequentialGameMaster ) :
+class GameMaster( hacka.SequentialGameMaster ) :
     def __init__( self, world, numberOfPlayers=1, numberOfCarriers= 1, tic= 10, seed=False ):
         super().__init__(
             GameEngine( world, numberOfPlayers, numberOfCarriers, tic, seed ), 

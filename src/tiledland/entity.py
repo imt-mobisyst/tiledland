@@ -48,8 +48,8 @@ class Entity() :
     
     # Hacka.DataTree interface:
     def asDataTree(self):
-        return hacka.DataTree().fromLists( 
-            ["Entity"], 
+        return hacka.DataTree( 
+            "Entity", 
             [self.id(), self.group()],
             self.position().asList(),
             [ self.shape().asDataTree() ]
@@ -64,3 +64,8 @@ class Entity() :
         self.setPosition( Point().fromList( aDataTree.values() ) )
         self.setShape( Convex().fromDataTree( aDataTree.children()[0] ) )
         return self
+    
+    def dataTreeCopy(self):
+        cpy= type(self)()
+        cpy.fromDataTree( self.asDataTree() )
+        return cpy

@@ -60,14 +60,14 @@ def test_Convex_str():
     print(f">>> {convex}")
     assert str(convex) == "Convex 6[(-8.66, -10.0), (8.66, 10.0)]"
 
-def test_Convex_podable():
+def test_Convex_hacka():
     convex= Convex().initializeSquare( 10.0 )
-    pod= convex.asDataTree()
+    tree= convex.asDataTree()
 
-    assert pod.words() == ["Convex"]
-    assert pod.integers() == []
-    assert pod.values() == [-5.0, -5.0, -5.0, 5.0, 5.0, 5.0, 5.0, -5.0]
-    assert pod.children() == []
+    assert tree.label() == "Convex"
+    assert tree.digits() == []
+    assert tree.values() == [-5.0, -5.0, -5.0, 5.0, 5.0, 5.0, 5.0, -5.0]
+    assert tree.children() == []
 
     convexBis= Convex()
     assert convexBis.asZipped() == []
@@ -75,18 +75,11 @@ def test_Convex_podable():
     convexBis.fromDataTree( convex.asDataTree() )
     assert convexBis.asZipped() == [(-5.0, -5.0), (-5.0, 5.0), (5.0, 5.0), (5.0, -5.0)]
 
-def test_Convex_podCopy():
+def test_Convex_DataTreeCopy():
     convex= Convex().initializeSquare(0.9)
     assert convex.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
     
     convexBis= convex.copy()
-    assert convexBis.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
-
-def test_Convex_podCopy():
-    convex= Convex().initializeSquare(0.9)
-    assert convex.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
-    
-    convexBis= convex.podCopy()
     assert convexBis.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
 
 def test_Convex_convex():

@@ -122,7 +122,7 @@ Scene:
 - Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ matter-0 adjs[2] agents(0)
 """
 
-def test_Scene_pod():
+def test_Scene_hacka():
     scene= Scene().initializeLine(4, connect=False)
     scene.connectAll( [ [1, 2], [1, 3], [1, 4], [2, 1], [2, 3], [2, 4],
                        [3, 1], [3, 2], [4, 1], [4, 2]
@@ -156,26 +156,24 @@ def test_Scene_box():
     print( scene.box() )
     assert scene.box().asZip() == [(-0.5, -0.5), (1.6, 1.6)]
 
-def test_Scene_podable():
+def test_Scene_hacka2():
     scene= Scene().initializeLine(3, connect=False)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
 
-    pod= scene.asDataTree()
+    dt= scene.asDataTree()
 
-    assert pod.numberOfWords() == 1
-    assert pod.words() == ["Scene"]
-    assert pod.word() == "Scene"
+    assert dt.label() == "Scene"
 
-    assert pod.numberOfIntegers() == 0
-    assert pod.integers() == []
+    assert dt.numberOfDigits() == 0
+    assert dt.digits() == []
     
-    assert pod.numberOfValues() == 1
-    assert pod.values() == [0.01]
+    assert dt.numberOfValues() == 1
+    assert dt.values() == [0.01]
     
-    assert pod.numberOfChildren() == 3
-    assert pod.children() == [ t.asDataTree() for t in scene.tiles() ]
+    assert dt.numberOfChildren() == 3
+    assert dt.children() == [ t.asDataTree() for t in scene.tiles() ]
 
-def test_Scene_podcopy():
+def test_Scene_dataTreecopy():
     scene= Scene().initializeLine(3, connect=False)
     scene.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
 
@@ -189,7 +187,7 @@ Scene:
 """
 
     print("Go for the copying...")
-    sceneBis= scene.podCopy()
+    sceneBis= scene.dataTreeCopy()
     scene.connect(3, 1)
 
     assert type(scene) == type(sceneBis)

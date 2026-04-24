@@ -84,15 +84,14 @@ class Tile(Agent):
 
     # hacka.DataTree Interface:
     def asDataTree(self):
-        return hacka.DataTree().fromLists(   
-            ["Tile"], 
+        return hacka.DataTree("Tile", 
             [self.id(), self.matter()] + self.adjacencies(),
             self.position().asList(),
             [self.shape().asDataTree()] + [ ag.asDataTree() for ag in self.agents() ]
         )
     
     def fromDataTree( self, aDataTree, agentFactory=Agent ):
-        integers= aDataTree.integers()
+        integers= aDataTree.digits()
         children= aDataTree.children()
         self.setId( integers[0] )
         self.setMatter( integers[1] )
@@ -100,8 +99,8 @@ class Tile(Agent):
         self.setPosition( Point().fromList( aDataTree.values() ) )
         self.setShape( Convex().fromDataTree( aDataTree.children()[0] ) )
         self.clear()
-        for podBod in children[1:] :
-            self.append( agentFactory().fromDataTree( podBod ) )
+        for c in children[1:] :
+            self.append( agentFactory().fromDataTree( c ) )
         return self
     
     # Classical Class

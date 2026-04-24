@@ -81,60 +81,56 @@ def test_Tile_str():
 def test_Tile_absobj():
     tile= Tile(8, Point(18.5, 4.07))
     tile.connectAll( [ 1, 3, 7, 19 ] )
-    pod= tile.asDataTree()
+    tree= tile.asDataTree()
 
-    assert pod.numberOfWords() == 1
-    assert pod.words() == ["Tile"]
-    assert pod.word() == "Tile"
+    assert tree.label() == "Tile"
 
-    assert pod.numberOfIntegers() == 6
-    assert pod.integers() == [ tile.id(), tile.matter() ] + [ 1, 3, 7, 19 ]
+    assert tree.numberOfDigits() == 6
+    assert tree.digits() == [ tile.id(), tile.matter() ] + [ 1, 3, 7, 19 ]
     
-    assert pod.numberOfValues() == 2
-    assert pod.values() == [18.5, 4.07]
+    assert tree.numberOfValues() == 2
+    assert tree.values() == [18.5, 4.07]
     
-    assert pod.numberOfChildren() == 1
-    assert pod.children() == [ tile.shape().asDataTree() ]
+    assert tree.numberOfChildren() == 1
+    assert tree.children() == [ tile.shape().asDataTree() ]
 
     bod= Agent()
     tile.append( bod )
-    pod= tile.asDataTree()
+    tree= tile.asDataTree()
 
-    assert pod.numberOfChildren() == 2
-    for child in pod.children():
+    assert tree.numberOfChildren() == 2
+    for child in tree.children():
         assert type(child) == hacka.DataTree
-    assert pod.children() == [ tile.shape().asDataTree(), bod.asDataTree() ]
+    assert tree.children() == [ tile.shape().asDataTree(), bod.asDataTree() ]
 
-    tileBis= Tile().fromDataTree( pod )
+    tileBis= Tile().fromDataTree( tree )
 
     assert type( tileBis.agent(1) ) is Agent
     assert not ( tileBis.agent(1) is bod )
 
     print( tileBis )
-    pod= tileBis.asDataTree()
+    dt= tileBis.asDataTree()
 
-    assert pod.numberOfWords() == 1
-    assert pod.words() == ["Tile"]
-    assert pod.word() == "Tile"
+    assert dt.label() == "Tile"
 
-    assert pod.numberOfIntegers() == 6
-    assert pod.integers() == [ tile.id(), tile.matter() ] + [ 1, 3, 7, 19 ]
+    assert dt.numberOfDigits() == 6
+    assert dt.digits() == [ tile.id(), tile.matter() ] + [ 1, 3, 7, 19 ]
     
-    assert pod.numberOfValues() == 2
-    assert pod.values() == [18.5, 4.07]
+    assert dt.numberOfValues() == 2
+    assert dt.values() == [18.5, 4.07]
     
-    assert pod.numberOfChildren() == 2
-    assert pod.children() == [ tile.shape().asDataTree(), bod.asDataTree() ]
+    assert dt.numberOfChildren() == 2
+    assert dt.children() == [ tile.shape().asDataTree(), bod.asDataTree() ]
 
 
-def test_Tile_podCopy():
+def test_Tile_DataTreeCopy():
     tile= Tile(8, Point(18.5, 4.07))
     tile.connectAll( [ 1, 3, 7, 19 ] )
     tile.append( Agent(1) )
 
     assert tile.adjacencies() == [ 1, 3, 7, 19 ]
 
-    tileBis= tile.podCopy()
+    tileBis= tile.dataTreeCopy()
     tile.connect(4)
 
     assert type(tile) == type(tileBis)

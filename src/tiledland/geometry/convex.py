@@ -269,7 +269,7 @@ class Convex():
     
     # Hacka.DataTree interface:
     def asDataTree(self):
-        return hacka.DataTree().fromLists( ["Convex"], [], self.asList(), [] )
+        return hacka.DataTree( "Convex", [], self.asList(), [] )
     
     def fromDataTree( self, aDataTree ):
         values= aDataTree.values()

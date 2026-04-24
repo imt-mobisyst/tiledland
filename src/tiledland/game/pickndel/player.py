@@ -40,7 +40,7 @@ class BasicBot( Player ):
 
     def perceive(self, stateDataTree):
         # update the game state:
-        self._tic= self._model.setOnDataTree(stateDataTree)
+        self._tic= self._model.setOnState(stateDataTree)
 
     def decide(self):
         return "pass"
@@ -67,8 +67,8 @@ class ShellPlayer( BasicBot ):
         print( "   - pass" )
         print( "   - stop (will 'pass' until the game ends)" )
 
-    def perceive(self, podState):
-        super().perceive(podState)
+    def perceive(self, stateTree):
+        super().perceive(stateTree)
         self.model().render()
 
     def decide(self):

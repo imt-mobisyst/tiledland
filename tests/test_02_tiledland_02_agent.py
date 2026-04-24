@@ -62,27 +62,25 @@ def test_Agent_str():
     print(agent)
     assert str(agent) == "Agent-1.42 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 
-def test_Agent_podable():
+def test_Agent_hacka():
     agent= tll.Agent( 42, 4, Point(1.0, 2.0) )
-    pod= agent.asDataTree()
+    tree= agent.asDataTree()
 
-    assert pod.numberOfWords() == 1
-    assert pod.words() == ["Agent"]
-    assert pod.word() == "Agent"
-    assert pod.numberOfIntegers() == 4
-    assert pod.integers() == [42, 4, 14, 0]
-    assert pod.integer(1) == 42
-    assert pod.integer(2) == 4
-    assert pod.integer(3) == 14
-    assert pod.integer(4) == 0
-    assert pod.numberOfValues() == 2
-    assert pod.values() == [1.0, 2.0]
-    assert pod.value(1) == 1.0
-    assert pod.value(2) == 2.0
-    assert pod.numberOfChildren() == 1
-    assert pod.children() == [ agent.shape().asDataTree() ]
+    assert tree.label() == "Agent"
+    assert tree.numberOfDigits() == 4
+    assert tree.digits() == [42, 4, 14, 0]
+    assert tree.digit(1) == 42
+    assert tree.digit(2) == 4
+    assert tree.digit(3) == 14
+    assert tree.digit(4) == 0
+    assert tree.numberOfValues() == 2
+    assert tree.values() == [1.0, 2.0]
+    assert tree.value(1) == 1.0
+    assert tree.value(2) == 2.0
+    assert tree.numberOfChildren() == 1
+    assert tree.children() == [ agent.shape().asDataTree() ]
 
-    agent2= tll.Agent().fromDataTree(pod)
-    pod2= agent2.asDataTree()
+    agent2= tll.Agent().fromDataTree(tree)
+    tree2= agent2.asDataTree()
 
-    assert str(pod2) == str(pod)
+    assert str(tree2) == str(tree)

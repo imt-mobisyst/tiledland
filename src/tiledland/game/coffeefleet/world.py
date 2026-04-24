@@ -170,12 +170,12 @@ class World( scene.Scene ):
         return missionDataTree
     
     def carriersAsDataTree(self):
-        podMobiles= hacka.DataTree( "Carriers" )
+        mobilesDT= hacka.DataTree( "Carriers" )
         for group in range( self.numberOfGroups() ):
             for car in self.agents( group ):
                 mDataTree= hacka.DataTree( "carrier", [group, car.id(), car.tile(), car.mission()] )
-                podMobiles.append(mDataTree)
-        return podMobiles
+                mobilesDT.append(mDataTree)
+        return mobilesDT
 
     def fromDataTree( self, aDataTree ):
         self._name= aDataTree.label()
@@ -186,16 +186,16 @@ class World( scene.Scene ):
     def missionsFromDataTree(self, aDataTree):
         self._missions= []
         for childDataTree in aDataTree.children() :
-            self._missions.append( Mission().fromList( childDataTree.integers() ) )
+            self._missions.append( Mission().fromList( childDataTree.digits() ) )
         return self._missions
     
     def carriersFromDataTree(self, aDataTree):
         self.clearAgents()
-        for pod in aDataTree.children() :
-            iPlayer= pod.integer(1)
-            iCarrier= pod.integer(2)
-            pos= pod.integer(3)
-            mis= pod.integer(4)
+        for c in aDataTree.children() :
+            iPlayer= c.digit(1)
+            iCarrier= c.digit(2)
+            pos= c.digit(3)
+            mis= c.digit(4)
             carrier= self.popAgentOn( pos, iPlayer )
             assert carrier.id() == iCarrier
             carrier.setMission(mis)
@@ -204,7 +204,7 @@ class World( scene.Scene ):
     def setOnDataTreeState(self, aDataTree):
         self.missionsFromDataTree( aDataTree.child(1) )
         self.carriersFromDataTree( aDataTree.child(2) )
-        return aDataTree.integer(1)
+        return aDataTree.digit(1)
     
     # Rendering :
     def render(self):

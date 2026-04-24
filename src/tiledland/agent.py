@@ -55,8 +55,8 @@ class Agent(Entity):
 
     # Hacka.DataTree interface:
     def asDataTree(self):
-        return hacka.DataTree().fromLists( 
-            ["Agent"], 
+        return hacka.DataTree(
+            "Agent", 
             [self.id(), self.group(), self.matter(), self.tile()],
             self.position().asList(),
             [ self.shape().asDataTree() ]

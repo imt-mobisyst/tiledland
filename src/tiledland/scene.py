@@ -1,11 +1,12 @@
 import hacka
 from .geometry import Point, Box, Convex
+from .entity import Entity
 from .tile import Tile
 from .agent import Agent
 
 import math
 
-class Scene():
+class Scene(Entity):
 
     # Constructor:
     def clear( self ):
@@ -15,6 +16,7 @@ class Scene():
         return self
     
     def __init__(self, shapes= [], epsilon= 0.01):
+        super().__init__()
         self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Convex().initializeRegular(0.8, 5) ).setMatter(1)
         self.clear()
         for s in shapes :
@@ -461,8 +463,7 @@ class Scene():
 
     # Hacka.DataTree interface:
     def asDataTree( self, name= "Scene" ):
-        return hacka.DataTree().fromLists(
-            [name], [], [self._epsilon],
+        return hacka.DataTree(name, [], [self._epsilon],
             [ t.asDataTree() for t in self.tiles() ]
         )
     
