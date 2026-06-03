@@ -9,6 +9,7 @@ config.toml
 #-----------------
 site/
 dist/
+tuto/
 shot-*
 log-*
 

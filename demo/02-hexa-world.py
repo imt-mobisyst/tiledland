@@ -31,7 +31,7 @@ bod.setMatter(15)
 # Create an artist to render this scene:
 anArtist= tll.Artist().initializePNG( "shot-demo.png", 800, 600 )
 anArtist.fitBox( scene.box() )
-anArtist.draw(scene)
+scene.draw(anArtist)
 anArtist.flip() # Uptate the support and return to a blanc page.
 
 print( f"You can open now the './{anArtist.support().filePath()}' file." )

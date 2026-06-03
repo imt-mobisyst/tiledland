@@ -22,21 +22,20 @@ You can look at concurrent/complementary projects:
 
 ## Install
 
-The project and its dependancies can be installed with pip
+The project and its dependencies can be installed with _pip_ tool
 
 ```sh
 pip install tiledland
 ```
 
-The project is a `Python` program reling on [Cairo](https://pypi.org/project/pycairo/) library for rendering example, [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
+The project is a `Python` program relying on [Cairo](https://pypi.org/project/pycairo/) library for rendering example, [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
 
-You can also install _tiledland_ from source on [github.com - tiledland](https://github.com/imt-mobisyst/tiledland).
+You can also install _TiledLand_ from source on [github.com - tiledland](https://github.com/imt-mobisyst/tiledland).
 
 
 ## Getting started
 
-
-Then, as an exemple, the following code will generate a grid land with 3 square agents in position _9_, _14_ and _26_.
+Then, as an exemple, the following code will generate a grid-land with 3 square agents in position _9_, _14_ and _26_.
 The land is then rendered as a _png_ graphic.
 
 ```python
@@ -44,14 +43,14 @@ The land is then rendered as a _png_ graphic.
 import tiledland as tll
 
 # Create a new TiledMap as a grid:
-scene= tll.Sence()
-scene.initializeGrid(
-    [[0, 1, 1, -1, 0, 0, 0, 0],  #  -1 : means no cell at this location
-    [5, -1, 0, 2, 0, -1, 5, 0],  #  0 - n : give the group identifier
-    [0, 0, 0, -1, 0, 1, 1, 0],   #           of the cell to create.  
-    [0, 4, 0, -1, 0, 2, 1, 6],     
-    [-1, -1, 0, 0, 0, -1, -1, -1]]  
-)
+scene= tll.Scene()
+scene.initializeGrid([
+	[0, 1, 1, -1, 0, 0, 0, 0], # -1 : means no cell at this location
+	[5, -1, 0, 2, 0, -1, 5, 0], # 0 - n : give the group identifier
+	[0, 0, 0, -1, 0, 1, 1, 0], # of the cell to create.
+	[0, 4, 0, -1, 0, 2, 1, 6],
+	[-1, -1, 0, 0, 0, -1, -1, -1]
+])
 
 # Agent 1
 agent= scene.popAgentOn(9)
@@ -70,5 +69,15 @@ pablo.fitBox( scene.box() )
 scene.draw(pablo)
 pablo.flip() # Uptate the support and return to a blanc page.
 
-print( f"You can open now the './{artist.support().filePath()}' file." )
+print( f"You can open now the './{pablo.support().filePath()}' file." )
 ```
+
+## Structure
+
+The _Python_ module _TiledLand_ is structured with several sub-modules, each one dedicated to a functionality.
+
+- _geometry_ :  Polygon-based objects and the map definition.
+- _mas_ : multi-agent def.
+- _artist_ : for rendering stuff
+- _games_ : 
+- _interfaces_ offering program interface tool for external solutions like ROS2, Web IHM (with Remi).
