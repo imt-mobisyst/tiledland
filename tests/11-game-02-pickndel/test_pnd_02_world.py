@@ -135,7 +135,7 @@ def test_pnd_withCarrier():
     [43, 44, 45, 46, 47,   , 48,   ,   ,   ]
 """
 
-def test_pnd_emcomber():
+def test_long_pnd_emcomber():
     # Game MoveIt:
     model= pnd.World( numberOfPlayers=2 )
     model.initializeGrid( refMatrix, 0.9, 0.1 )

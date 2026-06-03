@@ -14,12 +14,14 @@
 ## Simple, but strong plan geometry
 
 - [x] Convex obj. min/max radius, and collision
-- [x] Scene: Gridmap to Tiled Scenes 
+- [x] Scene: Gridmap to Tiled Scenes
+- [ ] Scene vs Map a semantic map ie. structured tiled obj (and in oposition to GridMap).
 - [x] Fast position requestest : add a grid canvas to Scene get a tiles from a position (getTile at, closest, inRadius ...)
-- [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Scene: `forward(agent, action)` (But on Hacka?) )
-- [ ] Scene: Apply a grid and use it on connectClose...
-- [ ] Scene: Generation from Voroi, gabriel, ....
+- [ ] PointCloud (potentially from Scan) to Envellope, a centered and ordered PointCloud.
+- [ ] Map: Apply a grid and use it on connectClose...
+- [ ] Map: Generation from Voroi, gabriel, ....
 - [ ] Tile: Search for text zones (header, body, footer)
+- [ ] Based on an appropriation of BOX2D c-library...
 
 ## Land, Tiles and Agents :
 
@@ -28,6 +30,7 @@
 - [x] Tiles as collection of: Agents
 - [x] Abstraction on Scene: Agents could be anything...
 - [x] Grid and Hexa-grid based scene initilization.
+- [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Scene: `forward(agent, action)` (But on Hacka?) )
 - [ ] Basic Scene manipulation: doSomething ... doTeleportOn(tile, agent, group).
 - [ ] Be topological: Clockdir manipulation.
 - [ ] Generate scene from point-graph (mesh).

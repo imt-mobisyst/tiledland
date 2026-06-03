@@ -9,15 +9,28 @@ To notice that, _TiledLand_ is more a sandbox project to test approaches than an
 - On PyPip: [projct tiledland](https://pypi.org/project/tiledland/)
 - Documentation : []()
 
-## Install
+## Not what are you looking for ?
 
-The project is a `Python` program reling on [Cairo](https://pypi.org/project/pycairo/) library for rendering example, [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
+You can look at concurrent/complementary projects:
+
+- [Box2d](https://box2d.org) a 2d physics game engine
+- [pygame](https://www.pygame.org) a python-based game engine
+- [raylib](https://www.raylib.com/) a simple cross language game engine
+- [shapely](https://pypi.org/project/shapely) to manipulate in python geometric objects in the cartesian plane (based on [GEOS](https://libgeos.org/))
+- [cgal](https://www.cgal.org) another Computational Geometry Algorithms Library (c++)
+
+
+## Install
 
 The project and its dependancies can be installed with pip
 
 ```sh
 pip install tiledland
 ```
+
+The project is a `Python` program reling on [Cairo](https://pypi.org/project/pycairo/) library for rendering example, [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
+
+You can also install _tiledland_ from source on [github.com - tiledland](https://github.com/imt-mobisyst/tiledland).
 
 
 ## Getting started

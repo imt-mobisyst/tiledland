@@ -31,7 +31,7 @@ def test_gridmap_asGrid():
         [0, 0, 0, 0]
     ]
 
-def test_gridmap_rectanglemap():
+def test_long_gridmap_rectanglemap():
     gridmap= ros.GridMap().load( "tests/rsc", "convexmap.yaml" )
     grid= gridmap.asTllGrid()
     scene= tll.Scene().fromGridRectangles(grid)
@@ -49,7 +49,7 @@ def test_gridmap_rectanglemap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_gridmap_smallMap():
+def test_long_gridmap_smallMap():
     gridmap= ros.GridMap().load( "tests/rsc", "small-map.yaml" )
     grid= gridmap.asTllGrid()
 
@@ -79,7 +79,7 @@ def test_gridmap_smallMap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_gridmap_mediumMap_inside():
+def test_long_gridmap_mediumMap_inside():
     gridmap= ros.GridMap().load( "tests/rsc", "medium-map.yaml" )
     grid= gridmap.asTllGrid()
     grid.filter(1, -1)
@@ -128,7 +128,7 @@ def test_gridmap_mediumMap_inside():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_gridmap_mediumMap():
+def test_long_gridmap_mediumMap():
     gridmap= ros.GridMap().load( "tests/rsc", "medium-map.yaml" )
     grid= gridmap.asTllGrid()
     grid.filter(1, -1)

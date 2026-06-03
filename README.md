@@ -10,20 +10,9 @@ The project relies on [Cairo](https://pypi.org/project/pycairo/) library for ren
 - On github: [imt-mobisyst/tiledland](https://github.com/imt-mobisyst/tiledland)
 - On PyPip: [projct tiledland](https://pypi.org/project/tiledland/)
 
-## Not what are you looking for ?
+### Get started
 
-You can look at concurrent/complementary projects:
-
-- [Box2d](https://box2d.org) a 2d physics game engine
-- [pygame](https://www.pygame.org) a python-based game engine
-- [raylib](https://www.raylib.com/) a simple cross language game engine
-- [shapely](https://pypi.org/project/shapely) to manipulate in python geometric objects in the cartesian plane (based on [GEOS](https://libgeos.org/))
-- [cgal](https://www.cgal.org) another Computational Geometry Algorithms Library (c++)
-
-
-## Install
-
-The _Tiled-Land_ project can be installed with _pip_.
+The _TiledLand_ project can be installed with _pip_ (directly or after cloning).
 To notice that, the project is based on _pytest_ for testing.
 
 ```sh
@@ -32,8 +21,6 @@ cd tiled-land
 pytest
 pip install .
 ```
-
-### Get started
 
 The `demo` directory include simple examples for _TiledLand_.
 Most of the demonstrations generate a scene, rendered in a `shot-demo.png` file.
@@ -47,3 +34,5 @@ code shot-demo.png
 python3 02-hexa-world.py
 python3 03-loading-gridmap.py 
 ```
+
+## Documentation

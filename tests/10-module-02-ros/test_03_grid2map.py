@@ -51,7 +51,7 @@ def test_gridmap_smallMap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_gridmap_largeMap():
+def test_long_gridmap_largeMap():
     gridmap= ros.GridMap().load( "tests/rsc", "large-clean-map.yaml" )
     grid= gridmap.asTllGrid()
 
