@@ -1,5 +1,6 @@
 # TiledLand: Polygon-based simulation engine.
 
+This project is a `Python` package oriented toward multi-agent simulation reling on a convex polygonal objects.
 The main idea is to model a plan world (a land) as a collection of convex-polygons objects : tiles.
 Then, the land is mainly composed of an environnement - interconnected tiles - and agents distributed inside it.
 
@@ -22,13 +23,15 @@ You can look at concurrent/complementary projects:
 
 ## Install
 
-The project and its dependencies can be installed with _pip_ tool
+The project and its dependencies can be installed with _pip_ tool.
+its relies [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
+The project requires also [Cairo](https://pypi.org/project/pycairo/) library for _PNG_ image rendering example. 
+This dependency is not mandatory, but all example and demonstration generating or reading _PNG_ image will fail. 
+Only _SVG_ rendering will be available.
 
 ```sh
-pip install tiledland
+pip install pycairo tiledland
 ```
-
-The project is a `Python` program relying on [Cairo](https://pypi.org/project/pycairo/) library for rendering example, [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
 
 You can also install _TiledLand_ from source on [github.com - tiledland](https://github.com/imt-mobisyst/tiledland).
 
