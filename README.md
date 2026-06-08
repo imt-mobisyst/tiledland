@@ -18,7 +18,7 @@ To notice that, the project is based on _pytest_ for testing.
 ```sh
 git clone git@github.com:imt-mobisyst/tiled-land.git
 cd tiled-land
-pytest
+pytest -k "not long" # to shunt time consiming tests
 pip install .
 ```
 

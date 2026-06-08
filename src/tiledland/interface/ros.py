@@ -8,10 +8,10 @@ import yaml, cairo
 def loadGridMap( path, file ) :
     if path == "" :
         path= "."
-    gridmap= GridMap().load( path, file )
-    return gridmap.asTllGrid()
+    gridmap= RosGridMap().load( path, file )
+    return gridmap.asGrid()
 
-class GridMap :
+class RosGridMap :
     # Initialization
     def __init__(self, position= (0.0, 0.0), resolution=0.5):
         self._grid= [[0]]
@@ -19,6 +19,29 @@ class GridMap :
         self._resolution= resolution
         self._occupied= 0.8
         self._free= 0.2
+
+    def initialize(self, grid, position= (0.0, 0.0), resolution=0.5):
+        self._position= position
+        self._resolution= resolution
+
+        width= 0
+        height= len(grid)
+        if height > 0 :
+            width= len(grid[0])
+
+        # build the grid
+        self._grid= [
+            [ 0.5 for i in range(width) ]
+            for _ in range(height)
+        ]
+        for iLine in range(height) :
+            for iCol in range(width) :
+                if grid[iLine][iCol] == 0 :
+                    self._grid[iLine][iCol]= 0.0
+                elif grid[iLine][iCol] == 100 :
+                    self._grid[iLine][iCol]= 1.0
+        
+        return self
 
     # Accessors
     def grid(self):
@@ -38,6 +61,12 @@ class GridMap :
     
     def freeTreshold(self):
         return self._free
+
+    def occupiedTreshold(self):
+        return self._occupied        
+    
+    def tresholds(self):
+        return self._free, self._occupied
 
     # File managment
     def load( self, path, file ):
@@ -102,7 +131,7 @@ class GridMap :
                     fouMap[iLine].append( 2 )
         return fouMap
     
-    def asTllGrid(self):
+    def asGrid(self):
         px, py= self.position()
         d= self.resolution() * 0.5
         return Grid(

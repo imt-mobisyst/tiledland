@@ -1,9 +1,9 @@
 # HackaGames UnitTest - `pytest`
-import sys
+import sys, re
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tll
-from src.tiledland.geometry import Point, Box, Convex
+from src.tiledland.geometry import Point, Box, Convex, Grid
 from src.tiledland import Agent, Tile, Scene 
 
 # ------------------------------------------------------------------------ #
@@ -11,7 +11,7 @@ from src.tiledland import Agent, Tile, Scene
 # ------------------------------------------------------------------------ #
 from src.tiledland.interface import ros
 
-def test_gridmap_smallMap():
+def test_long_gridmap_loadSmallMap():
     gridmap= ros.GridMap().load( "tests/rsc", "small-map.yaml" )
     grid= gridmap.asTllGrid()
 
@@ -47,11 +47,11 @@ def test_gridmap_smallMap():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-03-small-02.svg" ) 
+    refsFile= open( "tests/refs/interface-ros-03-small-02.svg" )
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_long_gridmap_largeMap():
+def test_long_gridmap_loadLargeMap():
     gridmap= ros.GridMap().load( "tests/rsc", "large-clean-map.yaml" )
     grid= gridmap.asTllGrid()
 
@@ -85,3 +85,55 @@ def test_long_gridmap_largeMap():
     refsFile= open( "tests/refs/interface-ros-03-large-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
+
+def test_gridmap_rosGridMap_webots():
+    gridmap= Grid()
+    assert gridmap.tresholds() == (0.2, 0.8)
+
+    rosFile= open( r"tests/rsc/webot-map.log", "r" )
+    meta= rosFile.readline().strip()
+    assert meta == "map: 103x162 at 0.05 on (-1.4355376215141014, -3.1116143188991185)"
+    patern= re.compile( r"map: ([\d]+)x([\d]+) at ([\d\.]+) on \((\-?[\d\.]+), (\-?[\d\.]+)\)" )
+    selects= list(patern.search(meta).groups())
+    assert selects == [ '103', '162', '0.05', '-1.4355376215141014', '-3.1116143188991185']
+    
+    width= int(selects[0])
+    height= int(selects[1])
+    resolution= float(selects[2]) 
+    pos_x= float(selects[3]) 
+    pos_y= float(selects[4])
+
+    assert [width, height, resolution, pos_x, pos_y] == [ 103, 162, 0.05, -1.4355376215141014, -3.1116143188991185]
+
+    grid= [
+        [ int(v) for v in line.strip().split(' ') ]
+        for line in rosFile
+    ]
+
+    rosFile.close
+
+    assert len(grid) == height
+    assert len(grid[0]) == width
+    assert len(grid[42]) == width
+    assert len(grid[161]) == width
+
+    gridmap= ros.GridMap().initialize( grid, (pos_x, pos_y), resolution)
+
+    assert gridmap.resolution() == 0.05
+    assert gridmap.position() == (-1.4355376215141014, -3.1116143188991185)
+    assert gridmap.dimention() == (103, 162)
+
+    shotImg= "shot-test.svg"
+    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+
+    grid= gridmap.asTllGrid()
+    scene= tll.Scene().fromGridConvexes( grid, 2.0 )
+    pablo.fit(scene)
+    tll.artist.drawScene(scene)
+    
+    scene.draw(pablo)
+    pablo.flip()
+
+    assert False
+
+
