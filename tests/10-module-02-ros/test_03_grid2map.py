@@ -13,7 +13,7 @@ from src.tiledland.interface import ros
 
 def test_long_gridmap_loadSmallMap():
     gridmap= ros.GridMap().load( "tests/rsc", "small-map.yaml" )
-    grid= gridmap.asTllGrid()
+    grid= gridmap.asGrid()
 
     assert gridmap.resolution() == 0.1
 
@@ -21,7 +21,7 @@ def test_long_gridmap_loadSmallMap():
     tll.artist.drawConvexes(convexes)
     assert len(convexes) == 17
     
-    scene= tll.Scene().fromGridConvexes( grid, 2.0, [0] )
+    scene= tll.Scene().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
 
     tll.artist.drawScene(scene)
 
@@ -53,14 +53,14 @@ def test_long_gridmap_loadSmallMap():
 
 def test_long_gridmap_loadLargeMap():
     gridmap= ros.GridMap().load( "tests/rsc", "large-clean-map.yaml" )
-    grid= gridmap.asTllGrid()
+    grid= gridmap.asGrid()
 
     assert gridmap.resolution() == 0.1
 
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
 
-    scene= tll.Scene().fromGridConvexes( grid, 2.0, [0] )
+    scene= tll.Scene().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
 
     tll.artist.drawScene(scene)
 
@@ -88,7 +88,6 @@ def test_long_gridmap_loadLargeMap():
 
 def test_gridmap_rosGridMap_webots():
     gridmap= Grid()
-    assert gridmap.tresholds() == (0.2, 0.8)
 
     rosFile= open( r"tests/rsc/webot-map.log", "r" )
     meta= rosFile.readline().strip()
@@ -117,23 +116,22 @@ def test_gridmap_rosGridMap_webots():
     assert len(grid[42]) == width
     assert len(grid[161]) == width
 
-    gridmap= ros.GridMap().initialize( grid, (pos_x, pos_y), resolution)
+    gridmap= ros.transformOccupMap( grid, (pos_x, pos_y), resolution )
 
     assert gridmap.resolution() == 0.05
-    assert gridmap.position() == (-1.4355376215141014, -3.1116143188991185)
+    assert gridmap.bottomleft().asTuple() == (-1.4355376215141014, -3.1116143188991185)
     assert gridmap.dimention() == (103, 162)
 
     shotImg= "shot-test.svg"
     pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
 
-    grid= gridmap.asTllGrid()
-    scene= tll.Scene().fromGridConvexes( grid, 2.0 )
+    scene= tll.Scene().fromGridConvexes( gridmap, 2.0, matters=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
     pablo.fit(scene)
-    tll.artist.drawScene(scene)
-    
     scene.draw(pablo)
     pablo.flip()
 
-    assert False
-
+    shotFile= open( shotImg ) 
+    refsFile= open( "tests/refs/interface-ros-03-webots-map.svg" ) 
+    for lineShot, lineRef in zip( shotFile, refsFile ):
+        assert( lineShot == lineRef )
 

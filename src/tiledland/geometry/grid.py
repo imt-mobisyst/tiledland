@@ -2,22 +2,44 @@ import math, hacka
 from .basic import Point, Line
 from .convex import Point, Convex
 from .mesh import Mesh
-#from .box import Box
 
-class Grid() : # ToDo: DataTree
+class Grid():
+    STATE_FREE= 0
+    STATE_OCCUPIED= 1
+    STATE_UNKWON= 2
+
     # Initialization
     def __init__(self, values= [[0]], bottomleft= Point(0.0, 0.0), resolution=0.1):
-        self.initialize(values)
         self._bottomleft= bottomleft
         self._resolution= resolution
+        self.initialize(values)
 
-    # Construction
     def initialize(self, aGrid):
         self._grid= aGrid
         self._height= len(self._grid)
         self._width= len(self._grid[0])
         return self
+    
+    def initializeTransform(self, grid, transform, position= Point(0.0, 0.0), resolution=0.5):
+        self._bottomleft= position
+        self._resolution= resolution
 
+        width= 0
+        height= len(grid)
+        if height > 0 :
+            width= len(grid[0])
+
+        # build the grid
+        self._grid= [
+            [ transform[v] for v in line ]
+            for line in grid
+        ]
+        self._height= len(self._grid)
+        self._width= len(self._grid[0])
+
+        return self
+
+    # Construction
     def setCell( self, x, y, state ):
         i, j= self.inTable(x, y)
         self._grid[i][j]= state
@@ -394,7 +416,7 @@ class Grid() : # ToDo: DataTree
         frontiers[matter].append( self.point(x, y) )
         return frontSize
 
-    def makeConvexes(self, matter, radius):
+    def makeConvexes(self, matter, radius, minSize= 0.0):
         marks, means= self.clustering(matter, radius)
         frontiers= marks.computeFrontiers()
         convs= []
@@ -402,7 +424,10 @@ class Grid() : # ToDo: DataTree
         for points in frontiers[1:] :
             c= Convex( points )
             c.simplify( epsilon )
-            convs.append(c)
+            width, height= c.box().dimention()
+            if width > 0.0 and height > 0.0 and ( width > minSize or height > minSize ) :
+                convs.append(c)
+                print( f">>> {(width, height)}" )
         return convs
 
     def makeRectangles(self, state, expectedSize=1.0):

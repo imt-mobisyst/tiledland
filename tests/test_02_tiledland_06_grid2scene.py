@@ -300,7 +300,7 @@ def test_makeConvexes_small():
     ], tll.Point(0.5, 0.5), 1.0 )
     print(grid)
     
-    scene= tll.Scene().fromGridConvexes(grid, 1.0, [0])
+    scene= tll.Scene().fromGridConvexes(grid, 1.0, matters=[tll.Grid.STATE_FREE])
     tll.artist.drawScene( scene )
 
     print('\n'+ str(scene) +'.')
@@ -317,13 +317,12 @@ Scene:
     print('\n'+ str(scene) +'.')
     assert '\n'+str(scene) == """
 Scene:
-- Tile-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ matter-0 adjs[2, 3, 4, 5, 6] agents(0)
-- Tile-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ matter-0 adjs[1, 6, 7] agents(0)
-- Tile-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ matter-0 adjs[1, 4, 5, 6, 7] agents(0)
-- Tile-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ matter-0 adjs[1, 3, 5] agents(0)
-- Tile-5 ⌊(3.5, 3.5), (3.5, 6.5)⌉ matter-1 adjs[1, 3, 4] agents(0)
-- Tile-6 ⌊(6.5, 5.5), (7.5, 7.5)⌉ matter-1 adjs[1, 2, 3, 7] agents(0)
-- Tile-7 ⌊(5.5, 8.5), (10.5, 10.5)⌉ matter-1 adjs[2, 3, 6] agents(0)"""
+- Tile-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ matter-0 adjs[2, 3, 4, 5] agents(0)
+- Tile-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ matter-0 adjs[1, 5, 6] agents(0)
+- Tile-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ matter-0 adjs[1, 4, 5, 6] agents(0)
+- Tile-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ matter-0 adjs[1, 3] agents(0)
+- Tile-5 ⌊(6.5, 5.5), (7.5, 7.5)⌉ matter-1 adjs[1, 2, 3, 6] agents(0)
+- Tile-6 ⌊(5.5, 8.5), (10.5, 10.5)⌉ matter-1 adjs[2, 3, 5] agents(0)"""
  
 def test_makeConvexes_medium():
     grid= tll.Grid([
@@ -365,7 +364,7 @@ def test_makeConvexes_medium():
     ], tll.Point(0.5, 0.5), 1.0 )
     print(grid)
     
-    scene= tll.Scene().fromGridConvexes(grid, 8.0, [0])
+    scene= tll.Scene().fromGridConvexes(grid, 8.0, 0.01, matters=[tll.Grid.STATE_FREE])
     tll.artist.drawScene( scene )
 
     print('\n'+ str(scene) +'.')

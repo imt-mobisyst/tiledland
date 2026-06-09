@@ -8,10 +8,20 @@ import yaml, cairo
 def loadGridMap( path, file ) :
     if path == "" :
         path= "."
-    gridmap= RosGridMap().load( path, file )
+    gridmap= GridMap().load( path, file )
     return gridmap.asGrid()
 
-class RosGridMap :
+def transformOccupMap(grid, position, resolution) :
+    x, y= position
+    transform= {
+        -1: Grid.STATE_UNKWON,
+        0: Grid.STATE_FREE,
+        100:Grid.STATE_OCCUPIED
+    }
+    gridmap= Grid().initializeTransform( grid, transform, Point(x, y), resolution )
+    return gridmap
+
+class GridMap :
     # Initialization
     def __init__(self, position= (0.0, 0.0), resolution=0.5):
         self._grid= [[0]]
@@ -124,11 +134,11 @@ class RosGridMap :
             for iCol in range(width) :
                 status= self._grid[iLine][iCol]
                 if status >= self._occupied :
-                    fouMap[iLine].append( 1 )
+                    fouMap[iLine].append( Grid.STATE_OCCUPIED )
                 elif status <= self._free :
-                    fouMap[iLine].append( 0 )
+                    fouMap[iLine].append( Grid.STATE_FREE )
                 else :
-                    fouMap[iLine].append( 2 )
+                    fouMap[iLine].append( Grid.STATE_UNKWON )
         return fouMap
     
     def asGrid(self):

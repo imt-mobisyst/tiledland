@@ -21,7 +21,7 @@ def test_gridmap_asGrid():
     ]
     assert gridmap.dimention() == (4, 3)
 
-    grid= gridmap.asTllGrid()
+    grid= gridmap.asGrid()
     
     assert type(grid) == tll.Grid
     assert grid.dimention() == (4, 3)
@@ -33,7 +33,7 @@ def test_gridmap_asGrid():
 
 def test_long_gridmap_rectanglemap():
     gridmap= ros.GridMap().load( "tests/rsc", "convexmap.yaml" )
-    grid= gridmap.asTllGrid()
+    grid= gridmap.asGrid()
     scene= tll.Scene().fromGridRectangles(grid)
 
     shotImg= "shot-test.svg"
@@ -51,7 +51,7 @@ def test_long_gridmap_rectanglemap():
 
 def test_long_gridmap_smallMap():
     gridmap= ros.GridMap().load( "tests/rsc", "small-map.yaml" )
-    grid= gridmap.asTllGrid()
+    grid= gridmap.asGrid()
 
     scene= tll.Scene().fromGridRectangles( grid )
 
@@ -81,7 +81,7 @@ def test_long_gridmap_smallMap():
 
 def test_long_gridmap_mediumMap_inside():
     gridmap= ros.GridMap().load( "tests/rsc", "medium-map.yaml" )
-    grid= gridmap.asTllGrid()
+    grid= gridmap.asGrid()
     grid.filter(1, -1)
 
     #scene= tll.Scene().fromGridRectangles( grid )
@@ -130,7 +130,7 @@ def test_long_gridmap_mediumMap_inside():
 
 def test_long_gridmap_mediumMap():
     gridmap= ros.GridMap().load( "tests/rsc", "medium-map.yaml" )
-    grid= gridmap.asTllGrid()
+    grid= gridmap.asGrid()
     grid.filter(1, -1)
 
     scene= tll.Scene().fromGridRectangles( grid, 4.0 )
@@ -151,7 +151,7 @@ def test_long_gridmap_mediumMap():
 """ 
 def test_gridmap_largeMap():
     gridmap= ros.GridMap().load( "tests/rsc", "large-clean-map.yaml" )
-    grid= gridmap.asTllGrid()
+    grid= gridmap.asGrid()
     grid.filter(1, -1)
 
     scene= tll.Scene().fromGridRectangles( grid, 4.0 )

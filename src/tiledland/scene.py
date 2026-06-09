@@ -30,11 +30,13 @@ class Scene(Entity):
         for s in shapes :
             self.createTile(s, matter)
     
-    def fromGridConvexes(self, aGrid, tileSize=1.0, matters= False):
+    def fromGridConvexes(self, aGrid, tileSize=1.0, minSizeRatio=0.1, matters= False):
         self.clear()
         seam= aGrid.resolution() * 1.001
         self._epsilon= aGrid.resolution() * 0.001
         gridConvexRadius= max(2, round( (tileSize/seam)/2.0 ))
+        assert( 0.0 <= minSizeRatio and minSizeRatio <= 1.0)
+        minSize= tileSize*minSizeRatio
 
         if not matters :
             minMatter, maxMatter= aGrid.valueMinMax()
@@ -42,7 +44,7 @@ class Scene(Entity):
         
         # Foreach value possibility:
         for matter in matters :
-            convexes= aGrid.makeConvexes(matter, gridConvexRadius)
+            convexes= aGrid.makeConvexes(matter, gridConvexRadius, minSize)
             for conv in convexes :
                 self.createTile(conv, matter)
 
