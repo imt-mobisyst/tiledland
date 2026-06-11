@@ -5,7 +5,7 @@ The world is mainly composed of an environnement and items and agents distribute
 
 Its is more a sandbox project to test approaches than an optimized, ready-to-use and well documented toolbox.
 
-The project relies on [Cairo](https://pypi.org/project/pycairo/) library for rendering example, [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
+The project relies on [Cairo](https://pypi.org/project/pycairo/) library for rendering example ; [pyyaml](https://pypi.org/project/PyYAML) and [msgpack](https://msgpack.org/) to read/write respectivelly configuration and serialized-object files ; [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
 
 - On github: [imt-mobisyst/tiledland](https://github.com/imt-mobisyst/tiledland)
 - On PyPip: [projct tiledland](https://pypi.org/project/tiledland/)

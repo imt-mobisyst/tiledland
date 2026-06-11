@@ -1,5 +1,6 @@
 # HackaGames UnitTest - `pytest`
-import sys, re
+import sys, re, yaml, msgpack
+from PIL import Image
 sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tll
@@ -89,32 +90,53 @@ def test_long_gridmap_loadLargeMap():
 def test_gridmap_rosGridMap_webots():
     gridmap= Grid()
 
-    rosFile= open( r"tests/rsc/webot-map.msg.yaml", "r" )
-    meta= rosFile.readline().strip()
-    assert meta == "map: 103x162 at 0.05 on (-1.4355376215141014, -3.1116143188991185)"
-    patern= re.compile( r"map: ([\d]+)x([\d]+) at ([\d\.]+) on \((\-?[\d\.]+), (\-?[\d\.]+)\)" )
-    selects= list(patern.search(meta).groups())
-    assert selects == [ '103', '162', '0.05', '-1.4355376215141014', '-3.1116143188991185']
+    # Lecture du fichier binaire
+    with open("tests/rsc/webots-grid.mpk", "rb") as f:
+        buf = f.read()
+        rosOccupGrid= msgpack.unpackb(buf, raw=False)
+
+    width, height= rosOccupGrid['width'], rosOccupGrid['height'] 
+    grid= rosOccupGrid['grid']
     
-    width= int(selects[0])
-    height= int(selects[1])
-    resolution= float(selects[2]) 
-    pos_x= float(selects[3]) 
-    pos_y= float(selects[4])
+    resolution= rosOccupGrid['resolution']
+    pos_x= rosOccupGrid['pos_x']
+    pos_y= rosOccupGrid['pos_y']
 
-    assert [width, height, resolution, pos_x, pos_y] == [ 103, 162, 0.05, -1.4355376215141014, -3.1116143188991185]
+    assert [width, height, resolution, pos_x, pos_y] == [ 103, 162, 0.05, -1.4355376215141014, -3.1116143188991185 ]
+    
+    img = Image.new("RGB", (width, height))
+    for y in range(height):
+        for x in range(width):
+            value= grid[y][x]
+            if value == 0 :
+                img.putpixel( (x, y), (255,255,255) )
+            elif value == 100 :
+                img.putpixel( (x, y), (0,0,0) )
+            else :
+                img.putpixel( (x, y), (127,127,127) )
 
-    grid= [
-        [ int(v) for v in line.strip().split(' ') ]
-        for line in rosFile
-    ]
+    # Sauvegarde en PNG
+    img.save("shot-test.png", format="PNG")
 
-    rosFile.close
+    shotFile= open( "shot-test.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/interface-ros-03-webots-01.png", mode='rb' ).read()
+    assert( shotFile == refsFile )
 
-    assert len(grid) == height
-    assert len(grid[0]) == width
-    assert len(grid[42]) == width
-    assert len(grid[161]) == width
+    # Test msgpack :
+
+    # Sérialisation -> écriture fichier binaire
+    with open("shot-webots-grid.mpk", "wb") as f:
+        packed = msgpack.packb(rosOccupGrid, use_bin_type=True)
+        f.write(packed)
+    print(f"Sérialisé ({len(packed)} octets)")
+
+    # Désérialisation -> lecture fichier binaire
+    with open("shot-webots-grid.mpk", "rb") as f:
+        buf = f.read()
+        dico2 = msgpack.unpackb(buf, raw=False)
+    print("Désérialisé :", dico2)
+
+    assert rosOccupGrid == dico2
 
     gridmap= ros.transformOccupMap( grid, (pos_x, pos_y), resolution )
 
