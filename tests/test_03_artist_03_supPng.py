@@ -3,6 +3,7 @@ workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
 import src.tiledland as tll
+from src.tiledland.artist.supportCairo import SupportPNG
 
 # ------------------------------------------------------------------------ #
 #                 T E S T   I N T E R F A C E    A R T I S T
@@ -11,12 +12,12 @@ shotImg= "shot-test.png"
 
 # Test firstAI launch
 def test_support_load():
-    sup= tll.SupportPNG()
-    assert( type(sup) ) == tll.SupportPNG
+    sup= SupportPNG()
+    assert( type(sup) ) == SupportPNG
 
 # Test firstAI launch
 def test_support_draw():
-    sup= tll.SupportPNG()
+    sup= SupportPNG()
     sup.save( shotImg )
 
     shotFile= open( shotImg, mode='rb' ).read()
@@ -57,7 +58,7 @@ def test_support_draw():
     assert( shotFile == refsFile )
 
 def test_support_write():
-    suppo= tll.SupportPNG()
+    suppo= tll.artist.supportCairo.SupportPNG()
 
     suppo.fillCircle( 250, 150, 2, 0xffe3f2 )
     suppo.write( 250, 150, "Hello", 0x25e3f2, 12 )
@@ -77,7 +78,7 @@ def test_artist_flip():
     pablo= tll.Artist().initializePNG( shotImg, 800, 600 )
 
     assert( type( pablo ) ) == tll.Artist
-    assert( type( pablo.support() ) ) == tll.SupportPNG
+    assert( type( pablo.support() ) ) == tll.artist.supportCairo.SupportPNG
 
     assert( pablo.support().filePath() == shotImg )
 

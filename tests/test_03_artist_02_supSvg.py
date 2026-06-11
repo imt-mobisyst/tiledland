@@ -10,8 +10,8 @@ import src.tiledland as tll
 
 # Test firstAI launch
 def test_support_load():
-    sup= tll.SupportSVG()
-    assert( type(sup) ) == tll.SupportSVG
+    sup= tll.artist.support.SupportSVG()
+    assert( type(sup) ) == tll.artist.support.SupportSVG
 
     print( sup.render() )
     assert( sup.render() == """<svg width="800" height="600">
@@ -19,7 +19,7 @@ def test_support_load():
 
 # Test firstAI launch
 def test_support_draw():
-    suppo= tll.SupportSVG()
+    suppo= tll.artist.support.SupportSVG()
     
     assert( suppo.render() == """<svg width="800" height="600">
 </svg>""" )
@@ -60,7 +60,7 @@ def test_support_draw():
     #suppo.save( "shot-test.svg" )
 
 def test_support_write():
-    suppo= tll.SupportSVG()
+    suppo= tll.artist.support.SupportSVG()
 
     suppo.fillCircle( 250, 150, 2, 0xffe3f2 )
     suppo.write( 250, 150, "Hello", 0x25e3f2, 12 )
@@ -85,11 +85,11 @@ def test_artist_load():
     pablo= tll.Artist()
 
     assert( type( pablo ) ) == tll.Artist
-    assert( type( pablo.support() ) ) == tll.Support
+    assert( type( pablo.support() ) ) == tll.artist.support.Support
 
     pablo.initializeSVG("shot-test.svg", 800, 600) 
 
-    assert( type( pablo.support() ) ) == tll.SupportSVG
+    assert( type( pablo.support() ) ) == tll.artist.support.SupportSVG
 
     print(pablo.render())
     assert( pablo.render() == """<svg width="800" height="600">

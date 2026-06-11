@@ -8,8 +8,5 @@ from .tile import Tile
 from .scene import Scene
 
 # rendering:
-from .artist import Support, SupportSVG, SupportPNG, Artist
+from .artist import Artist
 
-# interoperability:
-from .interface import ros
-from .interface import web

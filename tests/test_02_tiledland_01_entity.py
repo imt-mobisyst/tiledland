@@ -21,9 +21,6 @@ def test_load_local_tllcore():
     scene= tll.Scene()
 
 def test_load_local_tllihm():
-    support= tll.Support()
-    support2= tll.SupportSVG()
-    support3= tll.SupportPNG()
     artist= tll.Artist()
 
 # ------------------------------------------------------------------------ #

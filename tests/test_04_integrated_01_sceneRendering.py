@@ -3,7 +3,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src import tiledland as tll
 from src.tiledland.geometry import Point, Convex, Box
-from src.tiledland import Agent, Tile, Scene 
+from src.tiledland import Agent, Tile, Scene
 
 # ----------------------------------------------------------------------- #
 #           T E S T   T I L E D L A N D - I N T E G R A T E D   

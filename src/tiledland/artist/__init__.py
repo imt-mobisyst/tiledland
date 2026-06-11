@@ -1,10 +1,10 @@
 from .color import color, colorRatio, colorRatio, rgbColor, percentColor, webColor, colorFromWeb
 from .support import AbsSupport, Support, SupportSVG
-from .supportCairo import SupportPNG
 from ..scene import Scene 
 
 def drawScene(scene, filePath= "shot-tiled.png", width= 1600, height= 1200):
-    pablo= Artist().initializePNG( filePath, width, height )
+    from .supportCairo import SupportPNG
+    pablo= Artist().initializeSupport( filePath, width, height, SupportPNG)
     pablo.fit(scene)
     scene.draw(pablo)
     pablo.flip()
@@ -59,15 +59,19 @@ class Artist():
         self.flip()
 
     # Construction:
+    def initializeSupport(self, filePath, width, height, SupportClass):
+        self._support= SupportClass( width, height, filePath )
+        self.flip()
+        return self
+
     def initializeSVG(self, filePath, width= 1600, height= 1200):
-        self._support= SupportSVG( width, height, filePath )
-        self.flip()
-        return self
-    
+        return self.initializeSupport(filePath, width, height, SupportSVG)
+
     def initializePNG(self, filePath, width= 1600, height= 1200):
-        self._support= SupportPNG( width, height, filePath )
-        self.flip()
-        return self
+        from .supportCairo import SupportPNG
+        return self.initializeSupport(filePath, width, height, SupportPNG)
+
+    #def initialize(self, filePath, width= 1600, height= 1200):
 
     # Accessor:
     def support(self):

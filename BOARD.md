@@ -44,7 +44,7 @@
 - [ ] Visualize map (Static/Dynamic)
 - [ ] Add a monitor/control panel
 - [ ] Make the map clickable...
-
+- [ ] Hide the import of Artist's Supports (function of file extention)
 
 ## Robotique
 

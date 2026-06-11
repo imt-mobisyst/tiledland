@@ -427,7 +427,6 @@ class Grid():
             width, height= c.box().dimention()
             if width > 0.0 and height > 0.0 and ( width > minSize or height > minSize ) :
                 convs.append(c)
-                print( f">>> {(width, height)}" )
         return convs
 
     def makeRectangles(self, state, expectedSize=1.0):

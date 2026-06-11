@@ -89,7 +89,7 @@ def test_long_gridmap_loadLargeMap():
 def test_gridmap_rosGridMap_webots():
     gridmap= Grid()
 
-    rosFile= open( r"tests/rsc/webot-map.log", "r" )
+    rosFile= open( r"tests/rsc/webot-map.msg.yaml", "r" )
     meta= rosFile.readline().strip()
     assert meta == "map: 103x162 at 0.05 on (-1.4355376215141014, -3.1116143188991185)"
     patern= re.compile( r"map: ([\d]+)x([\d]+) at ([\d\.]+) on \((\-?[\d\.]+), (\-?[\d\.]+)\)" )
@@ -135,3 +135,6 @@ def test_gridmap_rosGridMap_webots():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
+    for tile in scene.tiles() :
+        print( tile )
+    
