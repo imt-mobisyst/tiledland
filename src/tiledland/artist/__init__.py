@@ -4,7 +4,7 @@ from ..scene import Scene
 
 def drawScene(scene, filePath= "shot-tiled.png", width= 1600, height= 1200):
     from .supportCairo import SupportPNG
-    pablo= Artist().initializeSupport( filePath, width, height, SupportPNG)
+    pablo= Artist().initialize( filePath, width, height, SupportPNG )
     pablo.fit(scene)
     scene.draw(pablo)
     pablo.flip()
@@ -12,6 +12,13 @@ def drawScene(scene, filePath= "shot-tiled.png", width= 1600, height= 1200):
 def drawConvexes(convexes, filePath= "shot-tiled.png", width= 1600, height= 1200):
     scene= Scene(convexes)
     drawScene(scene,filePath, width, height) 
+
+def createArtistSVG(filePath, width, height):
+    return Artist().initialize(filePath, width, height, SupportSVG)
+
+def createArtistPNG(filePath, width, height):
+    from .supportCairo import SupportPNG
+    return Artist().initialize(filePath, width, height, SupportPNG)
 
 # Artist:
 class Brush():
@@ -59,19 +66,10 @@ class Artist():
         self.flip()
 
     # Construction:
-    def initializeSupport(self, filePath, width, height, SupportClass):
+    def initialize(self, filePath, width, height, SupportClass= SupportSVG):
         self._support= SupportClass( width, height, filePath )
         self.flip()
         return self
-
-    def initializeSVG(self, filePath, width= 1600, height= 1200):
-        return self.initializeSupport(filePath, width, height, SupportSVG)
-
-    def initializePNG(self, filePath, width= 1600, height= 1200):
-        from .supportCairo import SupportPNG
-        return self.initializeSupport(filePath, width, height, SupportPNG)
-
-    #def initialize(self, filePath, width= 1600, height= 1200):
 
     # Accessor:
     def support(self):

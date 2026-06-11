@@ -18,7 +18,7 @@ shotImg= "shot-test.svg"
 
 # Test artist on tiles
 def test_artist_tile():
-    pablo= tll.Artist().initializeSVG( shotImg, 800, 600 )
+    pablo= tll.createArtistSVG( shotImg, 800, 600 )
     tile= tll.Tile()
     
     tile.draw( pablo )
@@ -51,7 +51,7 @@ def test_artist_tile():
 
 # Test artist on scene
 def test_artist_scene_tiles():
-    pablo= tll.Artist().initializeSVG( shotImg, 800, 600 )
+    pablo= tll.createArtistSVG( shotImg, 800, 600 )
     scene= tll.Scene()
 
     assert scene.epsilon() == 0.01
@@ -82,7 +82,7 @@ def test_artist_scene_tiles():
         assert( lineShot == lineRef )
 
 def test_artist_scene_net():
-    pablo= tll.Artist().initializeSVG( shotImg, 800, 600 )
+    pablo= tll.createArtistSVG( shotImg, 800, 600 )
     scene= tll.Scene()
     scene.initializeGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
@@ -122,7 +122,7 @@ def test_artist_scene_net():
 
 # Test artist on scene
 def test_artist_gridscene_piece():
-    pablo= tll.Artist().initializeSVG( shotImg, 800, 600 )
+    pablo= tll.createArtistSVG( shotImg, 800, 600 )
     scene= tll.Scene()
     scene.initializeGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
@@ -209,7 +209,7 @@ def test_artist_gridscene_piece():
 
 # Test artist on scene
 def test_artist_hexascene_piece():
-    pablo= tll.Artist().initializeSVG( shotImg, 800, 600 )
+    pablo= tll.createArtistSVG( shotImg, 800, 600 )
     scene= tll.Scene()
     scene.initializeHexa(
        [[0, 1, 1, -1, 0, 0, 0, 0],

@@ -8,5 +8,5 @@ from .tile import Tile
 from .scene import Scene
 
 # rendering:
-from .artist import Artist
+from .artist import Artist, createArtistSVG, createArtistPNG
 

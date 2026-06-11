@@ -34,7 +34,7 @@ def test_pnd_world():
     model= pnd.World( "Cool" )
     assert model.name() == "Cool"
     model.initializeGrid( refMatrix, 0.9, 0.1 )
-    pablo= tll.Artist().initializePNG("shot-test.png", 800, 600)
+    pablo= tll.createArtistPNG("shot-test.png", 800, 600)
     pablo.fitBox( model.box(), 10 )
 
     model.draw(pablo)
@@ -112,7 +112,7 @@ def test_pnd_withCarrier():
     assert model.move( 39,  0 ) == 39
     assert model.move( 39,  3 ) == False
     
-    pablo= tll.Artist().initializePNG("shot-test.png", 800, 600)
+    pablo= tll.createArtistPNG("shot-test.png", 800, 600)
     pablo.fitBox( model.box(), 10 )
     
     model.draw(pablo)

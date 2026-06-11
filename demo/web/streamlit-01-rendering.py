@@ -33,7 +33,7 @@ bod= scene.popAgentOn(26)
 bod.setId(3).setMatter(13)
 
 # Create an artist to render this scene:
-pablo= tll.Artist().initializeSVG( filePath= "shot-web-rendering.svg" )
+pablo= tll.createArtistSVG( filePath= "shot-web-rendering.svg" )
 pablo.fitBox( scene.box() )
 scene.draw(pablo)
 

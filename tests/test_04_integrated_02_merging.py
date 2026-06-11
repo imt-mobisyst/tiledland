@@ -19,7 +19,7 @@ def test_scene_fromConvex():
     ]
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setCamera( 4.0, 3.0 )
 
     for shape in shapes :
@@ -99,7 +99,7 @@ def test_scene_mergeOne():
     scene.connectAllClose(0.16)
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -135,7 +135,7 @@ def test_scene_mergeNoOne():
     scene.connectAllClose( 0.16 )
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -197,7 +197,7 @@ def test_scene_mergeFew():
     assert scene.size() == 10
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -275,7 +275,7 @@ def test_scene_mergeConplex():
     scene.connectAllClose(0.11)
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -329,7 +329,7 @@ def test_scene_mergeButNo():
     scene.connectAllClose(0.11)
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 

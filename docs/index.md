@@ -67,7 +67,7 @@ agent= scene.popAgentOn(14)
 agent.setMatter(15)
 
 # Create an artist to render this scene:
-pablo= tll.Artist().initializePNG( "shot-demo.png", 800, 600 )
+pablo= tll.createArtistPNG( "shot-demo.png", 800, 600 )
 pablo.fitBox( scene.box() )
 scene.draw(pablo)
 pablo.flip() # Uptate the support and return to a blanc page.

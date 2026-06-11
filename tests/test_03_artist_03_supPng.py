@@ -75,7 +75,7 @@ def test_support_write():
 
 
 def test_artist_flip():
-    pablo= tll.Artist().initializePNG( shotImg, 800, 600 )
+    pablo= tll.createArtistPNG( shotImg, 800, 600 )
 
     assert( type( pablo ) ) == tll.Artist
     assert( type( pablo.support() ) ) == tll.artist.supportCairo.SupportPNG

@@ -27,7 +27,7 @@ def test_long_gridmap_loadSmallMap():
     tll.artist.drawScene(scene)
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)
@@ -59,7 +59,7 @@ def test_long_gridmap_loadLargeMap():
     assert gridmap.resolution() == 0.1
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
 
     scene= tll.Scene().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
 
@@ -145,7 +145,7 @@ def test_gridmap_rosGridMap_webots():
     assert gridmap.dimention() == (103, 162)
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
 
     scene= tll.Scene().fromGridConvexes( gridmap, 2.0, matters=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
     pablo.fit(scene)

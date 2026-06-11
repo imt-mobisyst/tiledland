@@ -37,7 +37,7 @@ def test_long_gridmap_rectanglemap():
     scene= tll.Scene().fromGridRectangles(grid)
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)
@@ -56,7 +56,7 @@ def test_long_gridmap_smallMap():
     scene= tll.Scene().fromGridRectangles( grid )
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)
@@ -116,7 +116,7 @@ def test_long_gridmap_mediumMap_inside():
     ## end fromGrid
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)
@@ -136,7 +136,7 @@ def test_long_gridmap_mediumMap():
     scene= tll.Scene().fromGridRectangles( grid, 4.0 )
 
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)
@@ -157,7 +157,7 @@ def test_gridmap_largeMap():
     scene= tll.Scene().fromGridRectangles( grid, 4.0 )
     
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG(shotImg, 800, 600)
+    pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(scene)
 
     tll.artist.drawScene(scene)

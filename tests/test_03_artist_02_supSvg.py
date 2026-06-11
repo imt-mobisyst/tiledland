@@ -87,7 +87,7 @@ def test_artist_load():
     assert( type( pablo ) ) == tll.Artist
     assert( type( pablo.support() ) ) == tll.artist.support.Support
 
-    pablo.initializeSVG("shot-test.svg", 800, 600) 
+    pablo.initialize("shot-test.svg", 800, 600) 
 
     assert( type( pablo.support() ) ) == tll.artist.support.SupportSVG
 
@@ -127,7 +127,7 @@ def test_artist_load():
 
 def test_artist_flip():
     shotImg= "shot-test.svg"
-    pablo= tll.Artist().initializeSVG( shotImg, 800, 600 )
+    pablo= tll.createArtistSVG( shotImg, 800, 600 )
 
     assert( pablo.support().filePath() == shotImg )
 
