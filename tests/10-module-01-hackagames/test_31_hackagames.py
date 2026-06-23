@@ -63,21 +63,21 @@ def test_Tile_agents():
     tile.clear()
     assert tile.agents() == []
 
-def test_Scene_pod():
-    scene= Scene().initializeLine(4)
-    scene.connectAll( [ [1, 2], [1, 3], [1, 4], [2, 1], [2, 3], [2, 4],
+def test_Map_pod():
+    map= Map().initializeLine(4)
+    map.connectAll( [ [1, 2], [1, 3], [1, 4], [2, 1], [2, 3], [2, 4],
                        [3, 1], [3, 2], [4, 1], [4, 2]
                         ] )
 
-    scene.tile(1).setCenter( 5.0, 3.0 )
-    scene.tile(2).setCenter( 5.0, 15.0 )
-    scene.tile(3).setCenter( 1.0, 9.0 )
-    scene.tile(4).setCenter( 9.0, 9.0 )
+    map.tile(1).setCenter( 5.0, 3.0 )
+    map.tile(2).setCenter( 5.0, 15.0 )
+    map.tile(3).setCenter( 1.0, 9.0 )
+    map.tile(4).setCenter( 9.0, 9.0 )
     
-    scenePod= scene.asDataTree()
-    print(f">>>1 {scenePod}")
-    assert '\n'+ str(scenePod) +'\n' == """
-Scene:
+    mapPod= map.asDataTree()
+    print(f">>>1 {mapPod}")
+    assert '\n'+ str(mapPod) +'\n' == """
+Map:
 - Convex: [0] [-0.25, 0.1, -0.1, 0.25, 0.1, 0.25, 0.25, 0.1, 0.25, -0.1, 0.1, -0.25, -0.1, -0.25, -0.25, -0.1]
 - Tile: [1, 0, 2, 3, 4] [5.0, 3.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 - Tile: [2, 0, 1, 3, 4] [5.0, 15.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
@@ -85,10 +85,10 @@ Scene:
 - Tile: [4, 0, 1, 2] [9.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 """
 
-    scenePod= Scene().fromDataTree( scene.asDataTree() ).asDataTree()
-    print(f">>>2 {scenePod}")
-    assert '\n'+ str(scenePod) +'\n' == """
-Scene:
+    mapPod= Map().fromDataTree( map.asDataTree() ).asDataTree()
+    print(f">>>2 {mapPod}")
+    assert '\n'+ str(mapPod) +'\n' == """
+Map:
 - Convex: [0] [-0.25, 0.1, -0.1, 0.25, 0.1, 0.25, 0.25, 0.1, 0.25, -0.1, 0.1, -0.25, -0.1, -0.25, -0.25, -0.1]
 - Tile: [1, 0, 2, 3, 4] [5.0, 3.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 - Tile: [2, 0, 1, 3, 4] [5.0, 15.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
@@ -96,9 +96,9 @@ Scene:
 - Tile: [4, 0, 1, 2] [9.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 """
 
-    print(f">>> {scenePod.dump()}")
-    assert '\n'+ scenePod.dump() +'\n' == """
-Scene - 0 0 0 5 :
+    print(f">>> {mapPod.dump()}")
+    assert '\n'+ mapPod.dump() +'\n' == """
+Map - 0 0 0 5 :
 Convex - 0 1 16 0 : 0 -0.25 0.1 -0.1 0.25 0.1 0.25 0.25 0.1 0.25 -0.1 0.1 -0.25 -0.1 -0.25 -0.25 -0.1
 Tile - 0 5 10 0 : 1 0 2 3 4 5.0 3.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45
 Tile - 0 5 10 0 : 2 0 1 3 4 5.0 15.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45

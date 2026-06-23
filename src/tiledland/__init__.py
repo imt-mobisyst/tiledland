@@ -5,7 +5,7 @@ from .geometry import Point, Line, Box, Convex, Grid
 from .entity import Entity
 from .agent import Agent
 from .tile import Tile
-from .scene import Scene
+from .map import Map
 
 # rendering:
 from .artist import Artist, createArtistSVG, createArtistPNG

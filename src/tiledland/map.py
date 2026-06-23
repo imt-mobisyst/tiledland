@@ -1,12 +1,12 @@
 import hacka
 from .geometry import Point, Box, Convex
 from .entity import Entity
-from .tile import Tile
 from .agent import Agent
+from .tile import Tile
 
 import math
 
-class Scene(Entity):
+class Map(Entity):
 
     # Constructor:
     def clear( self ):
@@ -464,7 +464,7 @@ class Scene(Entity):
         return [ ag.tile() for ag in self.agents(iGroup) ]
 
     # Hacka.DataTree interface:
-    def asDataTree( self, name= "Scene" ):
+    def asDataTree( self, name= "Map" ):
         return hacka.DataTree(name, [], [self._epsilon],
             [ t.asDataTree() for t in self.tiles() ]
         )
@@ -520,7 +520,7 @@ class Scene(Entity):
         return self
 
     # string:
-    def str(self, name="Scene"):
+    def str(self, name="Map"):
         eltStrs =[]
         for t in self.tiles() :
             eltStrs.append( f"- {t}" )

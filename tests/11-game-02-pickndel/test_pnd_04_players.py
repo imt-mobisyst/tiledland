@@ -22,7 +22,7 @@ def test_basicBot_wakeUp():
 
     print( f"---\n{initDT}.")
     assert str(initDT) == """BasicWorld : :
-- Scene : : 0.01
+- Map : : 0.01
   - Tile : 1 0 2 3 : 0.0 1.1
     - Convex : : -0.5 -0.5 -0.5 0.5 0.5 0.5 0.5 -0.5
   - Tile : 2 0 1 4 : 1.1 1.1

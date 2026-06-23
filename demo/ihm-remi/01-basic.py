@@ -1,4 +1,4 @@
-#!python3
+#! /usr/bin/python3
 import remi, remi.gui as gui
 
 class MyApp(remi.App):

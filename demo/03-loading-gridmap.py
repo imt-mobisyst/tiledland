@@ -13,16 +13,16 @@ print( f"grid ({grid.dimention()}) at {grid.resolution()} resolution loaded" )
 radius= 1.5/grid.resolution()
 convexes= grid.makeConvexes(0, radius)
 
-## Instanciate the scene with this layer
-scene= tll.Scene(convexes)
-tll.artist.drawScene( scene, "shot-demo.png" )
+## Instanciate the map with this layer
+map= tll.Map(convexes)
+tll.artist.drawMap( map, "shot-demo.png" )
 
 ## Add obstables (1), but with a finest definition:
 radius= 0.5/grid.resolution()
 convexes= grid.makeConvexes(1, radius)
-scene.createSeveralTiles( convexes, 1 )
-tll.artist.drawScene( scene, "shot-demo.png" )
+map.createSeveralTiles( convexes, 1 )
+tll.artist.drawMap( map, "shot-demo.png" )
 
 ## Finnally connect close cells together :
-scene.connectAllClose( grid.resolution()*1.001 )
-tll.artist.drawScene( scene, "shot-demo.png" )
+map.connectAllClose( grid.resolution()*1.001 )
+tll.artist.drawMap( map, "shot-demo.png" )

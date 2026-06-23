@@ -1,12 +1,12 @@
 """
-# Simple Scene rendering using streamlit.
+# Simple Map rendering using streamlit.
 """
 import streamlit as st
 import tiledland as tll
 
 # Create a new TiledMap as a grid:
-scene= tll.Scene()
-scene.initializeGrid(
+map= tll.Map()
+map.initializeGrid(
     [[0, 1, 1, -1, 0, 0, 0, 0],              #  -1 : means no cell at this location
     [5, -1, 0, 2, 0, -1, 5, 0],              #  0 - n : give the group identifier of the cell to create.
     [0, 0, 0, -1, 0, 1, 1, 0],               #  
@@ -15,27 +15,27 @@ scene.initializeGrid(
 )
 
 # Connect all close enough tiles: 
-scene.connectAllDistance( 1.2 )
+map.connectAllDistance( 1.2 )
 
-# Add some objects on the scene:
+# Add some objects on the map:
 def newAgent( identifier, group ):
     return tll.Agent( identifier, group, shape=tll.Convex().initializeRegular(0.7, 6) )
 
-scene.setAgentFactory( newAgent )
+map.setAgentFactory( newAgent )
 
-bod= scene.popAgentOn(9)
+bod= map.popAgentOn(9)
 bod.setId(1).setMatter(13)
 
-bod= scene.popAgentOn(14)
+bod= map.popAgentOn(14)
 bod.setId(2).setMatter(15)
 
-bod= scene.popAgentOn(26)
+bod= map.popAgentOn(26)
 bod.setId(3).setMatter(13)
 
-# Create an artist to render this scene:
+# Create an artist to render this map:
 pablo= tll.createArtistSVG( filePath= "shot-web-rendering.svg" )
-pablo.fitBox( scene.box() )
-scene.draw(pablo)
+pablo.fitBox( map.box() )
+map.draw(pablo)
 
 # Rendering in a streamlit widget
 widget= st.empty()

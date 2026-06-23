@@ -1,10 +1,10 @@
 import random, hacka
 
 from .bot import Bot
-from ... import scene, Tile, artist
+from ... import map, Tile, artist
 from ...geometry import Point, Convex, Box
 
-class World( scene.Scene ):
+class World( map.Map ):
     def __init__(self, name="Pick'nDel", numberOfPlayers= 1):
         super().__init__()
         self.setAgentFactory(Bot)

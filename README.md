@@ -23,13 +23,13 @@ pip install .
 ```
 
 The `demo` directory include simple examples for _TiledLand_.
-Most of the demonstrations generate a scene, rendered in a `shot-demo.png` file.
+Most of the demonstrations generate a map, rendered in a `shot-demo.png` file.
 
 In VisualStudio Code terminal for instance:
 
 ```shell
 cd demo
-python3 01-grid-scene.py 
+python3 01-grid-map.py 
 code shot-demo.png
 python3 02-hexa-world.py
 python3 03-loading-gridmap.py 

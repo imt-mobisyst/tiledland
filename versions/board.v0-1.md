@@ -5,17 +5,17 @@
 
 - [x] Initialize with hackagames.tiled
 - [x] Initialize artist rendering
-- [x] New Structure: core (Scene, Tiles and Agents), geometry and artist
+- [x] New Structure: core (Map, Tiles and Agents), geometry and artist
 - [x] HackaGame compatible
 - [ ] asDico() and fromDico() morphing (via Pop)
 
-## Scene, Tiles and Agents :
+## Map, Tiles and Agents :
 
 - [x] Agents: Position, clock-position and Convex
-- [x] Scene as collection of: group's Agents, structured on Tiles
+- [x] Map as collection of: group's Agents, structured on Tiles
 - [x] Tiles as collection of: Agents
-- [x] Abstraction on Scene: Agents could be anything...
-- [x] Grid and Hexa-grid based scene initilization.
+- [x] Abstraction on Map: Agents could be anything...
+- [x] Grid and Hexa-grid based map initilization.
 
 
 ## Rendering :
@@ -28,9 +28,9 @@
 - [ ] Free Projection : (rotation + translation)
 
 
-## Manipulate the scene : 
+## Manipulate the map : 
 
-- [ ] Basic Scene manipulation: doSomething ... doTeleportOn(tile, agent, group).
+- [ ] Basic Map manipulation: doSomething ... doTeleportOn(tile, agent, group).
 - [ ] Be topological: Clockdir manipulation.
 
 
@@ -50,7 +50,7 @@ Social complient navigation.
 
 Pick-up and Delivery with hiden random congestion.
 
-- [x] Carrier from Agents and World from Scene.
+- [x] Carrier from Agents and World from Map.
 - [x] Mission on market place (origin destination)
 - [x] Hacka compatible GameMaster
 - [x] First players and first of documentation.
@@ -66,7 +66,7 @@ Pick-up and Delivery with hiden random congestion.
 
 Based on MultiPath solving problem.
 
-- [ ] Mobile from Agent and World from Scene.
+- [ ] Mobile from Agent and World from Map.
 - [ ] Mission: position to reach, where something need to be done.
 - [ ] NPC and Collision between mobiles.
 - [ ] Hacka compatible GameMaster.
@@ -91,7 +91,7 @@ Based on MultiPath solving problem.
 - [ ] Segment automatic tag.
 - [ ] get a tiles from a position (in max radius, and closest)
 - [ ] Agents: update position and Convex function (auto-centering)
-- [ ] Scene: Generation from graphs, Voroi, gabriel, ....
+- [ ] Map: Generation from graphs, Voroi, gabriel, ....
 - [ ] Convex: Collisions
 
 

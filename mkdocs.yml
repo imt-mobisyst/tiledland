@@ -2,8 +2,16 @@ site_name: Tiled-Land
 
 nav:
   - Home: 'index.md'
-  - Scene: 'scene.md'
-  - webapp: 'web.md'
+  - Main Components:
+    - Tiled Entity: 'main-entity.md'
+    - Tiles and Map: 'main-map.md'
+    - Agents: 'main-agent.md'
+    - Rendering: 'main-rendering.md'
+  - Interactive:
+    - Classical GUI: 'ihm-gui.md'
+    - Web App: 'ihm-web.md'
+    - Multithreading: 'ihm-thread.md'
+  - Geometry: 'geometry.md'
 
 markdown_extensions:
   - attr_list

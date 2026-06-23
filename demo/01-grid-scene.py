@@ -2,8 +2,8 @@
 import tiledland as tll
 
 # Create a new TiledMap as a grid:
-scene= tll.Scene()
-scene.initializeGrid(
+map= tll.Map()
+map.initializeGrid(
     [[0, 1, 1, -1, 0, 0, 0, 0],              #  -1 : means no cell at this location
     [5, -1, 0, 2, 0, -1, 5, 0],              #  0 - n : give the group identifier of the cell to create.
     [0, 0, 0, -1, 0, 1, 1, 0],               #  
@@ -12,20 +12,20 @@ scene.initializeGrid(
 )
 
 # Agent 1
-agent= scene.popAgentOn(9)
+agent= map.popAgentOn(9)
 
 # Agent 2
-agent= scene.popAgentOn(26)
+agent= map.popAgentOn(26)
 agent.setMatter(13)
 
 # Agent 3
-agent= scene.popAgentOn(14)
+agent= map.popAgentOn(14)
 agent.setMatter(15)
 
-# Create an artist to render this scene:
+# Create an artist to render this map:
 anArtist= tll.createArtistPNG( "shot-demo.png", 800, 600 )
-anArtist.fitBox( scene.box() )
-scene.draw(anArtist)
+anArtist.fitBox( map.box() )
+map.draw(anArtist)
 anArtist.flip() # Uptate the support and return to a blanc page.
 
 print( f"You can open now the './{anArtist.support().filePath()}' file." )

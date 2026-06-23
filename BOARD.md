@@ -7,51 +7,56 @@
 - [x] `Entity` the root class with group, id and shape.
 - [x] Initialize artist rendering
 - [ ] Drawing as `Entities` methods (with no matters)
-- [ ] New Structure: core (Tiles, Land and Agents), geometry and artist
+- [ ] New Structure: core (Entities, Tiles Agents, and Map), geometry and artist
 - [x] HackaGame (DataTree) compatible
-
 
 ## Simple, but strong plan geometry
 
 - [x] Convex obj. min/max radius, and collision
-- [x] Scene: Gridmap to Tiled Scenes
-- [ ] Scene vs Map a semantic map ie. structured tiled obj (and in oposition to GridMap).
-- [x] Fast position requestest : add a grid canvas to Scene get a tiles from a position (getTile at, closest, inRadius ...)
+- [x] Map: Gridmap to Tiled Maps
+- [ ] Map vs Map a semantic map ie. structured tiled obj (and in oposition to GridMap).
+- [x] Fast position requestest : add a grid canvas to Map get a tiles from a position (getTile at, closest, inRadius ...)
 - [ ] PointCloud (potentially from Scan) to Envellope, a centered and ordered PointCloud.
 - [ ] Map: Apply a grid and use it on connectClose...
 - [ ] Map: Generation from Voroi, gabriel, ....
 - [ ] Tile: Search for text zones (header, body, footer)
 - [ ] Based on an appropriation of BOX2D c-library...
 
-## Land, Tiles and Agents :
+
+## Map, Tiles and Agents :
 
 - [x] Agents: Position, clock-position and Convex
 - [x] Land as collection of: group's Agents, structured on Tiles
 - [x] Tiles as collection of: Agents
-- [x] Abstraction on Scene: Agents could be anything...
-- [x] Grid and Hexa-grid based scene initilization.
-- [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Scene: `forward(agent, action)` (But on Hacka?) )
-- [ ] Basic Scene manipulation: doSomething ... doTeleportOn(tile, agent, group).
+- [x] Abstraction on Map: Agents could be anything...
+- [x] Grid and Hexa-grid based map initilization.
+- [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Map: `forward(agent, action)` (But on Hacka?) )
+- [ ] Basic Map manipulation: doSomething ... doTeleportOn(tile, agent, group).
 - [ ] Be topological: Clockdir manipulation.
-- [ ] Generate scene from point-graph (mesh).
+- [ ] Generate map from point-graph (mesh).
+- [ ] No geometry artifact on Agent and Tiles...
 
 
-## Web IHM - Rendering
+## One Agent - Several Agents :
+
+- [ ] `Mobile` : A mobile agent
+- [ ] ...
+
+
+## Web IHM
 
 - [x] Artist + support architectur.
-- [x] SVG Support.
-- [x] PNG Support with Cairo.
-- [ ] Visualize map (Static/Dynamic)
-- [ ] Add a monitor/control panel
-- [ ] Make the map clickable...
-- [ ] Hide the import of Artist's Supports (function of file extention)
+- [x] SVG Support and PNG Support with Cairo.
+- [ ] Interactive Simulation (Move-To)
+- [ ] With Sprites
+
 
 ## Robotique
 
-- [x] Transform GridMap to scene.
-- [ ] Integrate TiledLand in a TiledNav ROS package.
-- [ ] Be resilent hugly maps
-- [ ] Be resilent on ".png" format. 
+- [x] Transform GridMap to TiledLand.Map.
+- [ ] Integrate TiledLand in Tiled ROS packages.
+- [ ] Be resilent to hugly maps
+- [ ] Be resilent on 'all' ".png" format. 
 - [ ] Cloud point on frontiere cell (position on frontiers not cell center).
 - [ ] Correction on colliding convexes paving a matter.
 
@@ -72,7 +77,7 @@ Multi-Path planning problem (with uncertainty).
 
 Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 
-- [x] Carrier from Agents and World from Scene.
+- [x] Carrier from Agents and World from Map.
 - [x] Mission on market place (origin destination)
 - [x] Hacka compatible GameMaster
 - [x] First players and first of documentation.
@@ -98,7 +103,7 @@ Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 
 - [ ] Migrate geometry module on a _C_ library (from `box2d` or new `LibEGG` Euclidean Graspable Geometry).
 - [ ] Encapsulate _Convex_ in _Motif_ object (ie. one or several join convexes)
-- [ ] Migrade Scene geometry function into a Texture dedicated object (collection of _Motif_).
+- [ ] Migrade Map geometry function into a Texture dedicated object (collection of _Motif_).
 
 
 ## Rendering :
@@ -109,9 +114,9 @@ Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 - [ ] Free Projection : (rotation + translation)
 
 
-## Scene, Tiles and Agents :
+## Map, Tiles and Agents :
 
-- [ ] scene with _epsilon_ and _seam_ distance
+- [ ] map with _epsilon_ and _seam_ distance
 
 
 ## HackaGames - Multi-Bot Delivery
@@ -142,7 +147,7 @@ Social complient navigation.
 
 Based on MultiPath solving problem.
 
-- [ ] Mobile from Agent and World from Scene.
+- [ ] Mobile from Agent and World from Map.
 - [ ] Mission: position to reach, where something need to be done.
 - [ ] NPC and Collision between mobiles.
 - [ ] Hacka compatible GameMaster.

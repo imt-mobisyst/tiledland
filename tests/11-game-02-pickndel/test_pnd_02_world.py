@@ -41,7 +41,7 @@ def test_pnd_world():
     pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
-    refsFile= open( "tests/refs/41.pickndel-scene-01.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/41.pickndel-map-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
     bod= model.popAgentOn(1)
@@ -56,7 +56,7 @@ def test_pnd_world():
     pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
-    refsFile= open( "tests/refs/41.pickndel-scene-02.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/41.pickndel-map-02.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
 def test_pnd_graph():
@@ -119,7 +119,7 @@ def test_pnd_withCarrier():
     pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
-    refsFile= open( "tests/refs/41.pickndel-scene-03.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/41.pickndel-map-03.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
 

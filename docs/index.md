@@ -1,14 +1,13 @@
-# TiledLand: Polygon-based simulation engine.
+# TiledLand: A Polygon-based Simulation Engine.
 
 This project is a `Python` package oriented toward multi-agent simulation reling on a convex polygonal objects.
-The main idea is to model a plan world (a land) as a collection of convex-polygons objects : tiles.
-Then, the land is mainly composed of an environnement - interconnected tiles - and agents distributed inside it.
+The main idea is to model a plan world (the land) as a collection of convex-polygons cells (the tiles).
+Then, the land is mainly composed of a map - interconnected tiles - and agents distributed inside it.
 
 To notice that, _TiledLand_ is more a sandbox project to test approaches than an optimized, ready-to-use and well documented toolbox.
 
 - On github: [imt-mobisyst/tiledland](https://github.com/imt-mobisyst/tiledland)
 - On PyPip: [projct tiledland](https://pypi.org/project/tiledland/)
-- Documentation : []()
 
 ## Not what are you looking for ?
 
@@ -27,7 +26,7 @@ The project and its dependencies can be installed with _pip_ tool.
 its relies [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
 The project requires also [Cairo](https://pypi.org/project/pycairo/) library for _PNG_ image rendering example. 
 This dependency is not mandatory, but all example and demonstration generating or reading _PNG_ image will fail. 
-Only _SVG_ rendering will be available.
+Only _SVG_ rendering is available by default.
 
 ```sh
 pip install pycairo tiledland
@@ -46,8 +45,8 @@ The land is then rendered as a _png_ graphic.
 import tiledland as tll
 
 # Create a new TiledMap as a grid:
-scene= tll.Scene()
-scene.initializeGrid([
+map= tll.Map()
+map.initializeGrid([
 	[0, 1, 1, -1, 0, 0, 0, 0], # -1 : means no cell at this location
 	[5, -1, 0, 2, 0, -1, 5, 0], # 0 - n : give the group identifier
 	[0, 0, 0, -1, 0, 1, 1, 0], # of the cell to create.
@@ -56,20 +55,20 @@ scene.initializeGrid([
 ])
 
 # Agent 1
-agent= scene.popAgentOn(9)
+agent= map.popAgentOn(9)
 
 # Agent 2
-agent= scene.popAgentOn(26)
+agent= map.popAgentOn(26)
 agent.setMatter(13)
 
 # Agent 3
-agent= scene.popAgentOn(14)
+agent= map.popAgentOn(14)
 agent.setMatter(15)
 
-# Create an artist to render this scene:
+# Create an artist to render this map:
 pablo= tll.createArtistPNG( "shot-demo.png", 800, 600 )
-pablo.fitBox( scene.box() )
-scene.draw(pablo)
+pablo.fitBox( map.box() )
+map.draw(pablo)
 pablo.flip() # Uptate the support and return to a blanc page.
 
 print( f"You can open now the './{pablo.support().filePath()}' file." )

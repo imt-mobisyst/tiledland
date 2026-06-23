@@ -1,17 +1,17 @@
 from .color import color, colorRatio, colorRatio, rgbColor, percentColor, webColor, colorFromWeb
 from .support import AbsSupport, Support, SupportSVG
-from ..scene import Scene 
+from ..map import Map 
 
-def drawScene(scene, filePath= "shot-tiled.png", width= 1600, height= 1200):
+def drawMap(map, filePath= "shot-tiled.png", width= 1600, height= 1200):
     from .supportCairo import SupportPNG
     pablo= Artist().initialize( filePath, width, height, SupportPNG )
-    pablo.fit(scene)
-    scene.draw(pablo)
+    pablo.fit(map)
+    map.draw(pablo)
     pablo.flip()
 
 def drawConvexes(convexes, filePath= "shot-tiled.png", width= 1600, height= 1200):
-    scene= Scene(convexes)
-    drawScene(scene,filePath, width, height) 
+    map= Map(convexes)
+    drawMap(map,filePath, width, height) 
 
 def createArtistSVG(filePath, width, height):
     return Artist().initialize(filePath, width, height, SupportSVG)

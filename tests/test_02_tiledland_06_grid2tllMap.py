@@ -35,22 +35,22 @@ def test_g2s_makeRectangles_small():
         (0.21, 0.41), (0.21, 0.59), (0.49, 0.59), (0.49, 0.41)
     ]
 
-    # Scene Construction :
-    scene= tll.Scene( epsilon=0.06 )
+    # Map Construction :
+    map= tll.Map( epsilon=0.06 )
     shapes= grid.makeRectangles(0)
     i= 0
     for s in shapes :
         i+= 1
-        assert scene.createTile(s, 0) == i
-        scene.tile(i).position().round(2)
-        scene.tile(i).shape().round(2)
-    assert scene.size() == i
+        assert map.createTile(s, 0) == i
+        map.tile(i).position().round(2)
+        map.tile(i).shape().round(2)
+    assert map.size() == i
     assert i == 2
 
     print( "---" )
-    print( scene.asDataTree() )
-    assert "\n"+ str(scene.asDataTree()) +"\n" =="""
-Scene : : 0.06
+    print( map.asDataTree() )
+    assert "\n"+ str(map.asDataTree()) +"\n" =="""
+Map : : 0.06
 - Tile : 1 0 : 0.25 0.2
   - Convex : : -0.24 -0.19 -0.24 0.19 0.24 0.19 0.24 -0.19
 - Tile : 2 0 : 0.35 0.5
@@ -60,16 +60,16 @@ Scene : : 0.06
     shapes= grid.makeRectangles(1)
     for s in shapes :
         i+= 1
-        assert scene.createTile(s, 1) == i
-        scene.tile(i).position().round(2)
-        scene.tile(i).shape().round(2)
-    assert scene.size() == 3
+        assert map.createTile(s, 1) == i
+        map.tile(i).position().round(2)
+        map.tile(i).shape().round(2)
+    assert map.size() == 3
 
     print( '-'*10 )
-    print( scene.asDataTree() )
+    print( map.asDataTree() )
 
-    assert "\n"+ str(scene.asDataTree()) +"\n" =="""
-Scene : : 0.06
+    assert "\n"+ str(map.asDataTree()) +"\n" =="""
+Map : : 0.06
 - Tile : 1 0 : 0.25 0.2
   - Convex : : -0.24 -0.19 -0.24 0.19 0.24 0.19 0.24 -0.19
 - Tile : 2 0 : 0.35 0.5
@@ -78,13 +78,13 @@ Scene : : 0.06
   - Convex : : -0.09 -0.09 -0.09 0.09 0.09 0.09 0.09 -0.09
 """
 
-    scene.connectAllClose( grid.resolution() )
+    map.connectAllClose( grid.resolution() )
 
     print( '-'*10 )
-    print( scene.asDataTree() )
+    print( map.asDataTree() )
 
-    assert "\n"+ str(scene.asDataTree()) +"\n" =="""
-Scene : : 0.06
+    assert "\n"+ str(map.asDataTree()) +"\n" =="""
+Map : : 0.06
 - Tile : 1 0 2 3 : 0.25 0.2
   - Convex : : -0.24 -0.19 -0.24 0.19 0.24 0.19 0.24 -0.19
 - Tile : 2 0 1 3 : 0.35 0.5
@@ -93,21 +93,21 @@ Scene : : 0.06
   - Convex : : -0.09 -0.09 -0.09 0.09 0.09 0.09 0.09 -0.09
 """
 
-    # Scene Construction, in short:
-    scene= tll.Scene().fromGridRectangles(grid)
-    scene._epsilon= round( scene._epsilon, 6 )
+    # Map Construction, in short:
+    map= tll.Map().fromGridRectangles(grid)
+    map._epsilon= round( map._epsilon, 6 )
 
-    for t in scene.tiles() :
+    for t in map.tiles() :
         t.position().round(2)
         t.shape().round(2)
     
     print( '-'*10 )
-    print( scene.asDataTree() )
+    print( map.asDataTree() )
 
-    tll.artist.drawScene(scene)
+    tll.artist.drawMap(map)
 
-    assert True or "\n"+ str(scene.asDataTree()) +"\n" =="""
-Scene: [0.06]
+    assert True or "\n"+ str(map.asDataTree()) +"\n" =="""
+Map: [0.06]
 - Tile: [1, 0, 2, 3] [0.25, 0.2]
   - Convex: [-0.24, -0.19, -0.24, 0.19, 0.24, 0.19, 0.24, -0.19]
 - Tile: [2, 0, 1, 3] [0.35, 0.5]
@@ -164,23 +164,23 @@ def test_g2s_makeRectangles_medium():
         print( shape.round(2).asZipped() )
         assert True or shape.asZipped() ==  ref
     
-    # Scene from grid:
-    scene= tll.Scene().fromGridRectangles(grid)
+    # Map from grid:
+    map= tll.Map().fromGridRectangles(grid)
 
-    for t in scene.tiles() :
+    for t in map.tiles() :
         t.position().round(2)
         t.shape().round(2)
     
-    data= scene.asDataTree()
+    data= map.asDataTree()
     data.round(3)
 
     print( '-'*10 )
     print( data )
 
-    tll.artist.drawScene(scene)
+    tll.artist.drawMap(map)
 
     assert "\n"+ str(data) +"\n" == """
-Scene : : 0.04
+Map : : 0.04
 - Tile : 1 0 2 4 5 6 : 0.2 0.3
   - Convex : : -0.19 -0.29 -0.19 0.29 0.19 0.29 0.19 -0.29
 - Tile : 2 0 1 3 5 : 0.65 0.15
@@ -196,7 +196,7 @@ Scene : : 0.04
 """
 
 def test_g2s_makeRectangles_medium_limit():
-    scene= tll.Scene()
+    map= tll.Map()
     grid= tll.Grid()
     grid.initialize([
         [1, 1, 1,  0, 0, 0,  0, 0, 0],
@@ -214,10 +214,10 @@ def test_g2s_makeRectangles_medium_limit():
 
     shapes= grid.makeRectangles(0, 0.31)
 
-    scene.fromShapes(shapes, 0)
-    scene.connectAllClose( 0.021 )
+    map.fromShapes(shapes, 0)
+    map.connectAllClose( 0.021 )
 
-    tll.artist.drawScene(scene)
+    tll.artist.drawMap(map)
     
     assert len(shapes) == 11
     referes= [
@@ -242,30 +242,30 @@ def test_g2s_makeRectangles_medium_limit():
         print( shape.round(2).asZipped() )
         assert shape.asZipped() ==  ref
 
-    assert scene.selectId(lambda t : t.matter() == 0) == [i for i in range(1, 12)]
-    assert scene.selectIdSmallbox(0.16) == [5, 7, 10, 11]
+    assert map.selectId(lambda t : t.matter() == 0) == [i for i in range(1, 12)]
+    assert map.selectIdSmallbox(0.16) == [5, 7, 10, 11]
 
-    assert( scene.mergeTile(5, 0.06, 1.0) )
-    #tll.artist.drawScene(scene, "shot-1.png")
-    body4= scene.tile(4).body().round(2).asZipped()
+    assert( map.mergeTile(5, 0.06, 1.0) )
+    #tll.artist.drawMap(map, "shot-1.png")
+    body4= map.tile(4).body().round(2).asZipped()
     print( body4 )
     assert body4 ==  [(0.01, 0.31), (0.01, 0.59), (0.39, 0.59), (0.39, 0.31)]
     
-    assert( scene.mergeTile(6, 0.06, 1.0) )
-    #tll.artist.drawScene(scene, "shot-2.png")
-    body6= scene.tile(6).body().round(2).asZipped()
+    assert( map.mergeTile(6, 0.06, 1.0) )
+    #tll.artist.drawMap(map, "shot-2.png")
+    body6= map.tile(6).body().round(2).asZipped()
     print(body6)
     assert body6 ==  [(0.11, 0.61), (0.11, 0.69), (0.21, 0.79), (0.39, 0.79), (0.39, 0.61)]
-    scene.mergeAllPossible( 0.06, 0.31 )
+    map.mergeAllPossible( 0.06, 0.31 )
 
-    for t in scene.tiles() :
+    for t in map.tiles() :
         t.position().round(2)
         t.shape().round(2)
-    tll.artist.drawScene(scene)
+    tll.artist.drawMap(map)
 
-    print( f"---\n{scene.asDataTree()}." )
-    assert "\n"+ str(scene.asDataTree()) +"\n" == """
-Scene : : 0.01
+    print( f"---\n{map.asDataTree()}." )
+    assert "\n"+ str(map.asDataTree()) +"\n" == """
+Map : : 0.01
 - Tile : 1 0 2 4 : 0.15 0.15
   - Convex : : -0.14 -0.14 -0.14 0.14 0.14 0.14 0.14 -0.14
 - Tile : 2 0 1 3 4 : 0.45 0.15
@@ -300,23 +300,23 @@ def test_makeConvexes_small():
     ], tll.Point(0.5, 0.5), 1.0 )
     print(grid)
     
-    scene= tll.Scene().fromGridConvexes(grid, 1.0, matters=[tll.Grid.STATE_FREE])
-    tll.artist.drawScene( scene )
+    map= tll.Map().fromGridConvexes(grid, 1.0, matters=[tll.Grid.STATE_FREE])
+    tll.artist.drawMap( map )
 
-    print('\n'+ str(scene) +'.')
-    assert '\n'+str(scene) == """
-Scene:
+    print('\n'+ str(map) +'.')
+    assert '\n'+str(map) == """
+Map:
 - Tile-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ matter-0 adjs[2, 3, 4] agents(0)
 - Tile-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ matter-0 adjs[1] agents(0)
 - Tile-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ matter-0 adjs[1, 4] agents(0)
 - Tile-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ matter-0 adjs[1, 3] agents(0)"""
 
-    scene= tll.Scene().fromGridConvexes(grid, 1.0)
-    tll.artist.drawScene( scene )
+    map= tll.Map().fromGridConvexes(grid, 1.0)
+    tll.artist.drawMap( map )
 
-    print('\n'+ str(scene) +'.')
-    assert '\n'+str(scene) == """
-Scene:
+    print('\n'+ str(map) +'.')
+    assert '\n'+str(map) == """
+Map:
 - Tile-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ matter-0 adjs[2, 3, 4, 5] agents(0)
 - Tile-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ matter-0 adjs[1, 5, 6] agents(0)
 - Tile-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ matter-0 adjs[1, 4, 5, 6] agents(0)
@@ -364,12 +364,12 @@ def test_makeConvexes_medium():
     ], tll.Point(0.5, 0.5), 1.0 )
     print(grid)
     
-    scene= tll.Scene().fromGridConvexes(grid, 8.0, 0.01, matters=[tll.Grid.STATE_FREE])
-    tll.artist.drawScene( scene )
+    map= tll.Map().fromGridConvexes(grid, 8.0, 0.01, matters=[tll.Grid.STATE_FREE])
+    tll.artist.drawMap( map )
 
-    print('\n'+ str(scene) +'.')
-    assert '\n'+str(scene) == """
-Scene:
+    print('\n'+ str(map) +'.')
+    assert '\n'+str(map) == """
+Map:
 - Tile-1 ⌊(1.5, 1.5), (9.5, 10.5)⌉ matter-0 adjs[2, 5] agents(0)
 - Tile-2 ⌊(10.5, 1.5), (19.5, 11.5)⌉ matter-0 adjs[1, 5, 6] agents(0)
 - Tile-3 ⌊(21.5, 1.5), (28.5, 10.5)⌉ matter-0 adjs[4, 6] agents(0)
@@ -387,12 +387,12 @@ Scene:
 - Tile-15 ⌊(1.5, 20.5), (7.5, 30.5)⌉ matter-0 adjs[8, 12] agents(0)"""
 
     
-    scene= tll.Scene().fromGridConvexes(grid, 8.0)
-    tll.artist.drawScene( scene )
+    map= tll.Map().fromGridConvexes(grid, 8.0)
+    tll.artist.drawMap( map )
 
-    print('\n'+ str(scene) +'.')
-    assert '\n'+str(scene) == """
-Scene:
+    print('\n'+ str(map) +'.')
+    assert '\n'+str(map) == """
+Map:
 - Tile-1 ⌊(1.5, 1.5), (9.5, 10.5)⌉ matter-0 adjs[2, 5, 16] agents(0)
 - Tile-2 ⌊(10.5, 1.5), (19.5, 11.5)⌉ matter-0 adjs[1, 5, 6, 16, 17, 18] agents(0)
 - Tile-3 ⌊(21.5, 1.5), (28.5, 10.5)⌉ matter-0 adjs[4, 6, 17, 19] agents(0)

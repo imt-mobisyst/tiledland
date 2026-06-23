@@ -49,42 +49,42 @@ def test_artist_tile():
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-tile-04.svg" ):
         assert( lineShot == lineRef )
 
-# Test artist on scene
-def test_artist_scene_tiles():
+# Test artist on map
+def test_artist_map_tiles():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    scene= tll.Scene()
+    map= tll.Map()
 
-    assert scene.epsilon() == 0.01
+    assert map.epsilon() == 0.01
         
-    scene.drawTiles( pablo )
+    map.drawTiles( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-scene-00.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-00.svg" ):
         assert( lineShot == lineRef )
 
-    scene= tll.Scene().initializeLine(3)
+    map= tll.Map().initializeLine(3)
 
-    assert scene.epsilon() == 0.01
+    assert map.epsilon() == 0.01
 
-    scene.drawTiles( pablo )
+    map.drawTiles( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-scene-01.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-01.svg" ):
         assert( lineShot == lineRef )
 
     pablo.setCamera( 1.1, 0.0 )
     pablo.setScale( 200 )
 
-    scene.drawTiles( pablo )
+    map.drawTiles( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-scene-02.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-02.svg" ):
         assert( lineShot == lineRef )
 
-def test_artist_scene_net():
+def test_artist_map_net():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    scene= tll.Scene()
-    scene.initializeGrid(
+    map= tll.Map()
+    map.initializeGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [0, -1, 0, 0, 0, -1, 0, 0],
         [0, 0, 0, -1, 0, 1, 1, 0],
@@ -92,39 +92,39 @@ def test_artist_scene_net():
         [-1, -1, 0, 0, 0, -1, -1, -1]]
     )
 
-    scene.draw( pablo )
+    map.draw( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-scene-14.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-14.svg" ):
         assert( lineShot == lineRef )
 
-    box= scene.box()
+    box= map.box()
     box.round(2)
     assert box.asZip() == [(-0.5, -0.5), (8.2, 4.9)] 
 
-    pablo.fit( scene )
-    scene.draw( pablo )
+    pablo.fit( map )
+    map.draw( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-scene-15.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-15.svg" ):
         assert( lineShot == lineRef )
 
-    scene.connectAllConditions(
+    map.connectAllConditions(
         lambda tileFrom : tileFrom.matter() == 0,
         lambda tileFrom, tileTo : tileTo.matter() == 0 and tileFrom.centerDistance( tileTo ) < 1.2
     )
-    scene.draw( pablo )
+    map.draw( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-scene-16.svg" ):
+    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-16.svg" ):
         assert( lineShot == lineRef )
 
 
-# Test artist on scene
-def test_artist_gridscene_piece():
+# Test artist on map
+def test_artist_gridmap_piece():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    scene= tll.Scene()
-    scene.initializeGrid(
+    map= tll.Map()
+    map.initializeGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [5, -1, 0, 2, 0, -1, 5, 0],
         [0, 0, 0, -1, 0, 1, 1, 0],
@@ -133,8 +133,8 @@ def test_artist_gridscene_piece():
         1.0, 0.1
     )
 
-    pablo.fitBox( scene.box() )
-    scene.draw( pablo )
+    pablo.fitBox( map.box() )
+    map.draw( pablo )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-01.svg" ):
@@ -142,11 +142,11 @@ def test_artist_gridscene_piece():
 
     def popAgent( iRobot, iMatter, iTile ):
         bob= tll.Agent( iRobot, 0,
-            Point(0.1, 0.1)+scene.tile(iTile).position(),
+            Point(0.1, 0.1)+map.tile(iTile).position(),
             tll.Convex().initializeRegular(0.7, 6),
         )
         bob.setMatter(iMatter)
-        scene.tile(iTile).append( bob )
+        map.tile(iTile).append( bob )
         return bob
     
     bob= popAgent(1, 13, 12)
@@ -158,7 +158,7 @@ def test_artist_gridscene_piece():
         (0.3, 0.18), (0.3, -0.17), (0.0, -0.35),
     ]
 
-    bob= scene.tile(12).agent()
+    bob= map.tile(12).agent()
 
     env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.body().asZipped() ]
     print( env )
@@ -175,7 +175,7 @@ def test_artist_gridscene_piece():
     ]
     
 
-    scene.draw( pablo )
+    map.draw( pablo )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-02.svg" ):
@@ -186,7 +186,7 @@ def test_artist_gridscene_piece():
     popAgent(3, 13, 23)
     popAgent(1, 15, 20)
 
-    scene.draw( pablo )
+    map.draw( pablo )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-03.svg" ):
@@ -194,24 +194,24 @@ def test_artist_gridscene_piece():
 
     popAgent(1, 1, 17)
     
-    scene.draw( pablo )
+    map.draw( pablo )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-04.svg" ):
         assert( lineShot == lineRef )
 
-    scene.clearAgents()
-    scene.draw( pablo )
+    map.clearAgents()
+    map.draw( pablo )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-01.svg" ):
         assert( lineShot == lineRef )
 
-# Test artist on scene
-def test_artist_hexascene_piece():
+# Test artist on map
+def test_artist_hexamap_piece():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    scene= tll.Scene()
-    scene.initializeHexa(
+    map= tll.Map()
+    map.initializeHexa(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [5, -1, 0, 2, 0, -1, 5, 0],
         [0, 0, 0, -1, 0, 1, 1, 0],
@@ -220,8 +220,8 @@ def test_artist_hexascene_piece():
         1.0, 0.1
     )
 
-    pablo.fitBox( scene.box() )
-    scene.draw( pablo )
+    pablo.fitBox( map.box() )
+    map.draw( pablo )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-11.svg" ):
@@ -229,15 +229,15 @@ def test_artist_hexascene_piece():
 
     def popAgent( iRobot, iTile, iMatter ):
         bod= tll.Agent( iRobot, 0,
-            Point(0.1, 0.1)+scene.tile(iTile).position(),
+            Point(0.1, 0.1)+map.tile(iTile).position(),
             tll.Convex().initializeRegular(0.7, 6),
         )
         bod.setMatter(iMatter)
-        scene.tile(iTile).append( bod )
+        map.tile(iTile).append( bod )
     
     popAgent(1, 12, 13)
 
-    scene.draw( pablo )
+    map.draw( pablo )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-12.svg" ):
@@ -248,7 +248,7 @@ def test_artist_hexascene_piece():
     popAgent(3, 23, 13)
     popAgent(1, 20, 15)
 
-    scene.draw( pablo )
+    map.draw( pablo )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-13.svg" ):
@@ -256,14 +256,14 @@ def test_artist_hexascene_piece():
 
     popAgent(1, 17, 1)
 
-    scene.draw( pablo )
+    map.draw( pablo )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-14.svg" ):
         assert( lineShot == lineRef )
 
-    scene.clearAgents()
-    scene.draw( pablo )
+    map.clearAgents()
+    map.draw( pablo )
     pablo.flip()
 
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-11.svg" ):

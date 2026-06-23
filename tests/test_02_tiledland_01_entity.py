@@ -18,7 +18,7 @@ def test_load_local_tllcore():
     entity= tll.Entity()
     agent= tll.Agent()
     tile= tll.Tile()
-    scene= tll.Scene()
+    map= tll.Map()
 
 def test_load_local_tllihm():
     artist= tll.Artist()

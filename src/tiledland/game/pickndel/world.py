@@ -1,7 +1,7 @@
 import random, hacka
 
 from .carrier import Carrier
-from ... import scene, Tile, artist
+from ... import map, Tile, artist
 from ...geometry import Point, Convex, Box
 
 class Mission:
@@ -24,7 +24,7 @@ class Mission:
     def asTuple(self):
         return self.start, self.final, self.reward, self.owner
 
-class World( scene.Scene ):
+class World( map.Map ):
     def __init__(self, name="Pick'nDel", numberOfPlayers= 1):
         super().__init__()
         self.setAgentFactory(Carrier)

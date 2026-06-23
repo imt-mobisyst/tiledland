@@ -5,7 +5,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tll
 from src.tiledland.geometry import Point, Box, Convex, Grid
-from src.tiledland import Agent, Tile, Scene 
+from src.tiledland import Agent, Tile, Map 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - G R I D   T O   M A P
@@ -22,17 +22,17 @@ def test_long_gridmap_loadSmallMap():
     tll.artist.drawConvexes(convexes)
     assert len(convexes) == 17
     
-    scene= tll.Scene().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
+    map= tll.Map().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
 
-    tll.artist.drawScene(scene)
+    tll.artist.drawMap(map)
 
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
-    pablo.fit(scene)
+    pablo.fit(map)
 
-    tll.artist.drawScene(scene)
+    tll.artist.drawMap(map)
 
-    scene.draw(pablo)
+    map.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -40,11 +40,11 @@ def test_long_gridmap_loadSmallMap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    scene= tll.Scene().fromGridConvexes( grid, 2.0 )
+    map= tll.Map().fromGridConvexes( grid, 2.0 )
 
-    tll.artist.drawScene(scene)
+    tll.artist.drawMap(map)
     
-    scene.draw(pablo)
+    map.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -61,12 +61,12 @@ def test_long_gridmap_loadLargeMap():
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
 
-    scene= tll.Scene().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
+    map= tll.Map().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
 
-    tll.artist.drawScene(scene)
+    tll.artist.drawMap(map)
 
-    pablo.fit(scene)
-    scene.draw(pablo)
+    pablo.fit(map)
+    map.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -74,12 +74,12 @@ def test_long_gridmap_loadLargeMap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    scene= tll.Scene().fromGridConvexes( grid, 2.0 )
+    map= tll.Map().fromGridConvexes( grid, 2.0 )
     
-    tll.artist.drawScene(scene)
+    tll.artist.drawMap(map)
     
-    pablo.fit(scene)
-    scene.draw(pablo)
+    pablo.fit(map)
+    map.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -147,9 +147,9 @@ def test_gridmap_rosGridMap_webots():
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
 
-    scene= tll.Scene().fromGridConvexes( gridmap, 2.0, matters=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
-    pablo.fit(scene)
-    scene.draw(pablo)
+    map= tll.Map().fromGridConvexes( gridmap, 2.0, matters=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
+    pablo.fit(map)
+    map.draw(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -157,6 +157,6 @@ def test_gridmap_rosGridMap_webots():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    for tile in scene.tiles() :
+    for tile in map.tiles() :
         print( tile )
     
