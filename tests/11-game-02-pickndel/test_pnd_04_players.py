@@ -11,13 +11,13 @@ import src.tiledland.game.pickndel as pnd
 import src.tiledland as tll
 
 def test_basicBot_wakeUp():
-    world= pnd.World("BasicWorld").initializeGrid([[0, 0], [0, 0]])
+    world= pnd.World("BasicWorld").initGrid([[0, 0], [0, 0]])
     game= pnd.GameEngine( world )
     world.teleport( world.agent(1, 1).tile(), 4 )
 
     bot= pnd.BasicBot()
 
-    initDT= game.initialize( (1, 2) )
+    initDT= game.init( (1, 2) )
     initDT.round(3)
 
     print( f"---\n{initDT}.")
@@ -80,13 +80,13 @@ def test_basicBot_wakeUp():
     assert bot.decide() == "pass"
 
 def test_basicBot_loop():
-    world= pnd.World().initializeGrid([[0, 0], [0, 0]])
+    world= pnd.World().initGrid([[0, 0], [0, 0]])
     game= pnd.GameEngine( world, tic= 10 )
 
     bot= pnd.BasicBot()
 
     assert game.world().missionIndexes() == []
-    assert game.initialize((1, 2))
+    assert game.init((1, 2))
     assert game.world().missionIndexes() == [1]
 
     t= 10

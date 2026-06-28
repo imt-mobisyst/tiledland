@@ -8,7 +8,7 @@ from src.tiledland import Point, Line
 #         T E S T   T I L E D L A N D - G E O M E T R Y
 # ------------------------------------------------------------------------ #
 
-def test_line_line():
+def test_fast_line_line():
     l1= Line( Point(1.0, 1.5), Point(7.0, 3.5) )
     l2= Line( Point(5.0, 1.0), Point(3.0, 4.0) )
     boom= Point()
@@ -39,7 +39,7 @@ def test_line_line():
     print( f"Boom: {boom}" )
     assert not collide
     
-def test_point_projection():
+def test_fast_point_projection():
     p= Point(1.0, 8.0)
     l= Line( Point(0, 0), Point(12, 8) )
 
@@ -49,7 +49,7 @@ def test_point_projection():
 
     assert proj.asTuple() == (4.385, 2.923)
 
-def test_linePoint_distance():
+def test_fast_linePoint_distance():
     p= Point(1.0, 8.0)
     l= Line( Point(0, 0), Point(12, 8) )
 

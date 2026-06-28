@@ -8,7 +8,6 @@ class Agent(Entity):
         self._tile= 0
         self._center= Point( position.x(), position.y() )
         self._matter= 10+group
-
     
     def tile(self):
         return self._tile
@@ -72,8 +71,11 @@ class Agent(Entity):
         self.setShape( Convex().fromDataTree( aDataTree.children()[0] ) )
         return self
     
-    # Artist drawing:
+    # Agent Model:
+    def process(self, perception):
+        return None
 
+    # Artist drawing:
     def draw( self, artist ):
         self.body().fill( artist, self._matter )
         minx, miny= self.box().leftFloor().asTuple()

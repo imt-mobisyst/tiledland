@@ -2,12 +2,16 @@ import sys
 workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
+import src.tiledland as tll
 import src.tiledland.artist as artist
 
 # ------------------------------------------------------------------------ #
 #                 T E S T   I N T E R F A C E    A R T I S T
 # ------------------------------------------------------------------------ #
 
+def test_fast_load_artist():
+    artist= tll.Artist()
+    
 # Test firstAI launch
 def test_support_load():
     canvas= artist.AbsSupport()

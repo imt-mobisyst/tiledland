@@ -6,7 +6,7 @@ import tiledland as tll
 
 # Create a new TiledMap as a grid:
 map= tll.Map()
-map.initializeGrid(
+map.initGrid(
     [[0, 1, 1, -1, 0, 0, 0, 0],              #  -1 : means no cell at this location
     [5, -1, 0, 2, 0, -1, 5, 0],              #  0 - n : give the group identifier of the cell to create.
     [0, 0, 0, -1, 0, 1, 1, 0],               #  
@@ -19,7 +19,7 @@ map.connectAllDistance( 1.2 )
 
 # Add some objects on the map:
 def newAgent( identifier, group ):
-    return tll.Agent( identifier, group, shape=tll.Convex().initializeRegular(0.7, 6) )
+    return tll.Agent( identifier, group, shape=tll.Convex().initRegular(0.7, 6) )
 
 map.setAgentFactory( newAgent )
 

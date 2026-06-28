@@ -33,7 +33,7 @@ for k in conf:
     print( f"- {k}: {valueStr}" )
 
 # Create game nstance :
-world= pnd.World( conf["conf"] ).initializeGrid( conf["grid"], conf["tileSize"], encumbers=conf["encumbers"] )
+world= pnd.World( conf["conf"] ).initGrid( conf["grid"], conf["tileSize"], encumbers=conf["encumbers"] )
 master= pnd.GameMaster( world, tic=conf["tic"] )
 
 # Start the numberOfGames games :

@@ -11,14 +11,14 @@ import src.tiledland.game.pickndel as pnd
 import src.tiledland as tll
 
 def test_gamemaster_method():
-    world= pnd.World().initializeGrid( [[0, 0], [0, 0]] )
+    world= pnd.World().initGrid( [[0, 0], [0, 0]] )
     game= pnd.GameEngine( world, 1, tic=20 )
 
     assert( len(game._model._agents) == 2 )
 
-    print( f">>> {type( game.initialize() )} is {hacka.DataTree}")
+    print( f">>> {type( game.init() )} is {hacka.DataTree}")
 
-    assert( type( game.initialize() ) is hacka.DataTree )
+    assert( type( game.init() ) is hacka.DataTree )
     assert( type( game.playerHand(1) ) is hacka.DataTree )
     assert( game.applyAction( "go 0", 1 )  )
     assert( game.applyAction( "do 1", 1 )  )
@@ -40,10 +40,10 @@ def test_gamemaster_method():
 
 def test_gamemaster_live_cycle():
     world= pnd.World()
-    world.initializeGrid( [[0, 0], [0, 0]] )
+    world.initGrid( [[0, 0], [0, 0]] )
     game= pnd.GameEngine( world, 1, tic=10 )
 
-    assert game.initialize()
+    assert game.init()
     world.setMissions( [(1, 2)] )
 
     t= 10
@@ -59,10 +59,10 @@ def test_gamemaster_live_cycle():
     
 def test_gamemaster_moves():
     world= pnd.World()
-    world.initializeGrid( [[0, 0, 0, -1], [0, -1, 0, 0], [0, 0, 0, 0]] )
+    world.initGrid( [[0, 0, 0, -1], [0, -1, 0, 0], [0, 0, 0, 0]] )
     game= pnd.GameEngine( world, 1, tic=20 )
     world.teleport( world.agent(1, 1,).tile(), 1 )
-    game.initialize()
+    game.init()
     world.setMissions( [(4, 5), (7, 8)] )
 
     world.render()
@@ -121,7 +121,7 @@ def test_gamemaster_moves():
 
 def test_gamemaster_drawMissions():
     world= pnd.World()
-    world.initializeGrid([
+    world.initGrid([
         [00, 00, 00, 00],
         [-1, 00, -1, -1],
         [00, 00, 00, 00],
@@ -129,7 +129,7 @@ def test_gamemaster_drawMissions():
     ])
     game= pnd.GameEngine( world, 1, tic=10 )
     world.teleport( world.agent(1, 1,).tile(), 1 )
-    game.initialize()
+    game.init()
     world.setMissions( [(4, 5), (7, 8)] )
 
     world.render()
@@ -162,14 +162,14 @@ def test_gamemaster_drawMissions():
 
 def test_gamemaster_distances_path():
     world= pnd.World()
-    world.initializeGrid([
+    world.initGrid([
         [00, 00, 00, 00],
         [-1, 00, -1, -1],
         [00, 00, 00, 00],
         [00, -1, -1, 00]
     ])
     game= pnd.GameEngine( world, 1, tic=10 )
-    game.initialize()
+    game.init()
     world.setMissions( [(4, 5), (7, 8)] )
 
     assert game.world().size() == 11
@@ -199,14 +199,14 @@ def test_gamemaster_distances_path():
 
 def test_gamemaster_options():
     world= pnd.World()
-    world.initializeGrid([
+    world.initGrid([
         [00, 00, 00, 00],  # 1  2  3  4
         [-1, 00, -1, -1],  #    5      
         [00, 00, 00, 00],  # 6  7  8  9
         [00, -1, -1, 00]   #10       13
     ])
     game= pnd.GameEngine( world, 1, tic=10 )
-    game.initialize()
+    game.init()
     world.setMissions( [(4, 5), (7, 8)] )
 
     world.render()
@@ -218,7 +218,7 @@ def test_gamemaster_options():
 
 def test_gamemaster_loops():
     world= pnd.World()
-    world.initializeGrid([
+    world.initGrid([
         [00, 00, 00, 00],  # 1  2  3  4
         [-1, 00, -1, -1],  #    5      
         [00, 00, 00, 00],  # 6  7  8  9
@@ -230,7 +230,7 @@ def test_gamemaster_loops():
     assert [ game.world().carrierTiles(i) for i in range(2) ] == [[], [1]]
     assert game.world()._missions  == []
 
-    game.initialize()
+    game.init()
 
     assert len( game.world()._missions ) == 1
     assert game.ticCounter() == 10
@@ -252,7 +252,7 @@ def test_gamemaster_loops():
     game._scores= [0, 100.0]
     assert game.playerScore(1) == 100.0
 
-    game.initialize()
+    game.init()
 
     assert game._tic == 10
     assert game.world().carrierTiles(1) == [5]

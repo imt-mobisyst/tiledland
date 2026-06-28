@@ -9,7 +9,7 @@ from src.tiledland.geometry import Point, Mesh
 #         T E S T   T I L E D L A N D - G E O M E T R Y
 # ------------------------------------------------------------------------ #
 
-def test_geometry_sortRadial():
+def test_fast_geometry_sortRadial():
     points= [
         Point(1.5, 1),
         Point(6, 3),
@@ -67,7 +67,7 @@ def test_geometry_sortRadial():
             == [(1.0, 1.0), (5.5, 5.0), (9.0, 4.5),
                 (8.5, 1.5), (6.0, 0.5), (4.5, 2.5)] )
     
-def test_geometry_mesh_init():
+def test_fast_geometry_mesh_init():
     c= Mesh()
     assert type(c) == Mesh
     assert c.size() == 0

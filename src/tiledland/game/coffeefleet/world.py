@@ -64,7 +64,7 @@ class World( map.Map ):
         return self._encumbers[iTile-1]
 
     # Construction:
-    def initializeMoves(self):
+    def initMoves(self):
         for group in range( self.numberOfGroups() ) :
             for car in self.agents(group) :
                 car.setMove(0)
@@ -81,13 +81,13 @@ class World( map.Map ):
         self._encumbers= [ defaultValue for i in range(self.size()) ]
         return self
     
-    def initializeLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
-        super(World, self).initializeLine(size, tileSize, separation, connect)
+    def initLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
+        super(World, self).initLine(size, tileSize, separation, connect)
         self.resetEncumbers()
         return self
     
-    def initializeGrid( self, matrix, tileSize= 1.0, separation=0.1, encumbers= [[],[]], connect=True ):
-        super(World, self).initializeGrid(matrix, tileSize, separation, connect)
+    def initGrid( self, matrix, tileSize= 1.0, separation=0.1, encumbers= [[],[]], connect=True ):
+        super(World, self).initGrid(matrix, tileSize, separation, connect)
         self.resetEncumbers()
         for iTile, enc in zip( encumbers[0], encumbers[1] ) :
             self.setEncumber( iTile, enc )

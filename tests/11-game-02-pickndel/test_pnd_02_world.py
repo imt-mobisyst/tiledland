@@ -33,7 +33,7 @@ refMatrix= [
 def test_pnd_world():
     model= pnd.World( "Cool" )
     assert model.name() == "Cool"
-    model.initializeGrid( refMatrix, 0.9, 0.1 )
+    model.initGrid( refMatrix, 0.9, 0.1 )
     pablo= tll.createArtistPNG("shot-test.png", 800, 600)
     pablo.fitBox( model.box(), 10 )
 
@@ -62,7 +62,7 @@ def test_pnd_world():
 def test_pnd_graph():
     # Game MoveIt:
     model= pnd.World()
-    model.initializeGrid( refMatrix, 0.9, 0.1 )
+    model.initGrid( refMatrix, 0.9, 0.1 )
 
     print( f">>> {model.neighbours(11)}" )
 
@@ -82,7 +82,7 @@ def test_pnd_graph():
 def test_pnd_withCarrier():
     # Game MoveIt:
     model= pnd.World( numberOfPlayers=2 )
-    model.initializeGrid( refMatrix, 0.9, 0.1 )
+    model.initGrid( refMatrix, 0.9, 0.1 )
     
     assert str(model.popAgentOn(1, 1)) == 'Carrier-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉ |0, 0|'
     assert str(model.popAgentOn(25, 1)) == 'Carrier-1.2 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
@@ -138,7 +138,7 @@ def test_pnd_withCarrier():
 def test_long_pnd_emcomber():
     # Game MoveIt:
     model= pnd.World( numberOfPlayers=2 )
-    model.initializeGrid( refMatrix, 0.9, 0.1 )
+    model.initGrid( refMatrix, 0.9, 0.1 )
 
     for i in range(1, 49) :
         assert model.encumber(i) == 0.0
@@ -149,7 +149,7 @@ def test_long_pnd_emcomber():
         [ 25,  20,  32  ],
         [ 0.6, 0.5, 0.4 ]
     ]
-    model.initializeGrid( refMatrix, 0.9, 0.1, encumber )
+    model.initGrid( refMatrix, 0.9, 0.1, encumber )
 
     for i in range(1, 49) :
         if i not in encumber[0] :

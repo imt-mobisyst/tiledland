@@ -3,12 +3,25 @@ import math
 class Point():
     # Initialization Destruction:
     def __init__( self, x= 0.0, y=0.0 ):
+        self.init(x, y)
+
+    def init(self, x, y):
         self._x= float(x)
         self._y= float(y)
+        return self
 
-    def fromPoints(self, p1, p2):
+    def initAs(self, p):
+        self._x= p._x
+        self._y= p._y
+        return self
+    
+    def initLimits(self, p1, p2):
         self._x= p2._x - p1._x
         self._y= p2._y - p1._y
+        return self
+    
+    def initTuple(self, t):
+        self._x, self._y= t
         return self
     
     # Accessors
@@ -18,7 +31,7 @@ class Point():
     def y(self):
         return self._y
     
-    # Transform :
+    # Polymorphing :
     def asTuple(self): 
         return (self._x, self._y)
     
@@ -127,6 +140,25 @@ class Point():
             return -a
         return 2*math.pi-a
     
+    # Transformation :
+    def negative(self):
+        self._x= -self._x
+        self._y= -self._y
+        return self
+
+    def translate(self, vector):
+        self._x+= vector.x()
+        self._y+= vector.y()
+        return self
+
+    def rotate(self, angle):
+        x, y= self._x, self._y
+        angleCos = math.cos(angle)
+        angleSin = math.sin(angle)
+        self._x= angleCos*x - angleSin*y
+        self._y= angleSin*x + angleCos*y
+        return self
+
     # Collision
     def isColliding(self, point, distance=0.001):
         between= point - self

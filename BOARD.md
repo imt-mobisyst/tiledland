@@ -10,6 +10,7 @@
 - [ ] New Structure: core (Entities, Tiles Agents, and Map), geometry and artist
 - [x] HackaGame (DataTree) compatible
 
+
 ## Simple, but strong plan geometry
 
 - [x] Convex obj. min/max radius, and collision
@@ -21,6 +22,7 @@
 - [ ] Map: Generation from Voroi, gabriel, ....
 - [ ] Tile: Search for text zones (header, body, footer)
 - [ ] Based on an appropriation of BOX2D c-library...
+- [ ] Georeferenced solution (import GIS Data)
 
 
 ## Map, Tiles and Agents :
@@ -94,7 +96,7 @@ Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 - [ ] Push tiled-land on pypip
 - [ ] Specific pages.
 - [ ] Write doc contents...
-
+- [ ] labelise test cases : `fast` and `long`
 
 **-- Board V2.0 --**
 

@@ -78,7 +78,7 @@ class MyApp(App):
 start(MyApp)
 ```
 
-The `main` method initialize the graphical user intercafe.
+The `main` method init the graphical user intercafe.
 It defines the initial windows components and how there are structured the one with the others. 
 This method is also used to intialize event handlers associated to the instanciate component.
 

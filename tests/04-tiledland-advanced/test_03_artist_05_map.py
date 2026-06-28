@@ -27,7 +27,7 @@ def test_artist_tile():
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-tile-01.svg" ):
         assert( lineShot == lineRef )
     
-    tile= tll.Tile( 3, Point(1.3, 0.9), Convex().initializeSquare(4.0) )
+    tile= tll.Tile( 3, Point(1.3, 0.9), Convex().initSquare(4.0) )
     tile.draw( pablo )
     pablo.flip()
 
@@ -35,7 +35,7 @@ def test_artist_tile():
         assert( lineShot == lineRef )
 
     tile= tll.Tile( 1, matter=1 ).setPosition( Point(0.4, 0.2) )
-    tile.shape().initializeRegular( 2.0, 6 )
+    tile.shape().initRegular( 2.0, 6 )
     tile.draw( pablo )
     pablo.flip()
 
@@ -62,7 +62,7 @@ def test_artist_map_tiles():
     for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-00.svg" ):
         assert( lineShot == lineRef )
 
-    map= tll.Map().initializeLine(3)
+    map= tll.Map().initLine(3)
 
     assert map.epsilon() == 0.01
 
@@ -84,7 +84,7 @@ def test_artist_map_tiles():
 def test_artist_map_net():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
     map= tll.Map()
-    map.initializeGrid(
+    map.initGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [0, -1, 0, 0, 0, -1, 0, 0],
         [0, 0, 0, -1, 0, 1, 1, 0],
@@ -124,7 +124,7 @@ def test_artist_map_net():
 def test_artist_gridmap_piece():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
     map= tll.Map()
-    map.initializeGrid(
+    map.initGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [5, -1, 0, 2, 0, -1, 5, 0],
         [0, 0, 0, -1, 0, 1, 1, 0],
@@ -143,7 +143,7 @@ def test_artist_gridmap_piece():
     def popAgent( iRobot, iMatter, iTile ):
         bob= tll.Agent( iRobot, 0,
             Point(0.1, 0.1)+map.tile(iTile).position(),
-            tll.Convex().initializeRegular(0.7, 6),
+            tll.Convex().initRegular(0.7, 6),
         )
         bob.setMatter(iMatter)
         map.tile(iTile).append( bob )
@@ -211,7 +211,7 @@ def test_artist_gridmap_piece():
 def test_artist_hexamap_piece():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
     map= tll.Map()
-    map.initializeHexa(
+    map.initHexa(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [5, -1, 0, 2, 0, -1, 5, 0],
         [0, 0, 0, -1, 0, 1, 1, 0],
@@ -230,7 +230,7 @@ def test_artist_hexamap_piece():
     def popAgent( iRobot, iTile, iMatter ):
         bod= tll.Agent( iRobot, 0,
             Point(0.1, 0.1)+map.tile(iTile).position(),
-            tll.Convex().initializeRegular(0.7, 6),
+            tll.Convex().initRegular(0.7, 6),
         )
         bod.setMatter(iMatter)
         map.tile(iTile).append( bod )

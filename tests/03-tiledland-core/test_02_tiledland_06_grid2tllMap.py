@@ -9,7 +9,7 @@ from src import tiledland as tll
 
 def test_g2s_makeRectangles_small():
     grid= tll.Grid()
-    grid.initialize([
+    grid.init([
         [1, 1, 0,  0, 0],
         [1, 1, 0,  0, 0],
         [0, 0, 0,  0, 0],
@@ -118,7 +118,7 @@ Map: [0.06]
 
 def test_g2s_makeRectangles_medium():
     grid= tll.Grid()
-    grid.initialize([
+    grid.init([
         [1, 1, 1,  0, 0, 0,  0, 0, 0],
         [1, 1, 0,  0, 0, 0,  0, 0, 0],
         [1, 0, 0,  0, 0, 0,  0, 0, 0],
@@ -198,7 +198,7 @@ Map : : 0.04
 def test_g2s_makeRectangles_medium_limit():
     map= tll.Map()
     grid= tll.Grid()
-    grid.initialize([
+    grid.init([
         [1, 1, 1,  0, 0, 0,  0, 0, 0],
         [1, 1, 0,  0, 0, 0,  0, 0, 0],
         [1, 0, 0,  0, 0, 0,  0, 0, 0],

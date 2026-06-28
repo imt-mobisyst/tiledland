@@ -21,7 +21,7 @@ def test_support_draw():
     sup.save( shotImg )
 
     shotFile= open( shotImg, mode='rb' ).read()
-    refsFile= open( "tests/refs/11.03-cairo-draw-00.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/02.03-supPng-draw-00.png", mode='rb' ).read()
     assert( shotFile == refsFile )
     
     sup.fillPolygon(
@@ -34,7 +34,7 @@ def test_support_draw():
     sup.save(shotImg)
 
     shotFile= open( shotImg, mode='rb' ).read()
-    refsFile= open( "tests/refs/11.03-cairo-draw-01.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/02.03-supPng-draw-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
     sup.traceCircle( 50, 50, 32, 0x25e3f2, 3 )
@@ -44,7 +44,7 @@ def test_support_draw():
     sup.save(shotImg)
 
     shotFile= open( shotImg, mode='rb' ).read()
-    refsFile= open( "tests/refs/11.03-cairo-draw-02.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/02.03-supPng-draw-02.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
     sup.fillPolygon( [30, 140, 70], [130, 130, 200], 0x25e302 )
@@ -54,7 +54,7 @@ def test_support_draw():
     sup.save(shotImg)
 
     shotFile= open( shotImg, mode='rb' ).read()
-    refsFile= open( "tests/refs/11.03-cairo-draw-03.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/02.03-supPng-draw-03.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
 def test_support_write():
@@ -70,7 +70,7 @@ def test_support_write():
     suppo.save(shotImg)
 
     shotFile= open( shotImg, mode='rb' ).read()
-    refsFile= open( "tests/refs/11.03-cairo-write-01.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/02.03-supPng-write-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
 
@@ -83,7 +83,7 @@ def test_artist_flip():
     assert( pablo.support().filePath() == shotImg )
 
     shotFile= open( shotImg, mode='rb' ).read()
-    refsFile= open( "tests/refs/11.03-cairo-flip-00.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/02.03-supPng-flip-00.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
     pablo.drawFrameGrid()
@@ -92,13 +92,13 @@ def test_artist_flip():
     pablo.flip()
     
     shotFile= open( shotImg, mode='rb' ).read()
-    refsFile= open( "tests/refs/11.03-cairo-flip-01.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/02.03-supPng-flip-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
     pablo.flip()
 
     shotFile= open( shotImg, mode='rb' ).read()
-    refsFile= open( "tests/refs/11.03-cairo-flip-02.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/02.03-supPng-flip-02.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
     pablo.drawPolygon( [-1.26, -2.6, -0.4, 3.4], [-2.3, 0.3, 6, -1.7] )
@@ -109,5 +109,5 @@ def test_artist_flip():
     pablo.flip()
 
     shotFile= open( shotImg, mode='rb' ).read()
-    refsFile= open( "tests/refs/11.03-cairo-flip-03.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/02.03-supPng-flip-03.png", mode='rb' ).read()
     assert( shotFile == refsFile )

@@ -10,7 +10,7 @@ from src.tiledland.geometry import Point, Convex
 # ------------------------------------------------------------------------ #
 
 def test_Tile_init():
-    tile= Tile( shape=Convex().initializeSquare(1.0) )
+    tile= Tile( shape=Convex().initSquare(1.0) )
 
     assert tile.id() == 0
     assert tile.matter() == 0
@@ -19,7 +19,7 @@ def test_Tile_init():
     assert tile.adjacencies() == []
     assert tile.agents() == []
     
-    tile= Tile( 3, Point(10.3, 9.7), Convex().initializeSquare(42.0), 0 )
+    tile= Tile( 3, Point(10.3, 9.7), Convex().initSquare(42.0), 0 )
 
     assert tile.id() == 3
     assert tile.position().asTuple() == (10.3, 9.7)
@@ -28,7 +28,7 @@ def test_Tile_init():
     assert tile.agents() == []
 
     tile.setId(1).setMatter(8).setPosition( Point(1.0, 1.0) )
-    tile.shape().initializeSquare( 2.0 )
+    tile.shape().initSquare( 2.0 )
 
     assert tile.id() == 1
     assert tile.matter() == 8
@@ -40,7 +40,7 @@ def test_Tile_init():
 def test_Tile_regular():
     tile= Tile( 1 )
     tile.position().set(10.0, 10.0)
-    tile.shape().initializeRegular( 20.0, 6 )
+    tile.shape().initRegular( 20.0, 6 )
     assert tile.id() == 1
     assert tile.position().asTuple() == (10.0, 10.0)
     assert tile.body().size() == 6
@@ -141,7 +141,7 @@ def test_Tile_DataTreeCopy():
 
 
 def test_Tile_clockDirection():
-    tile= Tile( shape=Convex().initializeRegular( 0.2, 12 ) )
+    tile= Tile( shape=Convex().initRegular( 0.2, 12 ) )
 
     assert tile.clockDirection( Point(  0.0,  0.0 ) ) == 0
     assert tile.clockDirection( Point(  0.0,  1.0 ) ) == 12
@@ -156,7 +156,7 @@ def test_Tile_clockDirection():
     assert tile.clockDirection( Point( -2.0,  0.0 ) ) == 9
     
     p= Point( 1.2, -0.5 )
-    tile= Tile( position=p, shape=Convex().initializeRegular( 0.2, 12 ) )
+    tile= Tile( position=p, shape=Convex().initRegular( 0.2, 12 ) )
 
     assert tile.clockDirection( p ) == 0
     assert tile.clockDirection( p + Point(  0.0,  2.0 ) ) == 12

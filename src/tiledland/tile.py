@@ -8,7 +8,7 @@ class Tile(Agent):
     def __init__( self, identifier= 0, position= Point(0.0, 0.0), shape= None, matter=0):
         shape
         if shape is None :
-            shape= Convex().initializeSquare(1.0)
+            shape= Convex().initSquare(1.0)
         self._adjacencies= []
         self._agents= []
         super(Tile, self).__init__(identifier, 0, position, shape)

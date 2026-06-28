@@ -6,20 +6,24 @@ class Convex():
 
     # Constructor/Destructor:
     def __init__( self, aListOfPoints= [] ):
-        self.initialize( aListOfPoints )
-    
+        self.init( aListOfPoints )
+
     def copy(self, position= Point(0.0, 0.0) ):
         cpy= type(self)()
         cpy._points= [ position + p.copy() for p in self.points() ]
         return cpy
     
     # Initialization:
-    def initialize(self, aListOfPoints):
+    def init(self, aListOfPoints):
         self._points= aListOfPoints
         self.makeConvex()
         return self
+
+    def initAs(self, aConvex):
+        self._points= [ p.copy() for p in aConvex.points() ]
+        return self
     
-    def initializeSquare(self, size):
+    def initSquare(self, size):
         demi= size*0.5
         self._points= [
             Point( -demi, -demi ),
@@ -29,7 +33,7 @@ class Convex():
         ]
         return self
 
-    def initializeRegular(self, size, numberOfVertex= 6):
+    def initRegular(self, size, numberOfVertex= 6):
         radius= size*0.5
         self._points= []
         delta= math.pi/(numberOfVertex/2)
@@ -42,6 +46,19 @@ class Convex():
         self._points= self.center().sortRadial( self._points )
         return self
     
+    def initArrowTip(self, size, theta= 0.0):
+        radius= size*0.5
+        pi5o6= 5 * math.pi / 6.0
+        xpi5o6, ypi5o6= math.cos(pi5o6)*radius, math.sin(pi5o6)*radius
+        self._points= [
+            Point( xpi5o6, -ypi5o6 ),
+            Point( xpi5o6, ypi5o6 ),
+            Point( 0.0, radius ),
+            Point( radius, 0.0 ),
+            Point( 0.0, -radius )
+        ]
+        return self
+
     def forcePoints(self, points):
         self._points= points
         return self
@@ -74,14 +91,14 @@ class Convex():
         return [p.x()+dx for p in self._points], [p.y()+dy for p in self._points]
     
     def fromLists(self, listX, listY):
-        self.initialize( [ Point(x, y) for x, y in zip(listX, listY) ] )
+        self.init( [ Point(x, y) for x, y in zip(listX, listY) ] )
         return self
 
     def asZipped(self):
         return [ (p.x(), p.y()) for p in self._points ]
 
     def fromZipped( self, zipedList ):
-        self.initialize( [ Point(x, y) for x, y in zipedList ] )
+        self.init( [ Point(x, y) for x, y in zipedList ] )
         return self
 
     # Construction:
@@ -93,8 +110,23 @@ class Convex():
     def setOnCenter(self):
         position= self.center()
         for p in self._points :
-            p.set( p._x-position._x, p._y-position._y,  )
+            p.set( p._x-position._x, p._y-position._y )
         return position
+
+    # Transformation: 
+    def translate(self, vector2):
+        for p in self._points :
+            p.translate(vector2)
+        return self
+    
+    def rotate(self, angle):
+        angleCos = math.cos(angle)
+        angleSin = math.sin(angle)
+        for p in self._points :
+            x, y= p._x, p._y
+            p._x= angleCos*x - angleSin*y
+            p._y= angleSin*x + angleCos*y
+        return self
 
     # Convex
     def makeConvex(self):
@@ -256,18 +288,7 @@ class Convex():
                 i1= i
                 i= i2
         return removed
-
-    # Artist drawing:
-    def draw( self, artist, brushId=0, px=0, py=0 ):
-        listxs, listys= self.asLists(px, py)
-        artist.drawPolygon( listxs, listys, artist.colorPalette( brushId ) )
-        return self
     
-    def fill( self, artist, brushId=0, px=0, py=0 ):
-        listxs, listys= self.asLists(px, py)
-        artist.fillPolygon( listxs, listys, artist.colorPalette( brushId ) )
-        return self
-
     # to str
     def str(self, typeName="Convex"): 
         # Myself :

@@ -1,10 +1,9 @@
 from .color import color, colorRatio, colorRatio, rgbColor, percentColor, webColor, colorFromWeb
 from .support import AbsSupport, Support, SupportSVG
-from ..map import Map 
 
 def drawMap(map, filePath= "shot-tiled.png", width= 1600, height= 1200):
     from .supportCairo import SupportPNG
-    pablo= Artist().initialize( filePath, width, height, SupportPNG )
+    pablo= Artist().init( filePath, width, height, SupportPNG )
     pablo.fit(map)
     map.draw(pablo)
     pablo.flip()
@@ -14,11 +13,11 @@ def drawConvexes(convexes, filePath= "shot-tiled.png", width= 1600, height= 1200
     drawMap(map,filePath, width, height) 
 
 def createArtistSVG(filePath, width, height):
-    return Artist().initialize(filePath, width, height, SupportSVG)
+    return Artist().init(filePath, width, height, SupportSVG)
 
 def createArtistPNG(filePath, width, height):
     from .supportCairo import SupportPNG
-    return Artist().initialize(filePath, width, height, SupportPNG)
+    return Artist().init(filePath, width, height, SupportPNG)
 
 # Artist:
 class Brush():
@@ -27,6 +26,32 @@ class Brush():
         self.stroke= stroke
         self.width= width
 
+class palette :
+    background= [
+        Brush(0xffcd80, 0x603800, 4), # 0-Free
+        Brush(0xff6644, 0x991100, 4), # 1-Red
+        Brush(0x70f050, 0x20770a, 4), # 2-Green
+        Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
+        Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
+        Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
+        Brush(0x66ddee, 0x117799, 4), # 6-Cian
+        Brush(0xffffff, 0xbbbbbb, 4), # 7-White
+        Brush(0x888888, 0x555555, 4), # 8-Grey
+        Brush(0x444444, 0x000000, 4)  # 9-Black
+    ]
+    foreground= [
+        Brush(0x603800, 0xffcd80, 4), # 10-Background
+        Brush(0x991100, 0xff6644, 4), # 11-Red
+        Brush(0x20770a, 0x70f050, 4), # 12-Green
+        Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
+        Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
+        Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
+        Brush(0x117799, 0x66ddee, 4), # 16-Cian
+        Brush(0xbbbbbb, 0xffffff, 4), # 17-White
+        Brush(0x555555, 0x888888, 4), # 18-Grey
+        Brush(0x000000, 0x444444, 4)  # 19-Black
+    ]
+
 class Artist():
     def __init__(self):
         #  Initialize support:
@@ -34,29 +59,6 @@ class Artist():
 
         # Initialize brush :
         self._background= 0xb86e00
-        self._colors= [
-            Brush(0xffcd80, 0x603800, 4), # 0-Free
-            Brush(0xff6644, 0x991100, 4), # 1-Red
-            Brush(0x70f050, 0x20770a, 4), # 2-Green
-            Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
-            Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
-            Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
-            Brush(0x66ddee, 0x117799, 4), # 6-Cian
-            Brush(0xffffff, 0xbbbbbb, 4), # 7-White
-            Brush(0x888888, 0x555555, 4), # 8-Grey
-            Brush(0x444444, 0x000000, 4), # 9-Black
-
-            Brush(0x603800, 0xffcd80, 4), # 10-Background
-            Brush(0x991100, 0xff6644, 4), # 11-Red
-            Brush(0x20770a, 0x70f050, 4), # 12-Green
-            Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
-            Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
-            Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
-            Brush(0x117799, 0x66ddee, 4), # 16-Cian
-            Brush(0xbbbbbb, 0xffffff, 4), # 17-White
-            Brush(0x555555, 0x888888, 4), # 18-Grey
-            Brush(0x000000, 0x444444, 4)  # 19-Black
-        ]
         self._fontSize= 16
 
         # Initialize Frame :
@@ -66,7 +68,7 @@ class Artist():
         self.flip()
 
     # Construction:
-    def initialize(self, filePath, width, height, SupportClass= SupportSVG):
+    def init(self, filePath, width, height, SupportClass= SupportSVG):
         self._support= SupportClass( width, height, filePath )
         self.flip()
         return self
@@ -97,9 +99,6 @@ class Artist():
         
     def scale( self ):
         return (self._scale)
-    
-    def colorPalette( self, idColor ):
-        return self._colors[ idColor%len(self._colors) ]
 
     # Setters:
     def setCamera( self, x, y ):
@@ -200,6 +199,17 @@ class Artist():
         )
         return self
 
+    # tiledland geometry:
+    def drawConvex( self, shape, brush, px=0.0, py=0.0 ):
+        listxs, listys= shape.asLists(px, py)
+        self.drawPolygon( listxs, listys, brush )
+        return self
+    
+    def fillConvex( self, shape, brushId, px=0.0, py=0.0 ):
+        listxs, listys= shape.asLists(px, py)
+        self.fillPolygon( listxs, listys, brush )
+        return self
+
     # Writting primitives:
     def write( self, x, y, text, brush= Brush() ):
         self._support.write(
@@ -224,7 +234,7 @@ class Artist():
         height= self._support.height()
 
         if not color :
-            color= self._colors[0].stroke
+            color= palette.background[0].stroke
         
         # Vertical
         for i in range( (int)(width/pixStep)+1 ) :

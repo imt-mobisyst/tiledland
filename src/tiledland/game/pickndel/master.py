@@ -27,7 +27,7 @@ class GameEngine( hacka.AbsGame ) :
         self._scores= [ 0.0 for i in range(self._numberOfPlayers+1) ]
     
     # Game interface :
-    def initialize(self):
+    def init(self):
         self._msg= [ hacka.DataTree("Hello player", [i]) for i in range(self._nbPlayer+1) ]
         self._tic= 0
         return hacka.DataTree("EchoGame", [self._nbPlayer, self._nbTics])
@@ -86,7 +86,7 @@ class GameEngine( hacka.AbsGame ) :
         return self._tic
 
     # Game interface :
-    def initialize(self, mission=None):
+    def init(self, mission=None):
         self._tic= self._initialTic
         self._scores= [ 0.0 for i in range( self.numberOfPlayers()+1 ) ]
         self._model.clearMissions()
@@ -136,7 +136,7 @@ class GameEngine( hacka.AbsGame ) :
                     self._model.move( mobile.tile(), mobile.move() )
                     self._scores[iPlayer]+= -1
         # Clean moves:
-        self._model.initializeMoves()
+        self._model.initMoves()
         self._tic-= 1
         return collision
     
@@ -181,7 +181,7 @@ class GameEngine( hacka.AbsGame ) :
                     self._model.teleport( m[0], m[1] )
         
         # Clean moves:
-        self._model.initializeMoves()
+        self._model.initMoves()
         self._tic-= 1
         return collision
 

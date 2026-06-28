@@ -7,7 +7,7 @@ class MyApp(remi.App):
     def __init__(self, *args):
         # Create a new TiledMap as a grid:
         map= tll.Map()
-        map.initializeHexa(
+        map.initHexa(
             [[0, 0, 0, -1, 0, 0, 0, 0],              #  -1 : means no cell at this location
             [0, -1, 0, 0, 0, -1, 0, 0],              #  0 - n : give the group identifier of the cell to create.
             [0, 0, 0, -1, 0, 0, 0, 0],               #  
@@ -17,7 +17,7 @@ class MyApp(remi.App):
 
         # Add some objects on the map:
         def newAgent( identifier, group ):
-            ag= tll.Agent( identifier, group, shape=tll.Convex().initializeRegular(0.7, 6) )
+            ag= tll.Agent( identifier, group, shape=tll.Convex().initRegular(0.7, 6) )
             ag.setMatter(12)
             return ag
 

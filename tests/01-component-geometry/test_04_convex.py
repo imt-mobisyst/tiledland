@@ -8,26 +8,26 @@ from src.tiledland.geometry import Point, Line, Convex, Box
 #         T E S T   H A C K A G A M E S - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
-def test_Convex_init():
+def test_fast_Convex_init():
     convex= Convex()
 
     print( convex.asZipped() )
     assert convex.asZipped() == []
     
-def test_Convex_initSquare():
-    convex= Convex().initializeSquare(1.0)
+def test_fast_Convex_initSquare():
+    convex= Convex().initSquare(1.0)
 
     print( convex.asZipped() )
     assert convex.asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
     
-    convex= Convex().initializeSquare( 42.0 )
+    convex= Convex().initSquare( 42.0 )
     assert convex.asZipped() == [(-21.0, -21.0), (-21.0, 21.0), (21.0, 21.0), (21.0, -21.0)]
 
-    convex.initializeSquare( 2.0 )
+    convex.initSquare( 2.0 )
     assert convex.asZipped() == [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
   
-def test_Convex_initRegular():
-    convex= Convex().initializeRegular( 20.0, 6 )
+def test_fast_Convex_initRegular():
+    convex= Convex().initRegular( 20.0, 6 )
     assert len(convex.asZipped()) == 6
     env= [ ( round(x, 2), round(y, 2) ) for x, y in convex.asZipped() ]
     print( env )
@@ -39,12 +39,12 @@ def test_Convex_initRegular():
     assert box.asList() == [-8.66, -10.0, 8.66, 10.0]
     assert box.asZip() == [ (-8.66, -10.0), (8.66, 10.0) ]
 
-    convex=  Convex().initializeRegular(0.7, 6)
+    convex=  Convex().initRegular(0.7, 6)
     env= [ ( round(x, 2), round(y, 2) ) for x, y in convex.asZipped() ]
     print( env )
     assert env == [(-0.3, -0.18), (-0.3, 0.17), (-0.0, 0.35), (0.3, 0.18), (0.3, -0.17), (0.0, -0.35)]
     
-def test_Convex_forcePoint():
+def test_fast_Convex_forcePoint():
     convex= Convex().forcePoints([
         Point(-0.4, 0.6), Point(0.2, 0.8), Point(0.6, -0.6), Point(-0.5, -0.5)
     ])
@@ -52,16 +52,16 @@ def test_Convex_forcePoint():
     print( convex.asZipped() )
     assert convex.asZipped() == [(-0.4, 0.6), (0.2, 0.8), (0.6, -0.6), (-0.5, -0.5)]
 
-def test_Convex_str():
-    convex= Convex().initializeSquare(10.0)
+def test_fast_Convex_str():
+    convex= Convex().initSquare(10.0)
     print(f">>> {convex}")
     assert str(convex) == "Convex 4[(-5.0, -5.0), (5.0, 5.0)]"
-    convex.initializeRegular( 20.0, 6 )
+    convex.initRegular( 20.0, 6 )
     print(f">>> {convex}")
     assert str(convex) == "Convex 6[(-8.66, -10.0), (8.66, 10.0)]"
 
-def test_Convex_hacka():
-    convex= Convex().initializeSquare( 10.0 )
+def test_fast_Convex_hacka():
+    convex= Convex().initSquare( 10.0 )
     tree= convex.asDataTree()
 
     assert tree.label() == "Convex"
@@ -75,16 +75,16 @@ def test_Convex_hacka():
     convexBis.fromDataTree( convex.asDataTree() )
     assert convexBis.asZipped() == [(-5.0, -5.0), (-5.0, 5.0), (5.0, 5.0), (5.0, -5.0)]
 
-def test_Convex_DataTreeCopy():
-    convex= Convex().initializeSquare(0.9)
+def test_fast_Convex_DataTreeCopy():
+    convex= Convex().initSquare(0.9)
     assert convex.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
     
     convexBis= convex.copy()
     assert convexBis.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
 
-def test_Convex_convex():
+def test_fast_Convex_convex():
     print( f"Go convex ..." )
-    convex= Convex().initializeSquare(0.9)
+    convex= Convex().initSquare(0.9)
     assert convex.asZipped() == [(-0.45, -0.45), (-0.45, 0.45), (0.45, 0.45), (0.45, -0.45)]
 
     assert not (Point(0.45, 0.45)-Point(-0.45, 0.45)).isCounterClockwise(Point(-0.45, -0.45)-Point(-0.45, 0.45))
@@ -109,7 +109,7 @@ def test_Convex_convex():
     assert convex.asZipped() == [(1.0, 1.0), (1.5, 4.0), (4.5, 4.5), (6.0, 0.5)]
     assert removed == [(2.5, 2.0), (4.5, 3.0)]
 
-def test_Convex_fromCoord():
+def test_fast_Convex_fromCoord():
     convex= Convex().fromZipped([(-0.4, 0.6), (0.2, 0.8), (0.6, -0.6), (-0.5, -0.5)])
     
     print( convex.asLists() )
@@ -122,7 +122,7 @@ def test_Convex_fromCoord():
     print( convex.asZipped() )
     assert convex.asZipped() == [(-0.5, -0.5), (-0.4, 0.6), (0.2, 0.8), (0.6, -0.6)]
 
-def test_convex_distance():
+def test_fast_convex_distance():
     convex= Convex([
         Point(5.0, 1.0),
         Point(5.0, 4.0),
@@ -190,7 +190,7 @@ def test_convex_distance():
         ), 3 ) == 0.664
     
     
-def test_box_colision():
+def test_fast_box_colision():
     b= Box( [Point(3, 0.5), Point(7, 3.5)] )
 
     assert not b.isColliding( Box([Point(1, 1.5), Point(2, 5)]) )
@@ -201,7 +201,7 @@ def test_box_colision():
     assert not b.isIncluding( Box([Point(1.5, 1), Point(5, 4.5)]) )
     assert b.isIncluding( Box([Point(3.5, 1.0), Point(4.5, 2)]) )
 
-def test_convex_inclusion():
+def test_fast_convex_inclusion():
     convex= Convex([
         Point(1.0, 1.0),
         Point(6.0, 11.0),
@@ -226,7 +226,7 @@ def test_convex_inclusion():
     assert not convex.isIncludingLine(Line( Point(2.0, 3.0), Point(1.0, 1.0) ))
     assert convex.isIncludingLine(Line( Point(1.0, 1.0), Point(4.0, 2.0) ))
 
-def test_convex_colision():
+def test_fast_convex_colision():
     convex= Convex([
         Point(1.0, 1.0),
         Point(5.5, 5.0),
@@ -257,7 +257,7 @@ def test_convex_colision():
         Point(1.0, 1.0), Point(5.5, 5.0), Point(6.0, 0.5)
     ]) )
 
-def test_convex_mergeFull():
+def test_fast_convex_mergeFull():
     convex= Convex([
         Point(1.0, 1.0),
         Point(5.5, 5.0),
@@ -280,7 +280,7 @@ def test_convex_mergeFull():
     ]
     assert removed == []
 
-def test_convex_mergeFull():
+def test_fast_convex_mergeFull():
     convex= Convex([
         Point(1.0, 1.0),
         Point(5.5, 5.0),
@@ -303,7 +303,7 @@ def test_convex_mergeFull():
     ]
     assert removed == []
 
-def test_convex_merge2():
+def test_fast_convex_merge2():
     convex= Convex([
         Point(1.0, 1.0),
         Point(5.5, 5.0),
@@ -326,7 +326,7 @@ def test_convex_merge2():
     ]
     assert [(p.x(), p.y()) for p in removed] == [(6.5, 3.0)]
 
-def test_convex_mergeFull():
+def test_fast_convex_mergeFull():
     convex= Convex([
         Point(1.0, 1.0),
         Point(5.5, 5.0),
@@ -349,7 +349,7 @@ def test_convex_mergeFull():
     ]
     assert removed == []
 
-def test_convex_merge2():
+def test_fast_convex_merge2():
     convex= Convex([
         Point(1.0, 1.0),
         Point(5.5, 5.0),
@@ -372,7 +372,7 @@ def test_convex_merge2():
     ]
     assert [(p.x(), p.y()) for p in removed] == [(4.5, 2.5)]
 
-def test_convex_mergeInside():
+def test_fast_convex_mergeInside():
     convex= Convex([
         Point(1.0, 1.0),
         Point(5.5, 5.0),
@@ -395,7 +395,7 @@ def test_convex_mergeInside():
     ]
     assert [(p.x(), p.y()) for p in removed] == [(4.5, 2.5)]
 
-def test_convex_mergeInsideBis():
+def test_fast_convex_mergeInsideBis():
     convex= Convex([
         Point(1.0, 1.0),
         Point(5.5, 5.0),
@@ -423,7 +423,7 @@ def test_convex_mergeInsideBis():
     ]
 
 
-def test_convex_mergeOnlyOne():
+def test_fast_convex_mergeOnlyOne():
     convex= Convex([
         Point(1.0, 1.0),
         Point(5.5, 5.0),
@@ -448,7 +448,7 @@ def test_convex_mergeOnlyOne():
             == [(6.0, 4.5), (6.5, 3.0)] )
 
 
-def test_convex_mergeNoOne():
+def test_fast_convex_mergeNoOne():
     convex= Convex([
         Point(1.0, 1.0),
         Point(5.5, 5.0),
@@ -474,7 +474,7 @@ def test_convex_mergeNoOne():
         dist= convbis.distancePoint(p)
         assert round(dist, 3) == ref
 
-def test_Convex_merge() :
+def test_fast_Convex_merge() :
 
     conv1= Convex([
         Point(5, 0.5), Point(5, 3),

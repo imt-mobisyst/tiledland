@@ -4,14 +4,14 @@ import src.tiledland as tll
 def test_Convex_pod():
     shape= tll.Convex(8, 10.0)
     
-    pod= hk.Pod().initializeFrom( shape )
+    pod= hk.Pod().initFrom( shape )
     print(f">>> {pod}")
     
     assert str(pod) == "Convex: [8] [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]"
 
-    shapeBis= tll.Convex().initializeFrom(pod)
+    shapeBis= tll.Convex().initFrom(pod)
     
-    podBis= hk.Pod().initializeFrom( shapeBis )
+    podBis= hk.Pod().initFrom( shapeBis )
     print(f">>> {podBis}")
 
     assert str(podBis) == "Convex: [8] [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]"
@@ -44,7 +44,7 @@ def test_Tile_load():
     assert tileBis.asDataTree() == tile.asDataTree()
     
 def test_Tile_load():
-    shape= Convex(8).initializeRegular( 12.0, 7 )
+    shape= Convex(8).initRegular( 12.0, 7 )
     
     shapeBis= Convex().load( shape.dump() )
     print( shape )
@@ -64,7 +64,7 @@ def test_Tile_agents():
     assert tile.agents() == []
 
 def test_Map_pod():
-    map= Map().initializeLine(4)
+    map= Map().initLine(4)
     map.connectAll( [ [1, 2], [1, 3], [1, 4], [2, 1], [2, 3], [2, 4],
                        [3, 1], [3, 2], [4, 1], [4, 2]
                         ] )

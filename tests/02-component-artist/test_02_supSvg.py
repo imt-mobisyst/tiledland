@@ -87,7 +87,7 @@ def test_artist_load():
     assert( type( pablo ) ) == tll.Artist
     assert( type( pablo.support() ) ) == tll.artist.support.Support
 
-    pablo.initialize("shot-test.svg", 800, 600) 
+    pablo.init("shot-test.svg", 800, 600) 
 
     assert( type( pablo.support() ) ) == tll.artist.support.SupportSVG
 
@@ -132,7 +132,7 @@ def test_artist_flip():
     assert( pablo.support().filePath() == shotImg )
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/11.02-svg-flip-00.svg" ) 
+    refsFile= open( "tests/refs/02.02-supSvg-flip-00.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -142,14 +142,14 @@ def test_artist_flip():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/11.02-svg-flip-01.svg" ) 
+    refsFile= open( "tests/refs/02.02-supSvg-flip-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/11.02-svg-flip-02.svg" ) 
+    refsFile= open( "tests/refs/02.02-supSvg-flip-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -161,6 +161,6 @@ def test_artist_flip():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/11.02-svg-flip-03.svg" ) 
+    refsFile= open( "tests/refs/02.02-supSvg-flip-03.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )

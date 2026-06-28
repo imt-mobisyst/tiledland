@@ -12,15 +12,15 @@ class Grid():
     def __init__(self, values= [[0]], bottomleft= Point(0.0, 0.0), resolution=0.1):
         self._bottomleft= bottomleft
         self._resolution= resolution
-        self.initialize(values)
+        self.init(values)
 
-    def initialize(self, aGrid):
+    def init(self, aGrid):
         self._grid= aGrid
         self._height= len(self._grid)
         self._width= len(self._grid[0])
         return self
     
-    def initializeTransform(self, grid, transform, position= Point(0.0, 0.0), resolution=0.5):
+    def initTransform(self, grid, transform, position= Point(0.0, 0.0), resolution=0.5):
         self._bottomleft= position
         self._resolution= resolution
 

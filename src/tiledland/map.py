@@ -17,7 +17,7 @@ class Map(Entity):
     
     def __init__(self, shapes= [], epsilon= 0.01):
         super().__init__()
-        self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Convex().initializeRegular(0.8, 5) ).setMatter(1)
+        self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Convex().initRegular(0.8, 5) ).setMatter(1)
         self.clear()
         for s in shapes :
             self.createTile( s )
@@ -170,9 +170,9 @@ class Map(Entity):
         return nb1
     
     # Construction:
-    def initializeLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
+    def initLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
         dist= tileSize+separation
-        shape= Convex().initializeSquare(tileSize)
+        shape= Convex().initSquare(tileSize)
         self._tiles= [
             Tile( i+1, Point(dist*i, 0.0), shape.copy() )
             for i in range(size)
@@ -182,7 +182,7 @@ class Map(Entity):
             self.connectAllClose(1.1*separation)
         return self
     
-    def initializeGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
+    def initGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
         dist= tileSize+separation
         self._tiles= []
         
@@ -195,7 +195,7 @@ class Map(Entity):
                     tile= Tile(
                         iTile,
                         Point( dist*j, dist*(maxLine-i) ),
-                        Convex().initializeSquare(tileSize),
+                        Convex().initSquare(tileSize),
                         matrix[i][j]
                     )
                     self._tiles.append( tile )
@@ -206,7 +206,7 @@ class Map(Entity):
             self.connectAllClose(1.1*separation)
         return self
 
-    def initializeHexa( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
+    def initHexa( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
         cosPi06= math.cos(math.pi/6)
         dist= tileSize*cosPi06 + separation
         vdist= dist*cosPi06
@@ -224,7 +224,7 @@ class Map(Entity):
                     tile= Tile(
                         iTile,
                         Point( delta+dist*j, vdist*iLine ),
-                        Convex().initializeRegular(tileSize, 6),
+                        Convex().initRegular(tileSize, 6),
                         matrix[i][j]
                     )
                     self._tiles.append( tile )

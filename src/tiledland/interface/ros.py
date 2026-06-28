@@ -18,7 +18,7 @@ def transformOccupMap(grid, position, resolution) :
         0: Grid.STATE_FREE,
         100:Grid.STATE_OCCUPIED
     }
-    gridmap= Grid().initializeTransform( grid, transform, Point(x, y), resolution )
+    gridmap= Grid().initTransform( grid, transform, Point(x, y), resolution )
     return gridmap
 
 class GridMap :
@@ -30,7 +30,7 @@ class GridMap :
         self._occupied= 0.8
         self._free= 0.2
 
-    def initialize(self, grid, position= (0.0, 0.0), resolution=0.5):
+    def init(self, grid, position= (0.0, 0.0), resolution=0.5):
         self._position= position
         self._resolution= resolution
 

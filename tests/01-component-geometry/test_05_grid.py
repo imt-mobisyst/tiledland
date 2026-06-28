@@ -58,7 +58,7 @@ def test_grid_init2():
 def test_grid_boxing():
     grid= Grid()
     
-    grid.initialize([
+    grid.init([
         [0, 0, 0, 0],
         [1, 1, 0, 0],
         [0, 1, 0, 0]
@@ -66,35 +66,35 @@ def test_grid_boxing():
 
     assert grid.maxRectangle(1, 1, 10) == [1, 1, 1, 1]
 
-    grid.initialize([
+    grid.init([
         [1, 1, 1, 0],
         [1, 1, 1, 0],
         [0, 0, 1, 0]
     ])
     assert grid.maxRectangle(1, 1, 10) == [1, 1, 2, 1]
 
-    grid.initialize([
+    grid.init([
         [1, 1, 1, 0],
         [0, 0, 1, 0],
         [0, 0, 1, 0]
     ])
     assert grid.maxRectangle(1, 1, 10) == [1, 1, 2, 2]
 
-    grid.initialize([
+    grid.init([
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ])
     assert grid.maxRectangle(1, 1, 10) == [1, 1, 4, 3]
 
-    grid.initialize([
+    grid.init([
         [0, 0, 1, 0],
         [0, 0, 1, 0],
         [0, 0, 1, 0]
     ])
     assert grid.maxRectangle(1, 1, 10) == [1, 1, 2, 3]
 
-    grid.initialize([
+    grid.init([
         [0, 0, 1, 0],
         [0, 0, 1, 0],
         [0, 0, 1, 0]
@@ -103,7 +103,7 @@ def test_grid_boxing():
 
 def test_grid_search():
     grid= Grid()
-    grid.initialize([
+    grid.init([
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]
@@ -111,7 +111,7 @@ def test_grid_search():
     assert grid.searchLine() == (1, 1)
     assert grid.searchLine(1) == False
 
-    grid.initialize([
+    grid.init([
         [0, 0, 0, 3],
         [0, 0, 1, 0],
         [2, 2, 0, 0]
@@ -122,7 +122,7 @@ def test_grid_search():
 
 def test_grid_allrectangle():
     grid= Grid()
-    grid.initialize([
+    grid.init([
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]
@@ -141,7 +141,7 @@ def test_grid_allrectangle():
         [0, 0, 0, 0]
     ]
 
-    grid.initialize([
+    grid.init([
         [0, 0, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 0]
@@ -170,7 +170,7 @@ def test_grid_allrectangle():
         [0, 0, 0, 0]
     ]
 
-    grid.initialize([
+    grid.init([
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
@@ -199,7 +199,7 @@ def test_grid_allrectangle():
 
 def test_grid_str():
     grid= Grid()
-    grid.initialize([
+    grid.init([
         [3, 3, 3, 0, 0, 0, 0, 0, 0, 0],
         [3, 3, 3, 0, 0, 0, 0, 0, 0, 0],
         [3, 3, 0, 0, 0, 0, 0, 0, 1, 1],
