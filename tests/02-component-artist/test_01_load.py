@@ -13,12 +13,12 @@ def test_fast_load_artist():
     artist= tll.Artist()
     
 # Test firstAI launch
-def test_support_load():
+def test_fast_support_load():
     canvas= artist.AbsSupport()
     assert type( canvas ) == artist.AbsSupport
 
 # Test firstAI launch
-def test_support_color():
+def test_fast_support_color():
     assert artist.rgbColor( 0x56f4ee ) == (0x56, 0xf4, 0xee)
     assert artist.percentColor( 0x56f4ee ) == (0.3373, 0.9569, 0.9333)
     assert artist.webColor( 0x56f4ee ) == '#56f4ee'
@@ -34,7 +34,7 @@ def test_support_color():
     assert artist.colorRatio( 0x56f4ee, 1.1 ) == 0x56f4ee
 
 # Test firstAI launch
-def test_artist_load():
+def test_fast_artist_load():
     pablo= artist.Artist()
     assert type( pablo ) == artist.Artist
 

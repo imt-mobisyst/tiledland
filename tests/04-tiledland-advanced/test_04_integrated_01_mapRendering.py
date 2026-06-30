@@ -15,8 +15,8 @@ def draw(map, filePath= "shot-test.png"):
     pablo.drawFrameGrid()
     pablo.drawFrameAxes()
 
-    map.drawNetwork(pablo)
-    map.drawTiles(pablo)
+    map.renderNetworkOn(pablo)
+    map.renderTilesOn(pablo)
 
     pablo.flip()
 
@@ -44,7 +44,7 @@ def test_map_clockNeighboring():
     tileConvex= Convex().fromZipped(
         [(-1.0, 0.0), (0.0, 1.5), (1.0, 0.0), (0.0, -1.5) ]
     )
-    map.addTile( Tile( shape=tileConvex, matter= 1 ) )
+    map.addTile( Tile( shape=tileConvex, group= 1 ) )
 
     draw(map)
 
@@ -128,10 +128,10 @@ def test_Map_hacka():
                        [3, 1], [3, 2], [4, 1], [4, 2]
                         ] )
 
-    map.tile(1).position().set( 5.0, 3.0 )
-    map.tile(2).position().set( 5.0, 15.0 )
-    map.tile(3).position().set( 1.0, 9.0 )
-    map.tile(4).position().set( 9.0, 9.0 )
+    map.tile(1).setPosition( 5.0, 3.0 )
+    map.tile(2).setPosition( 5.0, 15.0 )
+    map.tile(3).setPosition( 1.0, 9.0 )
+    map.tile(4).setPosition( 9.0, 9.0 )
 
     print(f">>>\n{map}.")
     assert '\n'+ str(map) +'\n' == """

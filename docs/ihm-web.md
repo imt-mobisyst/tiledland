@@ -107,7 +107,7 @@ With _TiledLand_ _Artist_ and _Map_, code will looklike :
 frame = gui.Svg( width=400, height=300 )
 container.append(frame)
 
-map.draw( artist )
+map.renderOn( artist )
 textsvg= artist.content()
 frame.add_child( 'content', textsvg )
 artist.clear()

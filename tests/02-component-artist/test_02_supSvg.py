@@ -9,7 +9,7 @@ import src.tiledland as tll
 # ------------------------------------------------------------------------ #
 
 # Test firstAI launch
-def test_support_load():
+def test_fast_support_load():
     sup= tll.artist.support.SupportSVG()
     assert( type(sup) ) == tll.artist.support.SupportSVG
 
@@ -18,7 +18,7 @@ def test_support_load():
 </svg>""" )
 
 # Test firstAI launch
-def test_support_draw():
+def test_fast_support_draw():
     suppo= tll.artist.support.SupportSVG()
     
     assert( suppo.render() == """<svg width="800" height="600">
@@ -59,7 +59,7 @@ def test_support_draw():
     
     #suppo.save( "shot-test.svg" )
 
-def test_support_write():
+def test_fast_support_write():
     suppo= tll.artist.support.SupportSVG()
 
     suppo.fillCircle( 250, 150, 2, 0xffe3f2 )
@@ -81,7 +81,7 @@ def test_support_write():
 </svg>""" )
 
 
-def test_artist_load():
+def test_fast_artist_load():
     pablo= tll.Artist()
 
     assert( type( pablo ) ) == tll.Artist
@@ -125,7 +125,7 @@ def test_artist_load():
 </svg>""" )
 
 
-def test_artist_flip():
+def test_fast_artist_flip():
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
 

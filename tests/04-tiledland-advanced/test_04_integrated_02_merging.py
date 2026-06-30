@@ -23,7 +23,7 @@ def test_map_fromConvex():
     pablo.setCamera( 4.0, 3.0 )
 
     for shape in shapes :
-        shape.draw(pablo, 0)
+        shape.renderOn(pablo, 0)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -38,7 +38,7 @@ def test_map_fromConvex():
     map.createTile( shapes[0] )
     assert map.size() == 1
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -50,7 +50,7 @@ def test_map_fromConvex():
         map.createTile( s )
     assert map.size() == 5
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -60,7 +60,7 @@ def test_map_fromConvex():
 
     map.connectAllClose(0.5)
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -103,7 +103,7 @@ def test_map_mergeOne():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -116,7 +116,7 @@ def test_map_mergeOne():
 
     assert ok
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -139,7 +139,7 @@ def test_map_mergeNoOne():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -152,7 +152,7 @@ def test_map_mergeNoOne():
 
     assert not ok
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -201,7 +201,7 @@ def test_map_mergeFew():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -216,7 +216,7 @@ def test_map_mergeFew():
     assert len( map.tiles() ) == 9
     assert map.size() == 9
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -227,7 +227,7 @@ def test_map_mergeFew():
     ## Merge 8-9 :
     assert map.mergeTilesIfPossible(8, 9, 0.09, 10.0)
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -237,9 +237,9 @@ def test_map_mergeFew():
 
     ## Merge all :
     map.mergeAllPossible(0.09, 10.0)
-    tll.artist.drawMap(map)
+    tll.draw(map)
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -279,7 +279,7 @@ def test_map_mergeConplex():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -290,10 +290,10 @@ def test_map_mergeConplex():
     ## Merge all :
     nbMerges= map.mergeAllPossible()
 
-    tll.artist.drawMap(map)
+    tll.draw(map)
     assert nbMerges == 12
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -333,7 +333,7 @@ def test_map_mergeButNo():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -344,7 +344,7 @@ def test_map_mergeButNo():
     ## Merge all :
     map.mergeAllPossible()
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 

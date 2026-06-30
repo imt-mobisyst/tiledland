@@ -15,14 +15,14 @@ convexes= grid.makeConvexes(0, radius)
 
 ## Instanciate the map with this layer
 map= tll.Map(convexes)
-tll.artist.drawMap( map, "shot-demo.png" )
+tll.draw( map, "shot-demo.png" )
 
 ## Add obstables (1), but with a finest definition:
 radius= 0.5/grid.resolution()
 convexes= grid.makeConvexes(1, radius)
 map.createSeveralTiles( convexes, 1 )
-tll.artist.drawMap( map, "shot-demo.png" )
+tll.draw( map, "shot-demo.png" )
 
 ## Finnally connect close cells together :
 map.connectAllClose( grid.resolution()*1.001 )
-tll.artist.drawMap( map, "shot-demo.png" )
+tll.draw( map, "shot-demo.png" )

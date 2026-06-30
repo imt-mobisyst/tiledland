@@ -26,20 +26,17 @@ def test_fast_simulation_map_init():
     )
 
     # Create an artist to render this map:
-    img= tll.createArtistPNG( "shot-test.png", 400, 300 )
-    img.fitBox( land.box() )
-    land.draw(img)
-    img.flip() # Uptate the support and return to a blanc page.
+    tll.draw( land, "shot-test.png", 400, 300 )
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
     refsFile= open( "tests/refs/05.01-land-00.png", mode='rb' ).read()
-    #assert( shotFile == refsFile )
+    assert( shotFile == refsFile )
 
     # Add the agent:
     bod= land.popAgentOn(10)
 
-    land.draw(img)
-    img.flip()
+    tll.draw( land, "shot-test.png", 400, 300 )
+
     shotFile= open( "shot-test.png", mode='rb' ).read()
     refsFile= open( "tests/refs/05.01-land-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )

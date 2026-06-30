@@ -8,5 +8,5 @@ from .tile import Tile
 from .map import Map
 
 # rendering:
-from .artist import Artist, createArtistSVG, createArtistPNG
+from .artist import Artist, draw, createArtistSVG, createArtistPNG
 

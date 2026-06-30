@@ -11,12 +11,12 @@ from src.tiledland.artist.supportCairo import SupportPNG
 shotImg= "shot-test.png"
 
 # Test firstAI launch
-def test_support_load():
+def test_fast_support_load():
     sup= SupportPNG()
     assert( type(sup) ) == SupportPNG
 
 # Test firstAI launch
-def test_support_draw():
+def test_fast_support_draw():
     sup= SupportPNG()
     sup.save( shotImg )
 
@@ -57,7 +57,7 @@ def test_support_draw():
     refsFile= open( "tests/refs/02.03-supPng-draw-03.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-def test_support_write():
+def test_fast_support_write():
     suppo= tll.artist.supportCairo.SupportPNG()
 
     suppo.fillCircle( 250, 150, 2, 0xffe3f2 )
@@ -74,7 +74,7 @@ def test_support_write():
     assert( shotFile == refsFile )
 
 
-def test_artist_flip():
+def test_fast_artist_flip():
     pablo= tll.createArtistPNG( shotImg, 800, 600 )
 
     assert( type( pablo ) ) == tll.Artist

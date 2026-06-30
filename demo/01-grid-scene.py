@@ -25,7 +25,7 @@ agent.setMatter(15)
 # Create an artist to render this map:
 anArtist= tll.createArtistPNG( "shot-demo.png", 800, 600 )
 anArtist.fitBox( map.box() )
-map.draw(anArtist)
+map.renderOn(anArtist)
 anArtist.flip() # Uptate the support and return to a blanc page.
 
 print( f"You can open now the './{anArtist.support().filePath()}' file." )

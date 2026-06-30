@@ -40,8 +40,8 @@ def test_long_gridmap_rectanglemap():
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(map)
 
-    tll.artist.drawMap(map)
-    map.draw(pablo)
+    tll.draw(map)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -59,8 +59,8 @@ def test_long_gridmap_smallMap():
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(map)
 
-    tll.artist.drawMap(map)
-    map.draw(pablo)
+    tll.draw(map)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -70,8 +70,8 @@ def test_long_gridmap_smallMap():
 
     map.mergeAllPossible( 0.2, 2.0 )
 
-    tll.artist.drawMap(map)
-    map.draw(pablo)
+    tll.draw(map)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -119,8 +119,8 @@ def test_long_gridmap_mediumMap_inside():
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(map)
 
-    tll.artist.drawMap(map)
-    map.draw(pablo)
+    tll.draw(map)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg )
@@ -139,8 +139,8 @@ def test_long_gridmap_mediumMap():
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(map)
 
-    tll.artist.drawMap(map)
-    map.draw(pablo)
+    tll.draw(map)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -160,8 +160,8 @@ def test_gridmap_largeMap():
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(map)
 
-    tll.artist.drawMap(map)
-    map.draw(pablo)
+    tll.draw(map)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 

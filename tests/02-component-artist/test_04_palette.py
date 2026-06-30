@@ -11,7 +11,7 @@ from src.tiledland.artist import palette
 # ------------------------------------------------------------------------ #
 
 # Test firstAI launch
-def test_artist_palette():
+def test_fast_artist_palette():
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
 
@@ -53,7 +53,7 @@ def test_artist_palette():
     refsFile= open( "tests/refs/02.04-palette-02.svg" ).read()
     assert( shotFile == refsFile )
 
-def test_artist_palette_png():
+def test_fast_artist_palette_png():
     shotImg= "shot-test.png"
     pablo= tll.createArtistPNG(shotImg, 800, 600)
 

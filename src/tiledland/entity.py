@@ -8,14 +8,13 @@ class Entity() :
     # Initialization Destruction:
     def __init__( self, identifier= 0, group=0, shape= None):
         self._id= identifier
-        self._group= group
         self._refShape= shape
         if self._refShape is None :
             self._refShape= Entity.defaultShape
         self._pos= Point(0.0, 0.0)
-        self._body= self._refShape.copy( self._pos )
+        self._body= self._refShape.copy()
         self._theta= 0.0
-        self._brush= palette.foreground[group]
+        self.setGroupAndBrush(group)
     
     # Accessor: 
     def id(self):
@@ -37,7 +36,7 @@ class Entity() :
         return self._body
 
     def brush(self):
-        return self._refShape
+        return self._brush
 
     # Construction:
     def setId(self, aInteger):
@@ -50,10 +49,49 @@ class Entity() :
     
     def setShape(self, aConvex):
         self._refShape= aConvex
+        self.updateBody()
+        return self
+    
+    def setBody(self, aConvex):
+        self._body= aConvex
+        x, y= self._body.center().asTuple()
+        self._position= Point(x, y)
+        self._refShape= self._body.copy()
+        self._refShape.translate( Point( -x, -y ) )
+        self._orientation= 0.0
+    
+    def setShapeSquare(self, size):
+        self._refShape.initSquare(size)
+        self.updateBody()
+        return self
+
+    def setShapeRegular(self, size, numberOfVertex= 6):
+        self._refShape.initRegular(size, numberOfVertex)
+        self.updateBody()
+        return self
+   
+    def setShapeArrowTip(self, size, theta= 0.0):
+        self._refShape.initArrowTip(self, size, theta)
+        self.updateBody()
+        return self
+    
+    def updateBody(self):
         self._body= self._refShape.copy()
         self.setPose( self._pos, self._theta )
         return self
-        
+
+    # Convex accessor : 
+    def box(self):
+        return self.body().box()
+    
+    def radius(self):
+        r= 0.0
+        zero= Point()
+        for p in self.referenceShape().points() :
+            d= zero.distance( p )
+            r= max( d, r )
+        return r
+
     # Transformation: 
     def setPose(self, position, angle):
         self._body.initAs( self._refShape )
@@ -62,6 +100,12 @@ class Entity() :
         self._body.translate( position )
         self._pos= position
         return self
+
+    def setPosition(self, x, y):
+        return self.setPose( Point(x, y), self._theta )
+
+    def setOrientation(self, angle):
+        return self.setPose( self._pos, angle )
 
     def translate(self, vector2):
         for p in self._body.points() :
@@ -80,8 +124,19 @@ class Entity() :
         return self
 
     # Artist :
-    def draw(self, artist):
-        pass
+    def setGroupAndBrush(self, aGroupId):
+        iBrush= aGroupId%len(palette.foreground)
+        self._brush= palette.foreground[iBrush]
+        self._group= aGroupId
+        return self
+    
+    # Artist drawing:
+    def renderOn( self, artist ):
+        artist.fillConvex( self.body(), self.brush() )
+        minx, miny= self.box().leftFloor().asTuple()
+        x, y= self.position().asTuple()
+        artist.write( x, y, str(self.id()), self.brush() )
+        return self
     
     # Hacka.DataTree interface:
     def asDataTree(self):
@@ -106,3 +161,12 @@ class Entity() :
         cpy= type(self)()
         cpy.fromDataTree( self.asDataTree() )
         return cpy
+
+    # str:
+    def str(self, typeName): 
+        if self.group() :
+            return typeName + f"-{self.group()}.{self.id()} {self.box()}"
+        return typeName + f"-{self.id()} {self.box()}"
+    
+    def __str__(self):
+        return self.str("Entity")

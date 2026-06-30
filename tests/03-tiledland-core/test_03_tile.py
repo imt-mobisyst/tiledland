@@ -9,17 +9,16 @@ from src.tiledland.geometry import Point, Convex
 #         T E S T   T I L E D L A N D - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
-def test_Tile_init():
+def test_fast_tile_init():
     tile= Tile( shape=Convex().initSquare(1.0) )
 
     assert tile.id() == 0
-    assert tile.matter() == 0
     assert tile.position().asTuple() == (0.0, 0.0)
     assert tile.body().asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
     assert tile.adjacencies() == []
     assert tile.agents() == []
     
-    tile= Tile( 3, Point(10.3, 9.7), Convex().initSquare(42.0), 0 )
+    tile= Tile( 3, 0, Convex().initSquare(42.0), Point(10.3, 9.7) )
 
     assert tile.id() == 3
     assert tile.position().asTuple() == (10.3, 9.7)
@@ -27,20 +26,20 @@ def test_Tile_init():
     assert tile.adjacencies() == []
     assert tile.agents() == []
 
-    tile.setId(1).setMatter(8).setPosition( Point(1.0, 1.0) )
-    tile.shape().initSquare( 2.0 )
+    tile.setId(1).setGroupAndBrush(8).setPosition(1.0, 1.0)
+    tile.setShapeSquare( 2.0 )
 
     assert tile.id() == 1
-    assert tile.matter() == 8
+    assert tile.group() == 8
     assert tile.position().asTuple() == (1.0, 1.0)
     assert tile.body().asZipped() == [(0.0, 0.0), (0.0, 2.0), (2.0, 2.0), (2.0, 0.0)]
     assert tile.adjacencies() == []
     assert tile.agents() == []
 
-def test_Tile_regular():
+def test_fast_tile_regular():
     tile= Tile( 1 )
-    tile.position().set(10.0, 10.0)
-    tile.shape().initRegular( 20.0, 6 )
+    tile.setPosition(10.0, 10.0)
+    tile.setShapeRegular( 20.0, 6 )
     assert tile.id() == 1
     assert tile.position().asTuple() == (10.0, 10.0)
     assert tile.body().size() == 6
@@ -54,45 +53,47 @@ def test_Tile_regular():
     box= tile.box().round(2)
     assert box.asZip() == [ (1.34, 0.0), (18.66, 20.0) ]
     
-def test_Tile_adjencies():
+def test_fast_tile_adjencies():
     tile= Tile(1)
     assert tile.adjacencies() == []
-    tile.connect( 2 )
+    tile.connect(2)
     assert tile.adjacencies() == [2]
     tile.connectAll( [3, 4] )
     assert tile.adjacencies() == [2, 3, 4]
 
-def test_Tile_str():
-    tile= Tile(8, Point(18.5, 4.07) )
+def test_fast_tile_str():
+    tile= Tile(8)
+    tile.setPosition(18.5, 4.07)
     print(f">>> {tile}")
-    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ matter-0 adjs[] agents(0)"
-    tile.setMatter(2).connectAll( [1, 2, 3] )
+    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] agents(0)"
+    tile.setGroupAndBrush(2).connectAll( [1, 2, 3] )
     print(f">>> {tile}")
-    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ matter-2 adjs[1, 2, 3] agents(0)"
+    assert str(tile) == "Tile-2.8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] agents(0)"
 
     tile= Tile( shape= Convex() )
     print(f">>> {tile}")
-    assert str(tile) == "Tile-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ matter-0 adjs[] agents(0)"
+    assert str(tile) == "Tile-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] agents(0)"
 
     print(f">>> {tile.body()}")
     assert tile.position().asTuple() == (0.0, 0.0)
     assert tile.body().asZipped() == []
 
-def test_Tile_absobj():
-    tile= Tile(8, Point(18.5, 4.07))
+def test_fast_tile_absobj():
+    tile= Tile(8)
+    tile.setPosition(18.5, 4.07)
     tile.connectAll( [ 1, 3, 7, 19 ] )
     tree= tile.asDataTree()
 
     assert tree.label() == "Tile"
 
     assert tree.numberOfDigits() == 6
-    assert tree.digits() == [ tile.id(), tile.matter() ] + [ 1, 3, 7, 19 ]
+    assert tree.digits() == [ tile.id(), tile.group() ] + [ 1, 3, 7, 19 ]
     
-    assert tree.numberOfValues() == 2
-    assert tree.values() == [18.5, 4.07]
+    assert tree.numberOfValues() == 3
+    assert tree.values() == [18.5, 4.07, 0.0]
     
     assert tree.numberOfChildren() == 1
-    assert tree.children() == [ tile.shape().asDataTree() ]
+    assert tree.children() == [ tile.referenceShape().asDataTree() ]
 
     bod= Agent()
     tile.append( bod )
@@ -101,7 +102,7 @@ def test_Tile_absobj():
     assert tree.numberOfChildren() == 2
     for child in tree.children():
         assert type(child) == hacka.DataTree
-    assert tree.children() == [ tile.shape().asDataTree(), bod.asDataTree() ]
+    assert tree.children() == [ tile.referenceShape().asDataTree(), bod.asDataTree() ]
 
     tileBis= Tile().fromDataTree( tree )
 
@@ -114,17 +115,18 @@ def test_Tile_absobj():
     assert dt.label() == "Tile"
 
     assert dt.numberOfDigits() == 6
-    assert dt.digits() == [ tile.id(), tile.matter() ] + [ 1, 3, 7, 19 ]
+    assert dt.digits() == [ tile.id(), tile.group() ] + [ 1, 3, 7, 19 ]
     
-    assert dt.numberOfValues() == 2
-    assert dt.values() == [18.5, 4.07]
+    assert dt.numberOfValues() == 3
+    assert dt.values() == [18.5, 4.07, 0.0]
     
     assert dt.numberOfChildren() == 2
-    assert dt.children() == [ tile.shape().asDataTree(), bod.asDataTree() ]
+    assert dt.children() == [ tile.referenceShape().asDataTree(), bod.asDataTree() ]
 
 
-def test_Tile_DataTreeCopy():
-    tile= Tile(8, Point(18.5, 4.07))
+def test_fast_tile_DataTreeCopy():
+    tile= Tile(8)
+    tile.setPosition(18.5, 4.07)
     tile.connectAll( [ 1, 3, 7, 19 ] )
     tile.append( Agent(1) )
 
@@ -136,11 +138,11 @@ def test_Tile_DataTreeCopy():
     assert type(tile) == type(tileBis)
     assert tileBis.adjacencies() == [ 1, 3, 7, 19 ]
 
-    assert str(tileBis) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ matter-0 adjs[1, 3, 7, 19] agents(1)"
+    assert str(tileBis) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 3, 7, 19] agents(1)"
     assert str(tileBis.agent()) == str(tile.agent())
 
 
-def test_Tile_clockDirection():
+def test_fast_tile_clockDirection():
     tile= Tile( shape=Convex().initRegular( 0.2, 12 ) )
 
     assert tile.clockDirection( Point(  0.0,  0.0 ) ) == 0
@@ -156,8 +158,9 @@ def test_Tile_clockDirection():
     assert tile.clockDirection( Point( -2.0,  0.0 ) ) == 9
     
     p= Point( 1.2, -0.5 )
-    tile= Tile( position=p, shape=Convex().initRegular( 0.2, 12 ) )
-
+    tile= Tile( shape=Convex().initRegular( 0.2, 12 ) )
+    tile.setPosition(p.x(), p.y())
+    
     assert tile.clockDirection( p ) == 0
     assert tile.clockDirection( p + Point(  0.0,  2.0 ) ) == 12
     assert tile.clockDirection( p + Point(  2.0,  0.0 ) ) == 3

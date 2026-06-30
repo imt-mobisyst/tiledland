@@ -35,7 +35,7 @@ bod.setId(3).setMatter(13)
 # Create an artist to render this map:
 pablo= tll.createArtistSVG( filePath= "shot-web-rendering.svg" )
 pablo.fitBox( map.box() )
-map.draw(pablo)
+map.renderOn(pablo)
 
 # Rendering in a streamlit widget
 widget= st.empty()

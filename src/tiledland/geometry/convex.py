@@ -8,11 +8,11 @@ class Convex():
     def __init__( self, aListOfPoints= [] ):
         self.init( aListOfPoints )
 
-    def copy(self, position= Point(0.0, 0.0) ):
+    def copy(self):
         cpy= type(self)()
-        cpy._points= [ position + p.copy() for p in self.points() ]
+        cpy._points= [ p.copy() for p in self.points() ]
         return cpy
-    
+
     # Initialization:
     def init(self, aListOfPoints):
         self._points= aListOfPoints
@@ -57,6 +57,7 @@ class Convex():
             Point( radius, 0.0 ),
             Point( 0.0, -radius )
         ]
+        self.rotate(theta)
         return self
 
     def forcePoints(self, points):

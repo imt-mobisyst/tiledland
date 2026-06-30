@@ -174,7 +174,7 @@ class Map(Entity):
         dist= tileSize+separation
         shape= Convex().initSquare(tileSize)
         self._tiles= [
-            Tile( i+1, Point(dist*i, 0.0), shape.copy() )
+            Tile( i+1, 0, shape, Point(dist*i, 0.0) )
             for i in range(size)
         ]
         self._size= size
@@ -184,6 +184,7 @@ class Map(Entity):
     
     def initGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
         dist= tileSize+separation
+        shape= Convex().initSquare(tileSize)
         self._tiles= []
         
         iTile= 0
@@ -194,12 +195,11 @@ class Map(Entity):
                     iTile+= 1
                     tile= Tile(
                         iTile,
-                        Point( dist*j, dist*(maxLine-i) ),
-                        Convex().initSquare(tileSize),
-                        matrix[i][j]
+                        matrix[i][j],
+                        shape,
+                        Point(dist*j, dist*(maxLine-i))
                     )
                     self._tiles.append( tile )
-                    #matrix[i][j]= iTile
         
         self._size= iTile
         if connect :
@@ -211,6 +211,7 @@ class Map(Entity):
         dist= tileSize*cosPi06 + separation
         vdist= dist*cosPi06
         hdelta= dist*0.5
+        shape= Convex().initRegular(tileSize, 6)
         self._tiles= []
         
         iTile= 0
@@ -223,10 +224,10 @@ class Map(Entity):
                     delta= (iLine%2) * hdelta
                     tile= Tile(
                         iTile,
-                        Point( delta+dist*j, vdist*iLine ),
-                        Convex().initRegular(tileSize, 6),
-                        matrix[i][j]
+                        matrix[i][j],
+                        shape
                     )
+                    tile.setPosition(delta+dist*j, vdist*iLine )
                     self._tiles.append( tile )
                     #matrix[i][j]= iTile
         self._size= iTile
@@ -240,15 +241,17 @@ class Map(Entity):
         self._tiles.append( aTile )
         return self._size
     
-    def createSeveralTiles(self, convexes, matter):
+    def createSeveralTiles(self, convexes, group):
         for c in convexes :
-            self.createTile( c, matter)
+            self.createTile( c, group )
         
-    def createTile( self, aBody, matter= 0 ):
+    def createTile( self, aBody, group= 0 ):
         self._size+= 1
         aShape= aBody.copy()
-        position= aShape.setOnCenter()
-        self._tiles.append( Tile( self._size, position, aShape, matter ) )
+        x, y= aShape.setOnCenter().asTuple()
+        tile= Tile( self._size, group, aShape )
+        tile.setPosition(x, y)
+        self._tiles.append(tile)
         return self._size
     
     def removeTile( self, iTile ):
@@ -299,7 +302,8 @@ class Map(Entity):
             return False
         ag= self._factory( len(self._agents[group])+1, group )
         ag.setTile(iTile)
-        ag.setPosition( self.tile(iTile).position().copy() )
+        x, y= self.tile(iTile).position().asTuple()
+        ag.setPosition(x, y)
         self.tile(iTile).append( ag )
         self.__addAgent(ag)
         return ag
@@ -424,7 +428,7 @@ class Map(Entity):
         neighborhood= [ (i, (tb + self.tile(i).box()).score() ) for i in t.adjacencies() ]
         neighborhood.sort(key=lambda tup: tup[1])
         for neighbor, val in neighborhood :
-            if ( self.tile(neighbor).matter() == t.matter()
+            if ( self.tile(neighbor).group() == t.group()
                 and self.mergeTilesIfPossible( neighbor, iTile, maxError, maxSize )
             ) :
                 return True
@@ -482,41 +486,35 @@ class Map(Entity):
     
     
     # Artist drawing:
-    
-    def drawNetwork( self, artist ):
+    def renderNetworkOn( self, artist ):
         for tile in self.tiles() :
             cx, cy= tile.position().asTuple()
-            artist.tracePoint( cx, cy, artist.colorPalette( tile.matter() ) )
+            artist.tracePoint( cx, cy, tile.brush() )
         for fromId, toId in self.edges() :
             fromX, fromY= self.tile( fromId ).position().asTuple()
-            brush= artist.colorPalette( self.tile( fromId ).matter() )
             toX, toY= self.tile( toId ).position().asTuple()
-            artist.traceLine( fromX, fromY, toX, toY, brush )
+            artist.traceLine( fromX, fromY, toX, toY, self.tile(fromId).brush() )
         return self
 
-    def drawTiles( self, artist):
+    def renderTilesOn( self, artist):
         for tile in self.tiles() :
-            tile.draw( artist )
-        return self
-
-    def writeTiles( self, artist ):
+            tile.renderOn( artist )
         for tile in self.tiles() :
-            tile.write( artist )
+            tile.writeOn( artist )
         return self
     
-    def drawAgents( self, artist ):
+    def renderAgentsOn( self, artist ):
         for tile in self.tiles() :
             x, y= tile.position().asTuple()
             position= (x+0.1, y+0.1)
             for agent in tile.agents() :
-                agent.draw( artist )
+                agent.renderOn( artist )
         return self
 
-    def draw( self, artist ):
-        self.drawNetwork(artist)
-        self.drawTiles(artist)
-        self.writeTiles(artist)
-        self.drawAgents(artist)
+    def renderOn( self, artist ):
+        self.renderNetworkOn(artist)
+        self.renderTilesOn(artist)
+        self.renderAgentsOn(artist)
         return self
 
     # string:

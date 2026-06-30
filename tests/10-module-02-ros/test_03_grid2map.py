@@ -24,15 +24,15 @@ def test_long_gridmap_loadSmallMap():
     
     map= tll.Map().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
 
-    tll.artist.drawMap(map)
+    tll.draw(map)
 
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.fit(map)
 
-    tll.artist.drawMap(map)
+    tll.draw(map)
 
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -42,9 +42,9 @@ def test_long_gridmap_loadSmallMap():
 
     map= tll.Map().fromGridConvexes( grid, 2.0 )
 
-    tll.artist.drawMap(map)
+    tll.draw(map)
     
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -63,10 +63,10 @@ def test_long_gridmap_loadLargeMap():
 
     map= tll.Map().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
 
-    tll.artist.drawMap(map)
+    tll.draw(map)
 
     pablo.fit(map)
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -76,10 +76,10 @@ def test_long_gridmap_loadLargeMap():
 
     map= tll.Map().fromGridConvexes( grid, 2.0 )
     
-    tll.artist.drawMap(map)
+    tll.draw(map)
     
     pablo.fit(map)
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -149,7 +149,7 @@ def test_gridmap_rosGridMap_webots():
 
     map= tll.Map().fromGridConvexes( gridmap, 2.0, matters=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
     pablo.fit(map)
-    map.draw(pablo)
+    map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 

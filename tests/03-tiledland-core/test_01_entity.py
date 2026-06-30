@@ -73,3 +73,29 @@ def test_fast_entity_transform():
     print( f"> transfom2 : {bodyPoints}" )
     assert bodyPoints == ['(1.79, -2.41)', '(1.29, -2.46)', '(1.0, -2.05)', '(1.45, -1.5)', '(2.0, -1.95)']
 
+def test_fast_entity_body():
+    ent= tll.Entity()
+
+    print(ent)
+    tll.draw(ent, "shot-test.svg", 800, 600)
+    assert( open("shot-test.svg").read()
+        == open("tests/refs/03.01-entity-body-01.svg").read() )
+
+    assert ent.position().asTuple() == (0.0, 0.0)
+    assert ent.orientation() == 0.0
+
+    shape= tll.Convex().initArrowTip(0.8)
+    shape.rotate(2.2)
+    shape.translate( Point(1.0, 0.6) )
+
+    ent.setBody(shape)
+    tll.draw(ent, "shot-test.svg", 800, 600)
+
+    assert shape.round(4).points() == ent.body().round(4).points()
+    
+    assert ent.position().asTuple() == (0.0, 0.0)
+    assert ent.orientation() == 0.0
+
+    assert( open("shot-test.svg").read()
+        == open("tests/refs/03.01-entity-body-02.svg").read() )
+    

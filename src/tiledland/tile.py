@@ -1,18 +1,19 @@
 import math, hacka
 from . import geometry
 from .geometry import Point, Convex
+from .entity import Entity
 from .agent import Agent
+from .artist import palette
 
-class Tile(Agent):
+class Tile(Entity):
 
-    def __init__( self, identifier= 0, position= Point(0.0, 0.0), shape= None, matter=0):
-        shape
+    def __init__( self, identifier= 0, group=0, shape= None, position= Point(0.0, 0.0), orientation= 0.0):
         if shape is None :
             shape= Convex().initSquare(1.0)
+        super(Tile, self).__init__(identifier, group, shape)
+        self.setPose( position, orientation )
         self._adjacencies= []
         self._agents= []
-        super(Tile, self).__init__(identifier, 0, position, shape)
-        self._matter= matter
         
     # Accessor:
     def adjacencies(self):
@@ -32,6 +33,13 @@ class Tile(Agent):
         self._adjacencies= aList
         return self
     
+    # Artist :
+    def setGroupAndBrush(self, aGroupId):
+        iBrush= aGroupId%len(palette.foreground)
+        self._brush= palette.background[iBrush]
+        self._group= aGroupId
+        return self
+
     # Connection:
     def isConnecting(self, iTile):
         return (iTile in self.adjacencies())
@@ -84,20 +92,22 @@ class Tile(Agent):
 
     # hacka.DataTree Interface:
     def asDataTree(self):
+        x, y = self.position().asTuple()
         return hacka.DataTree("Tile", 
-            [self.id(), self.matter()] + self.adjacencies(),
-            self.position().asList(),
-            [self.shape().asDataTree()] + [ ag.asDataTree() for ag in self.agents() ]
+            [self.id(), self.group()] + self.adjacencies(),
+            [x, y, self.orientation()],
+            [self.referenceShape().asDataTree()] + [ ag.asDataTree() for ag in self.agents() ]
         )
     
     def fromDataTree( self, aDataTree, agentFactory=Agent ):
-        integers= aDataTree.digits()
+        digits= aDataTree.digits()
+        values= aDataTree.values()
         children= aDataTree.children()
-        self.setId( integers[0] )
-        self.setMatter( integers[1] )
-        self.setAdjacencies( integers[2:] )
-        self.setPosition( Point().fromList( aDataTree.values() ) )
-        self.setShape( Convex().fromDataTree( aDataTree.children()[0] ) )
+        self.setId( digits[0] )
+        self.setGroupAndBrush( digits[1] )
+        self.setAdjacencies( digits[2:] )
+        self.referenceShape().fromDataTree( children[0] )
+        self.setPose( Point(values[0], values[1]), values[2] )
         self.clear()
         for c in children[1:] :
             self.append( agentFactory().fromDataTree( c ) )
@@ -109,30 +119,24 @@ class Tile(Agent):
         return cpy.fromDataTree( self.asDataTree() )
     
     # Artist drawing:
-    def draw(self, artist):
-        env= self.body().asZipped()
-        artist.drawPolygon(
-            [p[0] for p in env],
-            [p[1] for p in env],
-            artist.colorPalette( self.matter() )
-        )
+    def renderOn(self, artist):
+        artist.drawConvex( self.body(), self.brush() )
 
-    def write(self, artist):
+    def writeOn(self, artist):
         minx, miny= self.box().leftFloor().asTuple()
         x, y= self.position().asTuple()
         x= x+(minx-x)*2/3
         y= y+(miny-y)*2/3
-        artist.write( x, y, str(self.id()), artist.colorPalette( self.matter() ) )
+        artist.write( x, y, str(self.id()), self.brush() )
 
     # to str
-    def str(self, typeName="Tile"): 
+    def str(self, typeName): 
         # Myself :
         s= super(Tile, self).str(typeName)
-        s+= " matter-"+ str(self._matter)
         s+= " adjs"+ str(self._adjacencies)
         s+= f" agents({ len(self.agents()) })"
         return s
     
     def __str__(self): 
-        return self.str()
+        return self.str("Tile")
     

@@ -37,7 +37,7 @@ def test_pnd_world():
     pablo= tll.createArtistPNG("shot-test.png", 800, 600)
     pablo.fitBox( model.box(), 10 )
 
-    model.draw(pablo)
+    model.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
@@ -52,7 +52,7 @@ def test_pnd_world():
     assert model.popAgentOn(7).id() == 3
     assert model.popAgentOn(44).id() == 4
 
-    model.draw(pablo)
+    model.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
@@ -115,7 +115,7 @@ def test_pnd_withCarrier():
     pablo= tll.createArtistPNG("shot-test.png", 800, 600)
     pablo.fitBox( model.box(), 10 )
     
-    model.draw(pablo)
+    model.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()

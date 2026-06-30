@@ -1,16 +1,23 @@
 from .color import color, colorRatio, colorRatio, rgbColor, percentColor, webColor, colorFromWeb
 from .support import AbsSupport, Support, SupportSVG
 
-def drawMap(map, filePath= "shot-tiled.png", width= 1600, height= 1200):
-    from .supportCairo import SupportPNG
-    pablo= Artist().init( filePath, width, height, SupportPNG )
-    pablo.fit(map)
-    map.draw(pablo)
+def draw(anEntity, filePath="shot-tiledland.png", width= 1600, height= 1200):
+    pablo= Artist()
+    fileExtend= filePath.split(".")[-1]
+    if fileExtend in ["png", "PNG"]:
+        from .supportCairo import SupportPNG
+        pablo.init( filePath, width, height, SupportPNG )
+    elif fileExtend in ["svg", "SVG"]:
+        pablo.init( filePath, width, height, SupportSVG )    
+    
+    pablo.fit(anEntity)
+    anEntity.renderOn(pablo)
     pablo.flip()
+    return pablo
 
 def drawConvexes(convexes, filePath= "shot-tiled.png", width= 1600, height= 1200):
-    map= Map(convexes)
-    drawMap(map,filePath, width, height) 
+    land= Map(convexes)
+    draw(land,filePath, width, height) 
 
 def createArtistSVG(filePath, width, height):
     return Artist().init(filePath, width, height, SupportSVG)
@@ -205,7 +212,7 @@ class Artist():
         self.drawPolygon( listxs, listys, brush )
         return self
     
-    def fillConvex( self, shape, brushId, px=0.0, py=0.0 ):
+    def fillConvex( self, shape, brush, px=0.0, py=0.0 ):
         listxs, listys= shape.asLists(px, py)
         self.fillPolygon( listxs, listys, brush )
         return self
