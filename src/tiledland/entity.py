@@ -6,14 +6,14 @@ class Entity() :
     defaultShape= Convex().initArrowTip(1.0)
 
     # Initialization Destruction:
-    def __init__( self, identifier= 0, group=0, shape= None):
+    def __init__( self, identifier= 0, group=0, shape= None, position= Point(0.0, 0.0)):
         self._id= identifier
         self._refShape= shape
         if self._refShape is None :
             self._refShape= Entity.defaultShape
-        self._pos= Point(0.0, 0.0)
-        self._body= self._refShape.copy()
+        self._pos= position.copy()
         self._theta= 0.0
+        self.updateBody()
         self.setGroupAndBrush(group)
     
     # Accessor: 
@@ -163,10 +163,10 @@ class Entity() :
         return cpy
 
     # str:
-    def str(self, typeName): 
+    def str(self, typeName="Entity"): 
         if self.group() :
             return typeName + f"-{self.group()}.{self.id()} {self.box()}"
         return typeName + f"-{self.id()} {self.box()}"
     
     def __str__(self):
-        return self.str("Entity")
+        return self.str()

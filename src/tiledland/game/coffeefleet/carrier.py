@@ -8,7 +8,7 @@ mobileConvex= Convex().initRegular(0.4, 8)
 
 class Carrier(Agent):
     def __init__( self, identifier=0, owner=1, position= Point(0.0, 0.0), mission= 0):
-        super().__init__(identifier, owner, position, mobileConvex)
+        super().__init__(identifier, owner, mobileConvex, position)
         self._mission= mission
         self._clockMove= 0
 
@@ -30,3 +30,4 @@ class Carrier(Agent):
         s= super(Carrier, self).str(typeName)
         s+= f" |{self._clockMove}, {self._mission}|"
         return s
+    

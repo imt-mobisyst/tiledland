@@ -4,6 +4,8 @@ from .carrier import Carrier
 from ... import map, Tile, artist
 from ...geometry import Point, Convex, Box
 
+import tiledland as tll
+
 class Mission:
     def __init__( self, start= 0, final= 0, reward= 0, owner= 0 ):
         self.start= start
@@ -36,7 +38,7 @@ class World( map.Map ):
         self._artist.flip()
         self._artist.fitBox( Box([Point(-0.5, -0.5), Point(9.5, 6.5)] ), 10 )
         #self._artist.fitBox( self.box(), 10 )
-        self.marketBrush= self._artist.colorPalette(6)
+        self.marketBrush= tll.artist.palette.background[6]
         self.marketBrush.width= 8
 
     # Accessor: 
@@ -176,7 +178,7 @@ class World( map.Map ):
         # Set on iTo
         self.tile(iTo).append(carrier)
         carrier.setTile( iTo )
-        carrier.setPosition( self.tile(iTo).position() )
+        carrier.setPose( self.tile(iTo).position(), self.orientation() )
         return iTo
     
     # Hacka.DataTree interface:
@@ -228,7 +230,7 @@ class World( map.Map ):
     
     # Rendering :
     def render(self):
-        self.draw( self._artist )
+        self.renderOn( self._artist )
         # Market:
         self._artist.drawPolygon(
             [6.55, 6.55, 9.5, 9.5], [2.45, -0.6, -0.6, 2.45],

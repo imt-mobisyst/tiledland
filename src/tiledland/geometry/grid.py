@@ -81,35 +81,35 @@ class Grid():
     def valueMinMax(self):
         if self.height() == 0 :
             return (0, 0)
-        minMatter= -1
-        maxMatter= self.cell(1, 1)
+        minVal= -1
+        maxVal= self.cell(1, 1)
 
         for ix in range(1, self.width()+1):
             for iy in range(1, self.height()+1):
-                matter= self.cell(ix, iy)
-                if minMatter == -1 :
-                    minMatter= matter
-                if matter >= 0 :
-                    minMatter= min(minMatter, matter)
-                    maxMatter= max(maxMatter, matter)
-        return (minMatter, maxMatter)
+                pixval= self.cell(ix, iy)
+                if minVal == -1 :
+                    minVal= pixval
+                if pixval >= 0 :
+                    minVal= min(minVal, pixval)
+                    maxVal= max(maxVal, pixval)
+        return (minVal, maxVal)
     
     # Tests
     def isCell(self, x, y, state):
         return ( self.cell(x, y) == state )
     
     # Filling :
-    def fill(self, ix, iy, matter):
+    def fill(self, ix, iy, pixval):
         w, h= self.dimention()
         old= self.cell(ix, iy)
-        if old == matter :
+        if old == pixval :
             return Point(ix, iy)
         toFill= [(ix, iy)]
         cumul= Point()
         count= 0
         while len(toFill) > 0 :
             for cx, cy in toFill :
-                self.setCell(cx, cy, matter)
+                self.setCell(cx, cy, pixval)
                 cumul.add( Point(cx, cy) )
                 count+= 1
 
@@ -151,31 +151,31 @@ class Grid():
                     self._grid[i][j]= modif
 
     # Clustering :
-    def clustering(self, matter, radius):
-        marks, means= self.clusterInit(matter, radius)
+    def clustering(self, pixval, radius):
+        marks, means= self.clusterInit(pixval, radius)
         minDistance= 1.0
         while means.size() > 0 and minDistance > 0.001 :
-            marks, newMeans= self.clusterIterate(matter, means, radius)
+            marks, newMeans= self.clusterIterate(pixval, means, radius)
             for p, np in zip( means.points(), newMeans.points() ) :
                 minDistance= min(minDistance, p.distance(np))
             means= newMeans
         return marks, means
     
-    def clusterInitOld(self, matter, radius):
+    def clusterInitOld(self, pixval, radius):
         means= self.clusterInitMeans(radius)
-        marks, newMeans= self.clusterIterate(matter, means, radius)
+        marks, newMeans= self.clusterIterate(pixval, means, radius)
         # Search free cluster...
         w, h= self.dimention()
         for x in range(1, w+1) :
             for y in range(1, h+1) :
-                if marks.cell(x, y) == 0 and self.cell(x, y) == matter :
+                if marks.cell(x, y) == 0 and self.cell(x, y) == pixval :
                     iCluster= means.size()+1
                     center= self.fillMasks( marks, x, y, iCluster, radius )
                     means.append(center)
         return marks, means
     
 
-    def clusterInit(self, matter, radius):
+    def clusterInit(self, pixval, radius):
         means= self.clusterInitMeans(radius)
         w, h= self.dimention()
 
@@ -191,7 +191,7 @@ class Grid():
         count= 0
         for i in range(means.size()) :
             x, y= self.localPointToCoordinate( means.point(i+1) )
-            x, y, dist= self.searchClosest(matter, x, y)
+            x, y, dist= self.searchClosest(pixval, x, y)
             if dist <= radius :
                 count+= 1
                 center= self.fillMasks( marks, x, y, count, maxRadius )
@@ -201,7 +201,7 @@ class Grid():
         w, h= self.dimention()
         for x in range(1, w+1) :
             for y in range(1, h+1) :
-                if marks.cell(x, y) == 0 and self.cell(x, y) == matter :
+                if marks.cell(x, y) == 0 and self.cell(x, y) == pixval :
                     iCluster= means.size()+1
                     center= self.fillMasks( marks, x, y, iCluster, maxRadius )
                     means.append(center)
@@ -234,7 +234,7 @@ class Grid():
             int( min( self.height(), max( 1, int(round(aPoint.y())) )))
         )
     
-    def clusterIterate(self, matter, proposedMeans, radius):
+    def clusterIterate(self, pixval, proposedMeans, radius):
         w, h = self.dimention()
 
         # Initialize toVisit on mean-positions :
@@ -243,7 +243,7 @@ class Grid():
         count= 0
         for i in range(proposedMeans.size()) :
             x, y= self.localPointToCoordinate( proposedMeans.point(i+1) )
-            x, y, dist= self.searchClosest(matter, x, y)
+            x, y, dist= self.searchClosest(pixval, x, y)
             if dist <= radius :
                 toVisits.append( [(x, y)] )
                 myMeans.append( proposedMeans.point(i+1) )
@@ -282,19 +282,19 @@ class Grid():
                 clusterSum[i].add( Point(x, y) )
                 clusterCount[i]+= 1
                 for cx, cy in [ (x+1, y), (x-1, y), (x, y+1), (x, y-1) ] :
-                    if 0 < cx and cx <= w and 0 < cy and cy <= h and self.cell(cx, cy) == matter :
+                    if 0 < cx and cx <= w and 0 < cy and cy <= h and self.cell(cx, cy) == pixval :
                         toVisits[i].append( (cx, cy) )
                         count+=1
         return marks, Mesh( [ Point( p.x()/c, p.y()/c ) for p, c in zip(clusterSum, clusterCount) ] )
     
-    def clusterApplyBirdDistance(self, matter, means):
+    def clusterApplyBirdDistance(self, pixval, means):
         w, h = self.dimention()
         clusterCenters= [ Point() for i in range( means.size() ) ]
         clusterCount= [ 0 for i in range( means.size() ) ]
         mask= Grid( [ [ 0 for j in range(w)]  for i in range(h) ] )
         for x in range( 1, w+1 ):
             for y in range( 1, h+1 ):
-                if self.cell(x, y) == matter :
+                if self.cell(x, y) == pixval :
                     p= Point(x, y)
                     iCluster= means.searchClosestTo( p )
                     mask.setCell(x, y, iCluster)
@@ -351,15 +351,15 @@ class Grid():
         # Then return
         return [x, y, x2-1, y2-1]
 
-    def searchClosest(self, matter, x, y):
-        if self.cell(x, y) == matter :
+    def searchClosest(self, pixval, x, y):
+        if self.cell(x, y) == pixval :
             return (x, y, 0)
         w, h= self.dimention()
         for distance in range(1, max( w, h) ) :
             for d1 in range(distance):
                 d2= distance-d1
                 for cx, cy in [(x+d2, y+d1), (x-d1, y+d2), (x-d2, y-d1), (x+d1, y-d2) ] :
-                    if 0 < cx and cx <= w and 0 < cy and cy <= h and self.cell(cx, cy) == matter :
+                    if 0 < cx and cx <= w and 0 < cy and cy <= h and self.cell(cx, cy) == pixval :
                         return (cx, cy, distance)
         return False, False, max( w, h)
 
@@ -406,18 +406,18 @@ class Grid():
         return frontiers
     
     def updateFrontiers(self, frontiers, frontSize, x, y ):
-        matter= self.cell(x, y)
-        if matter < 0 :
+        pixval= self.cell(x, y)
+        if pixval < 0 :
             return frontSize
-        if matter >= frontSize :
-            frontiers+= [ [] for i in range( frontSize, matter+1 ) ]
-            frontSize= matter+1
+        if pixval >= frontSize :
+            frontiers+= [ [] for i in range( frontSize, pixval+1 ) ]
+            frontSize= pixval+1
             assert len(frontiers) == frontSize
-        frontiers[matter].append( self.point(x, y) )
+        frontiers[pixval].append( self.point(x, y) )
         return frontSize
 
-    def makeConvexes(self, matter, radius, minSize= 0.0):
-        marks, means= self.clustering(matter, radius)
+    def makeConvexes(self, pixval, radius, minSize= 0.0):
+        marks, means= self.clustering(pixval, radius)
         frontiers= marks.computeFrontiers()
         convs= []
         epsilon= self.resolution()*0.001

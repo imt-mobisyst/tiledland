@@ -87,10 +87,10 @@ def test_fast_map_hacka():
     print(f">>>\n{aMap}")
     assert '\n'+ str(aMap) +'\n' == """
 Map:
-- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ matter-0 adjs[2, 3, 4] agents(0)
-- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ matter-0 adjs[1, 3, 4] agents(0)
-- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ matter-0 adjs[1, 2] agents(0)
-- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ matter-0 adjs[1, 2] agents(0)
+- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] agents(0)
+- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] agents(0)
+- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] agents(0)
+- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] agents(0)
 """
 
 def test_fast_map_box():

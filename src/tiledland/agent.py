@@ -3,8 +3,8 @@ from .geometry import Point, Convex
 from .entity import Entity
 
 class Agent(Entity):
-    def __init__( self, identifier= 0, group=0, shape= None):
-        super().__init__(identifier, group, shape)
+    def __init__( self, identifier= 0, group=0, shape= None, position=Point(0.0, 0.0)):
+        super().__init__(identifier, group, shape, position)
         self._tile= 0
 
     # Accessor:
@@ -40,6 +40,8 @@ class Agent(Entity):
     def process(self, perception):
         return None
     
-    # str:    
-    def __str__(self):
-        return self.str("Agent")
+    # str:
+    def str(self, typeName= "Agent"): 
+        s= super().str(typeName)
+        return s
+    

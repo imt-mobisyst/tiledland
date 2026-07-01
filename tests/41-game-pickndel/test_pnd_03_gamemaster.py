@@ -10,7 +10,7 @@ sys.path.insert( 1, workdir )
 import src.tiledland.game.pickndel as pnd
 import src.tiledland as tll
 
-def test_gamemaster_method():
+def test_fast_gamemaster_method():
     world= pnd.World().initGrid( [[0, 0], [0, 0]] )
     game= pnd.GameEngine( world, 1, tic=20 )
 
@@ -119,7 +119,7 @@ def test_gamemaster_moves():
     assert world.agent(1, 1).mission() == 0
     assert game.score(1) == 119.0
 
-def test_gamemaster_drawMissions():
+def test_fast_gamemaster_drawMissions():
     world= pnd.World()
     world.initGrid([
         [00, 00, 00, 00],

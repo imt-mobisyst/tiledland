@@ -5,53 +5,47 @@ sys.path.insert( 1, workDir )
 import src.tiledland as tll
 from src.tiledland.geometry import Point, Convex
 
-def zipSvgFile( img1, img2 ):
-    shotFile= open( img1 ) 
-
-    refsFile= open( img2 )
-    return zip( shotFile, refsFile )
-
 # ------------------------------------------------------------------------ #
 #                 T E S T   I N T E R F A C E    A R T I S T
 # ------------------------------------------------------------------------ #
 shotImg= "shot-test.svg"
 
 # Test artist on tiles
-def test_artist_tile():
+def test_fast_tile_rendering():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
     tile= tll.Tile()
     
     tile.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-tile-01.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-tile-01.svg").read() )
     
     tile= tll.Tile( 3, 0, Convex().initSquare(4.0) )
     tile.setPosition(1.3, 0.9)
     tile.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-tile-02.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-tile-02.svg").read() )
 
-    tile= tll.Tile(1, 1).setPosition( Point(0.4, 0.2) )
-    tile.shape().initRegular( 2.0, 6 )
+    tile= tll.Tile(1, 1).setPosition(0.4, 0.2)
+    tile.setShapeRegular( 2.0, 6 )
     tile.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-tile-03.svg" ):
-        assert( lineShot == lineRef )
-
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-tile-03.svg").read() )
+    
     tile.renderOn( pablo )
     tile.writeOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-tile-04.svg" ):
-        assert( lineShot == lineRef )
-
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-tile-04.svg").read() )
+    
 # Test artist on map
-def test_artist_map_tiles():
+def test_fast_map_tile_rendering():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
     map= tll.Map()
 
@@ -60,8 +54,8 @@ def test_artist_map_tiles():
     map.renderTilesOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-00.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-map-00.svg" ).read() )
 
     map= tll.Map().initLine(3)
 
@@ -70,8 +64,9 @@ def test_artist_map_tiles():
     map.renderTilesOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-01.svg" ):
-        assert( lineShot == lineRef )
+
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-map-01.svg" ).read() )
 
     pablo.setCamera( 1.1, 0.0 )
     pablo.setScale( 200 )
@@ -79,10 +74,11 @@ def test_artist_map_tiles():
     map.renderTilesOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-02.svg" ):
-        assert( lineShot == lineRef )
 
-def test_artist_map_net():
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-map-02.svg" ).read() )
+
+def test_fast_map_net_rendering():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
     map= tll.Map()
     map.initGrid(
@@ -96,8 +92,9 @@ def test_artist_map_net():
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-14.svg" ):
-        assert( lineShot == lineRef )
+
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-map-04.svg" ).read() )
 
     box= map.box()
     box.round(2)
@@ -107,22 +104,24 @@ def test_artist_map_net():
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-15.svg" ):
-        assert( lineShot == lineRef )
+
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-map-05.svg" ).read() )
 
     map.connectAllConditions(
-        lambda tileFrom : tileFrom.matter() == 0,
-        lambda tileFrom, tileTo : tileTo.matter() == 0 and tileFrom.centerDistance( tileTo ) < 1.2
+        lambda tileFrom : tileFrom.group() == 0,
+        lambda tileFrom, tileTo : tileTo.group() == 0 and tileFrom.centerDistance( tileTo ) < 1.2
     )
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-map-16.svg" ):
-        assert( lineShot == lineRef )
+
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-map-06.svg" ).read() )
 
 
 # Test artist on map
-def test_artist_gridmap_piece():
+def test_gridmap_piece():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
     map= tll.Map()
     map.initGrid(
@@ -138,21 +137,20 @@ def test_artist_gridmap_piece():
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-01.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-agent-01.svg" ).read() )
 
-    def popAgent( iRobot, iMatter, iTile ):
-        bob= tll.Agent( iRobot, 0,
-            Point(0.1, 0.1)+map.tile(iTile).position(),
+    def popAgent( iRobot, iGroup, iTile ):
+        bob= tll.Agent( iRobot, iGroup,
             tll.Convex().initRegular(0.7, 6),
+            Point(0.1, 0.1)+map.tile(iTile).position()
         )
-        bob.setMatter(iMatter)
         map.tile(iTile).append( bob )
         return bob
     
     bob= popAgent(1, 13, 12)
 
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.shape().asZipped() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.referenceShape().asZipped() ]
     print( env )
     assert env == [
         (-0.3, -0.18), (-0.3, 0.17), (-0.0, 0.35),
@@ -179,8 +177,8 @@ def test_artist_gridmap_piece():
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-02.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-agent-02.svg" ).read() )
     
     popAgent(2, 13, 9)
     popAgent(2, 15, 14)
@@ -190,26 +188,26 @@ def test_artist_gridmap_piece():
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-03.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-agent-03.svg" ).read() )
 
     popAgent(1, 1, 17)
     
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-04.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-agent-04.svg" ).read() )
 
     map.clearAgents()
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-01.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-agent-01.svg" ).read() )
 
 # Test artist on map
-def test_artist_hexamap_piece():
+def test_hexamap_piece():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
     map= tll.Map()
     map.initHexa(
@@ -225,15 +223,14 @@ def test_artist_hexamap_piece():
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-11.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-agent-11.svg" ).read() )
 
-    def popAgent( iRobot, iTile, iMatter ):
-        bod= tll.Agent( iRobot, 0,
-            Point(0.1, 0.1)+map.tile(iTile).position(),
+    def popAgent( iRobot, iTile, iGroup ):
+        bod= tll.Agent( iRobot, iGroup,
             tll.Convex().initRegular(0.7, 6),
+            Point(0.1, 0.1)+map.tile(iTile).position()
         )
-        bod.setMatter(iMatter)
         map.tile(iTile).append( bod )
     
     popAgent(1, 12, 13)
@@ -241,8 +238,8 @@ def test_artist_hexamap_piece():
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-12.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-agent-12.svg" ).read() )
     
     popAgent(2,  9, 13)
     popAgent(2, 14, 15)
@@ -252,20 +249,20 @@ def test_artist_hexamap_piece():
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-13.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-agent-13.svg" ).read() )
 
     popAgent(1, 17, 1)
 
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-14.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-agent-14.svg" ).read() )
 
     map.clearAgents()
     map.renderOn( pablo )
     pablo.flip()
 
-    for lineShot, lineRef in zipSvgFile( shotImg, "tests/refs/11.11-artist-agent-11.svg" ):
-        assert( lineShot == lineRef )
+    assert( open(shotImg).read()
+        == open("tests/refs/03.05-agent-11.svg" ).read() )

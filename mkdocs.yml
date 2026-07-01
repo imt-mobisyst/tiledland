@@ -12,6 +12,7 @@ nav:
     - Web App: 'ihm-web.md'
     - Multithreading: 'ihm-thread.md'
   - Geometry: 'geometry.md'
+  - F.A.Q: 'faq.md'
 
 markdown_extensions:
   - attr_list

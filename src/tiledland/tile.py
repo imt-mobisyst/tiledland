@@ -10,8 +10,7 @@ class Tile(Entity):
     def __init__( self, identifier= 0, group=0, shape= None, position= Point(0.0, 0.0), orientation= 0.0):
         if shape is None :
             shape= Convex().initSquare(1.0)
-        super(Tile, self).__init__(identifier, group, shape)
-        self.setPose( position, orientation )
+        super(Tile, self).__init__(identifier, group, shape, position)
         self._adjacencies= []
         self._agents= []
         

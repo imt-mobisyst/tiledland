@@ -19,10 +19,10 @@ def test_long_gridmap_loadSmallMap():
     assert gridmap.resolution() == 0.1
 
     convexes= grid.makeConvexes(0, 8)
-    tll.artist.drawConvexes(convexes)
+    tll.artist.draw( tll.Map(convexes) )
     assert len(convexes) == 17
     
-    map= tll.Map().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
+    map= tll.Map().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
 
     tll.draw(map)
 
@@ -36,7 +36,7 @@ def test_long_gridmap_loadSmallMap():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-03-small-01.svg" ) 
+    refsFile= open( "tests/refs/21.03-small-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -48,7 +48,7 @@ def test_long_gridmap_loadSmallMap():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-03-small-02.svg" )
+    refsFile= open( "tests/refs/21.03-small-02.svg" )
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -61,7 +61,7 @@ def test_long_gridmap_loadLargeMap():
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
 
-    map= tll.Map().fromGridConvexes( grid, 2.0, matters=[Grid.STATE_FREE] )
+    map= tll.Map().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
 
     tll.draw(map)
 
@@ -70,7 +70,7 @@ def test_long_gridmap_loadLargeMap():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-03-large-01.svg" ) 
+    refsFile= open( "tests/refs/21.03-large-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -83,7 +83,7 @@ def test_long_gridmap_loadLargeMap():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-03-large-02.svg" ) 
+    refsFile= open( "tests/refs/21.03-large-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -119,7 +119,7 @@ def test_gridmap_rosGridMap_webots():
     img.save("shot-test.png", format="PNG")
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
-    refsFile= open( "tests/refs/interface-ros-03-webots-01.png", mode='rb' ).read()
+    refsFile= open( "tests/refs/21.03-webots-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
     # Test msgpack :
@@ -134,7 +134,9 @@ def test_gridmap_rosGridMap_webots():
     with open("shot-webots-grid.mpk", "rb") as f:
         buf = f.read()
         dico2 = msgpack.unpackb(buf, raw=False)
-    print("Désérialisé :", dico2)
+    
+    dico2str= str(dico2)
+    print("Désérialisé :", dico2str[:512], "...")
 
     assert rosOccupGrid == dico2
 
@@ -147,13 +149,13 @@ def test_gridmap_rosGridMap_webots():
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
 
-    map= tll.Map().fromGridConvexes( gridmap, 2.0, matters=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
+    map= tll.Map().fromGridConvexes( gridmap, 2.0, pixelValues=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
     pablo.fit(map)
     map.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-03-webots-map.svg" ) 
+    refsFile= open( "tests/refs/21.03-webots-map.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 

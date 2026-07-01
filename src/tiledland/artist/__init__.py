@@ -15,10 +15,6 @@ def draw(anEntity, filePath="shot-tiledland.png", width= 1600, height= 1200):
     pablo.flip()
     return pablo
 
-def drawConvexes(convexes, filePath= "shot-tiled.png", width= 1600, height= 1200):
-    land= Map(convexes)
-    draw(land,filePath, width, height) 
-
 def createArtistSVG(filePath, width, height):
     return Artist().init(filePath, width, height, SupportSVG)
 

@@ -9,9 +9,9 @@ authors = [
   { name="Guillaume Lozenguez", email="guillaume.lozenguez@imt-nord-europe.fr" },
 ]
 description = "Polygon-based interconnected tiles to model an environment and mobile objects inside."
-dependencies = [ "hacka", "pyyaml", "msgpack" ]
+dependencies = [ "hacka", "pyyaml", "pycairo", "msgpack" ]
 readme = "docs/pypip-index.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",

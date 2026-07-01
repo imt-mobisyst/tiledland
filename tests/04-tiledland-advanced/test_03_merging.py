@@ -4,6 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tll
 from src.tiledland.geometry import Point, Line, Convex
+from src.tiledland.artist import palette
 
 # ------------------------------------------------------------------------ #
 #         T E S T   S C E N E   B U I L D
@@ -23,11 +24,11 @@ def test_map_fromConvex():
     pablo.setCamera( 4.0, 3.0 )
 
     for shape in shapes :
-        shape.renderOn(pablo, 0)
+        pablo.drawConvex( shape, palette.background[0] )
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/22.01-toshapes-01.svg" ) 
+    refsFile= open( "tests/refs/04.03-toshapes-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -42,7 +43,7 @@ def test_map_fromConvex():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12-map-build-01.svg" ) 
+    refsFile= open( "tests/refs/04.03-map-build-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
     
@@ -54,7 +55,7 @@ def test_map_fromConvex():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12-map-build-02.svg" ) 
+    refsFile= open( "tests/refs/04.03-map-build-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -64,7 +65,7 @@ def test_map_fromConvex():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12-map-build-03.svg" ) 
+    refsFile= open( "tests/refs/04.03-map-build-03.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -107,7 +108,7 @@ def test_map_mergeOne():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-one-01.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-one-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
     
@@ -120,7 +121,7 @@ def test_map_mergeOne():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-one-02.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-one-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -143,7 +144,7 @@ def test_map_mergeNoOne():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-noone-01.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-noone-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -156,7 +157,7 @@ def test_map_mergeNoOne():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-noone-01.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-noone-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -205,7 +206,7 @@ def test_map_mergeFew():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-few-01.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-few-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -220,7 +221,7 @@ def test_map_mergeFew():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-few-02.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-few-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -231,7 +232,7 @@ def test_map_mergeFew():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-few-03.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-few-03.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -243,7 +244,7 @@ def test_map_mergeFew():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-few-04.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-few-04.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -283,7 +284,7 @@ def test_map_mergeConplex():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-complex-01.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-complex-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -297,7 +298,7 @@ def test_map_mergeConplex():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-complex-02.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-complex-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -337,7 +338,7 @@ def test_map_mergeButNo():
     pablo.flip()
     
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-complex2-01.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-complex2-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -348,6 +349,6 @@ def test_map_mergeButNo():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/12.01-mergeConvex-complex2-02.svg" ) 
+    refsFile= open( "tests/refs/04.03-mergeConvex-complex2-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )

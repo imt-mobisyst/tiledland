@@ -59,7 +59,7 @@ def test_fast_agent_body():
 
 
 def test_fast_agent_str():
-    agent= tll.Agent( 42, 0, Convex().initSquare(1.0) ).setPosition(1.0, 2.0)
+    agent= tll.Agent( 42, 0, Convex().initSquare(1.0), Point(1.0, 2.0) )
     print(agent)
     assert str(agent) == "Agent-42 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 

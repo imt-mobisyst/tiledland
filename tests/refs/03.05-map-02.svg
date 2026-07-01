@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600">
+<polygon points="0,0 0,600 800,600 800,0" fill="#b86e00" />
+<polygon points="80.0,400.0 80.0,200.0 280.0,200.0 280.0,400.0" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<polygon points="300.0,400.0 300.0,200.0 500.0,200.0 500.0,400.0" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<polygon points="520.0,400.0 520.0,200.0 720.0,200.0 720.0,400.0" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<text x="113.33333333333331" y="366.66666666666663" fill="#603800" font-family="Verdana" font-size="16">1</text>" />
+<text x="333.33333333333337" y="366.66666666666663" fill="#603800" font-family="Verdana" font-size="16">2</text>" />
+<text x="553.3333333333334" y="366.66666666666663" fill="#603800" font-family="Verdana" font-size="16">3</text>" />
+</svg>

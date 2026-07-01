@@ -10,6 +10,7 @@ The project relies on [Cairo](https://pypi.org/project/pycairo/) library for ren
 - On github: [imt-mobisyst/tiledland](https://github.com/imt-mobisyst/tiledland)
 - On PyPip: [projct tiledland](https://pypi.org/project/tiledland/)
 
+
 ### Get started
 
 The _TiledLand_ project can be installed with _pip_ (directly or after cloning).
@@ -18,7 +19,7 @@ To notice that, the project is based on _pytest_ for testing.
 ```sh
 git clone git@github.com:imt-mobisyst/tiled-land.git
 cd tiled-land
-pytest -k "not long" # to shunt time consiming tests
+pytest -k "not long" # to shunt time consuming tests
 pip install .
 ```
 

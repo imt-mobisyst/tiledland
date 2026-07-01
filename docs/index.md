@@ -23,19 +23,17 @@ You can look at concurrent/complementary projects:
 ## Install
 
 The project and its dependencies can be installed with _pip_ tool.
-its relies [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files and [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
-The project requires also [Cairo](https://pypi.org/project/pycairo/) library for _PNG_ image rendering example. 
-This dependency is not mandatory, but all example and demonstration generating or reading _PNG_ image will fail. 
-Only _SVG_ rendering is available by default.
 
 ```sh
-pip install pycairo tiledland
+pip install tiledland
 ```
 
-You can also install _TiledLand_ from source on [github.com - tiledland](https://github.com/imt-mobisyst/tiledland).
+For information, _TiledLand_ relies on [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files, on [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming and on  [Cairo](https://pypi.org/project/pycairo/) library for _PNG_ image rendering. 
+
+You can also install _TiledLand_ from source: [github.com - tiledland](https://github.com/imt-mobisyst/tiledland).
 
 
-## Getting started
+## Get started
 
 Then, as an exemple, the following code will generate a grid-land with 3 square agents in position _9_, _14_ and _26_.
 The land is then rendered as a _png_ graphic.
@@ -45,8 +43,8 @@ The land is then rendered as a _png_ graphic.
 import tiledland as tll
 
 # Create a new TiledMap as a grid:
-map= tll.Map()
-map.initGrid([
+land= tll.Map()
+land.initGrid([
 	[0, 1, 1, -1, 0, 0, 0, 0], # -1 : means no cell at this location
 	[5, -1, 0, 2, 0, -1, 5, 0], # 0 - n : give the group identifier
 	[0, 0, 0, -1, 0, 1, 1, 0], # of the cell to create.
@@ -55,31 +53,31 @@ map.initGrid([
 ])
 
 # Agent 1
-agent= map.popAgentOn(9)
+agent= land.popAgentOn(9)
 
 # Agent 2
-agent= map.popAgentOn(26)
+agent= land.popAgentOn(26)
 agent.setMatter(13)
 
 # Agent 3
-agent= map.popAgentOn(14)
+agent= land.popAgentOn(14)
 agent.setMatter(15)
 
 # Create an artist to render this map:
-pablo= tll.createArtistPNG( "shot-demo.png", 800, 600 )
-pablo.fitBox( map.box() )
-map.renderOn(pablo)
-pablo.flip() # Uptate the support and return to a blanc page.
+dali= tll.createArtistPNG( "shot-demo.png", 800, 600 )
+dali.fitBox( land.box() )
+land.renderOn(pablo)
+dali.flip() # Uptate and save the support and return to a blanc page.
 
-print( f"You can open now the './{pablo.support().filePath()}' file." )
+print( f"You can open now the './{dali.support().filePath()}' file." )
 ```
 
 ## Structure
 
-The _Python_ module _TiledLand_ is structured with several sub-modules, each one dedicated to a functionality.
+_TiledLand_ is structured with several sub-modules, each one dedicated to a functionality.
 
 - _geometry_ :  Polygon-based objects and the map definition.
-- _mas_ : multi-agent def.
-- _artist_ : for rendering stuff
-- _games_ : 
-- _interfaces_ offering program interface tool for external solutions like ROS2, Web IHM (with Remi).
+- _artist_ : for rendering geometry objects
+- _main_ : Build on top of `geometry` and `artist`, the main tiledland elements: `entities`, `tiles`, `maps` and `agents`
+- _games_ : few example games.
+- _interfaces_ : offering tools making _TiledLand_ easely integrable with external solutions like ROS2, Web IHM (with Remi). To notice that _TiledLand_ is not dependant to the python packages targeted with _interface_ components.

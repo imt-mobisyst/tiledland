@@ -45,7 +45,7 @@ def test_long_gridmap_rectanglemap():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-02-convexMap-01.svg" ) 
+    refsFile= open( "tests/refs/21.02-convexMap-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -64,7 +64,7 @@ def test_long_gridmap_smallMap():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-02-small-01.svg" ) 
+    refsFile= open( "tests/refs/21.02-small-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -75,7 +75,7 @@ def test_long_gridmap_smallMap():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-02-small-02.svg" ) 
+    refsFile= open( "tests/refs/21.02-small-02.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -95,15 +95,15 @@ def test_long_gridmap_mediumMap_inside():
     assert map.epsilon() == 0.04
 
     # Foreach value possibility:
-    minMatter, maxMatter= grid.valueMinMax()
-    assert (minMatter, maxMatter) == (0, 0)
+    minVal, maxVal= grid.valueMinMax()
+    assert (minVal, maxVal) == (0, 0)
     i= 0
-    for matter in range( minMatter, maxMatter+1 ):
+    for pixval in range(minVal, maxVal+1):
         # Add all shapes
-        shapes= grid.makeRectangles(matter, tileSize)
+        shapes= grid.makeRectangles(pixval, tileSize)
         for s in shapes :
             i+= 1
-            assert map.createTile(s, matter) == i
+            assert map.createTile(s, pixval) == i
 
     # Connect all elements:
     map.connectAllClose( grid.resolution() )
@@ -124,7 +124,7 @@ def test_long_gridmap_mediumMap_inside():
     pablo.flip()
 
     shotFile= open( shotImg )
-    refsFile= open( "tests/refs/interface-ros-02-medium-01.svg" )
+    refsFile= open( "tests/refs/21.02-medium-01.svg" )
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -144,7 +144,7 @@ def test_long_gridmap_mediumMap():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-02-medium-01.svg" ) 
+    refsFile= open( "tests/refs/21.02-medium-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
@@ -165,7 +165,7 @@ def test_gridmap_largeMap():
     pablo.flip()
 
     shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/interface-ros-02-large-01.svg" ) 
+    refsFile= open( "tests/refs/21.02-large-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 """

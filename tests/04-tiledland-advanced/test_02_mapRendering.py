@@ -50,19 +50,19 @@ def test_map_clockNeighboring():
 
     assert map.neighbours(1) == []
 
-    index= map.addTile( Tile( shape= tileConvex, position=Point(1.5, 2), matter= 2 ) )
+    index= map.addTile( Tile( shape= tileConvex, position=Point(1.5, 2), group= 2 ) )
     map.connect( 1, index )    
     assert map.neighbours(1) == [(2, 1)]
     draw(map)
 
-    index= map.addTile( Tile( shape= tileConvex, position=Point(-1.5, 2), matter= 2 ) )
+    index= map.addTile( Tile( shape= tileConvex, position=Point(-1.5, 2), group= 2 ) )
     map.connect( 1, index )    
     draw(map)
     assert map.neighbours(1) == [(2, 1), (3, 11)]
 
-    index= map.addTile( Tile( shape= tileConvex, position=Point(1.5, -2), matter= 2 ) )
+    index= map.addTile( Tile( shape= tileConvex, position=Point(1.5, -2), group= 2 ) )
     map.connect( 1, index )    
-    index= map.addTile( Tile( shape= tileConvex, position=Point(-1.5, -2), matter= 2 ) )
+    index= map.addTile( Tile( shape= tileConvex, position=Point(-1.5, -2), group= 2 ) )
     map.connect( 1, index )    
     draw(map)
     assert map.neighbours(1) == [(2, 1), (3, 11), (4, 5), (5, 7)]
@@ -116,10 +116,10 @@ def test_Map_str():
 
     assert "\n"+str(map)+"\n" == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ matter-0 adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ matter-0 adjs[1, 2] agents(1)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(1)
   - Agent-1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ matter-0 adjs[2] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
 """
 
 def test_Map_hacka():
@@ -136,10 +136,10 @@ def test_Map_hacka():
     print(f">>>\n{map}.")
     assert '\n'+ str(map) +'\n' == """
 Map:
-- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ matter-0 adjs[2, 3, 4] agents(0)
-- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ matter-0 adjs[1, 3, 4] agents(0)
-- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ matter-0 adjs[1, 2] agents(0)
-- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ matter-0 adjs[1, 2] agents(0)
+- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] agents(0)
+- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] agents(0)
+- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] agents(0)
+- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] agents(0)
 """
 
 def test_Map_box():
@@ -181,9 +181,9 @@ def test_Map_dataTreecopy():
     print( f">>>\n{map}." )
     assert '\n'+ str(map) +'\n' == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ matter-0 adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ matter-0 adjs[1, 2] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ matter-0 adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
 """
 
     print("Go for the copying...")
@@ -196,9 +196,9 @@ Map:
     print(f">>>\n{mapBis}.")
     assert '\n'+ str(mapBis) +'\n' == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ matter-0 adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ matter-0 adjs[1, 2] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ matter-0 adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
 """
 
     assert mapBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
@@ -212,9 +212,9 @@ def test_Map_connection():
     print( f">>>\n{map}.")
     assert "\n"+ str(map) +"\n" == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ matter-0 adjs[2] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ matter-0 adjs[2, 3] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ matter-0 adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] agents(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] agents(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
 """
 
     assert map.tile(1).adjacencies() == [2]
@@ -237,7 +237,7 @@ def test_Map_hexa():
     draw(map)
     print( f"---\n{map}.")
     assert str(map) == """Map:
-- Tile-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ matter-0 adjs[2, 3] agents(0)
-- Tile-2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ matter-1 adjs[1, 3, 4] agents(0)
-- Tile-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ matter-0 adjs[1, 2] agents(0)
-- Tile-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ matter-0 adjs[2] agents(0)"""
+- Tile-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ adjs[2, 3] agents(0)
+- Tile-1.2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ adjs[1, 3, 4] agents(0)
+- Tile-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ adjs[1, 2] agents(0)
+- Tile-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ adjs[2] agents(0)"""

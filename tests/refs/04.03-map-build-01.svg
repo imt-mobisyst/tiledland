@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600">
+<polygon points="0,0 0,600 800,600 800,0" fill="#b86e00" />
+<circle r="4" cx="250.0" cy="425.0" fill="#603800" />
+<polygon points="12.5,587.5 12.5,262.5 487.5,262.5 487.5,587.5" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<text x="91.66666666666669" y="533.3333333333333" fill="#603800" font-family="Verdana" font-size="16">1</text>" />
+</svg>

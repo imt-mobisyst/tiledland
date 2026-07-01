@@ -24,13 +24,13 @@ class Map(Entity):
         self._epsilon= epsilon
     
     # Initialization:
-    def fromShapes(self, shapes, matter):
+    def fromShapes(self, shapes, group):
         # Clean basis:
         self.clear()
         for s in shapes :
-            self.createTile(s, matter)
+            self.createTile(s, group)
     
-    def fromGridConvexes(self, aGrid, tileSize=1.0, minSizeRatio=0.1, matters= False):
+    def fromGridConvexes(self, aGrid, tileSize=1.0, minSizeRatio=0.1, pixelValues= False):
         self.clear()
         seam= aGrid.resolution() * 1.001
         self._epsilon= aGrid.resolution() * 0.001
@@ -38,15 +38,15 @@ class Map(Entity):
         assert( 0.0 <= minSizeRatio and minSizeRatio <= 1.0)
         minSize= tileSize*minSizeRatio
 
-        if not matters :
-            minMatter, maxMatter= aGrid.valueMinMax()
-            matters= range(minMatter, maxMatter+1)
+        if not pixelValues :
+            minVal, maxVal= aGrid.valueMinMax()
+            pixelValues= range(minVal, maxVal+1)
         
         # Foreach value possibility:
-        for matter in matters :
-            convexes= aGrid.makeConvexes(matter, gridConvexRadius, minSize)
+        for pixval in pixelValues :
+            convexes= aGrid.makeConvexes(pixval, gridConvexRadius, minSize)
             for conv in convexes :
-                self.createTile(conv, matter)
+                self.createTile(conv, pixval)
 
         # Connect all elements:
         self.connectAllClose( seam )
@@ -58,14 +58,14 @@ class Map(Entity):
         self._epsilon= aGrid.resolution() * 0.4
 
         # Foreach value possibility:
-        minMatter, maxMatter= aGrid.valueMinMax()
+        minVal, maxVal= aGrid.valueMinMax()
         i= 0
-        for matter in range( minMatter, maxMatter+1 ):
+        for pixval in range( minVal, maxVal+1 ):
             # Add all shapes
-            shapes= aGrid.makeRectangles(matter, tileSize)
+            shapes= aGrid.makeRectangles(pixval, tileSize)
             for s in shapes :
                 i+= 1
-                assert self.createTile(s, matter) == i
+                assert self.createTile(s, pixval) == i
         
         # Connect all elements:
         self.connectAllClose( aGrid.resolution() )

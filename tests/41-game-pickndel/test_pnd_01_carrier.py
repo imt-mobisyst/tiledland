@@ -11,6 +11,6 @@ import src.tiledland.game.pickndel as pnd
 import src.tiledland as tll
 
 
-def test_pnd_initCarrier():
+def test_pnd_fast_initCarrier():
     carrier= pnd.Carrier()
     assert str(carrier) == "Carrier-1.0 ⌊(-0.18, -0.18), (0.18, 0.18)⌉ |0, 0|"
