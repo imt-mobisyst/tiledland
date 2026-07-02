@@ -2,17 +2,21 @@
 Test - MoveIt Robot Class
 """
 from ...geometry import Point, Convex
-from ...agent import Agent
+from ...agent import Entity
 
 mobileConvex= Convex().initRegular(0.4, 8)
 
-class Carrier(Agent):
+class Carrier(Entity):
     def __init__( self, identifier=0, owner=1, position= Point(0.0, 0.0), mission= 0):
         super().__init__(identifier, owner, mobileConvex, position)
         self._mission= mission
         self._clockMove= 0
+        self._tile= 0
 
-    # Accessor:     
+    # Accessor:
+    def tile(self):
+        return self._tile
+    
     def mission(self):
         return self._mission
     

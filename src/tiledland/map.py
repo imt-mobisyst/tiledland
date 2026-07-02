@@ -1,7 +1,6 @@
 import hacka
 from .geometry import Point, Box, Convex
 from .entity import Entity
-from .agent import Agent
 from .tile import Tile
 
 import math
@@ -11,13 +10,13 @@ class Map(Entity):
     # Constructor:
     def clear( self ):
         self._tiles= []
-        self._agents= [[]]
+        self._entities= [[]]
         self._size= 0
         return self
     
     def __init__(self, shapes= [], epsilon= 0.01):
         super().__init__()
-        self._factory= Agent #lambda identifier, group : Agent( identifier, group, shape=Convex().initRegular(0.8, 5) ).setMatter(1)
+        self._factory= Entity #lambda identifier, group : Entity( identifier, group, shape=Convex().initRegular(0.8, 5) ).setMatter(1)
         self.clear()
         for s in shapes :
             self.createTile( s )
@@ -89,15 +88,15 @@ class Map(Entity):
     def tile(self, iCell):
         return self._tiles[iCell-1]
 
-    def agent(self, iAgent, group=0 ):
-        return self._agents[group][iAgent-1]
+    def entity(self, iEntity, group=0 ):
+        return self._entities[group][iEntity-1]
 
     def numberOfGroups(self):
-        return len(self._agents)
+        return len(self._entities)
     
-    def numberOfAgents(self, group=0):
-        if group < len(self._agents) :
-            return len( self._agents[group] )
+    def numberOfEntities(self, group=0):
+        if group < len(self._entities) :
+            return len( self._entities[group] )
         return 0
     
     # Graph:
@@ -142,8 +141,8 @@ class Map(Entity):
         return self.completeClock(iTile)[clockDir]
 
     # Test:
-    def isAgent(self, iAgent, group= 1):
-        return group < len(self._agents)  and iAgent-1 < len(self._agents[group])
+    def isEntity(self, iEntity, group= 1):
+        return group < len(self._entities)  and iEntity-1 < len(self._entities[group])
     
     def isTile(self, iTile):
         return 0 < iTile and iTile <= self.size()
@@ -159,12 +158,12 @@ class Map(Entity):
             box.merge( t.box() )
         return box
 
-    def testNumberOfAgents(self):
+    def testNumberOfEntities(self):
         nb1= 0
         nb2= 0
         for t in self.tiles() :
             nb1+= t.count()
-        for grp in self._agents :
+        for grp in self._entities :
             nb2+= len(grp)
         assert nb1 == nb2
         return nb1
@@ -278,35 +277,34 @@ class Map(Entity):
         self._epsilon= epsilon
         return self
 
-    def setAgentFactory(self, agentFactory ):
-        self._factory= agentFactory
+    def setEntityFactory(self, entityFactory ):
+        self._factory= entityFactory
         return self
 
-    def clearAgents(self):
+    def clearEntities(self):
         for t in self.tiles() :
             t.clear()
-        self._agents= [[]]
+        self._entities= [[]]
         return self
 
-    def __addAgent( self, anAgent ):
-        group= anAgent.group()
-        while len(self._agents) <= group :
-            self._agents.append([])
-        assert anAgent.id() == len(self._agents[group])+1 
-        self._agents[group].append(anAgent)
+    def __addEntity( self, anEntity ):
+        group= anEntity.group()
+        while len(self._entities) <= group :
+            self._entities.append([])
+        assert anEntity.id() == len(self._entities[group])+1 
+        self._entities[group].append(anEntity)
     
-    def popAgentOn(self, iTile=1, group= 0 ):
-        while len(self._agents) <= group :
-            self._agents.append([])
+    def popEntityOn(self, iTile=1, group= 0 ):
+        while len(self._entities) <= group :
+            self._entities.append([])
         if iTile > self.size() :
             return False
-        ag= self._factory( len(self._agents[group])+1, group )
-        ag.setTile(iTile)
+        entity= self._factory( len(self._entities[group])+1, group )
         x, y= self.tile(iTile).position().asTuple()
-        ag.setPosition(x, y)
-        self.tile(iTile).append( ag )
-        self.__addAgent(ag)
-        return ag
+        entity.setPosition(x, y)
+        self.tile(iTile).append( entity )
+        self.__addEntity(entity)
+        return entity
 
     def connect(self, iFrom, iTo):
         self.tile(iFrom).connect(iTo)
@@ -407,8 +405,8 @@ class Map(Entity):
         newConvex.simplify( self.epsilon() )
         tile.setBody(newConvex)
         deadTile= self.tile(iTile2)
-        # merge all agents
-        for ag in deadTile.agents() :
+        # merge all entities
+        for ag in deadTile.entities() :
             tile.append( ag )
         
         # merge connections
@@ -454,18 +452,18 @@ class Map(Entity):
         
         return count
 
-    # Agent Collection:
-    def allAgents( self, iGroup=0 ):
+    # Entity Collection:
+    def allEntities( self, iGroup=0 ):
         alls= []
-        for ags in self._agents:
+        for ags in self._entities:
             alls+= ags
         return alls
     
-    def agents( self, iGroup=0 ):
-        return self._agents[iGroup]
+    def entities( self, iGroup=0 ):
+        return self._entities[iGroup]
 
-    def agentTiles( self, iGroup=0 ):
-        return [ ag.tile() for ag in self.agents(iGroup) ]
+    #def entityTiles( self, iGroup=0 ):
+    #    return [ ag.tile() for ag in self.entities(iGroup) ]
 
     # Hacka.DataTree interface:
     def asDataTree( self, name= "Map" ):
@@ -476,12 +474,12 @@ class Map(Entity):
     def fromDataTree( self, aDataTree ):
         self.clear()
         self._epsilon= aDataTree.value(1)
-        allAgents= []
+        allEntities= []
         for absTile in aDataTree.children() :
             t= Tile().fromDataTree( absTile, self._factory )
             self.addTile(t)
-            for ag in t.agents() :
-                self.__addAgent(ag)
+            for ag in t.entities() :
+                self.__addEntity(ag)
         return self
     
     
@@ -503,18 +501,18 @@ class Map(Entity):
             tile.writeOn( artist )
         return self
     
-    def renderAgentsOn( self, artist ):
+    def renderEntitiesOn( self, artist ):
         for tile in self.tiles() :
             x, y= tile.position().asTuple()
             position= (x+0.1, y+0.1)
-            for agent in tile.agents() :
-                agent.renderOn( artist )
+            for entity in tile.entities() :
+                entity.renderOn( artist )
         return self
 
     def renderOn( self, artist ):
         self.renderNetworkOn(artist)
         self.renderTilesOn(artist)
-        self.renderAgentsOn(artist)
+        self.renderEntitiesOn(artist)
         return self
 
     # string:
@@ -522,7 +520,7 @@ class Map(Entity):
         eltStrs =[]
         for t in self.tiles() :
             eltStrs.append( f"- {t}" )
-            for ag in t.agents() :
+            for ag in t.entities() :
                 eltStrs.append( f"  - {ag}" )
         return f"{name}:\n" + "\n".join( eltStrs )
     

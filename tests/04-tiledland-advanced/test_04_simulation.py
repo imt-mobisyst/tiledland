@@ -11,8 +11,7 @@ from src.tiledland.geometry import Convex, Point
 
 def test_fast_simulation_agent_init():
     agent= tll.Agent()
-    assert agent.process(None) == None 
-
+    assert agent.decide() == None 
 
 def test_fast_simulation_map_init():
     land= tll.Map()
@@ -33,7 +32,7 @@ def test_fast_simulation_map_init():
     assert( shotFile == refsFile )
 
     # Add the agent:
-    bod= land.popAgentOn(10)
+    bod= land.popEntityOn(10)
 
     tll.draw( land, "shot-test.png", 400, 300 )
 

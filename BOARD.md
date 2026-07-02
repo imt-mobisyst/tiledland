@@ -4,11 +4,26 @@
 
 ## Tiledland Core Structures
 
-- [x] `Entity` the root class with group, id and shape.
-- [x] Initialize artist rendering
-- [ ] Drawing as `Entities` methods (with no matters)
-- [ ] New Structure: core (Entities, Tiles Agents, and Map), geometry and artist
+the core component of TiledLand refere to the `Tiles` composing a `Map` and comtainning `Entities`.
+
+- [x] `Entity` the root class with group, id and shape, a convex delimitation of the element.
+- [x] The `Entity` shape is defined with a reference shape (static, centered on (0.0, 0.0 and potentially shared between several entities) and a body shape (a transformed reference shape in the map).
+- [ ] An abstract entity `AbsEntity` that regroups the core, expected methods for an `Entity` : box, pose definition, and hackagame methods. An `Entity` is a `AbsEntity` 
+- [x] `Tiles`: a tile is an `Entity` interconnected with other tiles. 
+- [x] a tile contains entities. The elements are positioned in the tile. 
+- [x] `Map` : a map is an `AbsEntity`. It contains several tiles. Its shape (not necessarily convex) is the fusion of all contained tiles.
+- [x] Initialize artist rendering: abstract entities can be rendered through an Artist object.
 - [x] HackaGame (DataTree) compatible
+
+
+## Multi-Agent Model
+
+Agent-model is derivated from Hackagames. Agent is mainly defined by a `perception`, `decide` loop, itsel included in a `wake-up` and `sleep` super-loop.
+TiledLand agents perception and actions are mainly defined regarding the capability to move in a graph-model of the environment. 
+
+- [ ] a 'basic' agent : waking-up with a pointer to the land's map and perceiving an identification of its body in the map.
+- [ ] `Land` mainly a Map, but also an Agent manager, with agents linked to the Map's entities.
+- [ ] HackaAgent: encapsulating a basic agent for distributed computing.
 
 
 ## Simple, but strong plan geometry
@@ -25,12 +40,9 @@
 - [ ] Georeferenced solution (import GIS Data)
 
 
-## Map, Tiles and Agents :
+## Geometrical Land :
 
-- [x] Agents: Position, clock-position and Convex
-- [x] Land as collection of: group's Agents, structured on Tiles
-- [x] Tiles as collection of: Agents
-- [x] Abstraction on Map: Agents could be anything...
+- [x] Agents: Position, clock-orientation and Convex
 - [x] Grid and Hexa-grid based map initilization.
 - [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Map: `forward(agent, action)` (But on Hacka?) )
 - [ ] Basic Map manipulation: doSomething ... doTeleportOn(tile, agent, group).
@@ -38,11 +50,6 @@
 - [ ] Generate map from point-graph (mesh).
 - [ ] No geometry artifact on Agent and Tiles...
 
-
-## One Agent - Several Agents :
-
-- [ ] `Mobile` : A mobile agent
-- [ ] ...
 
 
 ## Web IHM

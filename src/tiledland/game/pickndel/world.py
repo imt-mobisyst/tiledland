@@ -29,7 +29,7 @@ class Mission:
 class World( map.Map ):
     def __init__(self, name="Pick'nDel", numberOfPlayers= 1):
         super().__init__()
-        self.setAgentFactory(Carrier)
+        self.setEntityFactory(Carrier)
         self._name= name
         self._missions= []
         self._encumbers= []
@@ -46,16 +46,16 @@ class World( map.Map ):
         return self._name
     
     def carrierTile(self, iCarrier= 1, iPlayer= 1):
-        return self.agent(iCarrier, iPlayer).tile()
+        return self.entity(iCarrier, iPlayer).tile()
     
     def carrierMission(self, iCarrier= 1, iPlayer= 1):
-        mission= self.agent(iCarrier, iPlayer).mission()
+        mission= self.entity(iCarrier, iPlayer).mission()
         if mission != 0 : 
             return mission
         return self.missionIndexes()[0]
 
     def carrierGoal(self, iCarrier= 1, iPlayer= 1):
-        mission= self.agent(iCarrier, iPlayer).mission()
+        mission= self.entity(iCarrier, iPlayer).mission()
         if mission != 0 : 
             return self.mission( mission ).final
         mission= self.missionIndexes()[0]
@@ -80,7 +80,7 @@ class World( map.Map ):
         return l
     
     def carrierTiles(self, iPlayer):
-        return [ m.tile() for m in self.agents(iPlayer) ]
+        return [ m.tile() for m in self.entities(iPlayer) ]
     
     def encumber(self, iTile):
         return self._encumbers[iTile-1]
@@ -88,7 +88,7 @@ class World( map.Map ):
     # Construction:
     def initMoves(self):
         for group in range( self.numberOfGroups() ) :
-            for car in self.agents(group) :
+            for car in self.entities(group) :
                 car.setMove(0)
 
     def append( self, tile, encumber= 0.0 ):
@@ -134,8 +134,8 @@ class World( map.Map ):
     def clearMissions(self):
         self._missions= []
         for group in range(self.numberOfGroups()+1) :
-            for iCarrier in range(1, self.numberOfAgents(group)+1) :
-                self.agent( iCarrier, group ).setMission(0)
+            for iCarrier in range(1, self.numberOfEntities(group)+1) :
+                self.entity( iCarrier, group ).setMission(0)
         return self
 
     def addMission( self, iFrom, iTo, pay= 124 ):
@@ -172,12 +172,12 @@ class World( map.Map ):
             return False
         # move:
         # Get from iFrom
-        carrier= self.tile(iFrom).agent()
+        carrier= self.tile(iFrom).entity()
         self.tile(iFrom).clear()
 
         # Set on iTo
         self.tile(iTo).append(carrier)
-        carrier.setTile( iTo )
+        #carrier.setTile( iTo )
         carrier.setPose( self.tile(iTo).position(), self.orientation() )
         return iTo
     
@@ -194,8 +194,8 @@ class World( map.Map ):
     def carriersAsDataTree(self):
         mobiles= hacka.DataTree( "Carriers" )
         for group in range( self.numberOfGroups() ):
-            for car in self.agents( group ):
-                mDataTree= hacka.DataTree( "carrier", [group, car.id(), car.tile(), car.mission()] )
+            for car in self.entities( group ):
+                mDataTree= hacka.DataTree( "carrier", [group, car.id(), car.mission()] )
                 mobiles.append(mDataTree)
         return mobiles
 
@@ -212,16 +212,16 @@ class World( map.Map ):
         return self._missions
     
     def carriersFromDataTree(self, aDataTree):
-        self.clearAgents()
+        self.clearEntities()
         for c in aDataTree.children() :
             iPlayer= c.digit(1)
             iCarrier= c.digit(2)
             pos= c.digit(3)
             mis= c.digit(4)
-            carrier= self.popAgentOn( pos, iPlayer )
+            carrier= self.popEntityOn( pos, iPlayer )
             assert carrier.id() == iCarrier
             carrier.setMission(mis)
-        return self._agents
+        return self._entities
 
     def setOnState(self, aDataTree):
         self.missionsFromDataTree( aDataTree.child(1) )

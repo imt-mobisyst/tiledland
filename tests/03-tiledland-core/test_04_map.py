@@ -4,7 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tll
 from src.tiledland.geometry import Point, Box, Convex
-from src.tiledland import Agent, Tile, Map 
+from src.tiledland import Entity, Tile, Map 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - C O M P O N E N T
@@ -61,16 +61,16 @@ def test_fast_map_construction():
 def test_fast_map_str():
     aMap= Map().initLine(3, connect=False)
     aMap.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
-    aMap.tile(2).append( Agent(1, 1) )
+    aMap.tile(2).append( Entity(1, 1) )
 
     print( f">>> {aMap}." )
 
     assert "\n"+str(aMap)+"\n" == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(1)
-  - Agent-1.1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(1)
+  - Entity-1.1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
 def test_fast_map_hacka():
@@ -87,10 +87,10 @@ def test_fast_map_hacka():
     print(f">>>\n{aMap}")
     assert '\n'+ str(aMap) +'\n' == """
 Map:
-- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] agents(0)
-- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] agents(0)
-- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] agents(0)
-- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] agents(0)
+- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] entities(0)
+- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] entities(0)
+- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] entities(0)
+- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] entities(0)
 """
 
 def test_fast_map_box():
@@ -140,9 +140,9 @@ def test_fast_map_DataTreecopy():
 
     assert '\n'+ str(aMap) +'\n' == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     print("Go for the copying...")
@@ -155,9 +155,9 @@ Map:
     print(f">>>\n{mapBis}")
     assert '\n'+ str(mapBis) +'\n' == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     assert mapBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
@@ -171,9 +171,9 @@ def test_fast_map_connection():
     print( f">>>\n{map}\n---")
     assert "\n"+ str(aMap) +"\n"  == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] entities(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] entities(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     assert aMap.tile(1).adjacencies() == [2]
@@ -187,101 +187,101 @@ Map:
     assert not aMap.isEdge(1, 3)
     assert not aMap.isEdge(3, 1)
   
-def test_fast_map_withAgents():
+def test_fast_map_withEntities():
     aMap= Map().initGrid( [[0, 1],[-1, 0]] )
     
-    assert aMap.testNumberOfAgents() == 0
+    assert aMap.testNumberOfEntities() == 0
     assert aMap.tile(1).count() == 0
     assert aMap.tile(2).count() == 0
     assert aMap.tile(3).count() == 0
     
-    aMap.popAgentOn(2)
+    aMap.popEntityOn(2)
 
-    assert aMap.testNumberOfAgents() == 1
+    assert aMap.testNumberOfEntities() == 1
     assert aMap.tile(1).count() == 0
     assert aMap.tile(2).count() == 1
     assert aMap.tile(3).count() == 0
 
-    aMap.popAgentOn(1)
+    aMap.popEntityOn(1)
 
-    assert aMap.testNumberOfAgents() == 2
+    assert aMap.testNumberOfEntities() == 2
     assert aMap.tile(1).count() == 1
     assert aMap.tile(2).count() == 1
     assert aMap.tile(3).count() == 0
 
-    bod= aMap.popAgentOn(2)
+    bod= aMap.popEntityOn(2)
     bod.setId(4)
 
-    assert aMap.testNumberOfAgents() == 3
+    assert aMap.testNumberOfEntities() == 3
     assert aMap.tile(1).count() == 1
     assert aMap.tile(2).count() == 2
     assert aMap.tile(3).count() == 0
 
     print( f"---\n{aMap}.")
     assert str(aMap) == """Map:
-- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] agents(1)
-  - Agent-2 ⌊(-0.43, 0.6), (0.5, 1.6)⌉
-- Tile-1.2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] agents(2)
-  - Agent-1 ⌊(0.67, 0.6), (1.6, 1.6)⌉
-  - Agent-4 ⌊(0.67, 0.6), (1.6, 1.6)⌉
-- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] agents(0)"""
+- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] entities(1)
+  - Entity-2 ⌊(-0.43, 0.6), (0.5, 1.6)⌉
+- Tile-1.2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] entities(2)
+  - Entity-1 ⌊(0.67, 0.6), (1.6, 1.6)⌉
+  - Entity-4 ⌊(0.67, 0.6), (1.6, 1.6)⌉
+- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] entities(0)"""
 
-    aMap.clearAgents()
+    aMap.clearEntities()
 
-    assert aMap.testNumberOfAgents() == 0
+    assert aMap.testNumberOfEntities() == 0
     assert aMap.tile(1).count() == 0
     assert aMap.tile(2).count() == 0
     assert aMap.tile(3).count() == 0
 
-def test_fast_map_popAgents():
+def test_fast_map_popEntities():
     aMap= Map().initGrid( [[0, 1],[-1, 0]] )
     
-    assert aMap.testNumberOfAgents() == 0
+    assert aMap.testNumberOfEntities() == 0
     assert aMap.tile(1).count() == 0
     assert aMap.tile(2).count() == 0
     assert aMap.tile(3).count() == 0
     
-    bod= aMap.popAgentOn(2)
+    bod= aMap.popEntityOn(2)
 
-    assert type(bod) == Agent
+    assert type(bod) == Entity
     assert bod.id() == 1
-    assert aMap.agent(1) == bod
+    assert aMap.entity(1) == bod
 
-    assert aMap.testNumberOfAgents() == 1
+    assert aMap.testNumberOfEntities() == 1
     assert aMap.tile(1).count() == 0
     assert aMap.tile(2).count() == 1
     assert aMap.tile(3).count() == 0
 
-    bod= aMap.popAgentOn(1)
+    bod= aMap.popEntityOn(1)
 
-    assert type(bod) == Agent
+    assert type(bod) == Entity
     assert bod.id() == 2
-    assert aMap.agent(2) == bod
+    assert aMap.entity(2) == bod
 
-    assert aMap.testNumberOfAgents() == 2
+    assert aMap.testNumberOfEntities() == 2
     assert aMap.tile(1).count() == 1
     assert aMap.tile(2).count() == 1
     assert aMap.tile(3).count() == 0
 
-    bod= aMap.popAgentOn(2)
+    bod= aMap.popEntityOn(2)
 
-    assert aMap.testNumberOfAgents() == 3
+    assert aMap.testNumberOfEntities() == 3
     assert aMap.tile(1).count() == 1
     assert aMap.tile(2).count() == 2
     assert aMap.tile(3).count() == 0
 
     print( f"---\n{aMap}.")
     assert str(aMap) == """Map:
-- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] agents(1)
-  - Agent-2 ⌊(-0.43, 0.6), (0.5, 1.6)⌉
-- Tile-1.2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] agents(2)
-  - Agent-1 ⌊(0.67, 0.6), (1.6, 1.6)⌉
-  - Agent-3 ⌊(0.67, 0.6), (1.6, 1.6)⌉
-- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] agents(0)"""
+- Tile-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] entities(1)
+  - Entity-2 ⌊(-0.43, 0.6), (0.5, 1.6)⌉
+- Tile-1.2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] entities(2)
+  - Entity-1 ⌊(0.67, 0.6), (1.6, 1.6)⌉
+  - Entity-3 ⌊(0.67, 0.6), (1.6, 1.6)⌉
+- Tile-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] entities(0)"""
 
-    aMap.clearAgents()
+    aMap.clearEntities()
 
-    assert aMap.testNumberOfAgents() == 0
+    assert aMap.testNumberOfEntities() == 0
     assert aMap.tile(1).count() == 0
     assert aMap.tile(2).count() == 0
     assert aMap.tile(3).count() == 0

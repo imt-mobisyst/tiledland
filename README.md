@@ -1,12 +1,13 @@
 # TiledLand: Polygon-based simulation engine.
 
-The main idea is to model a plan world as a collection of convex-polygons objects.
-The world is mainly composed of an environnement and items and agents distributed inside it with convex-based interconnected tiles for the environment.
+The main idea is to model a plane world as a collection of convex-polygon objects.
+The world is mainly composed of an environment and items and agents distributed inside it with convex-based interconnected tiles for the environment.
 
-Its is more a sandbox project to test approaches than an optimized, ready-to-use and well documented toolbox.
+It is more a sandbox project to test approaches than an optimized, ready-to-use, and well-documented toolbox.
 
-The project relies on [Cairo](https://pypi.org/project/pycairo/) library for rendering example ; [pyyaml](https://pypi.org/project/PyYAML) and [msgpack](https://msgpack.org/) to read/write respectivelly configuration and serialized-object files ; [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
+The project relies on the [Cairo](https://pypi.org/project/pycairo/) library for rendering ; [pyyaml](https://pypi.org/project/PyYAML) and [msgpack](https://msgpack.org/) to read/write respectively configuration and serialized-object files ; [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming.
 
+- Documentation: [imt-mobisyst.github.io](https://imt-mobisyst.github.io/tiledland/)
 - On github: [imt-mobisyst/tiledland](https://github.com/imt-mobisyst/tiledland)
 - On PyPip: [projct tiledland](https://pypi.org/project/tiledland/)
 
@@ -23,10 +24,10 @@ pytest -k "not long" # to shunt time consuming tests
 pip install .
 ```
 
-The `demo` directory include simple examples for _TiledLand_.
+The `demo` directory includes simple examples for _TiledLand_.
 Most of the demonstrations generate a map, rendered in a `shot-demo.png` file.
 
-In VisualStudio Code terminal for instance:
+In VS-Codium terminal, for instance:
 
 ```shell
 cd demo

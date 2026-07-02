@@ -2,7 +2,6 @@ import math, hacka
 from . import geometry
 from .geometry import Point, Convex
 from .entity import Entity
-from .agent import Agent
 from .artist import palette
 
 class Tile(Entity):
@@ -12,20 +11,20 @@ class Tile(Entity):
             shape= Convex().initSquare(1.0)
         super(Tile, self).__init__(identifier, group, shape, position)
         self._adjacencies= []
-        self._agents= []
+        self._entities= []
         
     # Accessor:
     def adjacencies(self):
         return self._adjacencies
 
-    def agents(self) :
-        return self._agents
+    def entities(self) :
+        return self._entities
     
     def count(self) :
-        return len( self._agents)
+        return len( self._entities)
     
-    def agent(self, i=1) :
-        return self._agents[i-1]
+    def entity(self, i=1) :
+        return self._entities[i-1]
     
     # Construction:
     def setAdjacencies( self, aList ):
@@ -75,11 +74,11 @@ class Tile(Entity):
 
     # Agent managment
     def append(self, aDataTree, brushId=0, shapeId=0 ): 
-        self._agents.append( aDataTree )
+        self._entities.append( aDataTree )
         return self
     
     def clear(self):
-        self._agents = []
+        self._entities = []
         return self
     
     # Comparison :
@@ -95,10 +94,10 @@ class Tile(Entity):
         return hacka.DataTree("Tile", 
             [self.id(), self.group()] + self.adjacencies(),
             [x, y, self.orientation()],
-            [self.referenceShape().asDataTree()] + [ ag.asDataTree() for ag in self.agents() ]
+            [self.referenceShape().asDataTree()] + [ ag.asDataTree() for ag in self.entities() ]
         )
     
-    def fromDataTree( self, aDataTree, agentFactory=Agent ):
+    def fromDataTree( self, aDataTree, entityFactory=Entity ):
         digits= aDataTree.digits()
         values= aDataTree.values()
         children= aDataTree.children()
@@ -109,7 +108,7 @@ class Tile(Entity):
         self.setPose( Point(values[0], values[1]), values[2] )
         self.clear()
         for c in children[1:] :
-            self.append( agentFactory().fromDataTree( c ) )
+            self.append( entityFactory().fromDataTree( c ) )
         return self
     
     # Classical Class
@@ -133,7 +132,7 @@ class Tile(Entity):
         # Myself :
         s= super(Tile, self).str(typeName)
         s+= " adjs"+ str(self._adjacencies)
-        s+= f" agents({ len(self.agents()) })"
+        s+= f" entities({ len(self.entities()) })"
         return s
     
     def __str__(self): 

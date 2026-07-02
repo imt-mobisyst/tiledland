@@ -140,21 +140,21 @@ class Entity() :
     
     # Hacka.DataTree interface:
     def asDataTree(self):
+        x, y= self.position().asTuple()
         return hacka.DataTree( 
             "Entity", 
             [self.id(), self.group()],
-            self.position().asList(),
-            [ self.shape().asDataTree() ]
+            [x, y, self.orientation()],
+            [ self.referenceShape().asDataTree() ]
         )
 
     def fromDataTree( self, aDataTree ):
         digits= aDataTree.digits()
+        values= aDataTree.values()
+        self.setShape( Convex().fromDataTree( aDataTree.children()[0] ) )
         self.setId( digits[0] )
         self.setGroup( digits[1] )
-        self.setMatter( digits[2] )
-        self.setTile( digits[3] )
-        self.setPosition( Point().fromList( aDataTree.values() ) )
-        self.setShape( Convex().fromDataTree( aDataTree.children()[0] ) )
+        self.setPose( Point(values[0], values[1]), values[2] )
         return self
     
     def dataTreeCopy(self):

@@ -138,17 +138,17 @@ def test_gridmap_piece():
     pablo.flip()
 
     assert( open(shotImg).read()
-        == open("tests/refs/03.05-agent-01.svg" ).read() )
+        == open("tests/refs/03.05-entity-01.svg" ).read() )
 
-    def popAgent( iRobot, iGroup, iTile ):
-        bob= tll.Agent( iRobot, iGroup,
+    def popEntity( iRobot, iGroup, iTile ):
+        bob= tll.Entity( iRobot, iGroup,
             tll.Convex().initRegular(0.7, 6),
             Point(0.1, 0.1)+map.tile(iTile).position()
         )
         map.tile(iTile).append( bob )
         return bob
     
-    bob= popAgent(1, 13, 12)
+    bob= popEntity(1, 13, 12)
 
     env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.referenceShape().asZipped() ]
     print( env )
@@ -157,7 +157,7 @@ def test_gridmap_piece():
         (0.3, 0.18), (0.3, -0.17), (0.0, -0.35),
     ]
 
-    bob= map.tile(12).agent()
+    bob= map.tile(12).entity()
 
     env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.body().asZipped() ]
     print( env )
@@ -178,33 +178,33 @@ def test_gridmap_piece():
     pablo.flip()
 
     assert( open(shotImg).read()
-        == open("tests/refs/03.05-agent-02.svg" ).read() )
+        == open("tests/refs/03.05-entity-02.svg" ).read() )
     
-    popAgent(2, 13, 9)
-    popAgent(2, 15, 14)
-    popAgent(3, 13, 23)
-    popAgent(1, 15, 20)
+    popEntity(2, 13, 9)
+    popEntity(2, 15, 14)
+    popEntity(3, 13, 23)
+    popEntity(1, 15, 20)
 
     map.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
-        == open("tests/refs/03.05-agent-03.svg" ).read() )
+        == open("tests/refs/03.05-entity-03.svg" ).read() )
 
-    popAgent(1, 1, 17)
+    popEntity(1, 1, 17)
     
     map.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
-        == open("tests/refs/03.05-agent-04.svg" ).read() )
+        == open("tests/refs/03.05-entity-04.svg" ).read() )
 
-    map.clearAgents()
+    map.clearEntities()
     map.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
-        == open("tests/refs/03.05-agent-01.svg" ).read() )
+        == open("tests/refs/03.05-entity-01.svg" ).read() )
 
 # Test artist on map
 def test_hexamap_piece():
@@ -224,45 +224,45 @@ def test_hexamap_piece():
     pablo.flip()
 
     assert( open(shotImg).read()
-        == open("tests/refs/03.05-agent-11.svg" ).read() )
+        == open("tests/refs/03.05-entity-11.svg" ).read() )
 
-    def popAgent( iRobot, iTile, iGroup ):
-        bod= tll.Agent( iRobot, iGroup,
+    def popEntity( iRobot, iTile, iGroup ):
+        bod= tll.Entity( iRobot, iGroup,
             tll.Convex().initRegular(0.7, 6),
             Point(0.1, 0.1)+map.tile(iTile).position()
         )
         map.tile(iTile).append( bod )
     
-    popAgent(1, 12, 13)
+    popEntity(1, 12, 13)
 
     map.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
-        == open("tests/refs/03.05-agent-12.svg" ).read() )
+        == open("tests/refs/03.05-entity-12.svg" ).read() )
     
-    popAgent(2,  9, 13)
-    popAgent(2, 14, 15)
-    popAgent(3, 23, 13)
-    popAgent(1, 20, 15)
+    popEntity(2,  9, 13)
+    popEntity(2, 14, 15)
+    popEntity(3, 23, 13)
+    popEntity(1, 20, 15)
 
     map.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
-        == open("tests/refs/03.05-agent-13.svg" ).read() )
+        == open("tests/refs/03.05-entity-13.svg" ).read() )
 
-    popAgent(1, 17, 1)
+    popEntity(1, 17, 1)
 
     map.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
-        == open("tests/refs/03.05-agent-14.svg" ).read() )
+        == open("tests/refs/03.05-entity-14.svg" ).read() )
 
-    map.clearAgents()
+    map.clearEntities()
     map.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
-        == open("tests/refs/03.05-agent-11.svg" ).read() )
+        == open("tests/refs/03.05-entity-11.svg" ).read() )

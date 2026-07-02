@@ -2,7 +2,7 @@
 import sys, hacka
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland import Agent, Tile
+from src.tiledland import Entity, Tile
 from src.tiledland.geometry import Point, Convex
 
 # ------------------------------------------------------------------------ #
@@ -16,7 +16,7 @@ def test_fast_tile_init():
     assert tile.position().asTuple() == (0.0, 0.0)
     assert tile.body().asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
     assert tile.adjacencies() == []
-    assert tile.agents() == []
+    assert tile.entities() == []
     
     tile= Tile( 3, 0, Convex().initSquare(42.0), Point(10.3, 9.7) )
 
@@ -24,7 +24,7 @@ def test_fast_tile_init():
     assert tile.position().asTuple() == (10.3, 9.7)
     assert tile.body().asZipped() == [(-10.7, -11.3), (-10.7, 30.7), (31.3, 30.7), (31.3, -11.3)]
     assert tile.adjacencies() == []
-    assert tile.agents() == []
+    assert tile.entities() == []
 
     tile.setId(1).setGroupAndBrush(8).setPosition(1.0, 1.0)
     tile.setShapeSquare( 2.0 )
@@ -34,7 +34,7 @@ def test_fast_tile_init():
     assert tile.position().asTuple() == (1.0, 1.0)
     assert tile.body().asZipped() == [(0.0, 0.0), (0.0, 2.0), (2.0, 2.0), (2.0, 0.0)]
     assert tile.adjacencies() == []
-    assert tile.agents() == []
+    assert tile.entities() == []
 
 def test_fast_tile_regular():
     tile= Tile( 1 )
@@ -65,14 +65,14 @@ def test_fast_tile_str():
     tile= Tile(8)
     tile.setPosition(18.5, 4.07)
     print(f">>> {tile}")
-    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] agents(0)"
+    assert str(tile) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] entities(0)"
     tile.setGroupAndBrush(2).connectAll( [1, 2, 3] )
     print(f">>> {tile}")
-    assert str(tile) == "Tile-2.8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] agents(0)"
+    assert str(tile) == "Tile-2.8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] entities(0)"
 
     tile= Tile( shape= Convex() )
     print(f">>> {tile}")
-    assert str(tile) == "Tile-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] agents(0)"
+    assert str(tile) == "Tile-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] entities(0)"
 
     print(f">>> {tile.body()}")
     assert tile.position().asTuple() == (0.0, 0.0)
@@ -95,7 +95,7 @@ def test_fast_tile_absobj():
     assert tree.numberOfChildren() == 1
     assert tree.children() == [ tile.referenceShape().asDataTree() ]
 
-    bod= Agent()
+    bod= Entity()
     tile.append( bod )
     tree= tile.asDataTree()
 
@@ -106,8 +106,8 @@ def test_fast_tile_absobj():
 
     tileBis= Tile().fromDataTree( tree )
 
-    assert type( tileBis.agent(1) ) is Agent
-    assert not ( tileBis.agent(1) is bod )
+    assert type( tileBis.entity(1) ) is Entity
+    assert not ( tileBis.entity(1) is bod )
 
     print( tileBis )
     dt= tileBis.asDataTree()
@@ -128,7 +128,7 @@ def test_fast_tile_DataTreeCopy():
     tile= Tile(8)
     tile.setPosition(18.5, 4.07)
     tile.connectAll( [ 1, 3, 7, 19 ] )
-    tile.append( Agent(1) )
+    tile.append( Entity(1) )
 
     assert tile.adjacencies() == [ 1, 3, 7, 19 ]
 
@@ -138,8 +138,8 @@ def test_fast_tile_DataTreeCopy():
     assert type(tile) == type(tileBis)
     assert tileBis.adjacencies() == [ 1, 3, 7, 19 ]
 
-    assert str(tileBis) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 3, 7, 19] agents(1)"
-    assert str(tileBis.agent()) == str(tile.agent())
+    assert str(tileBis) == "Tile-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 3, 7, 19] entities(1)"
+    assert str(tileBis.entity()) == str(tile.entity())
 
 
 def test_fast_tile_clockDirection():

@@ -14,7 +14,7 @@ def test_fast_gamemaster_method():
     world= pnd.World().initGrid( [[0, 0], [0, 0]] )
     game= pnd.GameEngine( world, 1, tic=20 )
 
-    assert( len(game._model._agents) == 2 )
+    assert( len(game._model._entities) == 2 )
 
     print( f">>> {type( game.init() )} is {hacka.DataTree}")
 

@@ -3,7 +3,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src import tiledland as tll
 from src.tiledland.geometry import Point, Convex, Box
-from src.tiledland import Agent, Tile, Map
+from src.tiledland import Entity, Tile, Map
 
 # ----------------------------------------------------------------------- #
 #           T E S T   T I L E D L A N D - I N T E G R A T E D   
@@ -110,16 +110,16 @@ def test_Map_construction():
 def test_Map_str():
     map= Map().initLine(3, connect=False)
     map.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
-    map.tile(2).append( Agent(1) )
+    map.tile(2).append( Entity(1) )
 
     print( f">>>\n{map}." )
 
     assert "\n"+str(map)+"\n" == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(1)
-  - Agent-1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(1)
+  - Entity-1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
 def test_Map_hacka():
@@ -136,10 +136,10 @@ def test_Map_hacka():
     print(f">>>\n{map}.")
     assert '\n'+ str(map) +'\n' == """
 Map:
-- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] agents(0)
-- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] agents(0)
-- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] agents(0)
-- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] agents(0)
+- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] entities(0)
+- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] entities(0)
+- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] entities(0)
+- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] entities(0)
 """
 
 def test_Map_box():
@@ -181,9 +181,9 @@ def test_Map_dataTreecopy():
     print( f">>>\n{map}." )
     assert '\n'+ str(map) +'\n' == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     print("Go for the copying...")
@@ -196,9 +196,9 @@ Map:
     print(f">>>\n{mapBis}.")
     assert '\n'+ str(mapBis) +'\n' == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     assert mapBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
@@ -212,9 +212,9 @@ def test_Map_connection():
     print( f">>>\n{map}.")
     assert "\n"+ str(map) +"\n" == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] agents(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] agents(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] agents(0)
+- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] entities(0)
+- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] entities(0)
+- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     assert map.tile(1).adjacencies() == [2]
@@ -237,7 +237,7 @@ def test_Map_hexa():
     draw(map)
     print( f"---\n{map}.")
     assert str(map) == """Map:
-- Tile-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ adjs[2, 3] agents(0)
-- Tile-1.2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ adjs[1, 3, 4] agents(0)
-- Tile-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ adjs[1, 2] agents(0)
-- Tile-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ adjs[2] agents(0)"""
+- Tile-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ adjs[2, 3] entities(0)
+- Tile-1.2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ adjs[1, 3, 4] entities(0)
+- Tile-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ adjs[1, 2] entities(0)
+- Tile-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ adjs[2] entities(0)"""

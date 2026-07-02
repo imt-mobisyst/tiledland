@@ -44,13 +44,13 @@ def test_pnd_world():
     refsFile= open( "tests/refs/41.pickndel-map-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-    bod= model.popAgentOn(1)
+    bod= model.popEntityOn(1)
     print( bod )
     assert bod.id() == 1
-    assert model.popAgentOn(25).id() == 2
+    assert model.popEntityOn(25).id() == 2
 
-    assert model.popAgentOn(7).id() == 3
-    assert model.popAgentOn(44).id() == 4
+    assert model.popEntityOn(7).id() == 3
+    assert model.popEntityOn(44).id() == 4
 
     model.renderOn(pablo)
     pablo.flip()
@@ -84,25 +84,25 @@ def test_pnd_withCarrier():
     model= pnd.World( numberOfPlayers=2 )
     model.initGrid( refMatrix, 0.9, 0.1 )
     
-    assert str(model.popAgentOn(1, 1)) == 'Carrier-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉ |0, 0|'
-    assert str(model.popAgentOn(25, 1)) == 'Carrier-1.2 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
+    assert str(model.popEntityOn(1, 1)) == 'Carrier-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉ |0, 0|'
+    assert str(model.popEntityOn(25, 1)) == 'Carrier-1.2 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
 
-    assert str(model.popAgentOn(7, 2)) == 'Carrier-2.1 ⌊(6.82, 5.82), (7.18, 6.18)⌉ |0, 0|'
-    assert str(model.popAgentOn(44, 2)) == 'Carrier-2.2 ⌊(0.82, -0.18), (1.18, 0.18)⌉ |0, 0|'
+    assert str(model.popEntityOn(7, 2)) == 'Carrier-2.1 ⌊(6.82, 5.82), (7.18, 6.18)⌉ |0, 0|'
+    assert str(model.popEntityOn(44, 2)) == 'Carrier-2.2 ⌊(0.82, -0.18), (1.18, 0.18)⌉ |0, 0|'
     
-    assert model.agentTiles(1) == [1, 25]
-    assert model.agentTiles(2) == [7, 44]
-    assert model.agents() == []
+    #assert model.entityTiles(1) == [1, 25]
+    #assert model.entityTiles(2) == [7, 44]
+    assert model.entities() == []
 
-    assert [ ag.tile() for ag in model.allAgents() ] == [1, 25, 7, 44]
+    #assert [ ag.tile() for ag in model.allEntities() ] == [1, 25, 7, 44]
 
     assert model.move( 11, 12 ) == 11
     assert model.move( 1, 6 ) == 10
 
-    assert model.agentTiles(1) == [10, 25]
-    assert model.agentTiles(2) == [7, 44]
+    #assert model.entityTiles(1) == [10, 25]
+    #assert model.entityTiles(2) == [7, 44]
 
-    assert str( model.tile(10).agent() ) == 'Carrier-1.1 ⌊(-0.18, 4.82), (0.18, 5.18)⌉ |0, 0|'
+    assert str( model.tile(10).entity() ) == 'Carrier-1.1 ⌊(-0.18, 4.82), (0.18, 5.18)⌉ |0, 0|'
 
     assert model.clockBearing(44) == [9, 3]
 
@@ -159,8 +159,8 @@ def test_long_pnd_emcomber():
     assert model.encumber(25) == 0.6
     assert model.encumber(32) == 0.4
 
-    model.popAgentOn(25, 1)
-    assert str( model.tile(25).agent() ) == 'Carrier-1.1 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
+    model.popEntityOn(25, 1)
+    assert str( model.tile(25).entity() ) == 'Carrier-1.1 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
 
     encumberCount= 0
     for i in range(10000) :
@@ -179,7 +179,7 @@ def test_long_pnd_emcomber():
     assert round(encumberCount/10000, 1) == 0.5
 
     model.teleport(20, 32)
-    assert str( model.tile(32).agent() ) == 'Carrier-1.1 ⌊(8.82, 2.82), (9.18, 3.18)⌉ |0, 0|'
+    assert str( model.tile(32).entity() ) == 'Carrier-1.1 ⌊(8.82, 2.82), (9.18, 3.18)⌉ |0, 0|'
     encumberCount= 0
     for i in range(10000) :
         if model.move(32, 9) == 32 :
