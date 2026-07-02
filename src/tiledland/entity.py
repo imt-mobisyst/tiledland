@@ -32,8 +32,8 @@ class Entity() :
     def position(self):
         return self._pos
     
-    def body(self):
-        return self._body
+    def projectedShape(self):
+        return self._projShape
 
     def brush(self):
         return self._brush
@@ -53,10 +53,10 @@ class Entity() :
         return self
     
     def setBody(self, aConvex):
-        self._body= aConvex
-        x, y= self._body.center().asTuple()
+        self._projShape= aConvex
+        x, y= self._projShape.center().asTuple()
         self._position= Point(x, y)
-        self._refShape= self._body.copy()
+        self._refShape= self._projShape.copy()
         self._refShape.translate( Point( -x, -y ) )
         self._orientation= 0.0
     
@@ -76,7 +76,7 @@ class Entity() :
         return self
     
     def updateBody(self):
-        self._body= self._refShape.copy()
+        self._projShape= self._refShape.copy()
         self.setPose( self._pos, self._theta )
         return self
 
@@ -94,10 +94,10 @@ class Entity() :
 
     # Transformation: 
     def setPose(self, position, angle):
-        self._body.initAs( self._refShape )
-        self._body.rotate( angle )
+        self._projShape.initAs( self._refShape )
+        self._projShape.rotate( angle )
         self._theta= angle
-        self._body.translate( position )
+        self._projShape.translate( position )
         self._pos= position
         return self
 
@@ -108,7 +108,7 @@ class Entity() :
         return self.setPose( self._pos, angle )
 
     def translate(self, vector2):
-        for p in self._body.points() :
+        for p in self._projShape.points() :
             p.translate(vector2)
         self._pos+= vector2
         return self
