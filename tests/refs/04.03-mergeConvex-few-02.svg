@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="800" height="600">
 <polygon points="0,0 0,600 800,600 800,0" fill="#b86e00" />
-<circle r="4" cx="350.0" cy="370.0" fill="#603800" />
+<circle r="4" cx="350.0" cy="360.0" fill="#603800" />
 <circle r="4" cx="370.0" cy="209.99999999999997" fill="#603800" />
 <circle r="4" cx="380.0" cy="190.00000000000003" fill="#603800" />
 <circle r="4" cx="390.00000000000006" cy="170.00000000000003" fill="#603800" />
@@ -10,8 +10,8 @@
 <circle r="4" cx="420.0" cy="109.99999999999997" fill="#603800" />
 <circle r="4" cx="430.0" cy="90.00000000000003" fill="#603800" />
 <circle r="4" cx="440.00000000000006" cy="70.00000000000003" fill="#603800" />
-<line x1="350.0" y1="370.0" x2="370.0" y2="209.99999999999997" style="stroke:#603800;stroke-width:4"/>
-<line x1="370.0" y1="209.99999999999997" x2="350.0" y2="370.0" style="stroke:#603800;stroke-width:4"/>
+<line x1="350.0" y1="360.0" x2="370.0" y2="209.99999999999997" style="stroke:#603800;stroke-width:4"/>
+<line x1="370.0" y1="209.99999999999997" x2="350.0" y2="360.0" style="stroke:#603800;stroke-width:4"/>
 <line x1="370.0" y1="209.99999999999997" x2="380.0" y2="190.00000000000003" style="stroke:#603800;stroke-width:4"/>
 <line x1="380.0" y1="190.00000000000003" x2="370.0" y2="209.99999999999997" style="stroke:#603800;stroke-width:4"/>
 <line x1="380.0" y1="190.00000000000003" x2="390.00000000000006" y2="170.00000000000003" style="stroke:#603800;stroke-width:4"/>
@@ -35,7 +35,7 @@
 <polygon points="245.0,115.0 245.0,104.99999999999997 595.0,104.99999999999997 595.0,115.0" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
 <polygon points="265.0,95.00000000000003 265.0,84.99999999999997 595.0,84.99999999999997 595.0,95.00000000000003" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
 <polygon points="285.0,75.0 285.0,65.00000000000003 595.0,65.00000000000003 595.0,75.0" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
-<text x="186.66666666666663" y="453.3333333333333" fill="#603800" font-family="Verdana" font-size="16">1</text>" />
+<text x="186.66666666666663" y="450.0" fill="#603800" font-family="Verdana" font-size="16">1</text>" />
 <text x="220.00000000000003" y="213.33333333333331" fill="#603800" font-family="Verdana" font-size="16">2</text>" />
 <text x="236.66666666666666" y="193.33333333333337" fill="#603800" font-family="Verdana" font-size="16">3</text>" />
 <text x="253.33333333333334" y="173.33333333333334" fill="#603800" font-family="Verdana" font-size="16">4</text>" />

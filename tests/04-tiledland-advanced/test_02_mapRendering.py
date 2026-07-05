@@ -27,15 +27,15 @@ def test_map_incremental():
     assert map.size() == 0
     assert map.box() == Box()
 
-    index= map.addTile( Tile( shape= Convex() ) )
+    index= map.appendTile( Tile( shape= Convex() ) ).index()
     assert index == 1
     assert map.size() == 1
 
     print( map.tile(1) )
     assert map.tile(1).position().asTuple() == (0.0, 0.0)
-    assert map.tile(1).body().asZipped() == []
+    assert map.tile(1).projectedShape().asZipped() == []
 
-    index= map.addTile( Tile( shape= Convex() ) )
+    index= map.appendTile( Tile( shape= Convex() ) ).index()
     assert index == 2
     assert map.size() == 2
 
@@ -44,26 +44,26 @@ def test_map_clockNeighboring():
     tileConvex= Convex().fromZipped(
         [(-1.0, 0.0), (0.0, 1.5), (1.0, 0.0), (0.0, -1.5) ]
     )
-    map.addTile( Tile( shape=tileConvex, group= 1 ) )
+    map.appendTile( Tile( shape=tileConvex, group= 1 ) )
 
     draw(map)
 
     assert map.neighbours(1) == []
 
-    index= map.addTile( Tile( shape= tileConvex, position=Point(1.5, 2), group= 2 ) )
-    map.connect( 1, index )    
+    t= map.appendTile( Tile( shape= tileConvex, position=Point(1.5, 2), group= 2 ) )
+    map.connect( 1, t.index() )    
     assert map.neighbours(1) == [(2, 1)]
     draw(map)
 
-    index= map.addTile( Tile( shape= tileConvex, position=Point(-1.5, 2), group= 2 ) )
-    map.connect( 1, index )    
+    t= map.appendTile( Tile( shape= tileConvex, position=Point(-1.5, 2), group= 2 ) )
+    map.connect( 1, t.index() )    
     draw(map)
     assert map.neighbours(1) == [(2, 1), (3, 11)]
 
-    index= map.addTile( Tile( shape= tileConvex, position=Point(1.5, -2), group= 2 ) )
-    map.connect( 1, index )    
-    index= map.addTile( Tile( shape= tileConvex, position=Point(-1.5, -2), group= 2 ) )
-    map.connect( 1, index )    
+    t= map.appendTile( Tile( shape= tileConvex, position=Point(1.5, -2), group= 2 ) )
+    map.connect( 1, t.index() )    
+    t= map.appendTile( Tile( shape= tileConvex, position=Point(-1.5, -2), group= 2 ) )
+    map.connect( 1, t.index() )    
     draw(map)
     assert map.neighbours(1) == [(2, 1), (3, 11), (4, 5), (5, 7)]
 
@@ -72,14 +72,14 @@ def test_map_clockNeighboring():
 
 def test_Map_initLine():
     map= Map().initLine(3, connect=False)
-    assert map.tile(1).id() == 1
-    assert map.tile(2).id() == 2
-    assert map.tile(3).id() == 3
+    assert map.tile(1).index() == 1
+    assert map.tile(2).index() == 2
+    assert map.tile(3).index() == 3
     assert map.tiles() == [ map.tile(1), map.tile(2), map.tile(3) ]
     assert map.edges() == []
 
     assert map.tile(1).position().asTuple() == (0.0, 0.0)
-    assert map.tile(1).body().asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
+    assert map.tile(1).projectedShape().asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
 
     assert map.tile(2).position().asTuple() == (1.1, 0.0)
     assert map.tile(3).position().asTuple() == (2.2, 0.0)
@@ -116,10 +116,10 @@ def test_Map_str():
 
     assert "\n"+str(map)+"\n" == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(1)
-  - Entity-1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(1)
+  - Entity1 2-1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
+- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
 def test_Map_hacka():
@@ -136,10 +136,10 @@ def test_Map_hacka():
     print(f">>>\n{map}.")
     assert '\n'+ str(map) +'\n' == """
 Map:
-- Tile-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] entities(0)
-- Tile-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] entities(0)
-- Tile-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] entities(0)
-- Tile-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] entities(0)
+- Tile0 0-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] entities(0)
+- Tile0 0-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] entities(0)
+- Tile0 0-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] entities(0)
+- Tile0 0-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] entities(0)
 """
 
 def test_Map_box():
@@ -181,9 +181,9 @@ def test_Map_dataTreecopy():
     print( f">>>\n{map}." )
     assert '\n'+ str(map) +'\n' == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
+- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     print("Go for the copying...")
@@ -196,9 +196,9 @@ Map:
     print(f">>>\n{mapBis}.")
     assert '\n'+ str(mapBis) +'\n' == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
+- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     assert mapBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
@@ -212,9 +212,9 @@ def test_Map_connection():
     print( f">>>\n{map}.")
     assert "\n"+ str(map) +"\n" == """
 Map:
-- Tile-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] entities(0)
-- Tile-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] entities(0)
-- Tile-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] entities(0)
+- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] entities(0)
+- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     assert map.tile(1).adjacencies() == [2]
@@ -237,7 +237,7 @@ def test_Map_hexa():
     draw(map)
     print( f"---\n{map}.")
     assert str(map) == """Map:
-- Tile-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ adjs[2, 3] entities(0)
-- Tile-1.2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ adjs[1, 3, 4] entities(0)
-- Tile-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ adjs[1, 2] entities(0)
-- Tile-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ adjs[2] entities(0)"""
+- Tile0 0-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ adjs[2, 3] entities(0)
+- Tile1 0-2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ adjs[1, 3, 4] entities(0)
+- Tile0 0-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ adjs[1, 2] entities(0)
+- Tile0 0-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ adjs[2] entities(0)"""

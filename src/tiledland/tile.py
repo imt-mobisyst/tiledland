@@ -5,44 +5,45 @@ from .entity import Entity
 from .artist import palette
 
 class Tile(Entity):
+    defaultShape= Convex().initSquare(1.0)
+    defaultPalette= palette.background
 
     def __init__( self, identifier= 0, group=0, shape= None, position= Point(0.0, 0.0), orientation= 0.0):
-        if shape is None :
-            shape= Convex().initSquare(1.0)
-        super(Tile, self).__init__(identifier, group, shape, position)
+        super(Tile, self).__init__( group, shape, position, orientation, None, 0, identifier)
         self._adjacencies= []
         self._entities= []
+        self._size= 0
         
     # Accessor:
     def adjacencies(self):
         return self._adjacencies
 
-    def entities(self) :
+    def entities(self):
         return self._entities
     
-    def count(self) :
-        return len( self._entities)
-    
+    def numberOfEntities(self):
+        return self._size
+
     def entity(self, i=1) :
         return self._entities[i-1]
     
     # Construction:
+    def setIndex(self, index):
+        for e in self.entities() :
+            e.setArea(index)
+        self._index= index
+        return self
+    
     def setAdjacencies( self, aList ):
         self._adjacencies= aList
         return self
     
-    # Artist :
-    def setGroupAndBrush(self, aGroupId):
-        iBrush= aGroupId%len(palette.foreground)
-        self._brush= palette.background[iBrush]
-        self._group= aGroupId
-        return self
-
     # Connection:
     def isConnecting(self, iTile):
         return (iTile in self.adjacencies())
     
     def connect(self, iTo):
+        assert( type(iTo) == int )
         if iTo not in self._adjacencies :
             self._adjacencies.append(iTo)
             self._adjacencies.sort()
@@ -72,13 +73,21 @@ class Tile(Entity):
                 distance= d
         return clock
 
-    # Agent managment
-    def append(self, aDataTree, brushId=0, shapeId=0 ): 
-        self._entities.append( aDataTree )
+    # Entity managment
+    def append(self, anEntity ): 
+        self._entities.append( anEntity )
+        self._size+= 1
+        anEntity.setLocation( self._index, self._size )
         return self
+
+    def appendCenter(self, anEntity ):
+        self.append( anEntity )
+        anEntity.setPose( self.position(), anEntity.orientation() )
+        return anEntity
     
     def clear(self):
         self._entities = []
+        self._size= 0
         return self
     
     # Comparison :
@@ -86,29 +95,30 @@ class Tile(Entity):
         return self.position().distance( another.position() )
 
     def bodyDistance(self, another):
-        return self.body().distance( another.body() )
+        return self.projectedShape().distance( another.projectedShape() )
 
     # hacka.DataTree Interface:
     def asDataTree(self):
         x, y = self.position().asTuple()
         return hacka.DataTree("Tile", 
-            [self.id(), self.group()] + self.adjacencies(),
+            [self.index(), self.group()] + self.adjacencies(),
             [x, y, self.orientation()],
             [self.referenceShape().asDataTree()] + [ ag.asDataTree() for ag in self.entities() ]
         )
     
-    def fromDataTree( self, aDataTree, entityFactory=Entity ):
+    def fromDataTree( self, aDataTree, entityClass=Entity ):
         digits= aDataTree.digits()
         values= aDataTree.values()
         children= aDataTree.children()
-        self.setId( digits[0] )
+        self.setIndex( digits[0] )
         self.setGroupAndBrush( digits[1] )
         self.setAdjacencies( digits[2:] )
         self.referenceShape().fromDataTree( children[0] )
         self.setPose( Point(values[0], values[1]), values[2] )
         self.clear()
         for c in children[1:] :
-            self.append( entityFactory().fromDataTree( c ) )
+            ent= entityClass().fromDataTree( c )
+            self.append( ent )
         return self
     
     # Classical Class
@@ -118,14 +128,14 @@ class Tile(Entity):
     
     # Artist drawing:
     def renderOn(self, artist):
-        artist.drawConvex( self.body(), self.brush() )
+        artist.drawConvex( self.projectedShape(), self.brush() )
 
     def writeOn(self, artist):
         minx, miny= self.box().leftFloor().asTuple()
         x, y= self.position().asTuple()
         x= x+(minx-x)*2/3
         y= y+(miny-y)*2/3
-        artist.write( x, y, str(self.id()), self.brush() )
+        artist.write( x, y, str(self.index()), self.brush() )
 
     # to str
     def str(self, typeName): 

@@ -1,33 +1,55 @@
 import hacka
 from .geometry import Point, Box, Convex
-from .entity import Entity
+from .entity import AbsEntity, Entity
 from .tile import Tile
 
 import math
 
-class Map(Entity):
+class Map(AbsEntity):
+    defaultEntity= Entity()
 
-    # Constructor:
+    def __init__(self, epsilon= 0.01):
+        assert( type(epsilon) == float )
+        super().__init__()
+        self._tiles= []
+        self._size= 0
+        self._epsilon= epsilon
+
+    # Initialization:
     def clear( self ):
         self._tiles= []
-        self._entities= [[]]
         self._size= 0
         return self
-    
-    def __init__(self, shapes= [], epsilon= 0.01):
-        super().__init__()
-        self._factory= Entity #lambda identifier, group : Entity( identifier, group, shape=Convex().initRegular(0.8, 5) ).setMatter(1)
-        self.clear()
-        for s in shapes :
-            self.createTile( s )
-        self._epsilon= epsilon
-    
-    # Initialization:
-    def fromShapes(self, shapes, group):
+
+    def fromShapes(self, shapes, group=0):
         # Clean basis:
         self.clear()
         for s in shapes :
             self.createTile(s, group)
+        return self
+    
+    def fromGridRectangles(self, aGrid, tileSize= 1.0):
+        self.clear()
+        self._epsilon= aGrid.resolution() * 0.4
+
+        # Foreach value possibility:
+        minVal, maxVal= aGrid.valueMinMax()
+        i= 0
+        for pixval in range( minVal, maxVal+1 ):
+            # Add all shapes
+            shapes= aGrid.makeRectangles(pixval, tileSize)
+            for s in shapes :
+                i+= 1
+                assert self.createTile(s, pixval) == i
+        
+        # Connect all elements:
+        self.connectAllClose( aGrid.resolution() )
+
+        # Optimize the definition:
+        for factor in [0.2, 0.4, 0.6, 0.8] :
+            self.mergeAllPossible( aGrid.resolution() * factor, tileSize)
+
+        return self
     
     def fromGridConvexes(self, aGrid, tileSize=1.0, minSizeRatio=0.1, pixelValues= False):
         self.clear()
@@ -52,123 +74,6 @@ class Map(Entity):
 
         return self
 
-    def fromGridRectangles(self, aGrid, tileSize= 1.0):
-        self.clear()
-        self._epsilon= aGrid.resolution() * 0.4
-
-        # Foreach value possibility:
-        minVal, maxVal= aGrid.valueMinMax()
-        i= 0
-        for pixval in range( minVal, maxVal+1 ):
-            # Add all shapes
-            shapes= aGrid.makeRectangles(pixval, tileSize)
-            for s in shapes :
-                i+= 1
-                assert self.createTile(s, pixval) == i
-        
-        # Connect all elements:
-        self.connectAllClose( aGrid.resolution() )
-
-        # Optimize the definition:
-        for factor in [0.2, 0.4, 0.6, 0.8] :
-            self.mergeAllPossible( aGrid.resolution() * factor, tileSize)
-
-        return self
-    
-    # Accessor:
-    def epsilon(self):
-        return self._epsilon
-    
-    def size(self):
-        return self._size
-    
-    def tiles(self):
-        return self._tiles
-
-    def tile(self, iCell):
-        return self._tiles[iCell-1]
-
-    def entity(self, iEntity, group=0 ):
-        return self._entities[group][iEntity-1]
-
-    def numberOfGroups(self):
-        return len(self._entities)
-    
-    def numberOfEntities(self, group=0):
-        if group < len(self._entities) :
-            return len( self._entities[group] )
-        return 0
-    
-    # Graph:
-    def adjacencies(self, iTile) :
-        return self.tile(iTile).adjacencies()
-    
-    def edges(self):
-        edgeList= []
-        for t in self.tiles() :
-            edgeList+= [ (t.id(), neibor) for neibor in t.adjacencies() ]
-        return edgeList
-
-    def neighbours(self, iTile):
-        neibs= [] 
-        for iNei in self.adjacencies(iTile) :
-            clockdir= self.tile(iTile).clockDirection( self.tile(iNei).position() )
-            neibs.append( (iNei, clockdir) )
-        return neibs
-        
-    def directions(self, iTile) : 
-        cx, cy= self.tile(iTile).position().asTuple()
-        neibor= self.adjacencies(iTile)
-        positions= [ self.tile(i).position().asTuple() for i in neibor ]
-        return [ (x-cx, y-cy) for x, y in positions ]
-    
-    def clockBearing(self, iTile):
-        clock= [
-            [ 0,  9,  0],
-            [ 6,  0, 12],
-            [ 0,  3,  0]
-        ]
-        positions= [ (int(round(x, 0)), int(round(y, 0))) for x, y in self.directions(iTile) ]
-        return [ clock[1+x][1+y] for x, y in positions ]
-
-    def completeClock(self, iTile):
-        clock= [ iTile for i in range(13) ]
-        for it, ic in self.neighbours(iTile) :
-            clock[ic]= it
-        return clock
-
-    def clockposition(self, iTile, clockDir):
-        return self.completeClock(iTile)[clockDir]
-
-    # Test:
-    def isEntity(self, iEntity, group= 1):
-        return group < len(self._entities)  and iEntity-1 < len(self._entities[group])
-    
-    def isTile(self, iTile):
-        return 0 < iTile and iTile <= self.size()
-    
-    def isEdge(self, iFrom, iTo):
-        return iTo in self.tile(iFrom).adjacencies()
-    
-    def box(self):
-        if self._size == 0 :
-            return Box()
-        box= self.tile(1).box()
-        for t in self.tiles()[1:] :
-            box.merge( t.box() )
-        return box
-
-    def testNumberOfEntities(self):
-        nb1= 0
-        nb2= 0
-        for t in self.tiles() :
-            nb1+= t.count()
-        for grp in self._entities :
-            nb2+= len(grp)
-        assert nb1 == nb2
-        return nb1
-    
-    # Construction:
     def initLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
         dist= tileSize+separation
         shape= Convex().initSquare(tileSize)
@@ -233,24 +138,95 @@ class Map(Entity):
         if connect :
             self.connectAllClose(1.1*separation)
         return self
+
+    # Accessor:
+    def epsilon(self):
+        return self._epsilon
     
-    def addTile( self, aTile ):
-        self._size+= 1
-        aTile.setId( self._size )
-        self._tiles.append( aTile )
+    def size(self):
         return self._size
+    
+    def tiles(self):
+        return self._tiles
+
+    def tile(self, iTile):
+        return self._tiles[iTile-1]
+
+    def eEentity(self, iTile, index):
+        return self.tile(iTile).entity(index)
+
+    def numberOfTiles(self):
+        return self._size
+    
+    def numberOfEntities(self):
+        c= 0
+        for t in self._tiles :
+            c+= len( t.entities() )
+        return c
+
+    # Graph:
+    def adjacencies(self, iTile) :
+        return self.tile(iTile).adjacencies()
+    
+    def edges(self):
+        edgeList= []
+        for t in self.tiles() :
+            edgeList+= [ (t.index(), neibor) for neibor in t.adjacencies() ]
+        return edgeList
+
+    def neighbours(self, iTile):
+        neibs= [] 
+        for iNei in self.adjacencies(iTile) :
+            print(f"{iTile} and {iNei}")
+            clockdir= self.tile(iTile).clockDirection( self.tile(iNei).position() )
+            neibs.append( (iNei, clockdir) )
+        return neibs
+        
+    def directions(self, iTile) : 
+        cx, cy= self.tile(iTile).position().asTuple()
+        neibor= self.adjacencies(iTile)
+        positions= [ self.tile(i).position().asTuple() for i in neibor ]
+        return [ (x-cx, y-cy) for x, y in positions ]
+    
+    def clockBearing(self, iTile):
+        clock= [
+            [ 0,  9,  0],
+            [ 6,  0, 12],
+            [ 0,  3,  0]
+        ]
+        positions= [ (int(round(x, 0)), int(round(y, 0))) for x, y in self.directions(iTile) ]
+        return [ clock[1+x][1+y] for x, y in positions ]
+
+    def completeClock(self, iTile):
+        clock= [ iTile for i in range(13) ]
+        for it, ic in self.neighbours(iTile) :
+            clock[ic]= it
+        return clock
+
+    def clockposition(self, iTile, clockDir):
+        return self.completeClock(iTile)[clockDir]
+
+    # Construction:
+    def setEpsilon(self, epsilon):
+        self._epsilon= epsilon
+        return self
+
+    def appendTile( self, aTile ):
+        self._size+= 1
+        aTile.setIndex( self._size )
+        self._tiles.append( aTile )
+        return aTile
     
     def createSeveralTiles(self, convexes, group):
         for c in convexes :
             self.createTile( c, group )
         
-    def createTile( self, aBody, group= 0 ):
-        self._size+= 1
-        aShape= aBody.copy()
+    def createTile( self, aTileShape, group= 0 ):
+        aShape= aTileShape.copy()
         x, y= aShape.setOnCenter().asTuple()
-        tile= Tile( self._size, group, aShape )
+        tile= Tile( 0, group, aShape )
         tile.setPosition(x, y)
-        self._tiles.append(tile)
+        self.appendTile(tile)
         return self._size
     
     def removeTile( self, iTile ):
@@ -258,53 +234,47 @@ class Map(Entity):
             if t.isConnecting(iTile) :
                 t.disconnect(iTile)
         for jTile in range( iTile+1, self.size()+1 ) :
-            self.changeTileID( jTile, jTile-1 )
+            self.changeTileIndex( jTile, jTile-1 )
         self._tiles.pop(iTile-1)
         self._size-=1
         return self
-    
-    def changeTileID( self, iTile, newID ):
+
+    def changeTileIndex( self, iTile, newID ):
         # Change connection :
         for t in self._tiles :
             if t.isConnecting(iTile) :
                 t.disconnect(iTile)
                 t.connect(newID)
         # Change iTile :
-        self.tile(iTile).setId(newID)
+        self.tile(iTile).setIndex(newID)
         return self
 
-    def setEpsilon(self, epsilon):
-        self._epsilon= epsilon
-        return self
+    # Test:
+    def isTile(self, iTile):
+        return 0 < iTile and iTile <= self.size()
+    
+    def isEdge(self, iFrom, iTo):
+        return iTo in self.tile(iFrom).adjacencies()
 
-    def setEntityFactory(self, entityFactory ):
-        self._factory= entityFactory
-        return self
-
+    # Population:
     def clearEntities(self):
         for t in self.tiles() :
             t.clear()
-        self._entities= [[]]
         return self
 
-    def __addEntity( self, anEntity ):
-        group= anEntity.group()
-        while len(self._entities) <= group :
-            self._entities.append([])
-        assert anEntity.id() == len(self._entities[group])+1 
-        self._entities[group].append(anEntity)
-    
-    def popEntityOn(self, iTile=1, group= 0 ):
-        while len(self._entities) <= group :
-            self._entities.append([])
-        if iTile > self.size() :
-            return False
-        entity= self._factory( len(self._entities[group])+1, group )
-        x, y= self.tile(iTile).position().asTuple()
-        entity.setPosition(x, y)
-        self.tile(iTile).append( entity )
-        self.__addEntity(entity)
-        return entity
+    def tileAppendEntity( self, iTile, anEntity= None ):
+        if anEntity is None :
+            anEntity= type(self).defaultEntity.copy()
+        tile= self.tile(iTile)
+        tile.appendCenter(anEntity)
+        anEntity.setPose(tile.position(), anEntity.orientation())
+        return anEntity
+
+    def isEntity(self, iTile, index):
+        return (self.isTile(iTile) 
+            and 0 < index 
+            and index <= len( self.tile(iTile).entities() )
+        )
 
     def connect(self, iFrom, iTo):
         self.tile(iFrom).connect(iTo)
@@ -381,7 +351,7 @@ class Map(Entity):
                 selection.append(i)
         return selection
         
-    # Tile operation :
+    # Tile Operation :
     def mergeTilesIfPossible(self, iTile1, iTile2, maxError, maxSize):
         if iTile1 == iTile2 :
             return False
@@ -389,8 +359,8 @@ class Map(Entity):
             return self.mergeTilesIfPossible(iTile2, iTile1, maxError, maxSize)
 
         tile= self.tile(iTile1)
-        newConvex= tile.body().copy()
-        convex2= self.tile(iTile2).body()
+        newConvex= tile.projectedShape().copy()
+        convex2= self.tile(iTile2).projectedShape()
         removed= newConvex.merge( convex2 )
         w, h= newConvex.box().dimention()
         if w > maxSize or h > maxSize :
@@ -403,7 +373,7 @@ class Map(Entity):
         
         # Do merge:
         newConvex.simplify( self.epsilon() )
-        tile.setBody(newConvex)
+        tile.setProjectedShape(newConvex)
         deadTile= self.tile(iTile2)
         # merge all entities
         for ag in deadTile.entities() :
@@ -452,36 +422,14 @@ class Map(Entity):
         
         return count
 
-    # Entity Collection:
-    def allEntities( self, iGroup=0 ):
-        alls= []
-        for ags in self._entities:
-            alls+= ags
-        return alls
-    
-    def entities( self, iGroup=0 ):
-        return self._entities[iGroup]
-
-    #def entityTiles( self, iGroup=0 ):
-    #    return [ ag.tile() for ag in self.entities(iGroup) ]
-
-    # Hacka.DataTree interface:
-    def asDataTree( self, name= "Map" ):
-        return hacka.DataTree(name, [], [self._epsilon],
-            [ t.asDataTree() for t in self.tiles() ]
-        )
-    
-    def fromDataTree( self, aDataTree ):
-        self.clear()
-        self._epsilon= aDataTree.value(1)
-        allEntities= []
-        for absTile in aDataTree.children() :
-            t= Tile().fromDataTree( absTile, self._factory )
-            self.addTile(t)
-            for ag in t.entities() :
-                self.__addEntity(ag)
-        return self
-    
+    # AbsEntity:
+    def box(self):
+        if self._size == 0 :
+            return Box()
+        box= self.tile(1).box()
+        for t in self.tiles()[1:] :
+            box.merge( t.box() )
+        return box
     
     # Artist drawing:
     def renderNetworkOn( self, artist ):
@@ -515,6 +463,22 @@ class Map(Entity):
         self.renderEntitiesOn(artist)
         return self
 
+    # Hacka.DataTree interface:
+    def asDataTree( self, name= "Map" ):
+        return hacka.DataTree(name, [], [self._epsilon],
+            [ t.asDataTree() for t in self.tiles() ]
+        )
+    
+    def fromDataTree( self, aDataTree ):
+        self.clear()
+        self._epsilon= aDataTree.value(1)
+        allEntities= []
+        for absTile in aDataTree.children() :
+            t= Tile().fromDataTree( absTile )
+            assert( t.index() == self.numberOfTiles()+1 )
+            self.appendTile(t)
+        return self
+
     # string:
     def str(self, name="Map"):
         eltStrs =[]
@@ -526,4 +490,4 @@ class Map(Entity):
     
     def __str__(self):
         return self.str()
-    
+

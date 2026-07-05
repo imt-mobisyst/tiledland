@@ -32,7 +32,7 @@ def test_fast_simulation_map_init():
     assert( shotFile == refsFile )
 
     # Add the agent:
-    bod= land.popEntityOn(10)
+    bod= land.tileAppendEntity( 10, tll.Entity(name="1") )
 
     tll.draw( land, "shot-test.png", 400, 300 )
 

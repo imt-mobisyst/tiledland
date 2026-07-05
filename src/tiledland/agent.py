@@ -7,7 +7,6 @@ class Agent:
     def __init__(self, identifier=0):
         self._identifier= identifier
         self._map= None
-        self._tileId= 0
 
     # Accessor:
     def id(self):

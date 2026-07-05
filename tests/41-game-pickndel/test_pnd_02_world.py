@@ -44,13 +44,13 @@ def test_pnd_world():
     refsFile= open( "tests/refs/41.pickndel-map-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-    bod= model.popEntityOn(1)
+    bod= model.tileAppendEntity(1)
     print( bod )
-    assert bod.id() == 1
-    assert model.popEntityOn(25).id() == 2
+    assert bod.index() == 1
+    assert model.tileAppendEntity(25).index() == 2
 
-    assert model.popEntityOn(7).id() == 3
-    assert model.popEntityOn(44).id() == 4
+    assert model.tileAppendEntity(7).index() == 3
+    assert model.tileAppendEntity(44).index() == 4
 
     model.renderOn(pablo)
     pablo.flip()
@@ -84,11 +84,11 @@ def test_pnd_withCarrier():
     model= pnd.World( numberOfPlayers=2 )
     model.initGrid( refMatrix, 0.9, 0.1 )
     
-    assert str(model.popEntityOn(1, 1)) == 'Carrier-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉ |0, 0|'
-    assert str(model.popEntityOn(25, 1)) == 'Carrier-1.2 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
+    assert str(model.tileAppendEntity(1, 1)) == 'Carrier-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉ |0, 0|'
+    assert str(model.tileAppendEntity(25, 1)) == 'Carrier-1.2 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
 
-    assert str(model.popEntityOn(7, 2)) == 'Carrier-2.1 ⌊(6.82, 5.82), (7.18, 6.18)⌉ |0, 0|'
-    assert str(model.popEntityOn(44, 2)) == 'Carrier-2.2 ⌊(0.82, -0.18), (1.18, 0.18)⌉ |0, 0|'
+    assert str(model.tileAppendEntity(7, 2)) == 'Carrier-2.1 ⌊(6.82, 5.82), (7.18, 6.18)⌉ |0, 0|'
+    assert str(model.tileAppendEntity(44, 2)) == 'Carrier-2.2 ⌊(0.82, -0.18), (1.18, 0.18)⌉ |0, 0|'
     
     #assert model.entityTiles(1) == [1, 25]
     #assert model.entityTiles(2) == [7, 44]
@@ -159,7 +159,7 @@ def test_long_pnd_emcomber():
     assert model.encumber(25) == 0.6
     assert model.encumber(32) == 0.4
 
-    model.popEntityOn(25, 1)
+    model.tileAppendEntity( 25, Entity(1) )
     assert str( model.tile(25).entity() ) == 'Carrier-1.1 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
 
     encumberCount= 0

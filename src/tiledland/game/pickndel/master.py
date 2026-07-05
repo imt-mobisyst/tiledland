@@ -23,7 +23,7 @@ class GameEngine( hacka.AbsGame ) :
         # Initialize Players:
         for pId in range(1, self._numberOfPlayers+1) :
             for tileId in random.choices( range(1, self._model.size()+1 ), k = numberOfCarriers ) :
-                self._model.popEntityOn( tileId, pId )
+                self._model.tileAppendEntity( tileId, Entity(pId) )
         self._scores= [ 0.0 for i in range(self._numberOfPlayers+1) ]
     
     # Game interface :

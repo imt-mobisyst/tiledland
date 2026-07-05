@@ -1,12 +1,15 @@
 # Basement: 
 from .geometry import Point, Line, Box, Convex, Grid
 
-# core coponents: 
-from .entity import Entity
-from .agent import Agent
+# core components: 
+from .entity import AbsEntity, Entity
 from .tile import Tile
 from .map import Map
 
+# mas components
+from .agent import Agent
+from .land import Avatar, Land
+
 # rendering:
-from .artist import Artist, draw, createArtistSVG, createArtistPNG
+from .artist import Brush, Artist, draw, createArtistSVG, createArtistPNG
 

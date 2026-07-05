@@ -120,7 +120,7 @@ class World( map.Map ):
         self._encumbers= []
 
     def addTile( self, aTile, encumber= 0.0 ):
-        super(World, self).addTile(aTile)
+        super(World, self).appendTile(aTile)
         self._encumbers.append(encumber)
         return self._size
 
@@ -218,7 +218,7 @@ class World( map.Map ):
             iCarrier= c.digit(2)
             pos= c.digit(3)
             mis= c.digit(4)
-            carrier= self.popEntityOn( pos, iPlayer )
+            carrier= self.tileAppendEntity( pos, Entiry(iPlayer) )
             assert carrier.id() == iCarrier
             carrier.setMission(mis)
         return self._entities

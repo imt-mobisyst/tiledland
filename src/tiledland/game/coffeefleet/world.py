@@ -98,7 +98,7 @@ class World( map.Map ):
         self._encumbers= []
 
     def addTile( self, aTile, encumber= 0.0 ):
-        super(World, self).addTile(aTile)
+        super(World, self).appendTile(aTile)
         self._encumbers.append(encumber)
         return self._size
 

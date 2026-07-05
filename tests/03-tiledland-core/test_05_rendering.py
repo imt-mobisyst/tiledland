@@ -141,9 +141,10 @@ def test_gridmap_piece():
         == open("tests/refs/03.05-entity-01.svg" ).read() )
 
     def popEntity( iRobot, iGroup, iTile ):
-        bob= tll.Entity( iRobot, iGroup,
+        bob= tll.Entity( iGroup,
             tll.Convex().initRegular(0.7, 6),
-            Point(0.1, 0.1)+map.tile(iTile).position()
+            Point(0.1, 0.1)+map.tile(iTile).position(),
+            name= str(iRobot)
         )
         map.tile(iTile).append( bob )
         return bob
@@ -159,14 +160,14 @@ def test_gridmap_piece():
 
     bob= map.tile(12).entity()
 
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.body().asZipped() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.projectedShape().asZipped() ]
     print( env )
     assert env == [
         (6.4, 3.23), (6.4, 3.58), (6.7, 3.75),
         (7.0, 3.58), (7.0, 3.23), (6.7, 3.05)
     ]
 
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.body().asZipped() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.projectedShape().asZipped() ]
     print( env )
     assert env == [
         (6.4, 3.23), (6.4, 3.58), (6.7, 3.75),
@@ -227,9 +228,10 @@ def test_hexamap_piece():
         == open("tests/refs/03.05-entity-11.svg" ).read() )
 
     def popEntity( iRobot, iTile, iGroup ):
-        bod= tll.Entity( iRobot, iGroup,
+        bod= tll.Entity( iGroup,
             tll.Convex().initRegular(0.7, 6),
-            Point(0.1, 0.1)+map.tile(iTile).position()
+            Point(0.1, 0.1)+map.tile(iTile).position(),
+            name= str(iRobot)
         )
         map.tile(iTile).append( bod )
     

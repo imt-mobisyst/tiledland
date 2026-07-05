@@ -44,7 +44,7 @@ def test_g2s_makeRectangles_small():
         assert aMap.createTile(s, 0) == i
         aMap.tile(i).position().round(2)
         aMap.tile(i).referenceShape().round(2)
-    aMap.updateBody()
+        aMap.tile(i).updateProjection()
     assert aMap.size() == i
     assert i == 2
 
@@ -64,7 +64,7 @@ Map : : 0.06
         assert aMap.createTile(s, 1) == i
         aMap.tile(i).position().round(2)
         aMap.tile(i).referenceShape().round(2)
-    aMap.updateBody()
+        aMap.tile(i).updateProjection()
     assert aMap.size() == 3
 
     print( '-'*10 )
@@ -102,7 +102,7 @@ Map : : 0.06
     for t in aMap.tiles() :
         t.position().round(2)
         t.referenceShape().round(2)
-    t.updateBody()
+    t.updateProjection()
     
     print( '-'*10 )
     print( aMap.asDataTree() )
@@ -173,16 +173,15 @@ def test_g2s_makeRectangles_medium():
     for t in aMap.tiles() :
         t.position().round(2)
         t.referenceShape().round(2)
-        t.updateBody()
+        t.updateProjection()
     
     data= aMap.asDataTree()
     data.round(3)
 
-    print( '-'*10 )
-    print( data )
-
     tll.draw(aMap, "shot-test.png", 800, 600)
 
+    print( '-'*10 )
+    print( data )
     assert "\n"+ str(data) +"\n" == """
 Map : : 0.04
 - Tile : 1 0 2 4 5 6 : 0.2 0.3 0.0
@@ -191,11 +190,11 @@ Map : : 0.04
   - Convex : : -0.24 -0.14 -0.24 0.14 0.24 0.14 0.24 -0.14
 - Tile : 3 0 2 4 5 : 0.75 0.6 0.0
   - Convex : : -0.14 -0.29 -0.14 0.29 0.14 0.29 0.14 -0.29
-- Tile : 4 0 1 3 5 6 : 0.35 0.65 0.0
+- Tile : 4 0 1 3 5 6 : 0.35 0.75 0.0
   - Convex : : -0.24 -0.14 -0.04 0.14 0.24 0.14 0.24 -0.14
 - Tile : 5 1 1 2 3 4 : 0.5 0.45 0.0
   - Convex : : -0.09 -0.14 -0.09 0.14 0.09 0.14 0.09 -0.14
-- Tile : 6 1 1 4 : 0.05 0.75 0.0
+- Tile : 6 1 1 4 : 0.15 0.75 0.0
   - Convex : : -0.14 -0.14 -0.14 0.14 0.14 0.14 0.14 0.06
 """
 
@@ -251,13 +250,13 @@ def test_g2s_makeRectangles_medium_limit():
 
     assert( aMap.mergeTile(5, 0.06, 1.0) )
     #tll.draw(aMap, "shot-1.png")
-    body4= aMap.tile(4).body().round(2).asZipped()
+    body4= aMap.tile(4).projectedShape().round(2).asZipped()
     print( body4 )
     assert body4 ==  [(0.01, 0.31), (0.01, 0.59), (0.39, 0.59), (0.39, 0.31)]
     
     assert( aMap.mergeTile(6, 0.06, 1.0) )
     #tll.draw(aMap, "shot-2.png")
-    body6= aMap.tile(6).body().round(2).asZipped()
+    body6= aMap.tile(6).projectedShape().round(2).asZipped()
     print(body6)
     assert body6 ==  [(0.11, 0.61), (0.11, 0.69), (0.21, 0.79), (0.39, 0.79), (0.39, 0.61)]
     aMap.mergeAllPossible( 0.06, 0.31 )
@@ -265,7 +264,7 @@ def test_g2s_makeRectangles_medium_limit():
     for t in aMap.tiles() :
         t.position().round(2)
         t.referenceShape().round(2)
-        t.updateBody()
+        t.updateProjection()
     tll.draw(aMap)
 
     print( f"---\n{aMap.asDataTree()}." )
@@ -277,11 +276,11 @@ Map : : 0.01
   - Convex : : -0.14 -0.14 -0.14 0.14 0.14 0.14 0.14 -0.14
 - Tile : 3 0 2 5 : 0.75 0.15 0.0
   - Convex : : -0.14 -0.14 -0.14 0.14 0.14 0.14 0.14 -0.14
-- Tile : 4 0 1 2 6 : 0.15 0.45 0.0
+- Tile : 4 0 1 2 6 : 0.2 0.45 0.0
   - Convex : : -0.19 -0.14 -0.19 0.14 0.19 0.14 0.19 -0.14
 - Tile : 5 0 3 7 8 : 0.75 0.45 0.0
   - Convex : : -0.14 -0.14 -0.14 0.14 0.14 0.14 0.14 -0.14
-- Tile : 6 0 4 7 : 0.25 0.65 0.0
+- Tile : 6 0 4 7 : 0.25 0.75 0.0
   - Convex : : -0.14 -0.14 -0.14 -0.06 0.06 0.14 0.14 0.14 0.14 -0.14
 - Tile : 7 0 5 6 8 : 0.55 0.75 0.0
   - Convex : : -0.14 -0.14 -0.14 0.14 0.14 0.14 0.14 -0.14
@@ -311,10 +310,10 @@ def test_makeConvexes_small():
     print('\n'+ str(aMap) +'.')
     assert '\n'+str(aMap) == """
 Map:
-- Tile-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ adjs[2, 3, 4] entities(0)
-- Tile-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ adjs[1] entities(0)
-- Tile-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ adjs[1, 4] entities(0)
-- Tile-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ adjs[1, 3] entities(0)"""
+- Tile0 0-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ adjs[2, 3, 4] entities(0)
+- Tile0 0-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ adjs[1] entities(0)
+- Tile0 0-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ adjs[1, 4] entities(0)
+- Tile0 0-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ adjs[1, 3] entities(0)"""
 
     aMap= tll.Map().fromGridConvexes(grid, 1.0)
     tll.draw( aMap )
@@ -322,12 +321,12 @@ Map:
     print('\n'+ str(aMap) +'.')
     assert '\n'+str(aMap) == """
 Map:
-- Tile-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ adjs[2, 3, 4, 5] entities(0)
-- Tile-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ adjs[1, 5, 6] entities(0)
-- Tile-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ adjs[1, 4, 5, 6] entities(0)
-- Tile-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ adjs[1, 3] entities(0)
-- Tile-1.5 ⌊(6.5, 5.5), (7.5, 7.5)⌉ adjs[1, 2, 3, 6] entities(0)
-- Tile-1.6 ⌊(5.5, 8.5), (10.5, 10.5)⌉ adjs[2, 3, 5] entities(0)"""
+- Tile0 0-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ adjs[2, 3, 4, 5] entities(0)
+- Tile0 0-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ adjs[1, 5, 6] entities(0)
+- Tile0 0-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ adjs[1, 4, 5, 6] entities(0)
+- Tile0 0-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ adjs[1, 3] entities(0)
+- Tile1 0-5 ⌊(6.5, 5.5), (7.5, 7.5)⌉ adjs[1, 2, 3, 6] entities(0)
+- Tile1 0-6 ⌊(5.5, 8.5), (10.5, 10.5)⌉ adjs[2, 3, 5] entities(0)"""
  
 def test_makeConvexes_medium():
     grid= tll.Grid([
@@ -375,21 +374,21 @@ def test_makeConvexes_medium():
     print('\n'+ str(aMap) +'.')
     assert '\n'+str(aMap) == """
 Map:
-- Tile-1 ⌊(1.5, 1.5), (9.5, 10.5)⌉ adjs[2, 5] entities(0)
-- Tile-2 ⌊(10.5, 1.5), (19.5, 11.5)⌉ adjs[1, 5, 6] entities(0)
-- Tile-3 ⌊(21.5, 1.5), (28.5, 10.5)⌉ adjs[4, 6] entities(0)
-- Tile-4 ⌊(29.5, 1.5), (35.5, 10.5)⌉ adjs[3, 7] entities(0)
-- Tile-5 ⌊(1.5, 10.5), (13.5, 16.5)⌉ adjs[1, 2, 6, 8, 9] entities(0)
-- Tile-6 ⌊(14.5, 9.5), (25.5, 18.5)⌉ adjs[2, 3, 5, 9] entities(0)
-- Tile-7 ⌊(27.5, 10.5), (35.5, 17.5)⌉ adjs[4, 10, 11] entities(0)
-- Tile-8 ⌊(1.5, 15.5), (10.5, 22.5)⌉ adjs[5, 9, 12, 15] entities(0)
-- Tile-9 ⌊(11.5, 14.5), (19.5, 24.5)⌉ adjs[5, 6, 8, 12, 13] entities(0)
-- Tile-10 ⌊(24.5, 17.5), (29.5, 24.5)⌉ adjs[7, 11, 13, 14] entities(0)
-- Tile-11 ⌊(30.5, 18.5), (35.5, 25.5)⌉ adjs[7, 10, 14] entities(0)
-- Tile-12 ⌊(8.5, 22.5), (16.5, 29.5)⌉ adjs[8, 9, 13, 15] entities(0)
-- Tile-13 ⌊(17.5, 21.5), (24.5, 30.5)⌉ adjs[9, 10, 12, 14] entities(0)
-- Tile-14 ⌊(23.5, 25.5), (31.5, 30.5)⌉ adjs[10, 11, 13] entities(0)
-- Tile-15 ⌊(1.5, 20.5), (7.5, 30.5)⌉ adjs[8, 12] entities(0)"""
+- Tile0 0-1 ⌊(1.5, 1.5), (9.5, 10.5)⌉ adjs[2, 5] entities(0)
+- Tile0 0-2 ⌊(10.5, 1.5), (19.5, 11.5)⌉ adjs[1, 5, 6] entities(0)
+- Tile0 0-3 ⌊(21.5, 1.5), (28.5, 10.5)⌉ adjs[4, 6] entities(0)
+- Tile0 0-4 ⌊(29.5, 1.5), (35.5, 10.5)⌉ adjs[3, 7] entities(0)
+- Tile0 0-5 ⌊(1.5, 10.5), (13.5, 16.5)⌉ adjs[1, 2, 6, 8, 9] entities(0)
+- Tile0 0-6 ⌊(14.5, 9.5), (25.5, 18.5)⌉ adjs[2, 3, 5, 9] entities(0)
+- Tile0 0-7 ⌊(27.5, 10.5), (35.5, 17.5)⌉ adjs[4, 10, 11] entities(0)
+- Tile0 0-8 ⌊(1.5, 15.5), (10.5, 22.5)⌉ adjs[5, 9, 12, 15] entities(0)
+- Tile0 0-9 ⌊(11.5, 14.5), (19.5, 24.5)⌉ adjs[5, 6, 8, 12, 13] entities(0)
+- Tile0 0-10 ⌊(24.5, 17.5), (29.5, 24.5)⌉ adjs[7, 11, 13, 14] entities(0)
+- Tile0 0-11 ⌊(30.5, 18.5), (35.5, 25.5)⌉ adjs[7, 10, 14] entities(0)
+- Tile0 0-12 ⌊(8.5, 22.5), (16.5, 29.5)⌉ adjs[8, 9, 13, 15] entities(0)
+- Tile0 0-13 ⌊(17.5, 21.5), (24.5, 30.5)⌉ adjs[9, 10, 12, 14] entities(0)
+- Tile0 0-14 ⌊(23.5, 25.5), (31.5, 30.5)⌉ adjs[10, 11, 13] entities(0)
+- Tile0 0-15 ⌊(1.5, 20.5), (7.5, 30.5)⌉ adjs[8, 12] entities(0)"""
 
     
     aMap= tll.Map().fromGridConvexes(grid, 8.0)
@@ -398,30 +397,30 @@ Map:
     print('\n'+ str(aMap) +'.')
     assert '\n'+str(aMap) == """
 Map:
-- Tile-1 ⌊(1.5, 1.5), (9.5, 10.5)⌉ adjs[2, 5, 16] entities(0)
-- Tile-2 ⌊(10.5, 1.5), (19.5, 11.5)⌉ adjs[1, 5, 6, 16, 17, 18] entities(0)
-- Tile-3 ⌊(21.5, 1.5), (28.5, 10.5)⌉ adjs[4, 6, 17, 19] entities(0)
-- Tile-4 ⌊(29.5, 1.5), (35.5, 10.5)⌉ adjs[3, 7, 19] entities(0)
-- Tile-5 ⌊(1.5, 10.5), (13.5, 16.5)⌉ adjs[1, 2, 6, 8, 9, 16, 18] entities(0)
-- Tile-6 ⌊(14.5, 9.5), (25.5, 18.5)⌉ adjs[2, 3, 5, 9, 17, 19, 21, 22] entities(0)
-- Tile-7 ⌊(27.5, 10.5), (35.5, 17.5)⌉ adjs[4, 10, 11, 19] entities(0)
-- Tile-8 ⌊(1.5, 15.5), (10.5, 22.5)⌉ adjs[5, 9, 12, 15, 20] entities(0)
-- Tile-9 ⌊(11.5, 14.5), (19.5, 24.5)⌉ adjs[5, 6, 8, 12, 13, 21] entities(0)
-- Tile-10 ⌊(24.5, 17.5), (29.5, 24.5)⌉ adjs[7, 11, 13, 14, 22] entities(0)
-- Tile-11 ⌊(30.5, 18.5), (35.5, 25.5)⌉ adjs[7, 10, 14, 25] entities(0)
-- Tile-12 ⌊(8.5, 22.5), (16.5, 29.5)⌉ adjs[8, 9, 13, 15, 23, 24] entities(0)
-- Tile-13 ⌊(17.5, 21.5), (24.5, 30.5)⌉ adjs[9, 10, 12, 14, 21, 22, 24] entities(0)
-- Tile-14 ⌊(23.5, 25.5), (31.5, 30.5)⌉ adjs[10, 11, 13, 25] entities(0)
-- Tile-15 ⌊(1.5, 20.5), (7.5, 30.5)⌉ adjs[8, 12, 20, 23, 26] entities(0)
-- Tile-1.16 ⌊(5.5, 5.5), (10.5, 10.5)⌉ adjs[1, 2, 5, 18] entities(0)
-- Tile-1.17 ⌊(20.5, 1.5), (21.5, 9.5)⌉ adjs[2, 3, 6] entities(0)
-- Tile-1.18 ⌊(7.5, 8.5), (12.5, 12.5)⌉ adjs[2, 5, 16] entities(0)
-- Tile-1.19 ⌊(25.5, 9.5), (30.5, 16.5)⌉ adjs[3, 4, 6, 7, 22] entities(0)
-- Tile-1.20 ⌊(1.5, 17.5), (6.5, 21.5)⌉ adjs[8, 15] entities(0)
-- Tile-1.21 ⌊(16.5, 19.5), (20.5, 21.5)⌉ adjs[6, 9, 13, 22] entities(0)
-- Tile-1.22 ⌊(21.5, 16.5), (26.5, 22.5)⌉ adjs[6, 10, 13, 19, 21] entities(0)
-- Tile-1.23 ⌊(5.5, 25.5), (13.5, 30.5)⌉ adjs[12, 15, 24] entities(0)
-- Tile-1.24 ⌊(14.5, 26.5), (20.5, 30.5)⌉ adjs[12, 13, 23] entities(0)
-- Tile-1.25 ⌊(30.5, 23.5), (35.5, 30.5)⌉ adjs[11, 14] entities(0)
-- Tile-1.26 ⌊(1.5, 26.5), (2.5, 28.5)⌉ adjs[15] entities(0)"""
+- Tile0 0-1 ⌊(1.5, 1.5), (9.5, 10.5)⌉ adjs[2, 5, 16] entities(0)
+- Tile0 0-2 ⌊(10.5, 1.5), (19.5, 11.5)⌉ adjs[1, 5, 6, 16, 17, 18] entities(0)
+- Tile0 0-3 ⌊(21.5, 1.5), (28.5, 10.5)⌉ adjs[4, 6, 17, 19] entities(0)
+- Tile0 0-4 ⌊(29.5, 1.5), (35.5, 10.5)⌉ adjs[3, 7, 19] entities(0)
+- Tile0 0-5 ⌊(1.5, 10.5), (13.5, 16.5)⌉ adjs[1, 2, 6, 8, 9, 16, 18] entities(0)
+- Tile0 0-6 ⌊(14.5, 9.5), (25.5, 18.5)⌉ adjs[2, 3, 5, 9, 17, 19, 21, 22] entities(0)
+- Tile0 0-7 ⌊(27.5, 10.5), (35.5, 17.5)⌉ adjs[4, 10, 11, 19] entities(0)
+- Tile0 0-8 ⌊(1.5, 15.5), (10.5, 22.5)⌉ adjs[5, 9, 12, 15, 20] entities(0)
+- Tile0 0-9 ⌊(11.5, 14.5), (19.5, 24.5)⌉ adjs[5, 6, 8, 12, 13, 21] entities(0)
+- Tile0 0-10 ⌊(24.5, 17.5), (29.5, 24.5)⌉ adjs[7, 11, 13, 14, 22] entities(0)
+- Tile0 0-11 ⌊(30.5, 18.5), (35.5, 25.5)⌉ adjs[7, 10, 14, 25] entities(0)
+- Tile0 0-12 ⌊(8.5, 22.5), (16.5, 29.5)⌉ adjs[8, 9, 13, 15, 23, 24] entities(0)
+- Tile0 0-13 ⌊(17.5, 21.5), (24.5, 30.5)⌉ adjs[9, 10, 12, 14, 21, 22, 24] entities(0)
+- Tile0 0-14 ⌊(23.5, 25.5), (31.5, 30.5)⌉ adjs[10, 11, 13, 25] entities(0)
+- Tile0 0-15 ⌊(1.5, 20.5), (7.5, 30.5)⌉ adjs[8, 12, 20, 23, 26] entities(0)
+- Tile1 0-16 ⌊(5.5, 5.5), (10.5, 10.5)⌉ adjs[1, 2, 5, 18] entities(0)
+- Tile1 0-17 ⌊(20.5, 1.5), (21.5, 9.5)⌉ adjs[2, 3, 6] entities(0)
+- Tile1 0-18 ⌊(7.5, 8.5), (12.5, 12.5)⌉ adjs[2, 5, 16] entities(0)
+- Tile1 0-19 ⌊(25.5, 9.5), (30.5, 16.5)⌉ adjs[3, 4, 6, 7, 22] entities(0)
+- Tile1 0-20 ⌊(1.5, 17.5), (6.5, 21.5)⌉ adjs[8, 15] entities(0)
+- Tile1 0-21 ⌊(16.5, 19.5), (20.5, 21.5)⌉ adjs[6, 9, 13, 22] entities(0)
+- Tile1 0-22 ⌊(21.5, 16.5), (26.5, 22.5)⌉ adjs[6, 10, 13, 19, 21] entities(0)
+- Tile1 0-23 ⌊(5.5, 25.5), (13.5, 30.5)⌉ adjs[12, 15, 24] entities(0)
+- Tile1 0-24 ⌊(14.5, 26.5), (20.5, 30.5)⌉ adjs[12, 13, 23] entities(0)
+- Tile1 0-25 ⌊(30.5, 23.5), (35.5, 30.5)⌉ adjs[11, 14] entities(0)
+- Tile1 0-26 ⌊(1.5, 26.5), (2.5, 28.5)⌉ adjs[15] entities(0)"""
 

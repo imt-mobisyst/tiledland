@@ -19,7 +19,7 @@ def test_long_gridmap_loadSmallMap():
     assert gridmap.resolution() == 0.1
 
     convexes= grid.makeConvexes(0, 8)
-    tll.artist.draw( tll.Map(convexes) )
+    tll.artist.draw( tll.Map().fromShapes( convexes ) )
     assert len(convexes) == 17
     
     map= tll.Map().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )

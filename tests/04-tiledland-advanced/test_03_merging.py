@@ -34,10 +34,10 @@ def test_map_fromConvex():
 
     map= tll.Map( epsilon=0.1 )
     assert map.epsilon() == 0.1
-    assert map.size() == 0
+    assert map.numberOfTiles() == 0
 
     map.createTile( shapes[0] )
-    assert map.size() == 1
+    assert map.numberOfTiles() == 1
 
     map.renderOn(pablo)
     pablo.flip()
@@ -49,7 +49,7 @@ def test_map_fromConvex():
     
     for s in shapes[1:] :
         map.createTile( s )
-    assert map.size() == 5
+    assert map.numberOfTiles() == 5
 
     map.renderOn(pablo)
     pablo.flip()
@@ -94,8 +94,8 @@ def test_map_mergeOne():
         assert shape.distancePoint(p) < 0.09
     
     ## Create the map : 
-    map= tll.Map( shapes, 0.09 )
-    assert map.size() == 2
+    map= tll.Map( 0.09 ).fromShapes(shapes)
+    assert map.numberOfTiles() == 2
 
     map.connectAllClose(0.16)
 
@@ -132,7 +132,7 @@ def test_map_mergeNoOne():
     ]
 
     ## Create the map : 
-    map= tll.Map( shapes )
+    map= tll.Map().fromShapes( shapes )
     map.connectAllClose( 0.16 )
 
     shotImg= "shot-test.svg"
@@ -147,6 +147,8 @@ def test_map_mergeNoOne():
     refsFile= open( "tests/refs/04.03-mergeConvex-noone-01.svg" ) 
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
+
+    print( map )
 
     ## Merge :
     ok= map.mergeTilesIfPossible(1, 2, 0.09, 10.0)
@@ -167,7 +169,7 @@ def test_map_mergeNoOne():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    map= tll.Map( shapes, 0.09 )
+    map= tll.Map( 0.09 ).fromShapes(shapes)
     map.connectAllClose(0.11)
     ## Merge :
     assert not map.mergeTilesIfPossible(1, 2, 0.09, 10.0)
@@ -195,7 +197,7 @@ def test_map_mergeFew():
     
     map.connectAllClose(0.11)
 
-    assert map.size() == 10
+    assert map.numberOfTiles() == 10
 
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
@@ -215,7 +217,7 @@ def test_map_mergeFew():
 
     assert ok
     assert len( map.tiles() ) == 9
-    assert map.size() == 9
+    assert map.numberOfTiles() == 9
 
     map.renderOn(pablo)
     pablo.flip()

@@ -7,7 +7,7 @@
 the core component of TiledLand refere to the `Tiles` composing a `Map` and comtainning `Entities`.
 
 - [x] `Entity` the root class with group, id and shape, a convex delimitation of the element.
-- [x] The `Entity` shape is defined with a reference shape (static, centered on (0.0, 0.0 and potentially shared between several entities) and a body shape (a transformed reference shape in the map).
+- [x] The `Entity` shape is defined with a reference shape (static, centered on (0.0, 0.0 and potentially shared between several entities) and a projected shape (a transformed reference shape in the map / land).
 - [ ] An abstract entity `AbsEntity` that regroups the core, expected methods for an `Entity` : box, pose definition, and hackagame methods. An `Entity` is a `AbsEntity` 
 - [x] `Tiles`: a tile is an `Entity` interconnected with other tiles. 
 - [x] a tile contains entities. The elements are positioned in the tile. 

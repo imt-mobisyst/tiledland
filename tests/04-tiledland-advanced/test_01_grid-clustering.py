@@ -272,7 +272,7 @@ def test_grid_clusterHulls():
     for cloud in frontiers[1:] :
         convexes.append( Convex( cloud ) )
     
-    tll.artist.draw( tll.Map(convexes) )
+    tll.artist.draw( tll.Map().fromShapes(convexes) )
 
     for i, j in [ (1, 2), (1, 7), (2, 8), (2, 3), (3, 4), (4, 10), (4, 5), (10, 9), (10, 11), (5, 11), (11, 6) ] :
         print( f"will connect {i, j} ? { round(convexes[i-1].distance( convexes[j-1] ), 4)}" )
@@ -323,7 +323,7 @@ def test_grid_large():
     ], Point(0.5, 0.5), 1.0 )
 
     convexes= grid.makeConvexes(0, 4)
-    tll.artist.draw( tll.Map(convexes) ) 
+    tll.artist.draw( tll.Map().fromShapes(convexes) ) 
 
     print('\n'+'\n'.join( [str(c) for c in convexes ])+'.')
     assert '\n'+'\n'.join( [str(c) for c in convexes ]) == """
@@ -433,16 +433,16 @@ def test_gridconves_no():
     ], Point(0.5, 0.5), 1.0 )
 
     convexes= grid.makeConvexes(0, 4)
-    tll.artist.draw( tll.Map(convexes) ) 
+    tll.artist.draw( tll.Map().fromShapes(convexes) ) 
 
     assert len(convexes) == 5
 
     convexes= grid.makeConvexes(1, 4)
-    tll.artist.draw( tll.Map(convexes) ) 
+    tll.artist.draw( tll.Map().fromShapes(convexes) ) 
 
     assert len(convexes) == 6
 
     convexes= grid.makeConvexes(2, 4)
-    tll.artist.draw( tll.Map(convexes) ) 
+    tll.artist.draw( tll.Map().fromShapes(convexes) ) 
 
     assert len(convexes) == 0
