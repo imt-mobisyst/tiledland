@@ -257,6 +257,12 @@ class Map(AbsEntity):
         return iTo in self.tile(iFrom).adjacencies()
 
     # Population:
+    def isEntity(self, iTile, index):
+        return (self.isTile(iTile) 
+            and 0 < index 
+            and index <= len( self.tile(iTile).entities() )
+        )
+
     def clearEntities(self):
         for t in self.tiles() :
             t.clear()
@@ -270,11 +276,19 @@ class Map(AbsEntity):
         anEntity.setPose(tile.position(), anEntity.orientation())
         return anEntity
 
-    def isEntity(self, iTile, index):
-        return (self.isTile(iTile) 
-            and 0 < index 
-            and index <= len( self.tile(iTile).entities() )
-        )
+    def tileRemoveEntity( self, iTile, iEntity ):
+        anEntity= None
+        if self.isEntity(iTile, iEntity) :
+            anEntity= self.tile(iTile).remove(iEntity)
+            anEntity.setLocation(0, 0)
+        return anEntity
+
+    def moveEntity( self, iTile, iEntity, tTile ):
+        anEntity= self.tileRemoveEntity(iTile, iEntity)
+        if anEntity is None :
+            return anEntity
+        self.tileAppendEntity(tTile, anEntity)
+        return anEntity
 
     def connect(self, iFrom, iTo):
         self.tile(iFrom).connect(iTo)

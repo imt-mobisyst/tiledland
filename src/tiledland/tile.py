@@ -9,7 +9,7 @@ class Tile(Entity):
     defaultPalette= palette.background
 
     def __init__( self, identifier= 0, group=0, shape= None, position= Point(0.0, 0.0), orientation= 0.0):
-        super(Tile, self).__init__( group, shape, position, orientation, None, 0, identifier)
+        super(Tile, self).__init__( group, shape, position, orientation, None, 0, identifier, "Tile")
         self._adjacencies= []
         self._entities= []
         self._size= 0
@@ -83,7 +83,16 @@ class Tile(Entity):
     def appendCenter(self, anEntity ):
         self.append( anEntity )
         anEntity.setPose( self.position(), anEntity.orientation() )
+        anEntity.setIndex( self.numberOfEntities() )
         return anEntity
+    
+    def remove(self, iEntity):
+        i= iEntity-1
+        ent= self._entities.pop(i)
+        self._size= len(self._entities)
+        for j in range( i, self._size ) :
+            self._entities[j].setIndex(j+1)
+        return ent
     
     def clear(self):
         self._entities = []
@@ -138,13 +147,13 @@ class Tile(Entity):
         artist.write( x, y, str(self.index()), self.brush() )
 
     # to str
-    def str(self, typeName): 
+    def str(self): 
         # Myself :
-        s= super(Tile, self).str(typeName)
+        s= super(Tile, self).str()
         s+= " adjs"+ str(self._adjacencies)
         s+= f" entities({ len(self.entities()) })"
         return s
     
     def __str__(self): 
-        return self.str("Tile")
+        return self.str()
     

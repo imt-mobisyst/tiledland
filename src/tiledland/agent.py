@@ -2,7 +2,6 @@ import hacka
 from .geometry import Point, Convex
 from .entity import Entity
 
-
 class Agent:
     def __init__(self, identifier=0):
         self._identifier= identifier

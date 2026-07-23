@@ -61,6 +61,9 @@ class Entity(AbsEntity) :
         )
 
     # Accessor: 
+    def name(self):
+        return self._name
+
     def group(self):
         return self._group
     
@@ -227,8 +230,8 @@ class Entity(AbsEntity) :
         return cpy
 
     # str:
-    def str(self, typeName="Entity"): 
-        return typeName + f"{self.group()} {self.area()}-{self.index()} {self.box()}"
+    def str(self): 
+        return self._name + f"{self.group()} {self.area()}-{self.index()} {self.box()}"
     
     def __str__(self):
         return self.str()

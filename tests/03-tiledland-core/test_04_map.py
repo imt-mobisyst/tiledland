@@ -9,6 +9,8 @@ from src.tiledland import Entity, Tile, Map
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - C O M P O N E N T
 # ------------------------------------------------------------------------ #
+def draw( entity ):
+    tll.draw( entity, "shot-test.png", 800, 600 )
 
 def test_fast_map_init():
     land= Map()
@@ -292,3 +294,104 @@ def test_fast_map_popEntities():
     assert aMap.tile(1).numberOfEntities() == 0
     assert aMap.tile(2).numberOfEntities() == 0
     assert aMap.tile(3).numberOfEntities() == 0
+
+def test_fast_map_moveEntities():
+    aMap= Map().initGrid( [[0, 0, 1],[-1, 0, 0], [2, 0, -1]] )
+    draw(aMap)
+
+    c= 1
+    entShape= Convex().initArrowTip(0.4)
+    for i in [1, 1, 2, 2, 3] :
+        aMap.tileAppendEntity(i, Entity(shape=entShape, name= f"E.{c}")  )
+        c+= 1
+
+    draw(aMap)
+    print( f"---\n{aMap}.")
+    assert str(aMap) == """Map:
+- Tile0 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+  - E.10 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - E.20 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+- Tile0 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(2)
+  - E.30 2-1 ⌊(0.93, 2.0), (1.3, 2.4)⌉
+  - E.40 2-2 ⌊(0.93, 2.0), (1.3, 2.4)⌉
+- Tile1 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
+  - E.50 3-1 ⌊(2.03, 2.0), (2.4, 2.4)⌉
+- Tile0 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
+- Tile0 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
+- Tile2 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
+- Tile0 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+
+    bob= aMap.tileRemoveEntity(2, 1)
+
+    print( bob )
+    assert str(bob) == "E.30 0-0 ⌊(0.93, 2.0), (1.3, 2.4)⌉"
+
+    print( f"---\n{aMap}.")
+    assert str(aMap) == """Map:
+- Tile0 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+  - E.10 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - E.20 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+- Tile0 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(1)
+  - E.40 2-1 ⌊(0.93, 2.0), (1.3, 2.4)⌉
+- Tile1 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
+  - E.50 3-1 ⌊(2.03, 2.0), (2.4, 2.4)⌉
+- Tile0 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
+- Tile0 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
+- Tile2 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
+- Tile0 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+    
+    bob= aMap.tileRemoveEntity(2, 1)
+
+    print( bob )
+    assert str(bob) == "E.40 0-0 ⌊(0.93, 2.0), (1.3, 2.4)⌉"
+
+    print( f"---\n{aMap}.")
+    assert str(aMap) == """Map:
+- Tile0 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+  - E.10 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - E.20 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+- Tile0 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
+- Tile1 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
+  - E.50 3-1 ⌊(2.03, 2.0), (2.4, 2.4)⌉
+- Tile0 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
+- Tile0 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
+- Tile2 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
+- Tile0 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+
+    bob= aMap.moveEntity(3, 1, 1)
+
+    print( bob )
+    assert bob.name() == "E.5"
+    assert bob.location() == (1, 3)
+
+    print( f"---\n{aMap}.")
+    assert str(aMap) == """Map:
+- Tile0 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(3)
+  - E.10 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - E.20 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - E.50 1-3 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+- Tile0 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
+- Tile1 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(0)
+- Tile0 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
+- Tile0 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
+- Tile2 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
+- Tile0 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+
+    bob= aMap.moveEntity(1, 2, 4)
+
+    print( bob )
+    assert bob.name() == "E.2"
+    assert bob.location() == (4, 1)
+
+    print( f"---\n{aMap}.")
+    assert str(aMap) == """Map:
+- Tile0 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+  - E.10 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - E.50 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+- Tile0 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
+- Tile1 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(0)
+- Tile0 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(1)
+  - E.20 4-1 ⌊(0.93, 0.9), (1.3, 1.3)⌉
+- Tile0 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
+- Tile2 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
+- Tile0 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
