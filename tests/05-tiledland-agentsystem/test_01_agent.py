@@ -11,10 +11,8 @@ from src.tiledland.geometry import Convex, Point
 
 def test_fast_agent_init():
     agent= tll.Agent()
-
     assert type(agent) == tll.Agent
-    assert agent.id() == 0
-
-def test_fast_agent_init2():
-    agent= tll.Agent( 42 )
-    assert agent.id() == 42
+    assert agent._statePs == agent.stateInfinitWait
+    a= agent.runStateProcessus()
+    assert a.identifier() == tll.Action.WAIT
+    assert a.attributes() == []

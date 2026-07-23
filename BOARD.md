@@ -2,13 +2,25 @@
 
 **-- Board V0.1.x --**
 
+## Geometrical Toolbox :
+
+- [x] Basic point, line, and polygon objects in 2D frame.
+- [x] Simple rectangular boxing.
+- [x] Main Convex object to represent a convex polygon.
+- [x] Convex obj. min/max radius, and collision
+- [x] Map: Gridmap to Tiled Maps
+
+
+## Artist Rendering :
+
+
 ## Tiledland Core Structures
 
 the core component of TiledLand refere to the `Tiles` composing a `Map` and comtainning `Entities`.
 
 - [x] `Entity` the root class with group, id and shape, a convex delimitation of the element.
 - [x] The `Entity` shape is defined with a reference shape (static, centered on (0.0, 0.0 and potentially shared between several entities) and a projected shape (a transformed reference shape in the map / land).
-- [ ] An abstract entity `AbsEntity` that regroups the core, expected methods for an `Entity` : box, pose definition, and hackagame methods. An `Entity` is a `AbsEntity` 
+- [x] An abstract entity `AbsEntity` that regroups the core, expected methods for an `Entity` : box, pose definition, and hackagame methods. An `Entity` is a `AbsEntity` 
 - [x] `Tiles`: a tile is an `Entity` interconnected with other tiles. 
 - [x] a tile contains entities. The elements are positioned in the tile. 
 - [x] `Map` : a map is an `AbsEntity`. It contains several tiles. Its shape (not necessarily convex) is the fusion of all contained tiles.
@@ -16,20 +28,25 @@ the core component of TiledLand refere to the `Tiles` composing a `Map` and comt
 - [x] HackaGame (DataTree) compatible
 
 
-## Multi-Agent Model
+## Tiled land Advanced :
+
+
+## Multi-Agent System (MAS) framework
 
 Agent-model is derivated from Hackagames. Agent is mainly defined by a `perception`, `decide` loop, itsel included in a `wake-up` and `sleep` super-loop.
 TiledLand agents perception and actions are mainly defined regarding the capability to move in a graph-model of the environment. 
 
-- [ ] a 'basic' agent : waking-up with a pointer to the land's map and perceiving an identification of its body in the map.
+- [ ] `Agent` can decide an action to perform.
 - [ ] `Land` mainly a Map, but also an Agent manager, with agents linked to the Map's entities.
+- [ ] _'agent'_ vs _'behavio'_ : Think state machine...
+- [ ] a 'basic' agent : with several moving strategies...
 - [ ] HackaAgent: encapsulating a basic agent for distributed computing.
 
 
 ## Simple, but strong plan geometry
 
-- [x] Convex obj. min/max radius, and collision
-- [x] Map: Gridmap to Tiled Maps
+Have the posibility to swith on a C-based librairie for computations...
+
 - [ ] Map vs Map a semantic map ie. structured tiled obj (and in oposition to GridMap).
 - [x] Fast position requestest : add a grid canvas to Map get a tiles from a position (getTile at, closest, inRadius ...)
 - [ ] PointCloud (potentially from Scan) to Envellope, a centered and ordered PointCloud.
@@ -42,7 +59,7 @@ TiledLand agents perception and actions are mainly defined regarding the capabil
 
 ## Geometrical Land :
 
-- [x] Agents: Position, clock-orientation and Convex
+- [x] Agent's bodys: Position, clock-orientation and Convex
 - [x] Grid and Hexa-grid based map initilization.
 - [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Map: `forward(agent, action)` (But on Hacka?) )
 - [ ] Basic Map manipulation: doSomething ... doTeleportOn(tile, agent, group).
@@ -86,7 +103,7 @@ Multi-Path planning problem (with uncertainty).
 
 Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 
-- [x] Carrier from Agents and World from Map.
+- [x] Carrier from Agents and World from LAnd.
 - [x] Mission on market place (origin destination)
 - [x] Hacka compatible GameMaster
 - [x] First players and first of documentation.
