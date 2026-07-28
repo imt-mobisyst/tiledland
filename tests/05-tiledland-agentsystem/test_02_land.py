@@ -29,7 +29,7 @@ def test_fast_land_first():
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-00.svg", mode='rb' ).read() )
 
-    identifier= land.tileAppendAvatar( 9,
+    identifier= land.appendAvatar( 9,
         tll.Entity(0, Convex().initArrowTip(0.4), name="E"),
         tll.Agent()
     )
@@ -41,5 +41,40 @@ def test_fast_land_first():
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-01.svg", mode='rb' ).read() )
 
-#def test_fast_land_factory():
-#    assert False
+    identifier= land.popAvatar( 3, 1 )
+    assert identifier == 2
+
+    tll.draw( land.map(), "shot-test.png", 800, 600 )
+    tll.draw( land.map(), "shot-test.svg", 800, 600 )
+
+    assert( open( "shot-test.svg", mode='rb' ).read()
+        == open( "tests/refs/05.02-land-02.svg", mode='rb' ).read() )
+
+def test_fast_land_factory():
+    land= tll.Land()
+    land.map().initHexa(
+        [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this location
+        [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
+        [0, 0, 0, -1, 0, 0, 0, 0],      #  
+        [0, 0, 0, -1, 0, 0, 0, 0],      #  
+        [-1, -1, 0, 0, 0, -1, -1, -1]]  #
+    )
+
+    tll.draw( land.map(), "shot-test.png", 800, 600 )
+
+    land.setBankOfEntities([
+        tll.Entity( i+1, Convex().initArrowTip(s), name= n )
+        for i, s, n in zip( range(5), [0.4, 0.4, 0.2, 0.8, 0.6], ["A", "B", "C", "D", "E"] )
+    ])
+
+    land.popAvatar(  3, 1 )
+    land.popAvatar( 10, 2 )
+    land.popAvatar( 12, 3 )
+    land.popAvatar( 15, 0 )
+    land.popAvatar( 26, 4 )
+
+    tll.draw( land.map(), "shot-test.png", 800, 600 )
+    tll.draw( land.map(), "shot-test.svg", 800, 600 )
+
+    assert( open( "shot-test.svg", mode='rb' ).read()
+        == open( "tests/refs/05.02-land-03.svg", mode='rb' ).read() )

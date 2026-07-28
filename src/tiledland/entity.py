@@ -41,8 +41,6 @@ class Entity(AbsEntity) :
             self.setGroupAndBrush(group)
         else :
             self._group= group
-        assert( type(self._refShape) == Convex )
-        assert( type(self._brush) == Brush )
         self._position= position.copy()
         self._theta= orientation
         self._area= area
@@ -57,9 +55,10 @@ class Entity(AbsEntity) :
             self._refShape,
             self._position, self._theta,
             self._brush,
-            self._area, self._index 
+            self._area, self._index,
+            self._name
         )
-
+    
     # Accessor: 
     def name(self):
         return self._name

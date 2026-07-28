@@ -20,10 +20,24 @@ class Action:
     # Construction:    
 
 class Agent:
-    def __init__(self):
-        self._body= None
-        self._map= None
-        self._statePs= self.stateInfinitWait
+    def __init__(self, aBody= None, aMap= None, state= None):
+        self._body= aBody
+        self._map= aMap
+        if state is None :
+            self.setStateProcessus(Agent.stateInitialize)
+        else :
+            self.setStateProcessus(state)
+
+    def copy(self):
+        b= None
+        if self._body is not None :
+            b= self._body.copy()
+        m= None
+        if self._map is not None :
+            b= self._map.copy()
+        cpy= type(self)( b, m, self._statePs )
+        
+        return cpy
 
     # Accessor:
     def perceivedBody(self):
@@ -32,26 +46,35 @@ class Agent:
     def perceivedMap(self):
         return self._map
     
-    # Construction:    
+    # Construction:
+
+    # State Machine:
     def setStateProcessus(self, method):
-        self._statePs= method
+        if hasattr(method, '__self__') :
+            self._statePs= method.__func__
+        else :
+            self._statePs= method
         return self
+
+    def runStateProcessus(self):
+        return self._statePs(self)
+
+    def stateInfinitWait(self):
+        return Action(Action.WAIT)
+
+    def stateInitialize(self):
+        self.setStateProcessus( Agent.stateInfinitWait )
+        return Action(Action.WAIT)
 
     # Agent Model:
     def perceive( self, body= None, map= None):
         return self
     
     def decide(self):
-        action= self.stateProcess()()
+        action= self.runStateProcessus()
         return None
     
-    # State Machine:
-    def runStateProcessus(self):
-        return self._statePs()
     
-    def stateInfinitWait(self):
-        return Action(Action.WAIT)
-
     # str:
     def str(self, typeName= "Agent"): 
         s= super().str(typeName)
