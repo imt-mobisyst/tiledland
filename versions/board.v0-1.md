@@ -5,17 +5,17 @@
 
 - [x] Initialize with hackagames.tiled
 - [x] Initialize artist rendering
-- [x] New Structure: core (Map, Tiles and Agents), geometry and artist
+- [x] New Structure: core (Tabletop, Tiles and Agents), geometry and artist
 - [x] HackaGame compatible
 - [ ] asDico() and fromDico() morphing (via Pop)
 
-## Map, Tiles and Agents :
+## Tabletop, Tiles and Agents :
 
 - [x] Agents: Position, clock-position and Convex
-- [x] Map as collection of: group's Agents, structured on Tiles
+- [x] Tabletop as collection of: group's Agents, structured on Tiles
 - [x] Tiles as collection of: Agents
-- [x] Abstraction on Map: Agents could be anything...
-- [x] Grid and Hexa-grid based map initilization.
+- [x] Abstraction on Tabletop: Agents could be anything...
+- [x] Grid and Hexa-grid based tabletop initilization.
 
 
 ## Rendering :
@@ -28,9 +28,9 @@
 - [ ] Free Projection : (rotation + translation)
 
 
-## Manipulate the map : 
+## Manipulate the tabletop : 
 
-- [ ] Basic Map manipulation: doSomething ... doTeleportOn(tile, agent, group).
+- [ ] Basic Tabletop manipulation: doSomething ... doTeleportOn(tile, agent, group).
 - [ ] Be topological: Clockdir manipulation.
 
 
@@ -50,7 +50,7 @@ Social complient navigation.
 
 Pick-up and Delivery with hiden random congestion.
 
-- [x] Carrier from Agents and World from Map.
+- [x] Carrier from Agents and World from Tabletop.
 - [x] Mission on market place (origin destination)
 - [x] Hacka compatible GameMaster
 - [x] First players and first of documentation.
@@ -66,7 +66,7 @@ Pick-up and Delivery with hiden random congestion.
 
 Based on MultiPath solving problem.
 
-- [ ] Mobile from Agent and World from Map.
+- [ ] Mobile from Agent and World from Tabletop.
 - [ ] Mission: position to reach, where something need to be done.
 - [ ] NPC and Collision between mobiles.
 - [ ] Hacka compatible GameMaster.
@@ -78,9 +78,9 @@ Based on MultiPath solving problem.
 ## Web Rendering :
 
 - [ ] Identifing a tool _flask_, _streamlit_, _django_, _dash by plotly_
-- [ ] Visualize map (Static/Dynamic)
+- [ ] Visualize tabletop (Static/Dynamic)
 - [ ] Add a monitor/control panel
-- [ ] Make the map clickable...
+- [ ] Make the tabletop clickable...
 
 
 ## Simple, but strong plan geometry
@@ -91,7 +91,7 @@ Based on MultiPath solving problem.
 - [ ] Segment automatic tag.
 - [ ] get a tiles from a position (in max radius, and closest)
 - [ ] Agents: update position and Convex function (auto-centering)
-- [ ] Map: Generation from graphs, Voroi, gabriel, ....
+- [ ] Tabletop: Generation from graphs, Voroi, gabriel, ....
 - [ ] Convex: Collisions
 
 

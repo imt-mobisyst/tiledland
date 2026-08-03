@@ -1,4 +1,4 @@
-import sys, hacka
+import sys, hacka, tiledland as tll
 
 """
 Test - Pick'n Del Games Class
@@ -8,7 +8,10 @@ workdir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workdir )
 
 import src.tiledland.game.pickndel as pnd
-import src.tiledland as tll
+
+"""
+Test - Land
+"""
 
 refMatrix= [
     [00, 00, 00, -1, 00, 00, 00, 00, 00, 00],
@@ -30,8 +33,8 @@ refMatrix= [
     [43, 44, 45, 46, 47,   , 48,   ,   ,   ]
 """
 
-def test_pnd_world():
-    model= pnd.World( "Cool" )
+def test_pnd_land():
+    model= pnd.Land( "Cool" )
     assert model.name() == "Cool"
     model.initGrid( refMatrix, 0.9, 0.1 )
     pablo= tll.createArtistPNG("shot-test.png", 800, 600)
@@ -61,7 +64,7 @@ def test_pnd_world():
 
 def test_pnd_graph():
     # Game MoveIt:
-    model= pnd.World()
+    model= pnd.Land()
     model.initGrid( refMatrix, 0.9, 0.1 )
 
     print( f">>> {model.neighbours(11)}" )
@@ -81,7 +84,7 @@ def test_pnd_graph():
 
 def test_pnd_withCarrier():
     # Game MoveIt:
-    model= pnd.World( numberOfPlayers=2 )
+    model= pnd.Land( numberOfPlayers=2 )
     model.initGrid( refMatrix, 0.9, 0.1 )
     
     assert str(model.tileAppendEntity(1, 1)) == 'Carrier-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉ |0, 0|'
@@ -137,14 +140,14 @@ def test_pnd_withCarrier():
 
 def test_long_pnd_emcomber():
     # Game MoveIt:
-    model= pnd.World( numberOfPlayers=2 )
+    model= pnd.Land( numberOfPlayers=2 )
     model.initGrid( refMatrix, 0.9, 0.1 )
 
     for i in range(1, 49) :
         assert model.encumber(i) == 0.0
 
     # Game MoveIt:
-    model= pnd.World( numberOfPlayers=2 )
+    model= pnd.Land( numberOfPlayers=2 )
     encumber= [
         [ 25,  20,  32  ],
         [ 0.6, 0.5, 0.4 ]

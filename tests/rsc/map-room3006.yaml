@@ -1,4 +1,4 @@
-image: "map-room3006.png"
+image: "tabletop-room3006.png"
 resolution: 0.1
 origin: [2.0, 3.0, 1.0]
 occupied_thresh: 0.6

@@ -15,7 +15,7 @@ def test_fast_land_init():
 
 def test_fast_land_first():
     land= tll.Land()
-    land.map().initHexa(
+    land.tabletop().initHexa(
         [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this location
         [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
@@ -23,8 +23,8 @@ def test_fast_land_first():
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
 
-    tll.draw( land.map(), "shot-test.png", 800, 600 )
-    tll.draw( land.map(), "shot-test.svg", 800, 600 )
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-00.svg", mode='rb' ).read() )
@@ -35,8 +35,8 @@ def test_fast_land_first():
     )
     assert identifier == 1  
 
-    tll.draw( land.map(), "shot-test.png", 800, 600 )
-    tll.draw( land.map(), "shot-test.svg", 800, 600 )
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-01.svg", mode='rb' ).read() )
@@ -44,15 +44,15 @@ def test_fast_land_first():
     identifier= land.popAvatar( 3, 1 )
     assert identifier == 2
 
-    tll.draw( land.map(), "shot-test.png", 800, 600 )
-    tll.draw( land.map(), "shot-test.svg", 800, 600 )
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-02.svg", mode='rb' ).read() )
 
 def test_fast_land_factory():
     land= tll.Land()
-    land.map().initHexa(
+    land.tabletop().initHexa(
         [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this location
         [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
@@ -60,11 +60,11 @@ def test_fast_land_factory():
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
 
-    tll.draw( land.map(), "shot-test.png", 800, 600 )
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
 
     land.setBankOfEntities([
-        tll.Entity( i+1, Convex().initArrowTip(s), name= n )
-        for i, s, n in zip( range(5), [0.4, 0.4, 0.2, 0.8, 0.6], ["A", "B", "C", "D", "E"] )
+        tll.Entity( i+1, Convex().initArrowTip(s), orientation= a,  name= n )
+        for i, s, a, n in zip( range(5), [0.4, 0.4, 0.2, 0.8, 0.6], [0.0, 3.14, -1.57, 0.8, -2.6], ["A", "B", "C", "D", "E"] )
     ])
 
     land.popAvatar(  3, 1 )
@@ -73,8 +73,8 @@ def test_fast_land_factory():
     land.popAvatar( 15, 0 )
     land.popAvatar( 26, 4 )
 
-    tll.draw( land.map(), "shot-test.png", 800, 600 )
-    tll.draw( land.map(), "shot-test.svg", 800, 600 )
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-03.svg", mode='rb' ).read() )

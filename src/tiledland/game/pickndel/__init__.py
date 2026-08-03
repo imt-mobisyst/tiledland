@@ -2,17 +2,10 @@
 Pick'n Del - an HackaGame game 
 """
 
-from . import carrier, master, world, player
-
 # Game Component:
-Carrier= carrier.Carrier
-World= world.World
+from .carrier import Carrier
+from .land    import Land
 
 # Hackagame Game:
-GameEngine= master.GameEngine
-GameMaster= master.GameMaster
-
-# Players
-BasicBot= player.BasicBot
-#BlindBot= player.BlindBot
-#ShellPlayer= player.ShellPlayer
+from .master  import GameEngine, GameMaster
+from .player  import BasicBot #, BlindBot, ShellPlayer

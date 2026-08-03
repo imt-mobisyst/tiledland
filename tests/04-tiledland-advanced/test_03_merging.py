@@ -10,7 +10,7 @@ from src.tiledland.artist import palette
 #         T E S T   S C E N E   B U I L D
 # ------------------------------------------------------------------------ #
 
-def test_map_fromConvex():
+def test_tabletop_fromConvex():
     shapes= [
         Convex().fromZipped( [(0.125, 0.125), (0.125, 3.375), (4.875, 3.375), (4.875, 0.125)]),
         Convex().fromZipped( [(5.125, 0.125), (5.125, 1.375), (7.875, 1.375), (7.875, 0.125)]),
@@ -32,14 +32,14 @@ def test_map_fromConvex():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    map= tll.Map( epsilon=0.1 )
-    assert map.epsilon() == 0.1
-    assert map.numberOfTiles() == 0
+    tabletop= tll.Tabletop( epsilon=0.1 )
+    assert tabletop.epsilon() == 0.1
+    assert tabletop.numberOfTiles() == 0
 
-    map.createTile( shapes[0] )
-    assert map.numberOfTiles() == 1
+    tabletop.createTile( shapes[0] )
+    assert tabletop.numberOfTiles() == 1
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -48,10 +48,10 @@ def test_map_fromConvex():
         assert( lineShot == lineRef )
     
     for s in shapes[1:] :
-        map.createTile( s )
-    assert map.numberOfTiles() == 5
+        tabletop.createTile( s )
+    assert tabletop.numberOfTiles() == 5
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -59,9 +59,9 @@ def test_map_fromConvex():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    map.connectAllClose(0.5)
+    tabletop.connectAllClose(0.5)
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -69,7 +69,7 @@ def test_map_fromConvex():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_map_mergeOne():
+def test_tabletop_mergeOne():
     shapes= [
         Convex().fromZipped( [(0.05, 0.05), (0.05, 2.55), (4.95, 2.55), (4.95, 0.05)] ),
         Convex().fromZipped( [(0.25, 2.65), (0.25, 2.75), (4.95, 2.75), (4.95, 2.65)] )
@@ -93,18 +93,18 @@ def test_map_mergeOne():
     for p in removed :
         assert shape.distancePoint(p) < 0.09
     
-    ## Create the map : 
-    map= tll.Map( 0.09 ).fromShapes(shapes)
-    assert map.numberOfTiles() == 2
+    ## Create the tabletop : 
+    tabletop= tll.Tabletop( 0.09 ).fromShapes(shapes)
+    assert tabletop.numberOfTiles() == 2
 
-    map.connectAllClose(0.16)
+    tabletop.connectAllClose(0.16)
 
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -113,11 +113,11 @@ def test_map_mergeOne():
         assert( lineShot == lineRef )
     
     ## Merge :
-    ok= map.mergeTilesIfPossible(1, 2, 0.09, 10.0)
+    ok= tabletop.mergeTilesIfPossible(1, 2, 0.09, 10.0)
 
     assert ok
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -125,22 +125,22 @@ def test_map_mergeOne():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_map_mergeNoOne():
+def test_tabletop_mergeNoOne():
     shapes= [
         Convex().fromZipped( [(0.05, 0.05), (0.05, 2.55), (4.95, 2.55), (4.95, 0.05)] ),
         Convex().fromZipped( [(1.75, 2.65), (1.75, 4.75), (4.95, 4.75), (4.95, 2.65)] )
     ]
 
-    ## Create the map : 
-    map= tll.Map().fromShapes( shapes )
-    map.connectAllClose( 0.16 )
+    ## Create the tabletop : 
+    tabletop= tll.Tabletop().fromShapes( shapes )
+    tabletop.connectAllClose( 0.16 )
 
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -148,14 +148,14 @@ def test_map_mergeNoOne():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    print( map )
+    print( tabletop )
 
     ## Merge :
-    ok= map.mergeTilesIfPossible(1, 2, 0.09, 10.0)
+    ok= tabletop.mergeTilesIfPossible(1, 2, 0.09, 10.0)
 
     assert not ok
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -169,12 +169,12 @@ def test_map_mergeNoOne():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    map= tll.Map( 0.09 ).fromShapes(shapes)
-    map.connectAllClose(0.11)
+    tabletop= tll.Tabletop( 0.09 ).fromShapes(shapes)
+    tabletop.connectAllClose(0.11)
     ## Merge :
-    assert not map.mergeTilesIfPossible(1, 2, 0.09, 10.0)
+    assert not tabletop.mergeTilesIfPossible(1, 2, 0.09, 10.0)
 
-def test_map_mergeFew():
+def test_tabletop_mergeFew():
     shapes= [
         Convex().fromZipped( [(0.05, 0.05), (0.05, 2.55), (4.95, 2.55), (4.95, 0.05)] ),
         Convex().fromZipped( [(0.25, 2.65), (0.25, 2.75), (4.95, 2.75), (4.95, 2.65)] ),
@@ -191,20 +191,20 @@ def test_map_mergeFew():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    map= tll.Map( epsilon=0.0999 )
+    tabletop= tll.Tabletop( epsilon=0.0999 )
     for s in shapes :
-        map.createTile( s )
+        tabletop.createTile( s )
     
-    map.connectAllClose(0.11)
+    tabletop.connectAllClose(0.11)
 
-    assert map.numberOfTiles() == 10
+    assert tabletop.numberOfTiles() == 10
 
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -213,13 +213,13 @@ def test_map_mergeFew():
         assert( lineShot == lineRef )
 
     ## Merge 1-2 :
-    ok= map.mergeTilesIfPossible(1, 2, 0.09, 10.0)
+    ok= tabletop.mergeTilesIfPossible(1, 2, 0.09, 10.0)
 
     assert ok
-    assert len( map.tiles() ) == 9
-    assert map.numberOfTiles() == 9
+    assert len( tabletop.tiles() ) == 9
+    assert tabletop.numberOfTiles() == 9
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -228,9 +228,9 @@ def test_map_mergeFew():
         assert( lineShot == lineRef )
 
     ## Merge 8-9 :
-    assert map.mergeTilesIfPossible(8, 9, 0.09, 10.0)
+    assert tabletop.mergeTilesIfPossible(8, 9, 0.09, 10.0)
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -239,10 +239,10 @@ def test_map_mergeFew():
         assert( lineShot == lineRef )
 
     ## Merge all :
-    map.mergeAllPossible(0.09, 10.0)
-    tll.draw(map)
+    tabletop.mergeAllPossible(0.09, 10.0)
+    tll.draw(tabletop)
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -250,7 +250,7 @@ def test_map_mergeFew():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_map_mergeConplex():
+def test_tabletop_mergeConplex():
     shapes= [
         Convex().fromZipped( [(0.05, 0.05), (0.05, 2.55), (4.95, 2.55), (4.95, 0.05)] ),
         Convex().fromZipped( [(5.05, 0.25), (5.05, 4.35), (5.15, 4.35), (5.15, 0.25)] ),
@@ -271,18 +271,18 @@ def test_map_mergeConplex():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    map= tll.Map( epsilon=0.0999 )
+    tabletop= tll.Tabletop( epsilon=0.0999 )
     for s in shapes :
-        map.createTile( s )
+        tabletop.createTile( s )
     
-    map.connectAllClose(0.11)
+    tabletop.connectAllClose(0.11)
 
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -291,12 +291,12 @@ def test_map_mergeConplex():
         assert( lineShot == lineRef )
 
     ## Merge all :
-    nbMerges= map.mergeAllPossible()
+    nbMerges= tabletop.mergeAllPossible()
 
-    tll.draw(map)
+    tll.draw(tabletop)
     assert nbMerges == 12
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -304,7 +304,7 @@ def test_map_mergeConplex():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_map_mergeButNo():
+def test_tabletop_mergeButNo():
     shapes= [
         Convex().fromZipped( [(0.05, 0.05), (0.05, 2.55), (4.95, 2.55), (4.95, 0.05)] ),
         Convex().fromZipped( [(0.25, 2.65), (0.25, 2.75), (4.95, 2.75), (4.95, 2.65)] ),
@@ -325,18 +325,18 @@ def test_map_mergeButNo():
         Convex().fromZipped( [(5.45, 0.65), (5.45, 3.35), (5.55, 3.35), (5.55, 0.65)] )
     ]
 
-    map= tll.Map( epsilon=0.0999 )
+    tabletop= tll.Tabletop( epsilon=0.0999 )
     for s in shapes :
-        map.createTile( s )
+        tabletop.createTile( s )
     
-    map.connectAllClose(0.11)
+    tabletop.connectAllClose(0.11)
 
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -345,9 +345,9 @@ def test_map_mergeButNo():
         assert( lineShot == lineRef )
 
     ## Merge all :
-    map.mergeAllPossible()
+    tabletop.mergeAllPossible()
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 

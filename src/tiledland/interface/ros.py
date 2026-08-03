@@ -11,7 +11,7 @@ def loadGridMap( path, file ) :
     gridmap= GridMap().load( path, file )
     return gridmap.asGrid()
 
-def transformOccupMap(grid, position, resolution) :
+def transformOccupTabletop(grid, position, resolution) :
     x, y= position
     transform= {
         -1: Grid.STATE_UNKWON,
@@ -126,20 +126,20 @@ class GridMap :
     
     # Morphing
     def asStatesGrid(self):
-        # Build a [Free(0), Occupied(1), Unknown(2)] map
+        # Build a [Free(0), Occupied(1), Unknown(2)] tabletop
         width, height = self.dimention()
-        fouMap= []
+        fouTabletop= []
         for iLine in range(height) :
-            fouMap.append( [] )
+            fouTabletop.append( [] )
             for iCol in range(width) :
                 status= self._grid[iLine][iCol]
                 if status >= self._occupied :
-                    fouMap[iLine].append( Grid.STATE_OCCUPIED )
+                    fouTabletop[iLine].append( Grid.STATE_OCCUPIED )
                 elif status <= self._free :
-                    fouMap[iLine].append( Grid.STATE_FREE )
+                    fouTabletop[iLine].append( Grid.STATE_FREE )
                 else :
-                    fouMap[iLine].append( Grid.STATE_UNKWON )
-        return fouMap
+                    fouTabletop[iLine].append( Grid.STATE_UNKWON )
+        return fouTabletop
     
     def asGrid(self):
         px, py= self.position()

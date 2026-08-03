@@ -1,15 +1,15 @@
 """
 Test - MoveIt Robot Class
 """
-from ...geometry import Point, Convex
-from ...agent import Entity
 
-mobileConvex= Convex().initRegular(0.4, 8)
+import tiledland as tll
+from tiledland.geometry import Point, Convex, Box
 
-class Carrier(Entity):
-    def __init__( self, identifier=0, owner=1, position= Point(0.0, 0.0), mission= 0):
-        super(Carrier, self).__init__( owner, mobileConvex, position )
-        self._id= identifier
+class Carrier(tll.Agent):
+
+    def __init__(self, aBody= None, tabletop= None, mission= 0):
+        super(Carrier, self).__init__( aBody, tabletop, Carrier.stateInitialize )
+        #self._id= identifier
         self._mission= mission
         self._clockMove= 0
         self._tile= 0
@@ -29,6 +29,10 @@ class Carrier(Entity):
 
     def setMove(self, clockDir):
         self._clockMove= clockDir
+
+    # state machine:
+    def stateInitialize(self):
+        return Action( Action.WAIT )
 
     # Accessor: 
     def str(self, typeName= "Carrier"): 

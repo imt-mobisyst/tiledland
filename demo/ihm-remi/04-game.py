@@ -5,9 +5,9 @@ import remi, remi.gui as gui
 # Remi :: App
 class MyApp(remi.App):
     def __init__(self, *args):
-        # Create a new TiledMap as a grid:
-        map= tll.Map()
-        map.initHexa(
+        # Create a new TiledTabletop as a grid:
+        tabletop= tll.Tabletop()
+        tabletop.initHexa(
             [[0, 0, 0, -1, 0, 0, 0, 0],              #  -1 : means no cell at this location
             [0, -1, 0, 0, 0, -1, 0, 0],              #  0 - n : give the group identifier of the cell to create.
             [0, 0, 0, -1, 0, 0, 0, 0],               #  
@@ -15,25 +15,25 @@ class MyApp(remi.App):
             [-1, -1, 0, 0, 0, -1, -1, -1]]           #  
         )
 
-        # Add some objects on the map:
+        # Add some objects on the tabletop:
         def newAgent( identifier, group ):
             ag= tll.Agent( identifier, group, shape=tll.Convex().initRegular(0.7, 6) )
             ag.setMatter(12)
             return ag
 
-        map.setAgentFactory( newAgent )
+        tabletop.setAgentFactory( newAgent )
 
-        bod= map.popAgentOn(9)
+        bod= tabletop.popAgentOn(9)
 
-        bod= map.popAgentOn(26)
+        bod= tabletop.popAgentOn(26)
         bod.setMatter(13)
 
-        bod= map.popAgentOn(14)
+        bod= tabletop.popAgentOn(14)
         bod.setMatter(15)
         #
-        self._map= map
+        self._tabletop= tabletop
         self._artist= tll.Artist()
-        self._artist.fitBox( map.box() )
+        self._artist.fitBox( tabletop.box() )
         self._width=800
         self._height=600
         self._clicks= []
@@ -56,7 +56,7 @@ class MyApp(remi.App):
         return container
 
     def draw(self):
-        self._map.renderOn( self._artist )
+        self._tabletop.renderOn( self._artist )
         svg= self._artist.content()
         self._frame.add_child( 'content', svg )
         self._artist.clear()

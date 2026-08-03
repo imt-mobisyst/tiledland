@@ -1,14 +1,17 @@
-import sys, hacka
+import sys, hacka, tiledland as tll
 
 """
-Test - Pick'n Del Games Class
+Test - Pick'n Del - Hacka Compatibility
 """
 
 workdir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workdir )
 
 import src.tiledland.game.pickndel as pnd
-import src.tiledland as tll
+
+"""
+Test - Players
+"""
 
 def test_basicBot_wakeUp():
     world= pnd.World("BasicWorld").initGrid([[0, 0], [0, 0]])
@@ -22,7 +25,7 @@ def test_basicBot_wakeUp():
 
     print( f"---\n{initDT}.")
     assert str(initDT) == """BasicWorld : :
-- Map : : 0.01
+- Tabletop : : 0.01
   - Tile : 1 0 2 3 : 0.0 1.1 0.0
     - Convex : : -0.5 -0.5 -0.5 0.5 0.5 0.5 0.5 -0.5
   - Tile : 2 0 1 4 : 1.1 1.1 0.0

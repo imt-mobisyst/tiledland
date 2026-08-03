@@ -1,10 +1,10 @@
 import random, hacka
 
 from .bot import Bot
-from ... import map, Tile, artist
+from ... import tabletop, Tile, artist
 from ...geometry import Point, Convex, Box
 
-class World( map.Map ):
+class World( tabletop.Tabletop ):
     def __init__(self, name="Pick'nDel", numberOfPlayers= 1):
         super().__init__()
         self.setAgentFactory(Bot)
@@ -128,7 +128,7 @@ class World( map.Map ):
         self._missions[iMission-1]= Mission(iFrom, iTo, pay, owner)
 
     def addRandomMission(self):
-        bound= self._engine._map.size()+1
+        bound= self._engine._tabletop.size()+1
         iFrom= random.randrange(1, bound)
         iTo= random.randrange(1, bound)
         pay= 10+random.randrange(bound)

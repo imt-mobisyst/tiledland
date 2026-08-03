@@ -1,10 +1,7 @@
-import random, hacka
-
-#from .artist import Artist
-#from  ... import tiled
+import random, hacka, tiledland as tll
 
 from .carrier import Carrier
-from .world import World
+from .land import Land
 
 class GameEngine( hacka.AbsGame ) :
 

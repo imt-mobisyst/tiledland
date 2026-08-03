@@ -4,7 +4,7 @@ nav:
   - Home: 'index.md'
   - Main Components:
     - Tiled Entity: 'main-entity.md'
-    - Tiles and Map: 'main-map.md'
+    - Tiles and Tabletop: 'main-tabletop.md'
     - Agents: 'main-agent.md'
     - Rendering: 'main-rendering.md'
   - Interactive:

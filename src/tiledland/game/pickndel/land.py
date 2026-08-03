@@ -1,10 +1,8 @@
 import random, hacka
 
-from .carrier import Carrier
-from ... import map, Tile, artist
-from ...geometry import Point, Convex, Box
-
 import tiledland as tll
+from tiledland.geometry import Point, Convex, Box
+from tiledland.artist import Artist
 
 class Mission:
     def __init__( self, start= 0, final= 0, reward= 0, owner= 0 ):
@@ -26,7 +24,7 @@ class Mission:
     def asTuple(self):
         return self.start, self.final, self.reward, self.owner
 
-class World( map.Map ):
+class Land(tll.Land):
     def __init__(self, name="Pick'nDel", numberOfPlayers= 1):
         super().__init__()
         self.setEntityFactory(Carrier)
@@ -150,7 +148,7 @@ class World( map.Map ):
         self._missions[iMission-1]= Mission(iFrom, iTo, pay, owner)
 
     def addRandomMission(self):
-        bound= self._engine._map.size()+1
+        bound= self._engine._tabletop.size()+1
         iFrom= random.randrange(1, bound)
         iTo= random.randrange(1, bound)
         pay= 10+random.randrange(bound)

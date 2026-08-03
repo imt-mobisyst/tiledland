@@ -20,9 +20,9 @@ class Action:
     # Construction:    
 
 class Agent:
-    def __init__(self, aBody= None, aMap= None, state= None):
+    def __init__(self, aBody= None, tabletop= None, state= None):
         self._body= aBody
-        self._map= aMap
+        self._tabletop= tabletop
         if state is None :
             self.setStateProcessus(Agent.stateInitialize)
         else :
@@ -33,18 +33,18 @@ class Agent:
         if self._body is not None :
             b= self._body.copy()
         m= None
-        if self._map is not None :
-            b= self._map.copy()
+        if self._tabletop is not None :
+            b= self._tabletop.copy()
         cpy= type(self)( b, m, self._statePs )
         
         return cpy
 
     # Accessor:
     def perceivedBody(self):
-        return self._map
+        return self._tabletop
 
-    def perceivedMap(self):
-        return self._map
+    def perceivedTabletop(self):
+        return self._tabletop
     
     # Construction:
 
@@ -67,18 +67,20 @@ class Agent:
         return Action(Action.WAIT)
 
     # Agent Model:
-    def perceive( self, body= None, map= None):
+    def perceive( self, body= None, tabletop= None):
         return self
     
     def decide(self):
         action= self.runStateProcessus()
         return None
     
-    
     # str:
     def str(self, typeName= "Agent"): 
-        s= super().str(typeName)
+        s= typeName
         return s
 
+    def __str__(self):
+        return self.str()
+    
 class HackaAgent:
     pass

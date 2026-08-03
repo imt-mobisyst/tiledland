@@ -10,15 +10,15 @@ import yaml, os.path, cairo
 #         T E S T   R O S I :   R O S 2   I N T E R F A C E
 # ------------------------------------------------------------------------ #
 
-def test_load_map_metadata():
+def test_load_tabletop_metadata():
     rscPath= "tests/rsc/"
-    mapName= "testmap"
-    # Open map meta data file
-    with open( rscPath+mapName+".yaml", 'r' ) as file:
-        mapFile= file.read()
-    print( f"---\n{mapFile}." )
+    tabletopName= "testmap"
+    # Open tabletop meta data file
+    with open( rscPath+tabletopName+".yaml", 'r' ) as file:
+        tabletopFile= file.read()
+    print( f"---\n{tabletopFile}." )
     
-    assert mapFile == """image: "testmap.png"
+    assert tabletopFile == """image: "testmap.png"
 resolution: 0.1
 origin: [2.0, 3.0, 1.0]
 occupied_thresh: 0.65
@@ -26,8 +26,8 @@ free_thresh: 0.196
 negate: 0
 mode: "trinary"
 """
-    # Read map meta data YAML file
-    with open( rscPath+mapName+".yaml", 'r' ) as file:
+    # Read tabletop meta data YAML file
+    with open( rscPath+tabletopName+".yaml", 'r' ) as file:
         data = yaml.safe_load(file)
 
     print(data)
@@ -41,10 +41,10 @@ mode: "trinary"
         'mode': "trinary"
     }
     
-    assert data["image"] == mapName+".png"
+    assert data["image"] == tabletopName+".png"
     assert os.path.isfile( rscPath+data["image"] )
 
-def test_load_map_data():
+def test_load_tabletop_data():
     image = cairo.ImageSurface.create_from_png( "tests/rsc/testmap.png" )
     width= image.get_width()
     height= image.get_height()
@@ -71,7 +71,7 @@ def test_load_map_data():
     for i in range(10) : 
         print( pixels_as_list[i:i+stride] )
 
-    # build the map :
+    # build the tabletop :
     gridmap= []
     for i in range(height) :
         gridmap.append([])
@@ -105,7 +105,7 @@ def test_load_map_data():
     assert pixel_data_mv[26] == 104
     assert pixels_as_bytes[26] == 255
 
-def test_load_map_with_rosi():
+def test_load_tabletop_with_rosi():
     gridmap= ros.GridMap()
 
     assert gridmap.dimention() == (1, 1)
@@ -151,7 +151,7 @@ def test_load_map_with_rosi():
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]
 
-def test_load_partialmap():
+def test_load_partialtabletop():
     gridmap= ros.GridMap()
     gridmap.load( "tests/rsc", "testslammap.yaml" )
     

@@ -44,24 +44,24 @@ def test_fast_tile_rendering():
     assert( open(shotImg).read()
         == open("tests/refs/03.05-tile-04.svg").read() )
     
-# Test artist on map
-def test_fast_map_tile_rendering():
+# Test artist on tabletop
+def test_fast_tabletop_tile_rendering():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    map= tll.Map()
+    tabletop= tll.Tabletop()
 
-    assert map.epsilon() == 0.01
+    assert tabletop.epsilon() == 0.01
         
-    map.renderTilesOn( pablo )
+    tabletop.renderTilesOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-map-00.svg" ).read() )
 
-    map= tll.Map().initLine(3)
+    tabletop= tll.Tabletop().initLine(3)
 
-    assert map.epsilon() == 0.01
+    assert tabletop.epsilon() == 0.01
 
-    map.renderTilesOn( pablo )
+    tabletop.renderTilesOn( pablo )
     pablo.flip()
 
 
@@ -71,17 +71,17 @@ def test_fast_map_tile_rendering():
     pablo.setCamera( 1.1, 0.0 )
     pablo.setScale( 200 )
 
-    map.renderTilesOn( pablo )
+    tabletop.renderTilesOn( pablo )
     pablo.flip()
 
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-map-02.svg" ).read() )
 
-def test_fast_map_net_rendering():
+def test_fast_tabletop_net_rendering():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    map= tll.Map()
-    map.initGrid(
+    tabletop= tll.Tabletop()
+    tabletop.initGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [0, -1, 0, 0, 0, -1, 0, 0],
         [0, 0, 0, -1, 0, 1, 1, 0],
@@ -89,30 +89,30 @@ def test_fast_map_net_rendering():
         [-1, -1, 0, 0, 0, -1, -1, -1]]
     )
 
-    map.renderOn( pablo )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-map-04.svg" ).read() )
 
-    box= map.box()
+    box= tabletop.box()
     box.round(2)
     assert box.asZip() == [(-0.5, -0.5), (8.2, 4.9)] 
 
-    pablo.fit( map )
-    map.renderOn( pablo )
+    pablo.fit( tabletop )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-map-05.svg" ).read() )
 
-    map.connectAllConditions(
+    tabletop.connectAllConditions(
         lambda tileFrom : tileFrom.group() == 0,
         lambda tileFrom, tileTo : tileTo.group() == 0 and tileFrom.centerDistance( tileTo ) < 1.2
     )
-    map.renderOn( pablo )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
 
@@ -120,11 +120,11 @@ def test_fast_map_net_rendering():
         == open("tests/refs/03.05-map-06.svg" ).read() )
 
 
-# Test artist on map
+# Test artist on tabletop
 def test_gridmap_piece():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    map= tll.Map()
-    map.initGrid(
+    tabletop= tll.Tabletop()
+    tabletop.initGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [5, -1, 0, 2, 0, -1, 5, 0],
         [0, 0, 0, -1, 0, 1, 1, 0],
@@ -133,8 +133,8 @@ def test_gridmap_piece():
         1.0, 0.1
     )
 
-    pablo.fitBox( map.box() )
-    map.renderOn( pablo )
+    pablo.fitBox( tabletop.box() )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -143,10 +143,10 @@ def test_gridmap_piece():
     def popEntity( iRobot, iGroup, iTile ):
         bob= tll.Entity( iGroup,
             tll.Convex().initRegular(0.7, 6),
-            Point(0.1, 0.1)+map.tile(iTile).position(),
+            Point(0.1, 0.1)+tabletop.tile(iTile).position(),
             name= str(iRobot)
         )
-        map.tile(iTile).append( bob )
+        tabletop.tile(iTile).append( bob )
         return bob
     
     bob= popEntity(1, 13, 12)
@@ -158,7 +158,7 @@ def test_gridmap_piece():
         (0.3, 0.18), (0.3, -0.17), (0.0, -0.35),
     ]
 
-    bob= map.tile(12).entity()
+    bob= tabletop.tile(12).entity()
 
     env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.projectedShape().asZipped() ]
     print( env )
@@ -175,7 +175,7 @@ def test_gridmap_piece():
     ]
     
 
-    map.renderOn( pablo )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -186,7 +186,7 @@ def test_gridmap_piece():
     popEntity(3, 13, 23)
     popEntity(1, 15, 20)
 
-    map.renderOn( pablo )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -194,24 +194,24 @@ def test_gridmap_piece():
 
     popEntity(1, 1, 17)
     
-    map.renderOn( pablo )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-04.svg" ).read() )
 
-    map.clearEntities()
-    map.renderOn( pablo )
+    tabletop.clearEntities()
+    tabletop.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-01.svg" ).read() )
 
-# Test artist on map
-def test_hexamap_piece():
+# Test artist on tabletop
+def test_hexatabletop_piece():
     pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    map= tll.Map()
-    map.initHexa(
+    tabletop= tll.Tabletop()
+    tabletop.initHexa(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [5, -1, 0, 2, 0, -1, 5, 0],
         [0, 0, 0, -1, 0, 1, 1, 0],
@@ -220,8 +220,8 @@ def test_hexamap_piece():
         1.0, 0.1
     )
 
-    pablo.fitBox( map.box() )
-    map.renderOn( pablo )
+    pablo.fitBox( tabletop.box() )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -230,14 +230,14 @@ def test_hexamap_piece():
     def popEntity( iRobot, iTile, iGroup ):
         bod= tll.Entity( iGroup,
             tll.Convex().initRegular(0.7, 6),
-            Point(0.1, 0.1)+map.tile(iTile).position(),
+            Point(0.1, 0.1)+tabletop.tile(iTile).position(),
             name= str(iRobot)
         )
-        map.tile(iTile).append( bod )
+        tabletop.tile(iTile).append( bod )
     
     popEntity(1, 12, 13)
 
-    map.renderOn( pablo )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -248,7 +248,7 @@ def test_hexamap_piece():
     popEntity(3, 23, 13)
     popEntity(1, 20, 15)
 
-    map.renderOn( pablo )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -256,14 +256,14 @@ def test_hexamap_piece():
 
     popEntity(1, 17, 1)
 
-    map.renderOn( pablo )
+    tabletop.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-14.svg" ).read() )
 
-    map.clearEntities()
-    map.renderOn( pablo )
+    tabletop.clearEntities()
+    tabletop.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()

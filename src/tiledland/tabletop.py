@@ -5,7 +5,7 @@ from .tile import Tile
 
 import math
 
-class Map(AbsEntity):
+class Tabletop(AbsEntity):
     defaultEntity= Entity()
 
     def __init__(self, epsilon= 0.01):
@@ -478,7 +478,7 @@ class Map(AbsEntity):
         return self
 
     # Hacka.DataTree interface:
-    def asDataTree( self, name= "Map" ):
+    def asDataTree( self, name= "Tabletop" ):
         return hacka.DataTree(name, [], [self._epsilon],
             [ t.asDataTree() for t in self.tiles() ]
         )
@@ -494,7 +494,7 @@ class Map(AbsEntity):
         return self
 
     # string:
-    def str(self, name="Map"):
+    def str(self, name="Tabletop"):
         eltStrs =[]
         for t in self.tiles() :
             eltStrs.append( f"- {t}" )

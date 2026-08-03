@@ -1,5 +1,5 @@
 """
-# Simple Map rendering using streamlit.
+# Simple Tabletop rendering using streamlit.
 """
 import streamlit as st
 

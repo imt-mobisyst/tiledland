@@ -1,4 +1,4 @@
-import sys, hacka as hacka
+import sys, hacka, tiledland as tll
 
 """
 Test - Pick'n Del Games Class
@@ -8,9 +8,11 @@ workdir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workdir )
 
 import src.tiledland.game.pickndel as pnd
-import src.tiledland as tll
 
+"""
+Test - Carrier
+"""
 
 def test_pnd_fast_initCarrier():
     carrier= pnd.Carrier()
-    assert str(carrier) == "Carrier-1.0 ⌊(-0.18, -0.18), (0.18, 0.18)⌉ |0, 0|"
+    assert str(carrier) == "Carrier |0, 0|"

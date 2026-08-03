@@ -1,4 +1,4 @@
-from .map import Map
+from .tabletop import Tabletop
 from .geometry import Convex
 from .entity import Entity
 from .agent import Agent
@@ -17,10 +17,10 @@ class Avatar():
         return self._body
 
 class Land():
-    def __init__( self, aMap= None, bankOfEntitiesSize= 8, bankOfAgentsSize= 4 ):
-        self._map= aMap
-        if self._map is None :
-            self._map= Map()
+    def __init__( self, tabletop= None, bankOfEntitiesSize= 8, bankOfAgentsSize= 4 ):
+        self._tabletop= tabletop
+        if self._tabletop is None :
+            self._tabletop= Tabletop()
         self._avatars= [ Avatar(0, None, None) ]
         self._bankOfEntities= [
             Entity( i, Convex().initArrowTip(0.8), name= chr( ord('A') + i%26 ) )
@@ -29,8 +29,8 @@ class Land():
         self._bankOfAgents= [Agent() for _ in range(bankOfAgentsSize)]
 
     # Accessor:
-    def map(self):
-        return self._map
+    def tabletop(self):
+        return self._tabletop
 
     def agent(self, identifier):
         return self._avatars[identifier].agent()
@@ -55,7 +55,7 @@ class Land():
     # Construction:
     def appendAvatar(self, iTile, body, agent ):
         newId= len(self._avatars)
-        self._map.tileAppendEntity( iTile, body )
+        self._tabletop.tileAppendEntity( iTile, body )
         self._avatars.append( Avatar(newId, body, agent) )
         return newId
     

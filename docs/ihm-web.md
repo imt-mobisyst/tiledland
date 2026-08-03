@@ -30,7 +30,7 @@ streamlit run demo/ihm-streamlit/01-basic.py
 ```
 
 The solution allows for custom _HTML_ with a empty widget.
-Test map rendering : 
+Test tabletop rendering : 
 
 - `streamlit run demo/ihm-streamlit/02-rendering.py`.
 
@@ -101,13 +101,13 @@ remi.start(MyApp, address='0.0.0.0', port=20014, update_interval=0.1)
 Cf. `demo/ihm-remi/02-interact.py` script for a complete example of interactive _SVG_ frame.
 
 For _tiledLAnd_ rendering, the main used _GUI_ composnent will be `SVG`. 
-With _TiledLand_ _Artist_ and _Map_, code will looklike :
+With _TiledLand_ _Artist_ and _Tabletop_, code will looklike :
 
 ```python
 frame = gui.Svg( width=400, height=300 )
 container.append(frame)
 
-map.renderOn( artist )
+tabletop.renderOn( artist )
 textsvg= artist.content()
 frame.add_child( 'content', textsvg )
 artist.clear()

@@ -1,14 +1,17 @@
-import sys, hacka
+import sys, hacka, tiledland as tll
 
 """
-Test - Pick'n Del Games Class
+Test - Pick'n Del - Hacka Compatibility
 """
 
 workdir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workdir )
 
 import src.tiledland.game.pickndel as pnd
-import src.tiledland as tll
+
+"""
+Test - Game Master
+"""
 
 def test_fast_gamemaster_method():
     world= pnd.World().initGrid( [[0, 0], [0, 0]] )

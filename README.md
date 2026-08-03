@@ -25,13 +25,13 @@ pip install .
 ```
 
 The `demo` directory includes simple examples for _TiledLand_.
-Most of the demonstrations generate a map, rendered in a `shot-demo.png` file.
+Most of the demonstrations generate a tabletop, rendered in a `shot-demo.png` file.
 
 In VS-Codium terminal, for instance:
 
 ```shell
 cd demo
-python3 01-grid-map.py 
+python3 01-grid-tabletop.py 
 code shot-demo.png
 python3 02-hexa-world.py
 python3 03-loading-gridmap.py 

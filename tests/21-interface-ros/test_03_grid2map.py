@@ -5,34 +5,34 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tll
 from src.tiledland.geometry import Point, Box, Convex, Grid
-from src.tiledland import Agent, Tile, Map 
+from src.tiledland import Agent, Tile, Tabletop 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - G R I D   T O   M A P
 # ------------------------------------------------------------------------ #
 from src.tiledland.interface import ros
 
-def test_long_gridmap_loadSmallMap():
+def test_long_gridmap_loadSmallTabletop():
     gridmap= ros.GridMap().load( "tests/rsc", "small-map.yaml" )
     grid= gridmap.asGrid()
 
     assert gridmap.resolution() == 0.1
 
     convexes= grid.makeConvexes(0, 8)
-    tll.artist.draw( tll.Map().fromShapes( convexes ) )
+    tll.artist.draw( tll.Tabletop().fromShapes( convexes ) )
     assert len(convexes) == 17
     
-    map= tll.Map().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
+    tabletop= tll.Tabletop().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
 
-    tll.draw(map)
+    tll.draw(tabletop)
 
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
-    pablo.fit(map)
+    pablo.fit(tabletop)
 
-    tll.draw(map)
+    tll.draw(tabletop)
 
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -40,11 +40,11 @@ def test_long_gridmap_loadSmallMap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    map= tll.Map().fromGridConvexes( grid, 2.0 )
+    tabletop= tll.Tabletop().fromGridConvexes( grid, 2.0 )
 
-    tll.draw(map)
+    tll.draw(tabletop)
     
-    map.renderOn(pablo)
+    tabletop.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -52,7 +52,7 @@ def test_long_gridmap_loadSmallMap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-def test_long_gridmap_loadLargeMap():
+def test_long_gridmap_loadLargeTabletop():
     gridmap= ros.GridMap().load( "tests/rsc", "large-clean-map.yaml" )
     grid= gridmap.asGrid()
 
@@ -61,12 +61,12 @@ def test_long_gridmap_loadLargeMap():
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
 
-    map= tll.Map().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
+    tabletop= tll.Tabletop().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
 
-    tll.draw(map)
+    tll.draw(tabletop)
 
-    pablo.fit(map)
-    map.renderOn(pablo)
+    pablo.fit(tabletop)
+    tabletop.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -74,12 +74,12 @@ def test_long_gridmap_loadLargeMap():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    map= tll.Map().fromGridConvexes( grid, 2.0 )
+    tabletop= tll.Tabletop().fromGridConvexes( grid, 2.0 )
     
-    tll.draw(map)
+    tll.draw(tabletop)
     
-    pablo.fit(map)
-    map.renderOn(pablo)
+    pablo.fit(tabletop)
+    tabletop.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -140,7 +140,7 @@ def test_gridmap_rosGridMap_webots():
 
     assert rosOccupGrid == dico2
 
-    gridmap= ros.transformOccupMap( grid, (pos_x, pos_y), resolution )
+    gridmap= ros.transformOccupTabletop( grid, (pos_x, pos_y), resolution )
 
     assert gridmap.resolution() == 0.05
     assert gridmap.bottomleft().asTuple() == (-1.4355376215141014, -3.1116143188991185)
@@ -149,9 +149,9 @@ def test_gridmap_rosGridMap_webots():
     shotImg= "shot-test.svg"
     pablo= tll.createArtistSVG(shotImg, 800, 600)
 
-    map= tll.Map().fromGridConvexes( gridmap, 2.0, pixelValues=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
-    pablo.fit(map)
-    map.renderOn(pablo)
+    tabletop= tll.Tabletop().fromGridConvexes( gridmap, 2.0, pixelValues=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
+    pablo.fit(tabletop)
+    tabletop.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -159,6 +159,6 @@ def test_gridmap_rosGridMap_webots():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    for tile in map.tiles() :
+    for tile in tabletop.tiles() :
         print( tile )
     

@@ -8,7 +8,7 @@
 - [x] Simple rectangular boxing.
 - [x] Main Convex object to represent a convex polygon.
 - [x] Convex obj. min/max radius, and collision
-- [x] Map: Gridmap to Tiled Maps
+- [x] Tabletop: Gridmap to Tiled Tabletops
 
 
 ## Artist Rendering :
@@ -16,14 +16,14 @@
 
 ## Tiledland Core Structures
 
-the core component of TiledLand refere to the `Tiles` composing a `Map` and comtainning `Entities`.
+the core component of TiledLand refere to the `Tiles` composing a `Tabletop` and comtainning `Entities`.
 
 - [x] `Entity` the root class with group, id and shape, a convex delimitation of the element.
-- [x] The `Entity` shape is defined with a reference shape (static, centered on (0.0, 0.0 and potentially shared between several entities) and a projected shape (a transformed reference shape in the map / land).
+- [x] The `Entity` shape is defined with a reference shape (static, centered on (0.0, 0.0 and potentially shared between several entities) and a projected shape (a transformed reference shape in the tabletop / land).
 - [x] An abstract entity `AbsEntity` that regroups the core, expected methods for an `Entity` : box, pose definition, and hackagame methods. An `Entity` is a `AbsEntity` 
 - [x] `Tiles`: a tile is an `Entity` interconnected with other tiles. 
 - [x] a tile contains entities. The elements are positioned in the tile. 
-- [x] `Map` : a map is an `AbsEntity`. It contains several tiles. Its shape (not necessarily convex) is the fusion of all contained tiles.
+- [x] `Tabletop` : a mabletop is an `AbsEntity`. It contains several tiles. Its shape (not necessarily convex) is the fusion of all contained tiles.
 - [x] Initialize artist rendering: abstract entities can be rendered through an Artist object.
 - [x] HackaGame (DataTree) compatible
 
@@ -37,7 +37,7 @@ Agent-model is derivated from Hackagames. Agent is mainly defined by a `percepti
 TiledLand agents perception and actions are mainly defined regarding the capability to move in a graph-model of the environment. 
 
 - [ ] `Agent` can decide an action to perform.
-- [ ] `Land` mainly a Map, but also an Agent manager, with agents linked to the Map's entities.
+- [ ] `Land` mainly a Tabletop, but also an Agent manager, with agents linked to the Tabletop's entities.
 - [ ] _'agent'_ vs _'behavio'_ : Think state machine...
 - [ ] a 'basic' agent : with several moving strategies...
 - [ ] HackaAgent: encapsulating a basic agent for distributed computing.
@@ -47,11 +47,11 @@ TiledLand agents perception and actions are mainly defined regarding the capabil
 
 Have the posibility to swith on a C-based librairie for computations...
 
-- [ ] Map vs Map a semantic map ie. structured tiled obj (and in oposition to GridMap).
-- [x] Fast position requestest : add a grid canvas to Map get a tiles from a position (getTile at, closest, inRadius ...)
+- [ ] Tabletop vs Tabletop a semantic tabletop ie. structured tiled obj (and in oposition to GridMap).
+- [x] Fast position requestest : add a grid canvas to Tabletop get a tiles from a position (getTile at, closest, inRadius ...)
 - [ ] PointCloud (potentially from Scan) to Envellope, a centered and ordered PointCloud.
-- [ ] Map: Apply a grid and use it on connectClose...
-- [ ] Map: Generation from Voroi, gabriel, ....
+- [ ] Tabletop: Apply a grid and use it on connectClose...
+- [ ] Tabletop: Generation from Voroi, gabriel, ....
 - [ ] Tile: Search for text zones (header, body, footer)
 - [ ] Based on an appropriation of BOX2D c-library...
 - [ ] Georeferenced solution (import GIS Data)
@@ -60,11 +60,11 @@ Have the posibility to swith on a C-based librairie for computations...
 ## Geometrical Land :
 
 - [x] Agent's bodys: Position, clock-orientation and Convex
-- [x] Grid and Hexa-grid based map initilization.
-- [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Map: `forward(agent, action)` (But on Hacka?) )
-- [ ] Basic Map manipulation: doSomething ... doTeleportOn(tile, agent, group).
+- [x] Grid and Hexa-grid based tabletop initilization.
+- [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Tabletop: `forward(agent, action)` (But on Hacka?) )
+- [ ] Basic Tabletop manipulation: doSomething ... doTeleportOn(tile, agent, group).
 - [ ] Be topological: Clockdir manipulation.
-- [ ] Generate map from point-graph (mesh).
+- [ ] Generate tabletop from point-graph (mesh).
 - [ ] No geometry artifact on Agent and Tiles...
 
 
@@ -79,9 +79,9 @@ Have the posibility to swith on a C-based librairie for computations...
 
 ## Robotique
 
-- [x] Transform GridMap to TiledLand.Map.
+- [x] Transform GridMap to TiledLand.Tabletop.
 - [ ] Integrate TiledLand in Tiled ROS packages.
-- [ ] Be resilent to hugly maps
+- [ ] Be resilent to hugly tabletops
 - [ ] Be resilent on 'all' ".png" format. 
 - [ ] Cloud point on frontiere cell (position on frontiers not cell center).
 - [ ] Correction on colliding convexes paving a matter.
@@ -129,7 +129,7 @@ Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 
 - [ ] Migrate geometry module on a _C_ library (from `box2d` or new `LibEGG` Euclidean Graspable Geometry).
 - [ ] Encapsulate _Convex_ in _Motif_ object (ie. one or several join convexes)
-- [ ] Migrade Map geometry function into a Texture dedicated object (collection of _Motif_).
+- [ ] Migrade Tabletop geometry function into a Texture dedicated object (collection of _Motif_).
 
 
 ## Rendering :
@@ -140,9 +140,9 @@ Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 - [ ] Free Projection : (rotation + translation)
 
 
-## Map, Tiles and Agents :
+## Tabletop, Tiles and Agents :
 
-- [ ] map with _epsilon_ and _seam_ distance
+- [ ] tabletop with _epsilon_ and _seam_ distance
 
 
 ## HackaGames - Multi-Bot Delivery
@@ -173,7 +173,7 @@ Social complient navigation.
 
 Based on MultiPath solving problem.
 
-- [ ] Mobile from Agent and World from Map.
+- [ ] Mobile from Agent and World from Tabletop.
 - [ ] Mission: position to reach, where something need to be done.
 - [ ] NPC and Collision between mobiles.
 - [ ] Hacka compatible GameMaster.
@@ -185,9 +185,9 @@ Based on MultiPath solving problem.
 ## Web Rendering :
 
 - [ ] Identifing a tool _flask_, _streamlit_, _django_, _dash by plotly_
-- [ ] Visualize map (Static/Dynamic)
+- [ ] Visualize tabletop (Static/Dynamic)
 - [ ] Add a monitor/control panel
-- [ ] Make the map clickable...
+- [ ] Make the tabletop clickable...
 
 
 ## Explorations

@@ -35,23 +35,23 @@ def test_g2s_makeRectangles_small():
         (0.21, 0.41), (0.21, 0.59), (0.49, 0.59), (0.49, 0.41)
     ]
 
-    # Map Construction :
-    aMap= tll.Map( epsilon=0.06 )
+    # Tabletop Construction :
+    tabletop= tll.Tabletop( epsilon=0.06 )
     shapes= grid.makeRectangles(0)
     i= 0
     for s in shapes :
         i+= 1
-        assert aMap.createTile(s, 0) == i
-        aMap.tile(i).position().round(2)
-        aMap.tile(i).referenceShape().round(2)
-        aMap.tile(i).updateProjection()
-    assert aMap.size() == i
+        assert tabletop.createTile(s, 0) == i
+        tabletop.tile(i).position().round(2)
+        tabletop.tile(i).referenceShape().round(2)
+        tabletop.tile(i).updateProjection()
+    assert tabletop.size() == i
     assert i == 2
 
     print( "---" )
-    print( aMap.asDataTree() )
-    assert "\n"+ str(aMap.asDataTree()) +"\n" =="""
-Map : : 0.06
+    print( tabletop.asDataTree() )
+    assert "\n"+ str(tabletop.asDataTree()) +"\n" =="""
+Tabletop : : 0.06
 - Tile : 1 0 : 0.25 0.2 0.0
   - Convex : : -0.24 -0.19 -0.24 0.19 0.24 0.19 0.24 -0.19
 - Tile : 2 0 : 0.35 0.5 0.0
@@ -61,17 +61,17 @@ Map : : 0.06
     shapes= grid.makeRectangles(1)
     for s in shapes :
         i+= 1
-        assert aMap.createTile(s, 1) == i
-        aMap.tile(i).position().round(2)
-        aMap.tile(i).referenceShape().round(2)
-        aMap.tile(i).updateProjection()
-    assert aMap.size() == 3
+        assert tabletop.createTile(s, 1) == i
+        tabletop.tile(i).position().round(2)
+        tabletop.tile(i).referenceShape().round(2)
+        tabletop.tile(i).updateProjection()
+    assert tabletop.size() == 3
 
     print( '-'*10 )
-    print( aMap.asDataTree() )
+    print( tabletop.asDataTree() )
 
-    assert "\n"+ str(aMap.asDataTree()) +"\n" =="""
-Map : : 0.06
+    assert "\n"+ str(tabletop.asDataTree()) +"\n" =="""
+Tabletop : : 0.06
 - Tile : 1 0 : 0.25 0.2 0.0
   - Convex : : -0.24 -0.19 -0.24 0.19 0.24 0.19 0.24 -0.19
 - Tile : 2 0 : 0.35 0.5 0.0
@@ -80,13 +80,13 @@ Map : : 0.06
   - Convex : : -0.09 -0.09 -0.09 0.09 0.09 0.09 0.09 -0.09
 """
 
-    aMap.connectAllClose( grid.resolution() )
+    tabletop.connectAllClose( grid.resolution() )
 
     print( '-'*10 )
-    print( aMap.asDataTree() )
+    print( tabletop.asDataTree() )
 
-    assert "\n"+ str(aMap.asDataTree()) +"\n" =="""
-Map : : 0.06
+    assert "\n"+ str(tabletop.asDataTree()) +"\n" =="""
+Tabletop : : 0.06
 - Tile : 1 0 2 3 : 0.25 0.2 0.0
   - Convex : : -0.24 -0.19 -0.24 0.19 0.24 0.19 0.24 -0.19
 - Tile : 2 0 1 3 : 0.35 0.5 0.0
@@ -95,22 +95,22 @@ Map : : 0.06
   - Convex : : -0.09 -0.09 -0.09 0.09 0.09 0.09 0.09 -0.09
 """
 
-    # Map Construction, in short:
-    aMap= tll.Map().fromGridRectangles(grid)
-    aMap._epsilon= round( aMap._epsilon, 6 )
+    # Tabletop Construction, in short:
+    tabletop= tll.Tabletop().fromGridRectangles(grid)
+    tabletop._epsilon= round( tabletop._epsilon, 6 )
 
-    for t in aMap.tiles() :
+    for t in tabletop.tiles() :
         t.position().round(2)
         t.referenceShape().round(2)
     t.updateProjection()
     
     print( '-'*10 )
-    print( aMap.asDataTree() )
+    print( tabletop.asDataTree() )
 
-    tll.draw(aMap)
+    tll.draw(tabletop)
 
-    assert True or "\n"+ str(aMap.asDataTree()) +"\n" =="""
-Map: [0.06]
+    assert True or "\n"+ str(tabletop.asDataTree()) +"\n" =="""
+Tabletop: [0.06]
 - Tile: [1, 0, 2, 3] [0.25, 0.2]
   - Convex: [-0.24, -0.19, -0.24, 0.19, 0.24, 0.19, 0.24, -0.19]
 - Tile: [2, 0, 1, 3] [0.35, 0.5]
@@ -167,23 +167,23 @@ def test_g2s_makeRectangles_medium():
         print( shape.round(2).asZipped() )
         assert True or shape.asZipped() ==  ref
     
-    # Map from grid:
-    aMap= tll.Map().fromGridRectangles(grid)
+    # Tabletop from grid:
+    tabletop= tll.Tabletop().fromGridRectangles(grid)
 
-    for t in aMap.tiles() :
+    for t in tabletop.tiles() :
         t.position().round(2)
         t.referenceShape().round(2)
         t.updateProjection()
     
-    data= aMap.asDataTree()
+    data= tabletop.asDataTree()
     data.round(3)
 
-    tll.draw(aMap, "shot-test.png", 800, 600)
+    tll.draw(tabletop, "shot-test.png", 800, 600)
 
     print( '-'*10 )
     print( data )
     assert "\n"+ str(data) +"\n" == """
-Map : : 0.04
+Tabletop : : 0.04
 - Tile : 1 0 2 4 5 6 : 0.2 0.3 0.0
   - Convex : : -0.19 -0.29 -0.19 0.29 0.19 0.29 0.19 -0.29
 - Tile : 2 0 1 3 5 : 0.65 0.15 0.0
@@ -199,7 +199,7 @@ Map : : 0.04
 """
 
 def test_g2s_makeRectangles_medium_limit():
-    aMap= tll.Map()
+    tabletop= tll.Tabletop()
     grid= tll.Grid()
     grid.init([
         [1, 1, 1,  0, 0, 0,  0, 0, 0],
@@ -217,10 +217,10 @@ def test_g2s_makeRectangles_medium_limit():
 
     shapes= grid.makeRectangles(0, 0.31)
 
-    aMap.fromShapes(shapes, 0)
-    aMap.connectAllClose( 0.021 )
+    tabletop.fromShapes(shapes, 0)
+    tabletop.connectAllClose( 0.021 )
 
-    tll.draw(aMap)
+    tll.draw(tabletop)
     
     assert len(shapes) == 11
     referes= [
@@ -245,31 +245,31 @@ def test_g2s_makeRectangles_medium_limit():
         print( shape.round(2).asZipped() )
         assert shape.asZipped() ==  ref
 
-    assert aMap.selectId(lambda t : t.group() == 0) == [i for i in range(1, 12)]
-    assert aMap.selectIdSmallbox(0.16) == [5, 7, 10, 11]
+    assert tabletop.selectId(lambda t : t.group() == 0) == [i for i in range(1, 12)]
+    assert tabletop.selectIdSmallbox(0.16) == [5, 7, 10, 11]
 
-    assert( aMap.mergeTile(5, 0.06, 1.0) )
-    #tll.draw(aMap, "shot-1.png")
-    body4= aMap.tile(4).projectedShape().round(2).asZipped()
+    assert( tabletop.mergeTile(5, 0.06, 1.0) )
+    #tll.draw(tabletop, "shot-1.png")
+    body4= tabletop.tile(4).projectedShape().round(2).asZipped()
     print( body4 )
     assert body4 ==  [(0.01, 0.31), (0.01, 0.59), (0.39, 0.59), (0.39, 0.31)]
     
-    assert( aMap.mergeTile(6, 0.06, 1.0) )
-    #tll.draw(aMap, "shot-2.png")
-    body6= aMap.tile(6).projectedShape().round(2).asZipped()
+    assert( tabletop.mergeTile(6, 0.06, 1.0) )
+    #tll.draw(tabletop, "shot-2.png")
+    body6= tabletop.tile(6).projectedShape().round(2).asZipped()
     print(body6)
     assert body6 ==  [(0.11, 0.61), (0.11, 0.69), (0.21, 0.79), (0.39, 0.79), (0.39, 0.61)]
-    aMap.mergeAllPossible( 0.06, 0.31 )
+    tabletop.mergeAllPossible( 0.06, 0.31 )
 
-    for t in aMap.tiles() :
+    for t in tabletop.tiles() :
         t.position().round(2)
         t.referenceShape().round(2)
         t.updateProjection()
-    tll.draw(aMap)
+    tll.draw(tabletop)
 
-    print( f"---\n{aMap.asDataTree()}." )
-    assert "\n"+ str(aMap.asDataTree()) +"\n" == """
-Map : : 0.01
+    print( f"---\n{tabletop.asDataTree()}." )
+    assert "\n"+ str(tabletop.asDataTree()) +"\n" == """
+Tabletop : : 0.01
 - Tile : 1 0 2 4 : 0.15 0.15 0.0
   - Convex : : -0.14 -0.14 -0.14 0.14 0.14 0.14 0.14 -0.14
 - Tile : 2 0 1 3 4 : 0.45 0.15 0.0
@@ -304,23 +304,23 @@ def test_makeConvexes_small():
     ], tll.Point(0.5, 0.5), 1.0 )
     print(grid)
     
-    aMap= tll.Map().fromGridConvexes(grid, 1.0, pixelValues=[tll.Grid.STATE_FREE])
-    tll.draw( aMap )
+    tabletop= tll.Tabletop().fromGridConvexes(grid, 1.0, pixelValues=[tll.Grid.STATE_FREE])
+    tll.draw( tabletop )
 
-    print('\n'+ str(aMap) +'.')
-    assert '\n'+str(aMap) == """
-Map:
+    print('\n'+ str(tabletop) +'.')
+    assert '\n'+str(tabletop) == """
+Tabletop:
 - Tile0 0-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ adjs[2, 3, 4] entities(0)
 - Tile0 0-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ adjs[1] entities(0)
 - Tile0 0-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ adjs[1, 4] entities(0)
 - Tile0 0-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ adjs[1, 3] entities(0)"""
 
-    aMap= tll.Map().fromGridConvexes(grid, 1.0)
-    tll.draw( aMap )
+    tabletop= tll.Tabletop().fromGridConvexes(grid, 1.0)
+    tll.draw( tabletop )
 
-    print('\n'+ str(aMap) +'.')
-    assert '\n'+str(aMap) == """
-Map:
+    print('\n'+ str(tabletop) +'.')
+    assert '\n'+str(tabletop) == """
+Tabletop:
 - Tile0 0-1 ⌊(4.5, 1.5), (9.5, 5.5)⌉ adjs[2, 3, 4, 5] entities(0)
 - Tile0 0-2 ⌊(8.5, 2.5), (10.5, 9.5)⌉ adjs[1, 5, 6] entities(0)
 - Tile0 0-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ adjs[1, 4, 5, 6] entities(0)
@@ -368,12 +368,12 @@ def test_makeConvexes_medium():
     ], tll.Point(0.5, 0.5), 1.0 )
     print(grid)
     
-    aMap= tll.Map().fromGridConvexes(grid, 8.0, 0.01, pixelValues=[tll.Grid.STATE_FREE])
-    tll.draw( aMap )
+    tabletop= tll.Tabletop().fromGridConvexes(grid, 8.0, 0.01, pixelValues=[tll.Grid.STATE_FREE])
+    tll.draw( tabletop )
 
-    print('\n'+ str(aMap) +'.')
-    assert '\n'+str(aMap) == """
-Map:
+    print('\n'+ str(tabletop) +'.')
+    assert '\n'+str(tabletop) == """
+Tabletop:
 - Tile0 0-1 ⌊(1.5, 1.5), (9.5, 10.5)⌉ adjs[2, 5] entities(0)
 - Tile0 0-2 ⌊(10.5, 1.5), (19.5, 11.5)⌉ adjs[1, 5, 6] entities(0)
 - Tile0 0-3 ⌊(21.5, 1.5), (28.5, 10.5)⌉ adjs[4, 6] entities(0)
@@ -391,12 +391,12 @@ Map:
 - Tile0 0-15 ⌊(1.5, 20.5), (7.5, 30.5)⌉ adjs[8, 12] entities(0)"""
 
     
-    aMap= tll.Map().fromGridConvexes(grid, 8.0)
-    tll.draw( aMap )
+    tabletop= tll.Tabletop().fromGridConvexes(grid, 8.0)
+    tll.draw( tabletop )
 
-    print('\n'+ str(aMap) +'.')
-    assert '\n'+str(aMap) == """
-Map:
+    print('\n'+ str(tabletop) +'.')
+    assert '\n'+str(tabletop) == """
+Tabletop:
 - Tile0 0-1 ⌊(1.5, 1.5), (9.5, 10.5)⌉ adjs[2, 5, 16] entities(0)
 - Tile0 0-2 ⌊(10.5, 1.5), (19.5, 11.5)⌉ adjs[1, 5, 6, 16, 17, 18] entities(0)
 - Tile0 0-3 ⌊(21.5, 1.5), (28.5, 10.5)⌉ adjs[4, 6, 17, 19] entities(0)

@@ -4,7 +4,7 @@ from .geometry import Point, Line, Box, Convex, Grid
 # core components: 
 from .entity import AbsEntity, Entity
 from .tile import Tile
-from .map import Map
+from .tabletop import Tabletop
 
 # mas components
 from .agent import Action, Agent

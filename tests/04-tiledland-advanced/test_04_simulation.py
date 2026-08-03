@@ -13,8 +13,8 @@ def test_fast_simulation_agent_init():
     agent= tll.Agent()
     assert agent.decide() == None 
 
-def test_fast_simulation_map_init():
-    land= tll.Map()
+def test_fast_simulation_tabletop_init():
+    land= tll.Tabletop()
     land.initHexa(
         [[0, 0, 0, -1, 0],    
         [0, -1, 0, 0, -1],    
@@ -24,7 +24,7 @@ def test_fast_simulation_map_init():
         1.4
     )
 
-    # Create an artist to render this map:
+    # Create an artist to render this tabletop:
     tll.draw( land, "shot-test.png", 400, 300 )
 
     shotFile= open( "shot-test.png", mode='rb' ).read()

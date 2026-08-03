@@ -36,21 +36,21 @@ def test_Tile_agents():
     tile.clear()
     assert tile.agents() == []
 
-def test_Map_pod():
-    map= Map().initLine(4)
-    map.connectAll( [ [1, 2], [1, 3], [1, 4], [2, 1], [2, 3], [2, 4],
+def test_Tabletop_pod():
+    tabletop= Tabletop().initLine(4)
+    tabletop.connectAll( [ [1, 2], [1, 3], [1, 4], [2, 1], [2, 3], [2, 4],
                        [3, 1], [3, 2], [4, 1], [4, 2]
                         ] )
 
-    map.tile(1).setCenter( 5.0, 3.0 )
-    map.tile(2).setCenter( 5.0, 15.0 )
-    map.tile(3).setCenter( 1.0, 9.0 )
-    map.tile(4).setCenter( 9.0, 9.0 )
+    tabletop.tile(1).setCenter( 5.0, 3.0 )
+    tabletop.tile(2).setCenter( 5.0, 15.0 )
+    tabletop.tile(3).setCenter( 1.0, 9.0 )
+    tabletop.tile(4).setCenter( 9.0, 9.0 )
     
-    mapPod= map.asDataTree()
-    print(f">>>1 {mapPod}")
-    assert '\n'+ str(mapPod) +'\n' == """
-Map:
+    tabletopPod= tabletop.asDataTree()
+    print(f">>>1 {tabletopPod}")
+    assert '\n'+ str(tabletopPod) +'\n' == """
+Tabletop:
 - Convex: [0] [-0.25, 0.1, -0.1, 0.25, 0.1, 0.25, 0.25, 0.1, 0.25, -0.1, 0.1, -0.25, -0.1, -0.25, -0.25, -0.1]
 - Tile: [1, 0, 2, 3, 4] [5.0, 3.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 - Tile: [2, 0, 1, 3, 4] [5.0, 15.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
@@ -58,10 +58,10 @@ Map:
 - Tile: [4, 0, 1, 2] [9.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 """
 
-    mapPod= Map().fromDataTree( map.asDataTree() ).asDataTree()
-    print(f">>>2 {mapPod}")
-    assert '\n'+ str(mapPod) +'\n' == """
-Map:
+    tabletopPod= Tabletop().fromDataTree( tabletop.asDataTree() ).asDataTree()
+    print(f">>>2 {tabletopPod}")
+    assert '\n'+ str(tabletopPod) +'\n' == """
+Tabletop:
 - Convex: [0] [-0.25, 0.1, -0.1, 0.25, 0.1, 0.25, 0.25, 0.1, 0.25, -0.1, 0.1, -0.25, -0.1, -0.25, -0.25, -0.1]
 - Tile: [1, 0, 2, 3, 4] [5.0, 3.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 - Tile: [2, 0, 1, 3, 4] [5.0, 15.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
@@ -69,9 +69,9 @@ Map:
 - Tile: [4, 0, 1, 2] [9.0, 9.0, -0.45, 0.45, 0.45, 0.45, 0.45, -0.45, -0.45, -0.45]
 """
 
-    print(f">>> {mapPod.dump()}")
-    assert '\n'+ mapPod.dump() +'\n' == """
-Map - 0 0 0 5 :
+    print(f">>> {tabletopPod.dump()}")
+    assert '\n'+ tabletopPod.dump() +'\n' == """
+Tabletop - 0 0 0 5 :
 Convex - 0 1 16 0 : 0 -0.25 0.1 -0.1 0.25 0.1 0.25 0.25 0.1 0.25 -0.1 0.1 -0.25 -0.1 -0.25 -0.25 -0.1
 Tile - 0 5 10 0 : 1 0 2 3 4 5.0 3.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45
 Tile - 0 5 10 0 : 2 0 1 3 4 5.0 15.0 -0.45 0.45 0.45 0.45 0.45 -0.45 -0.45 -0.45

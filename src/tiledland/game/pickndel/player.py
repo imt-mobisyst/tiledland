@@ -1,13 +1,13 @@
 import time
 from hacka import Player
-from .world import World
+from .land import Land
 
 class BasicBot( Player ):
 
     # Constructor:
     def __init__(self):
         super().__init__()
-        self._model= World()
+        self._model= Land()
         self._id= 0
         self._sumResult= 0.0
         self._countResult= 0

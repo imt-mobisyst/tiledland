@@ -12,7 +12,7 @@ def test_fast_load_local_tllcore():
     anAbsEntity= tll.AbsEntity()
     anEntity= tll.Entity()
     aTile= tll.Tile()
-    aMap= tll.Map()
+    tabletop= tll.Tabletop()
 
 # ------------------------------------------------------------------------ #
 #         T E S T   H A C K A G A M E S - E N T I T Y
