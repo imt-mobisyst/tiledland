@@ -66,15 +66,15 @@ def test_fast_tile_str():
     tile.setPosition(18.5, 4.07)
     
     print(f">>> {tile}")
-    assert str(tile) == "Tile0 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] entities(0)"
+    assert str(tile) == "0:Tile 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] entities(0)"
     
     tile.setGroupAndBrush(2).connectAll( [1, 2, 3] )
     print(f">>> {tile}")
-    assert str(tile) == "Tile2 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] entities(0)"
+    assert str(tile) == "2:Tile 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] entities(0)"
 
     tile= Tile( shape= Convex() )
     print(f">>> {tile}")
-    assert str(tile) == "Tile0 0-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] entities(0)"
+    assert str(tile) == "0:Tile 0-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] entities(0)"
 
     print(f">>> {tile.projectedShape()}")
     assert tile.position().asTuple() == (0.0, 0.0)
@@ -140,7 +140,7 @@ def test_fast_tile_DataTreeCopy():
     assert type(tile) == type(tileBis)
     assert tileBis.adjacencies() == [ 1, 3, 7, 19 ]
 
-    assert str(tileBis) == "Tile0 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 3, 7, 19] entities(1)"
+    assert str(tileBis) == "0:Tile 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 3, 7, 19] entities(1)"
     assert str(tileBis.entity()) == str(tile.entity())
 
 

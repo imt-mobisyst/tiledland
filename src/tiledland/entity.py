@@ -91,6 +91,10 @@ class Entity(AbsEntity) :
         return self._brush
 
     # Construction:
+    def setName(self, aString):
+        self._name= aString
+        return self
+
     def setArea(self, aInteger):
         self._area= aInteger
         return self
@@ -199,8 +203,9 @@ class Entity(AbsEntity) :
     def renderOn( self, artist ):
         artist.fillConvex( self.projectedShape(), self.brush() )
         minx, miny= self.box().leftFloor().asTuple()
-        x, y= self.position().asTuple()
-        artist.write( x, y, self._name, self.brush() )
+        cx, cy= self.position().asTuple()
+        x= minx + 0.1 * (cx - minx)
+        artist.write( x, cy, self._name, self.brush() )
         return self
     
     # Hacka.DataTree interface:
@@ -230,7 +235,7 @@ class Entity(AbsEntity) :
 
     # str:
     def str(self): 
-        return self._name + f"{self.group()} {self.area()}-{self.index()} {self.box()}"
+        return f"{self.group()}:{self._name} {self.area()}-{self.index()} {self.box()}"
     
     def __str__(self):
         return self.str()

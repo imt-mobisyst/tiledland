@@ -34,28 +34,31 @@ refMatrix= [
 """
 
 def test_pnd_land():
-    model= pnd.Land( "Cool" )
-    assert model.name() == "Cool"
-    model.initGrid( refMatrix, 0.9, 0.1 )
-    pablo= tll.createArtistPNG("shot-test.png", 800, 600)
-    pablo.fitBox( model.box(), 10 )
+    model= pnd.Land( "Cool-Land" )
+    assert model.name() == "Cool-Land"
 
-    model.renderOn(pablo)
+    model.initTabletop( tll.Tabletop().initGrid( refMatrix, 0.9, 0.1 ) )
+
+    pablo= tll.createArtistPNG("shot-test.png", 800, 600)
+    pablo.fitBox( model.tabletop().box(), 10 )
+
+    model.tabletop().renderOn(pablo)
     pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
     refsFile= open( "tests/refs/41.pickndel-map-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-    bod= model.tileAppendEntity(1)
+    bod= model.popAvatar(1)
+
     print( bod )
-    assert bod.index() == 1
-    assert model.tileAppendEntity(25).index() == 2
+    assert bod == 1
+    assert model.popAvatar(25) == 2
 
-    assert model.tileAppendEntity(7).index() == 3
-    assert model.tileAppendEntity(44).index() == 4
+    assert model.popAvatar(7)  == 3
+    assert model.popAvatar(44) == 4
 
-    model.renderOn(pablo)
+    model.tabletop().renderOn(pablo)
     pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
@@ -64,8 +67,8 @@ def test_pnd_land():
 
 def test_pnd_graph():
     # Game MoveIt:
-    model= pnd.Land()
-    model.initGrid( refMatrix, 0.9, 0.1 )
+    land= pnd.Land( "Testland", tll.Tabletop().initGrid( refMatrix, 0.9, 0.1 ) )
+    model= land.tabletop()
 
     print( f">>> {model.neighbours(11)}" )
 
@@ -84,41 +87,57 @@ def test_pnd_graph():
 
 def test_pnd_withCarrier():
     # Game MoveIt:
-    model= pnd.Land( numberOfPlayers=2 )
-    model.initGrid( refMatrix, 0.9, 0.1 )
+    land= pnd.Land( "Testland", tll.Tabletop().initGrid( refMatrix, 0.9, 0.1 ), numberOfPlayers=2 )
+    tabletop= land.tabletop()
+
+    assert land.popAvatar(1, 1)  == 1
+    assert land.popAvatar(25, 1) == 2
+    assert land.popAvatar(7, 2)  == 3
+    assert land.popAvatar(44, 2) == 4
     
-    assert str(model.tileAppendEntity(1, 1)) == 'Carrier-1.1 ⌊(-0.18, 5.82), (0.18, 6.18)⌉ |0, 0|'
-    assert str(model.tileAppendEntity(25, 1)) == 'Carrier-1.2 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
+    print(land.body(1)) 
+    assert str( land.body(1) ) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉'
 
-    assert str(model.tileAppendEntity(7, 2)) == 'Carrier-2.1 ⌊(6.82, 5.82), (7.18, 6.18)⌉ |0, 0|'
-    assert str(model.tileAppendEntity(44, 2)) == 'Carrier-2.2 ⌊(0.82, -0.18), (1.18, 0.18)⌉ |0, 0|'
+    assert [ e.group() for e in tabletop.tile(1).entities() ] == [1]
+    assert str(tabletop.entity(1, 1)) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉'
+    assert str(tabletop.entity(1)) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉'
+
+    assert [ e.group() for e in tabletop.tile(2).entities() ] == []
+    assert [ e.group() for e in tabletop.tile(7).entities() ] == [2]
+    assert [ e.group() for e in tabletop.tile(12).entities() ] == []
+    assert [ e.group() for e in tabletop.tile(25).entities() ] == [1]
+    assert [ e.group() for e in tabletop.tile(44).entities() ] == [2]
     
-    #assert model.entityTiles(1) == [1, 25]
-    #assert model.entityTiles(2) == [7, 44]
-    assert model.entities() == []
+    bodyIdentifiers= [
+        (b.area(), b.group()) 
+        for b in land.bodies()
+    ]
 
-    #assert [ ag.tile() for ag in model.allEntities() ] == [1, 25, 7, 44]
+    print( bodyIdentifiers )
+    assert bodyIdentifiers == [ (1, 1), (25, 1), (7, 2), (44, 2)]
 
-    assert model.move( 11, 12 ) == 11
-    assert model.move( 1, 6 ) == 10
+    #moveEntity
+
+    assert land.move( 11, 12 ) == 11
+    assert land.move( 1, 6 ) == 10
 
     #assert model.entityTiles(1) == [10, 25]
     #assert model.entityTiles(2) == [7, 44]
 
-    assert str( model.tile(10).entity() ) == 'Carrier-1.1 ⌊(-0.18, 4.82), (0.18, 5.18)⌉ |0, 0|'
+    assert str( land.tile(10).entity() ) == 'Carrier-1.1 ⌊(-0.18, 4.82), (0.18, 5.18)⌉ |0, 0|'
 
-    assert model.clockBearing(44) == [9, 3]
+    assert land.clockBearing(44) == [9, 3]
 
-    assert model.move( 44, 12 ) == False
-    assert model.move( 44, 3 ) == 45
-    assert model.move( 45, 12 ) == 39
-    assert model.move( 39,  0 ) == 39
-    assert model.move( 39,  3 ) == False
+    assert land.move( 44, 12 ) == False
+    assert land.move( 44, 3 ) == 45
+    assert land.move( 45, 12 ) == 39
+    assert land.move( 39,  0 ) == 39
+    assert land.move( 39,  3 ) == False
     
     pablo= tll.createArtistPNG("shot-test.png", 800, 600)
-    pablo.fitBox( model.box(), 10 )
+    pablo.fitBox( land.box(), 10 )
     
-    model.renderOn(pablo)
+    land.renderOn(pablo)
     pablo.flip()
 
     shotFile= open( "shot-test.png", mode='rb' ).read()

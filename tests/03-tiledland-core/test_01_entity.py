@@ -151,12 +151,12 @@ def test_fast_entity_str():
     entity.setLocation(12, 6)
 
     print(entity)
-    assert str(entity) == "Entity42 12-6 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
+    assert str(entity) == "42:Entity 12-6 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 
     entity= tll.Entity( 42, tll.Convex().initSquare(1.0) )
     entity.setPosition(1.0, 2.0)
     print(entity)
-    assert str(entity) == "Entity42 0-0 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
+    assert str(entity) == "42:Entity 0-0 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 
 def test_fast_entity_hacka():
     entity= tll.Entity( 4 ).setPose( Point(1.0, 2.0), 1.5 ).setLocation(3, 42)

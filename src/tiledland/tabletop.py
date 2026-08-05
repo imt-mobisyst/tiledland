@@ -152,7 +152,7 @@ class Tabletop(AbsEntity):
     def tile(self, iTile):
         return self._tiles[iTile-1]
 
-    def eEentity(self, iTile, index):
+    def entity(self, iTile, index= 1):
         return self.tile(iTile).entity(index)
 
     def numberOfTiles(self):

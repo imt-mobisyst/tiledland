@@ -2,7 +2,8 @@ import random, hacka
 
 import tiledland as tll
 from tiledland.geometry import Point, Convex, Box
-from tiledland.artist import Artist
+
+from .carrier import Carrier
 
 class Mission:
     def __init__( self, start= 0, final= 0, reward= 0, owner= 0 ):
@@ -20,24 +21,23 @@ class Mission:
 
     def asList(self):
         return [self.start, self.final, self.reward, self.owner]
-    
+
     def asTuple(self):
         return self.start, self.final, self.reward, self.owner
 
 class Land(tll.Land):
-    def __init__(self, name="Pick'nDel", numberOfPlayers= 1):
-        super().__init__()
-        self.setEntityFactory(Carrier)
-        self._name= name
+    def __init__(self, name= "Pick'n-Del", tabletop= None, numberOfPlayers= 1):
+        super(Land, self).__init__( tabletop, bankOfAgents= [Carrier()] )
+        self.initializeDefaultBankOfEntities( numberOfPlayers+1, 0.6 )
         self._missions= []
         self._encumbers= []
+        self._name= name
+
         # Initialize Artist :
-        self._artist= artist.createArtistPNG( "shot-pickndel.png", 800, 600 )
-        self._artist.flip()
-        self._artist.fitBox( Box([Point(-0.5, -0.5), Point(9.5, 6.5)] ), 10 )
-        #self._artist.fitBox( self.box(), 10 )
-        self.marketBrush= tll.artist.palette.background[6]
-        self.marketBrush.width= 8
+        #artist= artist.createArtistPNG( "shot-pickndel.png", 800, 600 )
+        #artist.flip()
+        #artist.fitBox( Box([Point(-0.5, -0.5), Point(9.5, 6.5)] ), 10 )
+        #artist.fitBox( self.box(), 10 )
 
     # Accessor: 
     def name(self):
@@ -83,6 +83,12 @@ class Land(tll.Land):
     def encumber(self, iTile):
         return self._encumbers[iTile-1]
 
+    # Initializing:
+    def initTabletop( self, tabletop, defaultEncumberValue= 0.0):
+        super(Land, self).initTabletop( tabletop )
+        self.resetEncumbers( defaultEncumberValue )
+        return self
+
     # Construction:
     def initMoves(self):
         for group in range( self.numberOfGroups() ) :
@@ -90,7 +96,7 @@ class Land(tll.Land):
                 car.setMove(0)
 
     def append( self, tile, encumber= 0.0 ):
-        super(World, self).append(tile)
+        super(Land, self).append(tile)
         self._encumbers.append(encumber)
 
     def setEncumber( self, iTile, value ):
@@ -100,27 +106,19 @@ class Land(tll.Land):
     def resetEncumbers( self, defaultValue= 0.0 ):
         self._encumbers= [ defaultValue for i in range(self.size()) ]
         return self
-    
-    def initLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
-        super(World, self).initLine(size, tileSize, separation, connect)
-        self.resetEncumbers()
-        return self
-    
-    def initGrid( self, matrix, tileSize= 1.0, separation=0.1, encumbers= [[],[]], connect=True ):
-        super(World, self).initGrid(matrix, tileSize, separation, connect)
-        self.resetEncumbers()
-        for iTile, enc in zip( encumbers[0], encumbers[1] ) :
-            self.setEncumber( iTile, enc )
-        return self
 
     def clear( self ):
-        super(World, self).clear()
-        self._encumbers= []
+        super(Land, self).clear()
+        self._missions= []
 
     def addTile( self, aTile, encumber= 0.0 ):
-        super(World, self).appendTile(aTile)
+        super(Land, self).appendTile(aTile)
         self._encumbers.append(encumber)
         return self._size
+
+    # Construction :
+    def popAvatar(self, iTile, iPlayer= 1):
+        return super().popAvatar(iTile, iPlayer)
 
     # Mission :
     def setMissions( self, aListOfTuples, pay= 124 ):
@@ -181,7 +179,7 @@ class Land(tll.Land):
     
     # Hacka.DataTree interface:
     def asDataTree( self ):
-        return hacka.DataTree( self._name, [], [], [ super(World, self).asDataTree(), self.missionsAsDataTree() ] )
+        return hacka.DataTree( self._name, [], [], [ super(Land, self).asDataTree(), self.missionsAsDataTree() ] )
     
     def missionsAsDataTree(self):
         missionDataTree= hacka.DataTree( "Missions" )
@@ -199,7 +197,7 @@ class Land(tll.Land):
 
     def fromDataTree( self, aDataTree ):
         self._name= aDataTree.label()
-        super(World, self).fromDataTree( aDataTree.child(1) )
+        super(Land, self).fromDataTree( aDataTree.child(1) )
         self.missionsFromDataTree(  aDataTree.child(2) )
         return self
     
@@ -227,26 +225,25 @@ class Land(tll.Land):
         return aDataTree.digit(1)
     
     # Rendering :
-    def render(self):
-        self.renderOn( self._artist )
+    def renderOn(self, artist, marketBrush= tll.artist.palette.background[6]):
+        self.tabletop().renderOn( artist )
         # Market:
-        self._artist.drawPolygon(
+        artist.drawPolygon(
             [6.55, 6.55, 9.5, 9.5], [2.45, -0.6, -0.6, 2.45],
-            self.marketBrush
+            marketBrush
         )
-        self._artist._fontSize= 20
-        self._artist.write( 6.6, 2.2, "Market Place:", self.marketBrush )
-        self._artist._fontSize= 16
+        artist._fontSize= 20
+        artist.write( 6.6, 2.2, "Market Place:", marketBrush )
+        artist._fontSize= 16
         sep= 0.0
         for i in self.missionIndexes() :
             mFrom, mTo, pay, iPlayer= self.mission(i).asTuple()
-            self._artist.write( 6.8, 1.9-sep, f".{i}", self.marketBrush) 
-            self._artist.write( 7.2, 1.9-sep, f"- {mFrom} to: {mTo}", self.marketBrush )
+            artist.write( 6.8, 1.9-sep, f".{i}", marketBrush) 
+            artist.write( 7.2, 1.9-sep, f"- {mFrom} to: {mTo}", marketBrush )
             if iPlayer == 0 :
-                self._artist.write( 8.5, 1.9-sep, f"({pay} ¢)", self.marketBrush )
+                artist.write( 8.5, 1.9-sep, f"({pay} ¢)", marketBrush )
             else :
-                self._artist.write( 8.4, 1.9-sep, f"(Team-{iPlayer})", self.marketBrush )
+                artist.write( 8.4, 1.9-sep, f"(Team-{iPlayer})", marketBrush )
             sep+= 0.24
-        # Finalize:
-        self._artist.flip()
+        return self
 

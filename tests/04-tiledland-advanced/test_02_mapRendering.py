@@ -116,10 +116,10 @@ def test_Tabletop_str():
 
     assert "\n"+str(tabletop)+"\n" == """
 Tabletop:
-- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
-- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(1)
-  - Entity1 2-1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
-- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- 0:Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- 0:Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(1)
+  - 1:Entity 2-1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
+- 0:Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
 def test_Tabletop_hacka():
@@ -136,10 +136,10 @@ def test_Tabletop_hacka():
     print(f">>>\n{tabletop}.")
     assert '\n'+ str(tabletop) +'\n' == """
 Tabletop:
-- Tile0 0-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] entities(0)
-- Tile0 0-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] entities(0)
-- Tile0 0-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] entities(0)
-- Tile0 0-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] entities(0)
+- 0:Tile 0-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] entities(0)
+- 0:Tile 0-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] entities(0)
+- 0:Tile 0-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] entities(0)
+- 0:Tile 0-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] entities(0)
 """
 
 def test_Tabletop_box():
@@ -181,9 +181,9 @@ def test_Tabletop_dataTreecopy():
     print( f">>>\n{tabletop}." )
     assert '\n'+ str(tabletop) +'\n' == """
 Tabletop:
-- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
-- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
-- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- 0:Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- 0:Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
+- 0:Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     print("Go for the copying...")
@@ -196,9 +196,9 @@ Tabletop:
     print(f">>>\n{tabletopBis}.")
     assert '\n'+ str(tabletopBis) +'\n' == """
 Tabletop:
-- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
-- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
-- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- 0:Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- 0:Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
+- 0:Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     assert tabletopBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
@@ -212,9 +212,9 @@ def test_Tabletop_connection():
     print( f">>>\n{tabletop}.")
     assert "\n"+ str(tabletop) +"\n" == """
 Tabletop:
-- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] entities(0)
-- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] entities(0)
-- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- 0:Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] entities(0)
+- 0:Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] entities(0)
+- 0:Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     assert tabletop.tile(1).adjacencies() == [2]
@@ -237,7 +237,7 @@ def test_Tabletop_hexa():
     draw(tabletop)
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:
-- Tile0 0-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ adjs[2, 3] entities(0)
-- Tile1 0-2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ adjs[1, 3, 4] entities(0)
-- Tile0 0-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ adjs[1, 2] entities(0)
-- Tile0 0-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ adjs[2] entities(0)"""
+- 0:Tile 0-1 ⌊(0.53, 1.17), (1.4, 2.17)⌉ adjs[2, 3] entities(0)
+- 1:Tile 0-2 ⌊(0.05, 0.34), (0.92, 1.34)⌉ adjs[1, 3, 4] entities(0)
+- 0:Tile 0-3 ⌊(1.02, 0.34), (1.88, 1.34)⌉ adjs[1, 2] entities(0)
+- 0:Tile 0-4 ⌊(-0.43, -0.5), (0.43, 0.5)⌉ adjs[2] entities(0)"""

@@ -41,6 +41,8 @@ def test_fast_land_first():
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-01.svg", mode='rb' ).read() )
 
+    land.initializeDefaultBankOfEntities(4)
+
     identifier= land.popAvatar( 3, 1 )
     assert identifier == 2
 
@@ -62,10 +64,10 @@ def test_fast_land_factory():
 
     tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
 
-    land.setBankOfEntities([
-        tll.Entity( i+1, Convex().initArrowTip(s), orientation= a,  name= n )
-        for i, s, a, n in zip( range(5), [0.4, 0.4, 0.2, 0.8, 0.6], [0.0, 3.14, -1.57, 0.8, -2.6], ["A", "B", "C", "D", "E"] )
-    ])
+    land.initializeArrowTipBankOfEntities( range(5),
+        [0.4, 0.4, 0.2, 0.8, 0.6],
+        [0.0, 3.14, -1.57, 0.8, -2.6],
+        ["A", "B", "C", "D", "E"] )
 
     land.popAvatar(  3, 1 )
     land.popAvatar( 10, 2 )

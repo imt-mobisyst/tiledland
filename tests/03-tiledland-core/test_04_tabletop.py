@@ -69,10 +69,10 @@ def test_fast_tabletop_str():
 
     assert "\n"+str(tabletop)+"\n" == """
 Tabletop:
-- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
-- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(1)
-  - Entity1 2-1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
-- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- 0:Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- 0:Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(1)
+  - 1:Entity 2-1 ⌊(-0.43, -0.5), (0.5, 0.5)⌉
+- 0:Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
 def test_fast_tabletop_hacka():
@@ -142,9 +142,9 @@ def test_fast_tabletop_DataTreecopy():
 
     assert '\n'+ str(tabletop) +'\n' == """
 Tabletop:
-- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
-- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
-- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- 0:Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- 0:Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
+- 0:Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     print("Go for the copying...")
@@ -157,9 +157,9 @@ Tabletop:
     print(f">>>\n{tabletopBis}")
     assert '\n'+ str(tabletopBis) +'\n' == """
 Tabletop:
-- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
-- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
-- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- 0:Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
+- 0:Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(0)
+- 0:Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     assert tabletopBis.edges() == [(1, 1), (1, 3), (2, 1), (2, 2), (3, 2)]
@@ -173,9 +173,9 @@ def test_fast_tabletop_connection():
     print( f">>>\n{tabletop}\n---")
     assert "\n"+ str(tabletop) +"\n"  == """
 Tabletop:
-- Tile0 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] entities(0)
-- Tile0 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] entities(0)
-- Tile0 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- 0:Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] entities(0)
+- 0:Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] entities(0)
+- 0:Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
 """
 
     assert tabletop.tile(1).adjacencies() == [2]
@@ -220,12 +220,12 @@ def test_fast_tabletop_withEntities():
 
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:
-- Tile0 0-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] entities(1)
-  - Entity0 1-1 ⌊(-0.43, 0.6), (0.5, 1.6)⌉
-- Tile1 0-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] entities(2)
-  - Entity0 2-1 ⌊(0.67, 0.6), (1.6, 1.6)⌉
-  - Entity0 2-2 ⌊(0.67, 0.6), (1.6, 1.6)⌉
-- Tile0 0-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] entities(0)"""
+- 0:Tile 0-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] entities(1)
+  - 0:Entity 1-1 ⌊(-0.43, 0.6), (0.5, 1.6)⌉
+- 1:Tile 0-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] entities(2)
+  - 0:Entity 2-1 ⌊(0.67, 0.6), (1.6, 1.6)⌉
+  - 0:Entity 2-2 ⌊(0.67, 0.6), (1.6, 1.6)⌉
+- 0:Tile 0-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] entities(0)"""
 
     tabletop.clearEntities()
 
@@ -246,7 +246,7 @@ def test_fast_tabletop_popEntities():
 
     assert type(bod) == Entity
     assert bod.location() == (2, 1)
-    assert tabletop.eEentity(2, 1) == bod
+    assert tabletop.entity(2, 1) == bod
 
     assert tabletop.numberOfEntities() == 1
     assert tabletop.tile(1).numberOfEntities() == 0
@@ -257,14 +257,14 @@ def test_fast_tabletop_popEntities():
 
     assert type(bod) == Entity
     assert bod.location() == (1, 1)
-    assert tabletop.eEentity(1, 1) == bod
+    assert tabletop.entity(1, 1) == bod
 
     bod= tabletop.tileAppendEntity(1)
 
     assert type(bod) == Entity
     assert bod.location() == (1, 2)
-    assert tabletop.eEentity(1, 1) != bod
-    assert tabletop.eEentity(1, 2) == bod
+    assert tabletop.entity(1, 1) != bod
+    assert tabletop.entity(1, 2) == bod
 
     assert tabletop.numberOfEntities() == 3
     assert tabletop.tile(1).numberOfEntities() == 2
@@ -280,13 +280,13 @@ def test_fast_tabletop_popEntities():
 
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:
-- Tile0 0-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] entities(2)
-  - Entity0 1-1 ⌊(-0.43, 0.6), (0.5, 1.6)⌉
-  - Entity0 1-2 ⌊(-0.43, 0.6), (0.5, 1.6)⌉
-- Tile1 0-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] entities(2)
-  - Entity0 2-1 ⌊(0.67, 0.6), (1.6, 1.6)⌉
-  - Entity0 2-2 ⌊(0.67, 0.6), (1.6, 1.6)⌉
-- Tile0 0-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] entities(0)"""
+- 0:Tile 0-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] entities(2)
+  - 0:Entity 1-1 ⌊(-0.43, 0.6), (0.5, 1.6)⌉
+  - 0:Entity 1-2 ⌊(-0.43, 0.6), (0.5, 1.6)⌉
+- 1:Tile 0-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] entities(2)
+  - 0:Entity 2-1 ⌊(0.67, 0.6), (1.6, 1.6)⌉
+  - 0:Entity 2-2 ⌊(0.67, 0.6), (1.6, 1.6)⌉
+- 0:Tile 0-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] entities(0)"""
 
     tabletop.clearEntities()
 
@@ -308,55 +308,55 @@ def test_fast_tabletop_moveEntities():
     draw(tabletop)
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:
-- Tile0 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
-  - E.10 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-  - E.20 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-- Tile0 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(2)
-  - E.30 2-1 ⌊(0.93, 2.0), (1.3, 2.4)⌉
-  - E.40 2-2 ⌊(0.93, 2.0), (1.3, 2.4)⌉
-- Tile1 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
-  - E.50 3-1 ⌊(2.03, 2.0), (2.4, 2.4)⌉
-- Tile0 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
-- Tile0 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
-- Tile2 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
-- Tile0 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+- 0:Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+  - 0:E.1 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - 0:E.2 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+- 0:Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(2)
+  - 0:E.3 2-1 ⌊(0.93, 2.0), (1.3, 2.4)⌉
+  - 0:E.4 2-2 ⌊(0.93, 2.0), (1.3, 2.4)⌉
+- 1:Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
+  - 0:E.5 3-1 ⌊(2.03, 2.0), (2.4, 2.4)⌉
+- 0:Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
+- 0:Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
+- 2:Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
+- 0:Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
 
     bob= tabletop.tileRemoveEntity(2, 1)
 
     print( bob )
-    assert str(bob) == "E.30 0-0 ⌊(0.93, 2.0), (1.3, 2.4)⌉"
+    assert str(bob) == "0:E.3 0-0 ⌊(0.93, 2.0), (1.3, 2.4)⌉"
 
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:
-- Tile0 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
-  - E.10 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-  - E.20 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-- Tile0 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(1)
-  - E.40 2-1 ⌊(0.93, 2.0), (1.3, 2.4)⌉
-- Tile1 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
-  - E.50 3-1 ⌊(2.03, 2.0), (2.4, 2.4)⌉
-- Tile0 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
-- Tile0 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
-- Tile2 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
-- Tile0 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+- 0:Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+  - 0:E.1 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - 0:E.2 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+- 0:Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(1)
+  - 0:E.4 2-1 ⌊(0.93, 2.0), (1.3, 2.4)⌉
+- 1:Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
+  - 0:E.5 3-1 ⌊(2.03, 2.0), (2.4, 2.4)⌉
+- 0:Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
+- 0:Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
+- 2:Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
+- 0:Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
     
     bob= tabletop.tileRemoveEntity(2, 1)
 
     print( bob )
-    assert str(bob) == "E.40 0-0 ⌊(0.93, 2.0), (1.3, 2.4)⌉"
+    assert str(bob) == "0:E.4 0-0 ⌊(0.93, 2.0), (1.3, 2.4)⌉"
 
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:
-- Tile0 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
-  - E.10 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-  - E.20 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-- Tile0 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
-- Tile1 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
-  - E.50 3-1 ⌊(2.03, 2.0), (2.4, 2.4)⌉
-- Tile0 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
-- Tile0 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
-- Tile2 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
-- Tile0 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+- 0:Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+  - 0:E.1 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - 0:E.2 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+- 0:Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
+- 1:Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
+  - 0:E.5 3-1 ⌊(2.03, 2.0), (2.4, 2.4)⌉
+- 0:Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
+- 0:Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
+- 2:Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
+- 0:Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
 
     bob= tabletop.moveEntity(3, 1, 1)
 
@@ -366,16 +366,16 @@ def test_fast_tabletop_moveEntities():
 
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:
-- Tile0 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(3)
-  - E.10 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-  - E.20 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-  - E.50 1-3 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-- Tile0 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
-- Tile1 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(0)
-- Tile0 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
-- Tile0 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
-- Tile2 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
-- Tile0 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+- 0:Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(3)
+  - 0:E.1 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - 0:E.2 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - 0:E.5 1-3 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+- 0:Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
+- 1:Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(0)
+- 0:Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
+- 0:Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
+- 2:Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
+- 0:Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
 
     bob= tabletop.moveEntity(1, 2, 4)
 
@@ -385,13 +385,13 @@ def test_fast_tabletop_moveEntities():
 
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:
-- Tile0 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
-  - E.10 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-  - E.50 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-- Tile0 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
-- Tile1 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(0)
-- Tile0 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(1)
-  - E.20 4-1 ⌊(0.93, 0.9), (1.3, 1.3)⌉
-- Tile0 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
-- Tile2 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
-- Tile0 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+- 0:Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+  - 0:E.1 1-1 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+  - 0:E.5 1-2 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
+- 0:Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
+- 1:Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(0)
+- 0:Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(1)
+  - 0:E.2 4-1 ⌊(0.93, 0.9), (1.3, 1.3)⌉
+- 0:Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
+- 2:Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
+- 0:Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
