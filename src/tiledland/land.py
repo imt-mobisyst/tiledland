@@ -7,7 +7,7 @@ class Actor():
     def __init__(self, index, bodies, agent):
         assert type(bodies) is list
         self._id= index
-        self._bodies= bodies
+        self._bodies= [b for b in bodies]
         self._agent= agent
     
     # accessor: 
@@ -39,7 +39,7 @@ class Land():
 
     def initializeArrowTipBankOfEntities(self, groups, arrowtipSizes, arrowtipAngles, names):
         self._bankOfEntities= [
-            Entity( i+1, Convex().initArrowTip(s), orientation= a,  name= n )
+            Entity( i, Convex().initArrowTip(s), orientation= a,  name= n )
             for i, s, a, n in zip( groups, arrowtipSizes, arrowtipAngles, names )
         ]
         return self

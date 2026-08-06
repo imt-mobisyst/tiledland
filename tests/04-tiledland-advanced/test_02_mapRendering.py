@@ -52,20 +52,24 @@ def test_tabletop_clockNeighboring():
 
     t= tabletop.appendTile( Tile( shape= tileConvex, position=Point(1.5, 2), group= 2 ) )
     tabletop.connect( 1, t.index() )    
-    assert tabletop.neighbours(1) == [(2, 1)]
+    assert tabletop.neighbours(1) == [(2, (1.5, 2.0), 1)]
     draw(tabletop)
 
     t= tabletop.appendTile( Tile( shape= tileConvex, position=Point(-1.5, 2), group= 2 ) )
     tabletop.connect( 1, t.index() )    
     draw(tabletop)
-    assert tabletop.neighbours(1) == [(2, 1), (3, 11)]
+
+    print( tabletop.neighbours(1) )
+    assert tabletop.neighbours(1) == [(2, (1.5, 2.0), 1), (3, (-1.5, 2.0), 11)]
 
     t= tabletop.appendTile( Tile( shape= tileConvex, position=Point(1.5, -2), group= 2 ) )
     tabletop.connect( 1, t.index() )    
     t= tabletop.appendTile( Tile( shape= tileConvex, position=Point(-1.5, -2), group= 2 ) )
     tabletop.connect( 1, t.index() )    
     draw(tabletop)
-    assert tabletop.neighbours(1) == [(2, 1), (3, 11), (4, 5), (5, 7)]
+
+    print( tabletop.neighbours(1) )
+    assert tabletop.neighbours(1) == [(2, (1.5, 2.0), 1), (3, (-1.5, 2.0), 11), (4, (1.5, -2.0), 5), (5, (-1.5, -2.0), 7)]
 
     assert tabletop.tile(1).adjacencies() == [2, 3, 4, 5]
     assert tabletop.edges() == [(1, 2), (1, 3), (1, 4), (1, 5)]

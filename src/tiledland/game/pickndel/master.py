@@ -181,8 +181,7 @@ class GameEngine( hacka.AbsGame ) :
         self._model.initMoves()
         self._tic-= 1
         return collision
-
-    
+   
     
     def toward(self, iTile, iTarget):
         world= self.world()

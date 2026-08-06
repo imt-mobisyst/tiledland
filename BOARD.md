@@ -30,6 +30,8 @@ the core component of TiledLand refere to the `Tiles` composing a `Tabletop` and
 
 ## Tiled land Advanced :
 
+- [ ] tabletop.completeClock : make a more complete function...
+
 
 ## Multi-Agent System (MAS) framework
 

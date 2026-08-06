@@ -174,21 +174,21 @@ class Tabletop(AbsEntity):
             edgeList+= [ (t.index(), neibor) for neibor in t.adjacencies() ]
         return edgeList
 
-    def neighbours(self, iTile):
-        neibs= [] 
-        for iNei in self.adjacencies(iTile) :
-            print(f"{iTile} and {iNei}")
-            clockdir= self.tile(iTile).clockDirection( self.tile(iNei).position() )
-            neibs.append( (iNei, clockdir) )
-        return neibs
-        
     def directions(self, iTile) : 
         cx, cy= self.tile(iTile).position().asTuple()
-        neibor= self.adjacencies(iTile)
-        positions= [ self.tile(i).position().asTuple() for i in neibor ]
+        neibors= self.adjacencies(iTile)
+        positions= [ self.tile(i).position().asTuple() for i in neibors ]
         return [ (x-cx, y-cy) for x, y in positions ]
     
-    def clockBearing(self, iTile):
+    def neighbours(self, iTile): # Return the list of neighbou tile identifiers couple with the clock direction to reach it
+        neibs= [] 
+        for iNei, pos in zip( self.adjacencies(iTile), self.directions(iTile) ) :
+            clockdir= self.tile(iTile).clockDirection( self.tile(iNei).position() )
+            neibs.append( (iNei, pos, clockdir) )
+        return neibs
+    
+    # Clock Bearing :
+    def obsolet_clockBearing(self, iTile):
         clock= [
             [ 0,  9,  0],
             [ 6,  0, 12],
@@ -199,12 +199,20 @@ class Tabletop(AbsEntity):
 
     def completeClock(self, iTile):
         clock= [ iTile for i in range(13) ]
-        for it, ic in self.neighbours(iTile) :
+        position= [ (0.0, 0.0) for i in range(13) ]
+        for it, pos, ic in self.neighbours(iTile) :
             clock[ic]= it
+            position[ic]= pos
         return clock
 
-    def clockposition(self, iTile, clockDir):
+    def clockPosition(self, iTile, clockDir):
         return self.completeClock(iTile)[clockDir]
+
+    def tileClockMoveEntity(self, iTile, iEntity, clockDir):
+        iTarget= self.clockPosition(iTile, clockDir)
+        if iTarget != iTile :
+            self.tileMoveEntity( iTile, iEntity, iTarget )
+        return iTarget
 
     # Construction:
     def setEpsilon(self, epsilon):
@@ -283,7 +291,7 @@ class Tabletop(AbsEntity):
             anEntity.setLocation(0, 0)
         return anEntity
 
-    def moveEntity( self, iTile, iEntity, tTile ):
+    def tileMoveEntity( self, iTile, iEntity, tTile ):
         anEntity= self.tileRemoveEntity(iTile, iEntity)
         if anEntity is None :
             return anEntity

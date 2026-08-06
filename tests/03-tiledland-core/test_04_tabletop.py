@@ -9,9 +9,6 @@ from src.tiledland import Entity, Tile, Tabletop
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - C O M P O N E N T
 # ------------------------------------------------------------------------ #
-def draw( entity ):
-    tll.draw( entity, "shot-test.png", 800, 600 )
-
 def test_fast_tabletop_init():
     land= Tabletop()
     assert type(land) == Tabletop
@@ -297,15 +294,15 @@ def test_fast_tabletop_popEntities():
 
 def test_fast_tabletop_moveEntities():
     tabletop= Tabletop().initGrid( [[0, 0, 1],[-1, 0, 0], [2, 0, -1]] )
-    draw(tabletop)
-
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    
     c= 1
     entShape= Convex().initArrowTip(0.4)
     for i in [1, 1, 2, 2, 3] :
         tabletop.tileAppendEntity(i, Entity(shape=entShape, name= f"E.{c}")  )
         c+= 1
 
-    draw(tabletop)
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:
 - 0:Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
@@ -358,7 +355,7 @@ def test_fast_tabletop_moveEntities():
 - 2:Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
 - 0:Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
 
-    bob= tabletop.moveEntity(3, 1, 1)
+    bob= tabletop.tileMoveEntity(3, 1, 1)
 
     print( bob )
     assert bob.name() == "E.5"
@@ -377,7 +374,7 @@ def test_fast_tabletop_moveEntities():
 - 2:Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
 - 0:Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
 
-    bob= tabletop.moveEntity(1, 2, 4)
+    bob= tabletop.tileMoveEntity(1, 2, 4)
 
     print( bob )
     assert bob.name() == "E.2"
