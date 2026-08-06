@@ -49,14 +49,14 @@ def test_pnd_land():
     refsFile= open( "tests/refs/41.pickndel-map-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-    bod= model.popAvatar(1)
+    bod= model.popActor(1)
 
     print( bod )
     assert bod == 1
-    assert model.popAvatar(25) == 2
+    assert model.popActor(25) == 2
 
-    assert model.popAvatar(7)  == 3
-    assert model.popAvatar(44) == 4
+    assert model.popActor(7)  == 3
+    assert model.popActor(44) == 4
 
     model.tabletop().renderOn(pablo)
     pablo.flip()
@@ -90,10 +90,10 @@ def test_pnd_withCarrier():
     land= pnd.Land( "Testland", tll.Tabletop().initGrid( refMatrix, 0.9, 0.1 ), numberOfPlayers=2 )
     tabletop= land.tabletop()
 
-    assert land.popAvatar(1, 1)  == 1
-    assert land.popAvatar(25, 1) == 2
-    assert land.popAvatar(7, 2)  == 3
-    assert land.popAvatar(44, 2) == 4
+    assert land.popActor(1, 1)  == 1
+    assert land.popActor(25, 1) == 2
+    assert land.popActor(7, 2)  == 3
+    assert land.popActor(44, 2) == 4
     
     print(land.body(1)) 
     assert str( land.body(1) ) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉'
@@ -109,7 +109,7 @@ def test_pnd_withCarrier():
     assert [ e.group() for e in tabletop.tile(44).entities() ] == [2]
     
     bodyIdentifiers= [
-        (b.area(), b.group()) 
+        (b.location(), b.group()) 
         for b in land.bodies()
     ]
 

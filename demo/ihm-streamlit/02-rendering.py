@@ -7,7 +7,7 @@ import tiledland as tll
 # Create a new TiledTabletop as a grid:
 tabletop= tll.Tabletop()
 tabletop.initGrid(
-    [[0, 1, 1, -1, 0, 0, 0, 0],              #  -1 : means no cell at this location
+    [[0, 1, 1, -1, 0, 0, 0, 0],              #  -1 : means no cell at this selector
     [5, -1, 0, 2, 0, -1, 5, 0],              #  0 - n : give the group identifier of the cell to create.
     [0, 0, 0, -1, 0, 1, 1, 0],               #  
     [0, 4, 0, -1, 0, 2, 1, 6],               #  

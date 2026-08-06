@@ -8,7 +8,7 @@ from .tabletop import Tabletop
 
 # mas components
 from .agent import Action, Agent
-from .land import Avatar, Land
+from .land import Actor, Land
 
 # rendering:
 from .artist import Brush, Artist, draw, createArtistSVG, createArtistPNG

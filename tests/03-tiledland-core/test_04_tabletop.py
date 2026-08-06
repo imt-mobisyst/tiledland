@@ -245,7 +245,7 @@ def test_fast_tabletop_popEntities():
     bod= tabletop.tileAppendEntity(2)
 
     assert type(bod) == Entity
-    assert bod.location() == (2, 1)
+    assert bod.selector() == (2, 1)
     assert tabletop.entity(2, 1) == bod
 
     assert tabletop.numberOfEntities() == 1
@@ -256,13 +256,13 @@ def test_fast_tabletop_popEntities():
     bod= tabletop.tileAppendEntity(1)
 
     assert type(bod) == Entity
-    assert bod.location() == (1, 1)
+    assert bod.selector() == (1, 1)
     assert tabletop.entity(1, 1) == bod
 
     bod= tabletop.tileAppendEntity(1)
 
     assert type(bod) == Entity
-    assert bod.location() == (1, 2)
+    assert bod.selector() == (1, 2)
     assert tabletop.entity(1, 1) != bod
     assert tabletop.entity(1, 2) == bod
 
@@ -362,7 +362,7 @@ def test_fast_tabletop_moveEntities():
 
     print( bob )
     assert bob.name() == "E.5"
-    assert bob.location() == (1, 3)
+    assert bob.selector() == (1, 3)
 
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:
@@ -381,7 +381,7 @@ def test_fast_tabletop_moveEntities():
 
     print( bob )
     assert bob.name() == "E.2"
-    assert bob.location() == (4, 1)
+    assert bob.selector() == (4, 1)
 
     print( f"---\n{tabletop}.")
     assert str(tabletop) == """Tabletop:

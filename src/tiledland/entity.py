@@ -43,7 +43,7 @@ class Entity(AbsEntity) :
             self._group= group
         self._position= position.copy()
         self._theta= orientation
-        self._area= area
+        self._local= area
         self._index= index
         self._projShape= Convex()
         self.setPose(self._position, self._theta)
@@ -55,7 +55,7 @@ class Entity(AbsEntity) :
             self._refShape,
             self._position, self._theta,
             self._brush,
-            self._area, self._index,
+            self._local, self._index,
             self._name
         )
     
@@ -66,14 +66,14 @@ class Entity(AbsEntity) :
     def group(self):
         return self._group
     
-    def area(self):
-        return self._area
+    def location(self):
+        return self._local
     
     def index(self):
         return self._index
     
-    def location(self):
-        return (self._area, self._index)
+    def selector(self):
+        return (self._local, self._index)
 
     def referenceShape(self):
         return self._refShape
@@ -96,7 +96,7 @@ class Entity(AbsEntity) :
         return self
 
     def setArea(self, aInteger):
-        self._area= aInteger
+        self._local= aInteger
         return self
 
     def setIndex(self, aInteger):
@@ -104,7 +104,7 @@ class Entity(AbsEntity) :
         return self
     
     def setLocation(self, area, index):
-        self._area= area
+        self._local= area
         self._index= index
         return self
     
@@ -213,7 +213,7 @@ class Entity(AbsEntity) :
         x, y= self.position().asTuple()
         return hacka.DataTree( 
             self._name, 
-            [self.group(), self._area, self._index],
+            [self.group(), self._local, self._index],
             [x, y, self.orientation()],
             [ self.referenceShape().asDataTree() ]
         )
@@ -235,7 +235,7 @@ class Entity(AbsEntity) :
 
     # str:
     def str(self): 
-        return f"{self.group()}:{self._name} {self.area()}-{self.index()} {self.box()}"
+        return f"{self.group()}:{self._name} {self.location()}-{self.index()} {self.box()}"
     
     def __str__(self):
         return self.str()

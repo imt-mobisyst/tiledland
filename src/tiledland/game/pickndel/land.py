@@ -117,8 +117,8 @@ class Land(tll.Land):
         return self._size
 
     # Construction :
-    def popAvatar(self, iTile, iPlayer= 1):
-        return super().popAvatar(iTile, iPlayer)
+    def popActor(self, iTile, iPlayer= 1):
+        return super().popActor(iTile, iPlayer)
 
     # Mission :
     def setMissions( self, aListOfTuples, pay= 124 ):

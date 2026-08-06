@@ -16,7 +16,7 @@ def test_fast_land_init():
 def test_fast_land_first():
     land= tll.Land()
     land.tabletop().initHexa(
-        [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this location
+        [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
         [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
@@ -29,11 +29,10 @@ def test_fast_land_first():
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-00.svg", mode='rb' ).read() )
 
-    identifier= land.appendAvatar( 9,
-        tll.Entity(0, Convex().initArrowTip(0.4), name="E"),
-        tll.Agent()
+    actorId= land.appendActor( tll.Agent(),
+        [9], [tll.Entity(0, Convex().initArrowTip(0.4), name="E")]
     )
-    assert identifier == 1  
+    assert actorId == 1  
 
     tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
     tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
@@ -43,8 +42,10 @@ def test_fast_land_first():
 
     land.initializeDefaultBankOfEntities(4)
 
-    identifier= land.popAvatar( 3, 1 )
-    assert identifier == 2
+    actorId= land.appendActor( tll.Agent() )
+    land.popActorBody( actorId, 3, 1 )
+    
+    assert actorId == 2
 
     tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
     tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
@@ -52,10 +53,10 @@ def test_fast_land_first():
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-02.svg", mode='rb' ).read() )
 
-def test_fast_land_factory():
+def test_fast_land_popActor():
     land= tll.Land()
     land.tabletop().initHexa(
-        [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this location
+        [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
         [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
@@ -69,14 +70,17 @@ def test_fast_land_factory():
         [0.0, 3.14, -1.57, 0.8, -2.6],
         ["A", "B", "C", "D", "E"] )
 
-    land.popAvatar(  3, 1 )
-    land.popAvatar( 10, 2 )
-    land.popAvatar( 12, 3 )
-    land.popAvatar( 15, 0 )
-    land.popAvatar( 26, 4 )
+    land.popSimpleActor( tll.Agent(), 3, 1 )
+    land.popSimpleActor( tll.Agent(), 10, 2 )
+    land.popSimpleActor( tll.Agent(), 12, 3 )
+    land.popSimpleActor( tll.Agent(), 15, 0 )
+    land.popSimpleActor( tll.Agent(), 26, 4 )
 
     tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
     tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-03.svg", mode='rb' ).read() )
+
+def test_fast_land_multi_bodies():
+    assert True

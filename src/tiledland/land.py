@@ -3,23 +3,28 @@ from .geometry import Convex
 from .entity import Entity
 from .agent import Agent
 
-class Avatar():
-    def __init__(self, index, body, agent):
+class Actor():
+    def __init__(self, index, bodies, agent):
+        assert type(bodies) is list
         self._id= index
-        self._body= body
+        self._bodies= bodies
         self._agent= agent
     
     # accessor: 
     def agent(self):
         return self._agent
 
-    def body(self):
-        return self._body
+    def bodies(self):
+        return self._bodies
+    
+    def appendBody(self, body):
+        self._bodies.append(body)
+        return self
+
 
 class Land():
-    def __init__( self, tabletop= None, bankOfEntities= [Entity()], bankOfAgents= [Agent()] ):
+    def __init__( self, tabletop= None, bankOfEntities= [Entity()] ):
         self._bankOfEntities= bankOfEntities
-        self._bankOfAgents= bankOfAgents
         if tabletop is None :
             tabletop= Tabletop()
         self.initTabletop(tabletop)
@@ -46,20 +51,23 @@ class Land():
     def size(self):
         return self._tabletop.size()
 
-    def avatars(self):
-        return self._avatars[1:]
+    def actors(self):
+        return self._actors
+
+    def actor(self, iActor):
+        return self._actors[iActor]
 
     def agent(self, identifier):
-        return self._avatars[identifier].agent()
+        return self._actors[identifier].agent()
 
     def agents(self):
-        return [ a.agent() for a in self.avatars() ]
+        return [ a.agent() for a in self.actors() ]
 
     def body(self, identifier):
-        return self._avatars[identifier].body()
+        return self._actors[identifier].body()
 
     def bodies(self):
-        return [ a.body() for a in self.avatars() ]
+        return [ a.body() for a in self.actors() ]
 
     def bankOfEntities( self ):
         return self._bankOfEntities
@@ -67,13 +75,6 @@ class Land():
     def bankEntity( self, num=0 ):
         i= num%(len(self._bankOfEntities))
         return self._bankOfEntities[i]
-
-    def bankOfAgents( self ):
-        return self._bankOfAgents
-    
-    def bankAgent( self, num=0 ):
-        i= num%(len(self._bankOfAgents))
-        return self._bankOfAgents[i]
 
     # Initializing:
     def initTabletop( self, tabletop ):
@@ -83,23 +84,25 @@ class Land():
 
     # Construction:
     def clear( self ):
-        self._avatars= [ Avatar(0, None, self) ]
+        self._actors= [ Actor(0, [], self) ]
     
-    def appendAvatar(self, iTile, body, agent ):
-        self._tabletop.tileAppendEntity( iTile, body )
-        newId= len(self._avatars)
-        body.setName( body.name() + "-" + str(newId) )
-        self._avatars.append( Avatar(newId, body, agent) )
+    def appendActor(self, agent, tileIds= [], bodies= [] ):
+        newId= len(self._actors)
+        for b, t in zip(bodies, tileIds ) :
+            self._tabletop.tileAppendEntity( t, b )
+            b.setName( b.name() + "-" + str(newId) )
+        self._actors.append( Actor(newId, bodies, agent) )
         return newId
+        
+    def popActorBody(self, iActor, iTile, entityNum):
+            body= self.bankEntity( entityNum ).copy()
+            body.setName( body.name() + "-" + str(iActor) )
+            self._tabletop.tileAppendEntity( iTile, body )
+            self.actor(iActor).appendBody(body)
+            return self
     
-    def popAvatar(self, iTile, entityNum=0, agentNum=0 ):
-        return self.appendAvatar( iTile,
-            self.bankEntity( entityNum ).copy(),
-            self.bankAgent( agentNum ).copy() )
-    
-    def setBankOfAgents( self, aListOfAgents ):
-        self._bankOfAgents= aListOfAgents
-        return self
+    def popSimpleActor(self, agent, iTile, entityNum ):
+        return self.appendActor( agent, [iTile], [self.bankEntity( entityNum ).copy()] )
 
     def setBankOfEntities( self, aListOfEntities ):
         self._bankOfEntities= aListOfEntities

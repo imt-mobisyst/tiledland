@@ -67,9 +67,9 @@ def test_fast_entity_init3():
         Point(1.0, 2.0), 0.4,
         tll.Brush(), 12, 42 )
 
-    assert entity.area() == 12
+    assert entity.location() == 12
     assert entity.index() == 42
-    assert entity.location() == (12, 42)
+    assert entity.selector() == (12, 42)
     assert entity.position() == Point(1.0, 2.0)
     assert entity.orientation() == 0.4
 
