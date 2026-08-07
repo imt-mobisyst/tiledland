@@ -1,4 +1,4 @@
-from .tabletop import Tabletop
+from .tabletop import CLOCK_ANGLE, Tabletop
 from .geometry import Convex
 from .entity import Entity
 from .agent import Agent
@@ -16,11 +16,16 @@ class Actor():
 
     def bodies(self):
         return self._bodies
+
+    def numberOfBodies(self):
+        return len(self._bodies)
     
+    def body(self, iBody):
+        return self._bodies[iBody-1]
+
     def appendBody(self, body):
         self._bodies.append(body)
         return self
-
 
 class Land():
     def __init__( self, tabletop= None, bankOfEntities= [Entity()] ):
@@ -90,21 +95,46 @@ class Land():
         newId= len(self._actors)
         for b, t in zip(bodies, tileIds ) :
             self._tabletop.tileAppendEntity( t, b )
-            b.setName( b.name() + "-" + str(newId) )
         self._actors.append( Actor(newId, bodies, agent) )
         return newId
         
     def popActorBody(self, iActor, iTile, entityNum):
+            a= self.actor(iActor)
+            nextId= a.numberOfBodies()+1
             body= self.bankEntity( entityNum ).copy()
-            body.setName( body.name() + "-" + str(iActor) )
+            body.setName( body.name() + "-" + str(nextId) )
             self._tabletop.tileAppendEntity( iTile, body )
-            self.actor(iActor).appendBody(body)
-            return self
+            a.appendBody(body)
+            return body
     
     def popSimpleActor(self, agent, iTile, entityNum ):
-        return self.appendActor( agent, [iTile], [self.bankEntity( entityNum ).copy()] )
+        b= self.bankEntity( entityNum ).copy()
+        b.setName( b.name() + "-1" )
+        return self.appendActor( agent, [iTile], [b] )
 
     def setBankOfEntities( self, aListOfEntities ):
         self._bankOfEntities= aListOfEntities
         return self
 
+    # Actor action :
+    def actBodyMove(self, iActor, iBody, clockDir):
+        body= self.actor(iActor).body(iBody)
+        self._tabletop.tileClockOrientEntity( body.location(), body.index(), clockDir )
+        newlocation= self._tabletop.tileClockMoveEntity( body.location(), body.index(), clockDir )
+        return newlocation
+
+    def actBodyOrient(self, iActor, iBody, clockDir):
+        body= self.actor(iActor).body(iBody)
+        out= self._tabletop.tileClockOrientEntity( body.location(), body.index(), clockDir )
+        return out
+    
+    def actBodyRotateLeft(self, iActor, iBody, nbClockAngles= 1):
+        iTile, index= self.actor(iActor).body(iBody).selector()
+        out= self._tabletop.tileRotateEntityLeft( iTile, index, CLOCK_ANGLE*nbClockAngles )
+        return out
+    
+    def actBodyRotateRight(self, iActor, iBody, nbClockAngles= 1):
+        iTile, index= self.actor(iActor).body(iBody).selector()
+        out= self._tabletop.tileRotateEntityLeft( iTile, index, -CLOCK_ANGLE*nbClockAngles )
+        return out
+    

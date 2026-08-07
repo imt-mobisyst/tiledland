@@ -1,5 +1,14 @@
 import math
 
+def radian(angle):
+    _pi= math.pi
+    _2pi= _pi*2
+    while angle > _pi :
+        angle-= _2pi
+    while angle <= -_pi :
+        angle+= _2pi
+    return angle
+
 class Point():
     # Initialization Destruction:
     def __init__( self, x= 0.0, y=0.0 ):

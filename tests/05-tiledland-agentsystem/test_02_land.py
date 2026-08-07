@@ -13,6 +13,7 @@ def test_fast_land_init():
     land= tll.Land()
     assert type(land) == tll.Land
 
+
 def test_fast_land_first():
     land= tll.Land()
     land.tabletop().initHexa(
@@ -30,7 +31,7 @@ def test_fast_land_first():
         == open( "tests/refs/05.02-land-00.svg", mode='rb' ).read() )
 
     actorId= land.appendActor( tll.Agent(),
-        [9], [tll.Entity(0, Convex().initArrowTip(0.4), name="E")]
+        [9], [tll.Entity(0, Convex().initArrowTip(0.4), name="E-1")]
     )
     assert actorId == 1  
 
@@ -52,6 +53,7 @@ def test_fast_land_first():
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-02.svg", mode='rb' ).read() )
+
 
 def test_fast_land_popActor():
     land= tll.Land()
@@ -82,7 +84,7 @@ def test_fast_land_popActor():
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-03.svg", mode='rb' ).read() )
 
-def test_fast_land_popActor():
+def test_fast_land_popBis():
     land= tll.Land()
     land.tabletop().initHexa(
         [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
@@ -91,7 +93,6 @@ def test_fast_land_popActor():
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
-
     tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
 
     land.initializeArrowTipBankOfEntities( range(3),
@@ -147,16 +148,87 @@ def test_fast_land_popActor():
     assert [ (b.location()) for b in land.actor(1).bodies() ] == [15, 6, 10 , 21]
 
 
+def test_fast_land_orients():
+    land= tll.Land()
+    land.tabletop().initHexa(
+        [[-1, 0, 0], 
+        [0, 0, 0], 
+        [-1, 0, 0]], 1.4
+    )
+
+    land.popSimpleActor( tll.Agent(), 4, 1 )
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    bob= land.actor(1).body(1)
+    
+    assert round( bob.orientation(), 2) == 0.0
+
+    land.actBodyOrient( 1, 1, tll.Action.DIR_W ) 
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 2) == 3.14
+    
+    land.actBodyOrient( 1, 1, tll.Action.DIR_SSE ) 
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 2) == -1.05
+
+    land.actBodyRotateLeft( 1, 1 ) 
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 2) == -0.52
+
+    land.actBodyRotateRight( 1, 1 ) 
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 2) == -1.05
+
+    land.actBodyRotateRight( 1, 1, 4 ) 
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 2) == -3.14
+
+    land.actBodyRotateRight( 1, 1, 2 ) 
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 2) == 2.09
+
 def test_fast_land_moves():
+    land= tll.Land()
+    land.tabletop().initHexa(
+        [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
+        [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
+        [0, 0, 0, -1, 0, 0, 0, 0],      #  
+        [0, 0, 0, -1, 0, 0, 0, 0],      #  
+        [-1, -1, 0, 0, 0, -1, -1, -1]]  #
+    )
+    land.initializeDefaultBankOfEntities()
 
+    land.popSimpleActor( tll.Agent(), 15, 1 )
+    land.popActorBody( 1, 29, 1 )
+    land.popSimpleActor( tll.Agent(), 6, 2 )
 
-    assert land.clockBearing(44) == [9, 3]
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    
+    print( str(land.actor(1).body(1)) )
+    assert land.actor(1).body(1).strIdentity() == "1:A-1 15-1"
 
-    assert land.move( 44, 12 ) == False
-    assert land.move( 44, 3 ) == 45
-    assert land.move( 45, 12 ) == 39
-    assert land.move( 39,  0 ) == 39
-    assert land.move( 39,  3 ) == False
+    assert land.actBodyMove( 1, 1, 3 ) == 16
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    assert land.actor(1).body(1).strIdentity() == "1:A-1 16-1"
 
+    assert land.actBodyMove( 1, 1, 3 ) == 16
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    assert land.actor(1).body(1).strIdentity() == "1:A-1 16-1"
 
-    assert False
+    assert land.actBodyMove( 1, 1, tll.Action.DIR_NNE ) == 9
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    assert land.actor(1).body(1).strIdentity() == "1:A-1 9-1"
+    assert round( land.actor(1).body(1).orientation(), 2 ) == 1.05
+
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    
+    assert land.actBodyMove( 1, 2, tll.Action.DIR_W ) == 28
+    assert land.actBodyMove( 1, 2, tll.Action.DIR_NNW ) == 22
+    assert land.actBodyMove( 1, 2, tll.Action.DIR_NNW ) == 15
+    assert land.actBodyMove( 1, 2, tll.Action.DIR_NNW ) == 8
+
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+
+    assert land.actor(1).body(1).strIdentity() == "1:A-1 9-1"
+    assert land.actor(1).body(2).strIdentity() == "1:A-2 8-1"
+    assert land.actor(2).body(1).strIdentity() == "2:B-1 6-1"
+    

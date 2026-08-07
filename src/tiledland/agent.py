@@ -5,8 +5,26 @@ from .entity import Entity
 class Action:
     WAIT= 0
     MOVE= 1
+    ROTATE= 2
+    
+    DIR_NORTH= 12
+    DIR_EAST= 3
+    DIR_SOUTH= 6
+    DIR_WEST= 9
+    DIR_N= 12
+    DIR_NNE= 1
+    DIR_ENE= 2
+    DIR_E= 3
+    DIR_ESE= 4
+    DIR_SSE= 5
+    DIR_S= 6
+    DIR_SSW= 7
+    DIR_WSW= 8
+    DIR_W= 9
+    DIR_WNW= 10
+    DIR_NNW= 11
 
-    def __init__(self, actionIdentifier= 0, attributes= []):
+    def __init__(self, actionIdentifier= 0, *attributes):
         self._id= actionIdentifier
         self._attributes= [x for x in attributes]
     
@@ -16,6 +34,9 @@ class Action:
 
     def attributes(self):
         return self._attributes
+
+    def attribute(self, i=0):
+        return self._attributes[i]
     
     # Construction:    
 

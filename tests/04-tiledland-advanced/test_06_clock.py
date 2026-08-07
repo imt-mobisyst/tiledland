@@ -10,6 +10,59 @@ from src.tiledland import Entity, Tile, Tabletop
 #         T E S T   T I L E D L A N D - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
+def test_fast_tabletop_clock():
+    clockAngle= [ round(x, 4) for x in tll.CLOCK_ANGLES ]
+    print( clockAngle )
+    assert len(tll.tabletop.CLOCK_ANGLES) == 13
+    assert clockAngle == [1.5708, 1.0472, 0.5236, 0.0, -0.5236, -1.0472, -1.5708, -2.0944, -2.618, 3.1416, 2.618, 2.0944, 1.5708]
+
+    tabletop= tll.Tabletop().initHexa(
+        [[-1, 0, 0], 
+        [0, 0, 0], 
+        [-1, 0, 0]] 
+    )
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+
+    bob= tll.Entity()
+    tabletop.tileAppendEntity( 4, bob )
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+
+    assert round( bob.orientation(), 4) == 0.0
+
+    tabletop.tileOrientEntity(4, 1, 1.2)
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 4) == 1.2
+
+    tabletop.tileRotateEntity(4, 1, 0.8)
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 4) == 2.0
+
+    tabletop.tileClockOrientEntity(4, 1, 7)
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 4) == -2.0944
+
+    tabletop.tileRotateEntityLeft(4, 1)
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 4) == -1.5708
+    
+    tabletop.tileRotateEntityRight(4, 1)
+    tabletop.tileRotateEntityRight(4, 1)
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 4) == -2.618
+
+    tabletop.tileRotateEntityRight(4, 1)
+    tabletop.tileRotateEntityRight(4, 1)
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 4) == 2.618
+    
+    tabletop.tileOrientEntity(4, 1, 387.2)
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 4) == -2.3575
+
+    tabletop.tileOrientEntity(4, 1, -55.2)
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    assert round( bob.orientation(), 4) == 1.3487
+
 def test_fast_tabletop_hexaclock():
     tabletop= tll.Tabletop().initHexa(
         [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
@@ -43,7 +96,6 @@ def test_fast_tabletop_hexaclock():
         == [(20, 11), (26, 9)] )
 
     assert( tabletop.completeClock(27)  == [27,  27, 27, 27,  27, 27, 27,  27, 27, 26,  27, 20, 27] )
-
 
 def test_fast_tabletop_hexamove():
     tabletop= tll.Tabletop().initHexa(

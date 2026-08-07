@@ -5,6 +5,10 @@ from .tile import Tile
 
 import math
 
+CLOCK_ANGLE= math.pi/6
+CLOCK_START= math.pi/2
+CLOCK_ANGLES= [ CLOCK_START - i*CLOCK_ANGLE for i in range(0,9) ] + [math.pi - i*CLOCK_ANGLE for i in range(0,4) ]
+
 class Tabletop(AbsEntity):
     defaultEntity= Entity()
 
@@ -212,8 +216,12 @@ class Tabletop(AbsEntity):
         iTarget= self.clockPosition(iTile, clockDir)
         if iTarget != iTile :
             self.tileMoveEntity( iTile, iEntity, iTarget )
+        self.tileRotateEntity( iTile, iEntity, iTarget )
         return iTarget
 
+    def tileClockOrientEntity(self, iTile, iEntity, clockDir):
+        return self.tileOrientEntity( iTile, iEntity, CLOCK_ANGLES[clockDir] )
+    
     # Construction:
     def setEpsilon(self, epsilon):
         self._epsilon= epsilon
@@ -297,6 +305,27 @@ class Tabletop(AbsEntity):
             return anEntity
         self.tileAppendEntity(tTile, anEntity)
         return anEntity
+
+    def tileOrientEntity(self, iTile, iEntity, angle):
+        anEntity= None
+        if self.isEntity(iTile, iEntity) :
+            anEntity= self.tile(iTile).entity()
+            anEntity.setOrientation(angle)
+        return anEntity
+
+    def tileRotateEntity(self, iTile, iEntity, angle):
+        anEntity= None
+        if self.isEntity(iTile, iEntity) :
+            anEntity= self.tile(iTile).entity()
+            anEntity.rotate(angle)
+        return anEntity
+    
+    def tileRotateEntityLeft(self, iTile, iEntity, angle= CLOCK_ANGLE):
+        return self.tileRotateEntity( iTile, iEntity, angle )
+
+    def tileRotateEntityRight(self, iTile, iEntity, angle= CLOCK_ANGLE):
+        return self.tileRotateEntity( iTile, iEntity, -angle )
+        
 
     def connect(self, iFrom, iTo):
         self.tile(iFrom).connect(iTo)

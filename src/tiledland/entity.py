@@ -1,5 +1,5 @@
 import math, hacka
-from .geometry import Point, Convex
+from .geometry import radian, Point, Convex
 from .artist import palette, Brush
 
 class AbsEntity() :
@@ -164,6 +164,8 @@ class Entity(AbsEntity) :
 
     # Transformation: 
     def setPose(self, position, angle):
+        angle= radian(angle)
+        # Redress
         self._projShape.initAs( self._refShape )
         if angle != 0.0 :
             self._projShape.rotate( angle )
@@ -235,7 +237,10 @@ class Entity(AbsEntity) :
 
     # str:
     def str(self): 
-        return f"{self.group()}:{self._name} {self.location()}-{self.index()} {self.box()}"
+        return self.strIdentity() + f" {self.box()}"
     
+    def strIdentity(self):
+        return f"{self.group()}:{self._name} {self.location()}-{self.index()}"
+
     def __str__(self):
         return self.str()
