@@ -15,4 +15,4 @@ Test - Carrier
 
 def test_pnd_fast_initCarrier():
     carrier= pnd.Carrier()
-    assert str(carrier) == "Carrier |0, 0|"
+    assert str(carrier) == "0:Car 0-0 ⌊(-0.26, -0.3), (0.3, 0.3)⌉ |0, 0|"

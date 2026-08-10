@@ -26,13 +26,18 @@ class Mission:
         return self.start, self.final, self.reward, self.owner
 
 class Land(tll.Land):
-    def __init__(self, name= "Pick'n-Del", tabletop= None, numberOfPlayers= 1):
-        super(Land, self).__init__( tabletop, bankOfAgents= [Carrier()] )
-        self.initializeDefaultBankOfEntities( numberOfPlayers+1, 0.6 )
+    def __init__(self, name= "Pick'n-Del", tabletop= None, nbOfActors= 14):
+        super(Land, self).__init__(
+            tabletop,
+            bankOfEntities= [
+                Carrier(i, name=n)
+                for i, n in zip(range(0, nbOfActors+1), ["-"] + [ chr( ord('A') + i%26 ) for i in range(nbOfActors) ])
+            ]
+        )
         self._missions= []
         self._encumbers= []
         self._name= name
-
+        
         # Initialize Artist :
         #artist= artist.createArtistPNG( "shot-pickndel.png", 800, 600 )
         #artist.flip()
@@ -115,10 +120,6 @@ class Land(tll.Land):
         super(Land, self).appendTile(aTile)
         self._encumbers.append(encumber)
         return self._size
-
-    # Construction :
-    def popActor(self, iTile, iPlayer= 1):
-        return super().popActor(iTile, iPlayer)
 
     # Mission :
     def setMissions( self, aListOfTuples, pay= 124 ):

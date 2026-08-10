@@ -148,7 +148,7 @@ def test_fast_entity_body():
 
 def test_fast_entity_str():
     entity= tll.Entity( 42, tll.Convex().initSquare(1.0), Point(1.0, 2.0) )
-    entity.setLocation(12, 6)
+    entity.setSelector(12, 6)
 
     print(entity)
     assert str(entity) == "42:Entity 12-6 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
@@ -159,7 +159,7 @@ def test_fast_entity_str():
     assert str(entity) == "42:Entity 0-0 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 
 def test_fast_entity_hacka():
-    entity= tll.Entity( 4 ).setPose( Point(1.0, 2.0), 1.5 ).setLocation(3, 42)
+    entity= tll.Entity( 4 ).setPose( Point(1.0, 2.0), 1.5 ).setSelector(3, 42)
     tree= entity.asDataTree()
 
     assert tree.label() == "Entity"

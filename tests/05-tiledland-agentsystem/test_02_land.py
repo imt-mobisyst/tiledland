@@ -72,11 +72,12 @@ def test_fast_land_popActor():
         [0.0, 3.14, -1.57, 0.8, -2.6],
         ["A", "B", "C", "D", "E"] )
 
-    land.popSimpleActor( tll.Agent(), 3, 1 )
-    land.popSimpleActor( tll.Agent(), 10, 2 )
-    land.popSimpleActor( tll.Agent(), 12, 3 )
-    land.popSimpleActor( tll.Agent(), 15, 0 )
-    land.popSimpleActor( tll.Agent(), 26, 4 )
+    land.popSimpleActor( tll.Agent(), 3 )
+    land.popSimpleActor( tll.Agent(), 10 )
+    land.popSimpleActor( tll.Agent(), 12 )
+    land.popSimpleActor( tll.Agent(), 26 )
+
+    land.popActorBody( 0, 15, 0 )
 
     tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
     tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
@@ -100,7 +101,7 @@ def test_fast_land_popBis():
         [0.0, 3.14, -1.57],
         ["X", "A", "B"] )
 
-    actor1= land.popSimpleActor( tll.Agent(), 15, 1 )
+    actor1= land.popSimpleActor( tll.Agent(), 15 )
 
     assert actor1 == 1
     actor2= land.appendActor( tll.Agent() )
@@ -156,7 +157,7 @@ def test_fast_land_orients():
         [-1, 0, 0]], 1.4
     )
 
-    land.popSimpleActor( tll.Agent(), 4, 1 )
+    land.popSimpleActor( tll.Agent(), 4 )
     tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
     bob= land.actor(1).body(1)
     
@@ -197,9 +198,9 @@ def test_fast_land_moves():
     )
     land.initializeDefaultBankOfEntities()
 
-    land.popSimpleActor( tll.Agent(), 15, 1 )
+    land.popSimpleActor( tll.Agent(), 15 )
     land.popActorBody( 1, 29, 1 )
-    land.popSimpleActor( tll.Agent(), 6, 2 )
+    land.popSimpleActor( tll.Agent(), 6 )
 
     tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
     

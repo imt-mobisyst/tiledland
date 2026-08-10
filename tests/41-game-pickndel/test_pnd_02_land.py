@@ -49,14 +49,13 @@ def test_pnd_land():
     refsFile= open( "tests/refs/41.pickndel-map-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-    bod= model.popActor(1)
+    bob= model.popSimpleActor( tll.Agent(), 1 )
 
-    print( bod )
-    assert bod == 1
-    assert model.popActor(25) == 2
-
-    assert model.popActor(7)  == 3
-    assert model.popActor(44) == 4
+    assert bob == 1
+    
+    assert model.popActorBody(bob, 25).selector() == (25, 1)
+    assert model.popActorBody(bob, 7).selector()  == (7, 1)
+    assert model.popActorBody(bob, 44).selector() == (44, 1)
 
     model.tabletop().renderOn(pablo)
     pablo.flip()

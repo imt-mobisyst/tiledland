@@ -31,7 +31,7 @@ class Entity(AbsEntity) :
             shape= None,
             position= Point(0.0, 0.0), orientation= 0.0,
             brush= None,
-            area=0, index= 0,
+            location=0, index= 0,
             name= "Entity"):
         self._refShape= shape
         if self._refShape is None :
@@ -43,7 +43,7 @@ class Entity(AbsEntity) :
             self._group= group
         self._position= position.copy()
         self._theta= orientation
-        self._local= area
+        self._local= location
         self._index= index
         self._projShape= Convex()
         self.setPose(self._position, self._theta)
@@ -95,7 +95,7 @@ class Entity(AbsEntity) :
         self._name= aString
         return self
 
-    def setArea(self, aInteger):
+    def setLocation(self, aInteger):
         self._local= aInteger
         return self
 
@@ -103,8 +103,8 @@ class Entity(AbsEntity) :
         self._index= aInteger
         return self
     
-    def setLocation(self, area, index):
-        self._local= area
+    def setSelector(self, location, index=1):
+        self._local= location
         self._index= index
         return self
     
@@ -226,7 +226,7 @@ class Entity(AbsEntity) :
         values= aDataTree.values()
         self.setReferenceShape( Convex().fromDataTree( aDataTree.children()[0] ) )
         self.setGroup( digits[0] )
-        self.setLocation( digits[1], digits[2] )
+        self.setSelector( digits[1], digits[2] )
         self.setPose( Point(values[0], values[1]), values[2] )
         return self
     

@@ -296,7 +296,7 @@ class Tabletop(AbsEntity):
         anEntity= None
         if self.isEntity(iTile, iEntity) :
             anEntity= self.tile(iTile).remove(iEntity)
-            anEntity.setLocation(0, 0)
+            anEntity.setSelector(0, 0)
         return anEntity
 
     def tileMoveEntity( self, iTile, iEntity, tTile ):

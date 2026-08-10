@@ -5,19 +5,34 @@ Test - MoveIt Robot Class
 import tiledland as tll
 from tiledland.geometry import Point, Convex, Box
 
-class Carrier(tll.Agent):
+class Carrier(tll.Entity):
+    defaultShape= Convex().initArrowTip(0.6)
 
-    def __init__(self, aBody= None, tabletop= None, mission= 0):
-        super(Carrier, self).__init__( aBody, tabletop, Carrier.stateInitialize )
+    def __init__(self, group=0, location= 0, index= 0, name= "Car", mission= 0):
+        super(Carrier, self).__init__( 
+            group= group,
+            location=0, index= 0,
+            name= name
+        )
         #self._id= identifier
         self._mission= mission
         self._clockMove= 0
-        self._tile= 0
-
-    # Accessor:
-    def tile(self):
-        return self._tile
     
+    def copy(self):
+        cpy= type(self)()
+        tll.Entity.__init__( cpy,
+            self._group,
+            self._refShape,
+            self._position, self._theta,
+            self._brush,
+            self._local, self._index,
+            self._name
+        )
+        cpy._mission= self._mission
+        cpy._clockMove= self._clockMove
+        return cpy
+    
+    # Accessor:
     def mission(self):
         return self._mission
     
@@ -35,7 +50,7 @@ class Carrier(tll.Agent):
         return Action( Action.WAIT )
 
     # Accessor: 
-    def str(self, typeName= "Carrier"): 
-        s= super(Carrier, self).str(typeName)
+    def str(self): 
+        s= super(Carrier, self).str()
         s+= f" |{self._clockMove}, {self._mission}|"
         return s

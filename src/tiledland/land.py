@@ -98,16 +98,19 @@ class Land():
         self._actors.append( Actor(newId, bodies, agent) )
         return newId
         
-    def popActorBody(self, iActor, iTile, entityNum):
+    def popActorBody(self, iActor, iTile, entityNum= -1):
             a= self.actor(iActor)
             nextId= a.numberOfBodies()+1
+            if entityNum < 0 :
+                entityNum= iActor
             body= self.bankEntity( entityNum ).copy()
             body.setName( body.name() + "-" + str(nextId) )
             self._tabletop.tileAppendEntity( iTile, body )
             a.appendBody(body)
             return body
     
-    def popSimpleActor(self, agent, iTile, entityNum ):
+    def popSimpleActor(self, agent, iTile ):
+        entityNum= len(self._actors)
         b= self.bankEntity( entityNum ).copy()
         b.setName( b.name() + "-1" )
         return self.appendActor( agent, [iTile], [b] )

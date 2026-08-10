@@ -77,7 +77,7 @@ class Tile(Entity):
     def append(self, anEntity ): 
         self._entities.append( anEntity )
         self._size+= 1
-        anEntity.setLocation( self._index, self._size )
+        anEntity.setSelector( self._index, self._size )
         return self
 
     def appendCenter(self, anEntity ):
