@@ -73,33 +73,40 @@ def test_pnd_graph():
 
     assert model.adjacencies(11) == [3, 12, 18]
     assert model.directions(11) == [(0.0, 1.0), (1.0, 0.0), (0.0, -1.0)]
-    assert model.clockBearing(11) == [12, 3, 6]
-    assert model.neighbours(11) == [(3, 12), (12, 3), (18, 6)]
+    assert model.clockDirections(11) == [12, 3, 6]
+
+    print( model.neighbours(11) )
+
+    assert model.neighbours(11) == [(3, (0.0, 1.0), 12), (12, (1.0, 0.0), 3), (18,  (0.0, -1.0), 6)]
+    
     assert model.completeClock(11) == [11,
                              11, 11, 12, 11, 11, 18,
                              11, 11, 11, 11, 11,  3 ]
-    assert model.clockposition(11, 0) == 11
-    assert model.clockposition(11, 12) == 3
-    assert model.clockposition(11, 6) == 18
-    assert model.clockposition(11, 3) == 12
-    assert model.clockposition(11, 9) == 11
+    
+    assert model.clockPosition(11, 0) == 11
+    assert model.clockPosition(11, 12) == 3
+    assert model.clockPosition(11, 6) == 18
+    assert model.clockPosition(11, 3) == 12
+    assert model.clockPosition(11, 9) == 11
 
 def test_pnd_withCarrier():
     # Game MoveIt:
-    land= pnd.Land( "Testland", tll.Tabletop().initGrid( refMatrix, 0.9, 0.1 ), numberOfPlayers=2 )
+    land= pnd.Land( "Testland", tll.Tabletop().initGrid( refMatrix, 0.9, 0.1 ), numberOfActors=2 )
     tabletop= land.tabletop()
 
-    assert land.popActor(1, 1)  == 1
-    assert land.popActor(25, 1) == 2
-    assert land.popActor(7, 2)  == 3
-    assert land.popActor(44, 2) == 4
+    assert land.popSimpleActor(tll.Agent(), 1)  == 1
+    assert land.popActorBody(1, 25).selector() == (25, 1)
+    assert land.popSimpleActor(tll.Agent(), 7)  == 2
+    assert land.popActorBody(2, 44).selector() == (44, 1)
     
+    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+
     print(land.body(1)) 
-    assert str( land.body(1) ) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉'
+    assert str( land.body(1) ) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
 
     assert [ e.group() for e in tabletop.tile(1).entities() ] == [1]
-    assert str(tabletop.entity(1, 1)) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉'
-    assert str(tabletop.entity(1)) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉'
+    assert str(tabletop.entity(1, 1)) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
+    assert str(tabletop.entity(1)) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
 
     assert [ e.group() for e in tabletop.tile(2).entities() ] == []
     assert [ e.group() for e in tabletop.tile(7).entities() ] == [2]
@@ -109,7 +116,7 @@ def test_pnd_withCarrier():
     
     bodyIdentifiers= [
         (b.location(), b.group()) 
-        for b in land.bodies()
+        for b in land.allBodies()
     ]
 
     print( bodyIdentifiers )

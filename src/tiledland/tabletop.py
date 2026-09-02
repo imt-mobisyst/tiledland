@@ -10,7 +10,6 @@ CLOCK_START= math.pi/2
 CLOCK_ANGLES= [ CLOCK_START - i*CLOCK_ANGLE for i in range(0,9) ] + [math.pi - i*CLOCK_ANGLE for i in range(0,4) ]
 
 class Tabletop(AbsEntity):
-    defaultEntity= Entity()
 
     def __init__(self, epsilon= 0.01):
         assert( type(epsilon) == float )
@@ -172,25 +171,27 @@ class Tabletop(AbsEntity):
     def adjacencies(self, iTile) :
         return self.tile(iTile).adjacencies()
     
-    def edges(self):
-        edgeList= []
-        for t in self.tiles() :
-            edgeList+= [ (t.index(), neibor) for neibor in t.adjacencies() ]
-        return edgeList
-
     def directions(self, iTile) : 
         cx, cy= self.tile(iTile).position().asTuple()
         neibors= self.adjacencies(iTile)
         positions= [ self.tile(i).position().asTuple() for i in neibors ]
         return [ (x-cx, y-cy) for x, y in positions ]
     
-    def neighbours(self, iTile): # Return the list of neighbou tile identifiers couple with the clock direction to reach it
-        neibs= [] 
-        for iNei, pos in zip( self.adjacencies(iTile), self.directions(iTile) ) :
-            clockdir= self.tile(iTile).clockDirection( self.tile(iNei).position() )
-            neibs.append( (iNei, pos, clockdir) )
-        return neibs
+    def clockDirections(self, iTile) : 
+        return [ self.tile(iTile).clockDirection( self.tile(iNei).position() )
+            for iNei in self.adjacencies(iTile) ]
     
+    def neighbours(self, iTile): # Return the list of neighbou tile identifiers couple with the clock direction to reach it
+        return [(iNei, pos, clockdir)
+            for iNei, pos, clockdir in zip( self.adjacencies(iTile), self.directions(iTile), self.clockDirections(iTile) ) 
+        ]
+        
+    def edges(self):
+        edgeList= []
+        for t in self.tiles() :
+            edgeList+= [ (t.index(), neibor) for neibor in t.adjacencies() ]
+        return edgeList
+
     # Clock Bearing :
     def obsolet_clockBearing(self, iTile):
         clock= [
@@ -284,9 +285,7 @@ class Tabletop(AbsEntity):
             t.clear()
         return self
 
-    def tileAppendEntity( self, iTile, anEntity= None ):
-        if anEntity is None :
-            anEntity= type(self).defaultEntity.copy()
+    def tileAppendEntity( self, iTile, anEntity ):
         tile= self.tile(iTile)
         tile.appendCenter(anEntity)
         anEntity.setPose(tile.position(), anEntity.orientation())

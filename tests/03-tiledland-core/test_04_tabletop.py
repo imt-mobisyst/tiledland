@@ -194,21 +194,21 @@ def test_fast_tabletop_withEntities():
     assert tabletop.tile(2).numberOfEntities() == 0
     assert tabletop.tile(3).numberOfEntities() == 0
     
-    tabletop.tileAppendEntity(2)
+    tabletop.tileAppendEntity(2, Entity())
 
     assert tabletop.numberOfEntities() == 1
     assert tabletop.tile(1).numberOfEntities() == 0
     assert tabletop.tile(2).numberOfEntities() == 1
     assert tabletop.tile(3).numberOfEntities() == 0
 
-    tabletop.tileAppendEntity(1)
+    tabletop.tileAppendEntity(1, Entity())
 
     assert tabletop.numberOfEntities() == 2
     assert tabletop.tile(1).numberOfEntities() == 1
     assert tabletop.tile(2).numberOfEntities() == 1
     assert tabletop.tile(3).numberOfEntities() == 0
 
-    bod= tabletop.tileAppendEntity(2)
+    bod= tabletop.tileAppendEntity(2, Entity())
 
     assert tabletop.numberOfEntities() == 3
     assert tabletop.tile(1).numberOfEntities() == 1
@@ -239,7 +239,7 @@ def test_fast_tabletop_popEntities():
     assert tabletop.tile(2).numberOfEntities() == 0
     assert tabletop.tile(3).numberOfEntities() == 0
     
-    bod= tabletop.tileAppendEntity(2)
+    bod= tabletop.tileAppendEntity(2, Entity())
 
     assert type(bod) == Entity
     assert bod.selector() == (2, 1)
@@ -250,13 +250,13 @@ def test_fast_tabletop_popEntities():
     assert tabletop.tile(2).numberOfEntities() == 1
     assert tabletop.tile(3).numberOfEntities() == 0
 
-    bod= tabletop.tileAppendEntity(1)
+    bod= tabletop.tileAppendEntity(1, Entity())
 
     assert type(bod) == Entity
     assert bod.selector() == (1, 1)
     assert tabletop.entity(1, 1) == bod
 
-    bod= tabletop.tileAppendEntity(1)
+    bod= tabletop.tileAppendEntity(1, Entity())
 
     assert type(bod) == Entity
     assert bod.selector() == (1, 2)
@@ -268,7 +268,7 @@ def test_fast_tabletop_popEntities():
     assert tabletop.tile(2).numberOfEntities() == 1
     assert tabletop.tile(3).numberOfEntities() == 0
 
-    bod= tabletop.tileAppendEntity(2)
+    bod= tabletop.tileAppendEntity(2, Entity())
 
     assert tabletop.numberOfEntities() == 4
     assert tabletop.tile(1).numberOfEntities() == 2

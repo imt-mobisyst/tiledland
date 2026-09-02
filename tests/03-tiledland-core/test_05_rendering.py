@@ -268,3 +268,43 @@ def test_hexatabletop_piece():
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-11.svg" ).read() )
+
+
+def test_gridtabletop_appendpiece():
+    tabletop= tll.Tabletop()
+    tabletop.initGrid([
+        [0, 1, 1, -1, 0, 0, 0, 0], # -1 : means no cell at this selector
+        [5, -1, 0, 2, 0, -1, 5, 0], # 0 - n : give the group identifier
+        [0, 0, 0, -1, 0, 1, 1, 0], # of the cell to create.
+        [0, 4, 0, -1, 0, 2, 1, 6],
+        [-1, -1, 0, 0, 0, -1, -1, -1]
+    ])
+
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    tll.draw( tabletop, "shot-test.svg", 800, 600 )
+
+    assert( open("shot-test.svg").read()
+        == open("tests/refs/03.05-render-grid-01.svg" ).read() )
+
+    # Add a first default entity on tile 2
+    tabletop.tileAppendEntity( 2, tll.Entity() )
+
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    tll.draw( tabletop, "shot-test.svg", 800, 600 )
+
+    assert( open("shot-test.svg").read()
+        == open("tests/refs/03.05-render-grid-02.svg" ).read() )
+
+    # Add several entities associate to different groups...
+    tabletop.tileAppendEntity( 8, tll.Entity(1) )
+    tabletop.tileAppendEntity( 16, tll.Entity(1) )
+    tabletop.tileAppendEntity( 4, tll.Entity(2) )
+    tabletop.tileAppendEntity( 19, tll.Entity(2) )
+    tabletop.tileAppendEntity( 24, tll.Entity(3) )
+    tabletop.tileAppendEntity( 30, tll.Entity(3) )
+
+    tll.draw( tabletop, "shot-test.png", 800, 600 )
+    tll.draw( tabletop, "shot-test.svg", 800, 600 )
+
+    assert( open("shot-test.svg").read()
+        == open("tests/refs/03.05-render-grid-03.svg" ).read() )

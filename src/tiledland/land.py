@@ -20,7 +20,7 @@ class Actor():
     def numberOfBodies(self):
         return len(self._bodies)
     
-    def body(self, iBody):
+    def body(self, iBody= 1):
         return self._bodies[iBody-1]
 
     def appendBody(self, body):
@@ -68,11 +68,14 @@ class Land():
     def agents(self):
         return [ a.agent() for a in self.actors() ]
 
-    def body(self, identifier):
-        return self._actors[identifier].body()
+    def body(self, identifier, iBody=1):
+        return self._actors[identifier].body(iBody)
 
-    def bodies(self):
-        return [ a.body() for a in self.actors() ]
+    def allBodies(self):
+        bodies= []
+        for a in self.actors() : 
+            bodies+= a.bodies()
+        return bodies
 
     def bankOfEntities( self ):
         return self._bankOfEntities

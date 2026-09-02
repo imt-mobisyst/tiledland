@@ -26,12 +26,12 @@ class Mission:
         return self.start, self.final, self.reward, self.owner
 
 class Land(tll.Land):
-    def __init__(self, name= "Pick'n-Del", tabletop= None, nbOfActors= 14):
+    def __init__(self, name= "Pick'n-Del", tabletop= None, numberOfActors= 14):
         super(Land, self).__init__(
             tabletop,
             bankOfEntities= [
                 Carrier(i, name=n)
-                for i, n in zip(range(0, nbOfActors+1), ["-"] + [ chr( ord('A') + i%26 ) for i in range(nbOfActors) ])
+                for i, n in zip(range(0, numberOfActors+1), ["-"] + [ chr( ord('A') + i%26 ) for i in range(numberOfActors) ])
             ]
         )
         self._missions= []

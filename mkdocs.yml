@@ -2,11 +2,13 @@ site_name: Tiled-Land
 
 nav:
   - Home: 'index.md'
-  - Main Components:
-    - Tiled Entity: 'main-entity.md'
-    - Tiles and Tabletop: 'main-tabletop.md'
-    - Agents: 'main-agent.md'
-    - Rendering: 'main-rendering.md'
+  - Core Components:
+    - Entity: 'core-entity.md'
+    - Tiles and Tabletop: 'core-tabletop.md'
+    - Rendering: 'core-rendering.md'
+  - Agent-Based Modeling :
+    - Land and Actors: 'as-land.md'
+    - Agents: 'as-agent.md'
   - Interactive:
     - Classical GUI: 'ihm-gui.md'
     - Web App: 'ihm-web.md'
