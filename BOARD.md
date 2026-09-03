@@ -10,7 +10,6 @@
 - [x] Convex obj. min/max radius, and collision
 - [x] Tabletop: Gridmap to Tiled Tabletops
 
-
 ## Artist Rendering :
 
 
@@ -31,6 +30,7 @@ the core component of TiledLand refere to the `Tiles` composing a `Tabletop` and
 ## Tiled land Advanced :
 
 - [ ] tabletop.completeClock : make a more complete function...
+- [ ] A tile should not be an entity...
 
 
 ## Multi-Agent System (MAS) framework
