@@ -90,6 +90,11 @@ class Land():
         i= num%(len(self._bankOfEntities))
         return self._bankOfEntities[i]
 
+
+    # Tabletop sortcut:
+    def tile(self, iTile):
+        return self._tabletop.tile(iTile)
+
     # Construction:
     def clear( self ):
         self._actors= [ Actor(0, [], self) ]

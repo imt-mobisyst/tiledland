@@ -2,7 +2,7 @@ import sys
 workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
-import src.tiledland as tll
+import src.tiledland as tild
 import src.tiledland.artist as artist
 
 # ------------------------------------------------------------------------ #
@@ -10,7 +10,7 @@ import src.tiledland.artist as artist
 # ------------------------------------------------------------------------ #
 
 def test_fast_load_artist():
-    artist= tll.Artist()
+    artist= tild.Artist()
     
 # Test firstAI launch
 def test_fast_support_load():

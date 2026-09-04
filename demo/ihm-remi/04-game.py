@@ -1,12 +1,12 @@
 #! /usr/bin/python3
-import tiledland as tll
+import tiledland as tild
 import remi, remi.gui as gui
 
 # Remi :: App
 class MyApp(remi.App):
     def __init__(self, *args):
         # Create a new TiledTabletop as a grid:
-        tabletop= tll.Tabletop()
+        tabletop= tild.Tabletop()
         tabletop.initHexa(
             [[0, 0, 0, -1, 0, 0, 0, 0],              #  -1 : means no cell at this selector
             [0, -1, 0, 0, 0, -1, 0, 0],              #  0 - n : give the group identifier of the cell to create.
@@ -17,7 +17,7 @@ class MyApp(remi.App):
 
         # Add some objects on the tabletop:
         def newAgent( identifier, group ):
-            ag= tll.Agent( identifier, group, shape=tll.Convex().initRegular(0.7, 6) )
+            ag= tild.Agent( identifier, group, shape=tild.Convex().initRegular(0.7, 6) )
             ag.setMatter(12)
             return ag
 
@@ -32,7 +32,7 @@ class MyApp(remi.App):
         bod.setMatter(15)
         #
         self._tabletop= tabletop
-        self._artist= tll.Artist()
+        self._artist= tild.Artist()
         self._artist.fitBox( tabletop.box() )
         self._width=800
         self._height=600

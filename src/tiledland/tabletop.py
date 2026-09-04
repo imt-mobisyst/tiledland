@@ -193,15 +193,6 @@ class Tabletop(AbsEntity):
         return edgeList
 
     # Clock Bearing :
-    def obsolet_clockBearing(self, iTile):
-        clock= [
-            [ 0,  9,  0],
-            [ 6,  0, 12],
-            [ 0,  3,  0]
-        ]
-        positions= [ (int(round(x, 0)), int(round(y, 0))) for x, y in self.directions(iTile) ]
-        return [ clock[1+x][1+y] for x, y in positions ]
-
     def completeClock(self, iTile):
         clock= [ iTile for i in range(13) ]
         position= [ (0.0, 0.0) for i in range(13) ]

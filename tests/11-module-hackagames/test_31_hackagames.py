@@ -1,15 +1,15 @@
-import src.tiledland as tll
+import src.tiledland as tild
 
 '''
 def test_Convex_pod():
-    shape= tll.Convex(8, 10.0)
+    shape= tild.Convex(8, 10.0)
     
     pod= hk.Pod().initFrom( shape )
     print(f">>> {pod}")
     
     assert str(pod) == "Convex: [8] [-5.0, 5.0, 5.0, 5.0, 5.0, -5.0, -5.0, -5.0]"
 
-    shapeBis= tll.Convex().initFrom(pod)
+    shapeBis= tild.Convex().initFrom(pod)
     
     podBis= hk.Pod().initFrom( shapeBis )
     print(f">>> {podBis}")

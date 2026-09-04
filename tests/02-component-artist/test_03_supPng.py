@@ -2,7 +2,7 @@ import sys
 workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
-import src.tiledland as tll
+import src.tiledland as tild
 from src.tiledland.artist.supportCairo import SupportPNG
 
 # ------------------------------------------------------------------------ #
@@ -58,7 +58,7 @@ def test_fast_support_draw():
     assert( shotFile == refsFile )
 
 def test_fast_support_write():
-    suppo= tll.artist.supportCairo.SupportPNG()
+    suppo= tild.artist.supportCairo.SupportPNG()
 
     suppo.fillCircle( 250, 150, 2, 0xffe3f2 )
     suppo.write( 250, 150, "Hello", 0x25e3f2, 12 )
@@ -75,10 +75,10 @@ def test_fast_support_write():
 
 
 def test_fast_artist_flip():
-    pablo= tll.createArtistPNG( shotImg, 800, 600 )
+    pablo= tild.createArtistPNG( shotImg, 800, 600 )
 
-    assert( type( pablo ) ) == tll.Artist
-    assert( type( pablo.support() ) ) == tll.artist.supportCairo.SupportPNG
+    assert( type( pablo ) ) == tild.Artist
+    assert( type( pablo.support() ) ) == tild.artist.supportCairo.SupportPNG
 
     assert( pablo.support().filePath() == shotImg )
 

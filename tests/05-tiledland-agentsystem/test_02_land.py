@@ -2,7 +2,7 @@
 import sys, time
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-import src.tiledland as tll
+import src.tiledland as tild
 from src.tiledland.geometry import Convex, Point
 
 # ------------------------------------------------------------------------ #
@@ -10,12 +10,12 @@ from src.tiledland.geometry import Convex, Point
 # ------------------------------------------------------------------------ #
 
 def test_fast_land_init():
-    land= tll.Land()
-    assert type(land) == tll.Land
+    land= tild.Land()
+    assert type(land) == tild.Land
 
 
 def test_fast_land_first():
-    land= tll.Land()
+    land= tild.Land()
     land.tabletop().initHexa(
         [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
         [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
@@ -24,44 +24,44 @@ def test_fast_land_first():
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
-    tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-00.svg", mode='rb' ).read() )
 
     land.setBankOfEntities([
-        tll.Entity(0, Convex().initArrowTip(0.6), name="X"),
-        tll.Entity(0, Convex().initArrowTip(0.4), name="E"),
-        tll.Entity(0, Convex().initArrowTip(0.3), name="C")
+        tild.Entity(0, Convex().initArrowTip(0.6), name="X"),
+        tild.Entity(0, Convex().initArrowTip(0.4), name="E"),
+        tild.Entity(0, Convex().initArrowTip(0.3), name="C")
     ])
 
 
-    actorId= land.appendActor( tll.Agent(), [9], [1] )
+    actorId= land.appendActor( tild.Agent(), [9], [1] )
     assert actorId == 1  
 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
-    tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-01.svg", mode='rb' ).read() )
 
     land.initializeDefaultBankOfEntities(4)
 
-    actorId= land.appendActor( tll.Agent() )
+    actorId= land.appendActor( tild.Agent() )
     land.popActorBody( actorId, 3, 1 )
     
     assert actorId == 2
 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
-    tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-02.svg", mode='rb' ).read() )
 
 
 def test_fast_land_popActor():
-    land= tll.Land()
+    land= tild.Land()
     land.tabletop().initHexa(
         [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
         [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
@@ -70,28 +70,28 @@ def test_fast_land_popActor():
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
 
     land.initializeArrowTipBankOfEntities( range(1, 6),
         [0.4, 0.4, 0.2, 0.8, 0.6],
         [0.0, 3.14, -1.57, 0.8, -2.6],
         ["A", "B", "C", "D", "E"] )
 
-    land.popSimpleActor( tll.Agent(), 3 )
-    land.popSimpleActor( tll.Agent(), 10 )
-    land.popSimpleActor( tll.Agent(), 12 )
-    land.popSimpleActor( tll.Agent(), 26 )
+    land.popSimpleActor( tild.Agent(), 3 )
+    land.popSimpleActor( tild.Agent(), 10 )
+    land.popSimpleActor( tild.Agent(), 12 )
+    land.popSimpleActor( tild.Agent(), 26 )
 
     land.popActorBody( 0, 15, 0 )
 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
-    tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-03.svg", mode='rb' ).read() )
 
 def test_fast_land_popBis():
-    land= tll.Land()
+    land= tild.Land()
     land.tabletop().initHexa(
         [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
         [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
@@ -99,17 +99,17 @@ def test_fast_land_popBis():
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
 
     land.initializeArrowTipBankOfEntities( range(3),
         [0.4, 0.6, 0.6],
         [0.0, 3.14, -1.57],
         ["X", "A", "B"] )
 
-    actor1= land.popSimpleActor( tll.Agent(), 15 )
+    actor1= land.popSimpleActor( tild.Agent(), 15 )
 
     assert actor1 == 1
-    actor2= land.appendActor( tll.Agent() )
+    actor2= land.appendActor( tild.Agent() )
 
     assert actor2 == 2
     assert len( land.actor(2).bodies() ) == 0
@@ -118,14 +118,14 @@ def test_fast_land_popBis():
     
     assert actor2 == 2
 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
 
     assert len( land.actors() ) == 3 
     assert len( land.actor(0).bodies() ) == 0
     assert len( land.actor(1).bodies() ) == 1
     assert len( land.actor(2).bodies() ) == 1
 
-    tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.svg", 800, 600 )
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-landpop-01.svg", mode='rb' ).read() )
 
@@ -139,8 +139,8 @@ def test_fast_land_popBis():
     land.popActorBody( actor2, 25, 2 )
     land.popActorBody( actor2, 30, 2 )
 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
-    tll.draw( land.tabletop(), "shot-test.svg", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-landpop-02.svg", mode='rb' ).read() )
@@ -155,45 +155,45 @@ def test_fast_land_popBis():
 
 
 def test_fast_land_orients():
-    land= tll.Land()
+    land= tild.Land()
     land.tabletop().initHexa(
         [[-1, 0, 0], 
         [0, 0, 0], 
         [-1, 0, 0]], 1.4
     )
 
-    land.popSimpleActor( tll.Agent(), 4 )
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    land.popSimpleActor( tild.Agent(), 4 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     bob= land.actor(1).body(1)
     
     assert round( bob.orientation(), 2) == 0.0
 
-    land.actBodyOrient( 1, 1, tll.Action.DIR_W ) 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    land.actBodyOrient( 1, 1, tild.Action.DIR_W ) 
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == 3.14
     
-    land.actBodyOrient( 1, 1, tll.Action.DIR_SSE ) 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    land.actBodyOrient( 1, 1, tild.Action.DIR_SSE ) 
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -1.05
 
     land.actBodyRotateLeft( 1, 1 ) 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -0.52
 
     land.actBodyRotateRight( 1, 1 ) 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -1.05
 
     land.actBodyRotateRight( 1, 1, 4 ) 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -3.14
 
     land.actBodyRotateRight( 1, 1, 2 ) 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == 2.09
 
 def test_fast_land_moves():
-    land= tll.Land()
+    land= tild.Land()
     land.tabletop().initHexa(
         [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
         [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
@@ -203,36 +203,36 @@ def test_fast_land_moves():
     )
     land.initializeDefaultBankOfEntities()
 
-    land.popSimpleActor( tll.Agent(), 15 )
+    land.popSimpleActor( tild.Agent(), 15 )
     land.popActorBody( 1, 29, 1 )
-    land.popSimpleActor( tll.Agent(), 6 )
+    land.popSimpleActor( tild.Agent(), 6 )
 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     
     print( str(land.actor(1).body(1)) )
     assert land.actor(1).body(1).strIdentity() == "1:A-1 15-1"
 
     assert land.actBodyMove( 1, 1, 3 ) == 16
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     assert land.actor(1).body(1).strIdentity() == "1:A-1 16-1"
 
     assert land.actBodyMove( 1, 1, 3 ) == 16
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     assert land.actor(1).body(1).strIdentity() == "1:A-1 16-1"
 
-    assert land.actBodyMove( 1, 1, tll.Action.DIR_NNE ) == 9
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    assert land.actBodyMove( 1, 1, tild.Action.DIR_NNE ) == 9
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     assert land.actor(1).body(1).strIdentity() == "1:A-1 9-1"
     assert round( land.actor(1).body(1).orientation(), 2 ) == 1.05
 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
     
-    assert land.actBodyMove( 1, 2, tll.Action.DIR_W ) == 28
-    assert land.actBodyMove( 1, 2, tll.Action.DIR_NNW ) == 22
-    assert land.actBodyMove( 1, 2, tll.Action.DIR_NNW ) == 15
-    assert land.actBodyMove( 1, 2, tll.Action.DIR_NNW ) == 8
+    assert land.actBodyMove( 1, 2, tild.Action.DIR_W ) == 28
+    assert land.actBodyMove( 1, 2, tild.Action.DIR_NNW ) == 22
+    assert land.actBodyMove( 1, 2, tild.Action.DIR_NNW ) == 15
+    assert land.actBodyMove( 1, 2, tild.Action.DIR_NNW ) == 8
 
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
 
     assert land.actor(1).body(1).strIdentity() == "1:A-1 9-1"
     assert land.actor(1).body(2).strIdentity() == "1:A-2 8-1"

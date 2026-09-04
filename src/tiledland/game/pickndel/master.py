@@ -1,4 +1,4 @@
-import random, hacka, tiledland as tll
+import random, hacka, tiledland as tild
 
 from .carrier import Carrier
 from .land import Land

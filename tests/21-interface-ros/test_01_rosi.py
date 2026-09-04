@@ -2,7 +2,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src import tiledland as tll
+from src import tiledland as tild
 from src.tiledland.interface import ros
 import yaml, os.path, cairo
 

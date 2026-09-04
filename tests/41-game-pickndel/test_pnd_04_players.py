@@ -1,4 +1,4 @@
-import sys, hacka, tiledland as tll
+import sys, hacka, tiledland as tild
 
 """
 Test - Pick'n Del - Hacka Compatibility
@@ -11,7 +11,7 @@ import src.tiledland.game.pickndel as pnd
 
 """
 Test - Players
-"""
+" " "
 
 def test_basicBot_wakeUp():
     world= pnd.World("BasicWorld").initGrid([[0, 0], [0, 0]])
@@ -24,7 +24,7 @@ def test_basicBot_wakeUp():
     initDT.round(3)
 
     print( f"---\n{initDT}.")
-    assert str(initDT) == """BasicWorld : :
+    assert str(initDT) == " " "BasicWorld : :
 - Tabletop : : 0.01
   - Tile : 1 0 2 3 : 0.0 1.1 0.0
     - Convex : : -0.5 -0.5 -0.5 0.5 0.5 0.5 0.5 -0.5
@@ -37,7 +37,7 @@ def test_basicBot_wakeUp():
     - Agent : 1 1 4 : 1.1 0.0 0.0
       - Convex : : -0.185 -0.077 -0.185 0.077 -0.077 0.185 0.077 0.185 0.185 0.077 0.185 -0.077 0.077 -0.185 -0.077 -0.185
 - Missions : :
-  - Mission : 1 2 124 0 :"""
+  - Mission : 1 2 124 0 :" " "
 
     bot.wakeUp( 1, 1, initDT )
 
@@ -52,11 +52,11 @@ def test_basicBot_wakeUp():
 
     stateDT= game.playerHand(1)
     print( f">>> {stateDT}.")
-    assert str(stateDT) == """State : 10 : 0.0 0.0
+    assert str(stateDT) == " " "State : 10 : 0.0 0.0
 - Missions : :
   - Mission : 1 2 124 0 :
 - Carriers : :
-  - carrier : 1 1 4 0 :"""
+  - carrier : 1 1 4 0 :" " "
 
     bot.perceive(stateDT)
     assert bot.ticCounter() == 10
@@ -68,12 +68,12 @@ def test_basicBot_wakeUp():
     
     stateDT= game.playerHand(1)
     print( f">>> {stateDT}.")
-    assert str(stateDT) == """State : 10 : 0.0 0.0
+    assert str(stateDT) == " " "State : 10 : 0.0 0.0
 - Missions : :
   - Mission : 1 2 124 0 :
   - Mission : 2 4 112 0 :
 - Carriers : :
-  - carrier : 1 1 4 0 :"""
+  - carrier : 1 1 4 0 :" " "
 
     bot.perceive(stateDT)
 
@@ -100,3 +100,5 @@ def test_basicBot_loop():
         t-= 1
     
     assert( game.isEnded() )
+
+"""

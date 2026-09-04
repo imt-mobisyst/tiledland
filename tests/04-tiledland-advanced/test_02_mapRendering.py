@@ -1,7 +1,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src import tiledland as tll
+from src import tiledland as tild
 from src.tiledland.geometry import Point, Convex, Box
 from src.tiledland import Entity, Tile, Tabletop
 
@@ -10,7 +10,7 @@ from src.tiledland import Entity, Tile, Tabletop
 # ----------------------------------------------------------------------- #
 
 def draw(tabletop, filePath= "shot-test.png"):
-    pablo= tll.createArtistPNG( filePath, 800, 600 )
+    pablo= tild.createArtistPNG( filePath, 800, 600 )
     
     pablo.drawFrameGrid()
     pablo.drawFrameAxes()

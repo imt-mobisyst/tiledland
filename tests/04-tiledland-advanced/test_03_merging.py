@@ -2,7 +2,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-import src.tiledland as tll
+import src.tiledland as tild
 from src.tiledland.geometry import Point, Line, Convex
 from src.tiledland.artist import palette
 
@@ -20,7 +20,7 @@ def test_tabletop_fromConvex():
     ]
 
     shotImg= "shot-test.svg"
-    pablo= tll.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.createArtistSVG(shotImg, 800, 600)
     pablo.setCamera( 4.0, 3.0 )
 
     for shape in shapes :
@@ -32,7 +32,7 @@ def test_tabletop_fromConvex():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    tabletop= tll.Tabletop( epsilon=0.1 )
+    tabletop= tild.Tabletop( epsilon=0.1 )
     assert tabletop.epsilon() == 0.1
     assert tabletop.numberOfTiles() == 0
 
@@ -94,13 +94,13 @@ def test_tabletop_mergeOne():
         assert shape.distancePoint(p) < 0.09
     
     ## Create the tabletop : 
-    tabletop= tll.Tabletop( 0.09 ).fromShapes(shapes)
+    tabletop= tild.Tabletop( 0.09 ).fromShapes(shapes)
     assert tabletop.numberOfTiles() == 2
 
     tabletop.connectAllClose(0.16)
 
     shotImg= "shot-test.svg"
-    pablo= tll.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -132,11 +132,11 @@ def test_tabletop_mergeNoOne():
     ]
 
     ## Create the tabletop : 
-    tabletop= tll.Tabletop().fromShapes( shapes )
+    tabletop= tild.Tabletop().fromShapes( shapes )
     tabletop.connectAllClose( 0.16 )
 
     shotImg= "shot-test.svg"
-    pablo= tll.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -169,7 +169,7 @@ def test_tabletop_mergeNoOne():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    tabletop= tll.Tabletop( 0.09 ).fromShapes(shapes)
+    tabletop= tild.Tabletop( 0.09 ).fromShapes(shapes)
     tabletop.connectAllClose(0.11)
     ## Merge :
     assert not tabletop.mergeTilesIfPossible(1, 2, 0.09, 10.0)
@@ -191,7 +191,7 @@ def test_tabletop_mergeFew():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    tabletop= tll.Tabletop( epsilon=0.0999 )
+    tabletop= tild.Tabletop( epsilon=0.0999 )
     for s in shapes :
         tabletop.createTile( s )
     
@@ -200,7 +200,7 @@ def test_tabletop_mergeFew():
     assert tabletop.numberOfTiles() == 10
 
     shotImg= "shot-test.svg"
-    pablo= tll.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -240,7 +240,7 @@ def test_tabletop_mergeFew():
 
     ## Merge all :
     tabletop.mergeAllPossible(0.09, 10.0)
-    tll.draw(tabletop)
+    tild.draw(tabletop)
 
     tabletop.renderOn(pablo)
     pablo.flip()
@@ -271,14 +271,14 @@ def test_tabletop_mergeConplex():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    tabletop= tll.Tabletop( epsilon=0.0999 )
+    tabletop= tild.Tabletop( epsilon=0.0999 )
     for s in shapes :
         tabletop.createTile( s )
     
     tabletop.connectAllClose(0.11)
 
     shotImg= "shot-test.svg"
-    pablo= tll.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -293,7 +293,7 @@ def test_tabletop_mergeConplex():
     ## Merge all :
     nbMerges= tabletop.mergeAllPossible()
 
-    tll.draw(tabletop)
+    tild.draw(tabletop)
     assert nbMerges == 12
 
     tabletop.renderOn(pablo)
@@ -325,14 +325,14 @@ def test_tabletop_mergeButNo():
         Convex().fromZipped( [(5.45, 0.65), (5.45, 3.35), (5.55, 3.35), (5.55, 0.65)] )
     ]
 
-    tabletop= tll.Tabletop( epsilon=0.0999 )
+    tabletop= tild.Tabletop( epsilon=0.0999 )
     for s in shapes :
         tabletop.createTile( s )
     
     tabletop.connectAllClose(0.11)
 
     shotImg= "shot-test.svg"
-    pablo= tll.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.createArtistSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 

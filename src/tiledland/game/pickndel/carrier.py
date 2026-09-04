@@ -2,10 +2,10 @@
 Test - MoveIt Robot Class
 """
 
-import tiledland as tll
+import tiledland as tild
 from tiledland.geometry import Point, Convex, Box
 
-class Carrier(tll.Entity):
+class Carrier(tild.Entity):
     defaultShape= Convex().initArrowTip(0.6)
 
     def __init__(self, group=0, location= 0, index= 0, name= "Car", mission= 0):
@@ -20,7 +20,7 @@ class Carrier(tll.Entity):
     
     def copy(self):
         cpy= type(self)()
-        tll.Entity.__init__( cpy,
+        tild.Entity.__init__( cpy,
             self._group,
             self._refShape,
             self._position, self._theta,

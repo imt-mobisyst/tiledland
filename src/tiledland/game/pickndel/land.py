@@ -1,6 +1,6 @@
 import random, hacka
 
-import tiledland as tll
+import tiledland as tild
 from tiledland.geometry import Point, Convex, Box
 
 from .carrier import Carrier
@@ -25,7 +25,7 @@ class Mission:
     def asTuple(self):
         return self.start, self.final, self.reward, self.owner
 
-class Land(tll.Land):
+class Land(tild.Land):
     def __init__(self, name= "Pick'n-Del", tabletop= None, numberOfActors= 14):
         super(Land, self).__init__(
             tabletop,
@@ -36,13 +36,21 @@ class Land(tll.Land):
         )
         self._missions= []
         self._encumbers= []
+        self.resetEncumbers(0.0)
         self._name= name
-        
-        # Initialize Artist :
-        #artist= artist.createArtistPNG( "shot-pickndel.png", 800, 600 )
-        #artist.flip()
-        #artist.fitBox( Box([Point(-0.5, -0.5), Point(9.5, 6.5)] ), 10 )
-        #artist.fitBox( self.box(), 10 )
+    
+    # Initializing:
+    def initTabletop( self, tabletop, defaultEncumberValue= 0.0):
+        super(Land, self).initTabletop( tabletop )
+        self.resetEncumbers( defaultEncumberValue )
+        return self
+
+    def initGrid(self, matrix, tileSize= 1.0, separation=0.1, encumber= None):
+        self.initTabletop( tild.Tabletop().initGrid(matrix, tileSize, separation, True) )
+        if not encumber is None :
+            for t, v in zip( encumber[0], encumber[1] ) :
+                self.setEncumber(t, v)
+        return self
 
     # Accessor: 
     def name(self):
@@ -87,12 +95,6 @@ class Land(tll.Land):
     
     def encumber(self, iTile):
         return self._encumbers[iTile-1]
-
-    # Initializing:
-    def initTabletop( self, tabletop, defaultEncumberValue= 0.0):
-        super(Land, self).initTabletop( tabletop )
-        self.resetEncumbers( defaultEncumberValue )
-        return self
 
     # Construction:
     def initMoves(self):
@@ -155,27 +157,29 @@ class Land(tll.Land):
         return iFrom, iTo, pay
 
     # Moving:
-    def move(self, iFrom, clockDir):
+    def moveEntity(self, iFrom, clockDir):
         #print( f">>> move {iFrom}, {clockDir} ({self.encumber(iFrom)})" )
-        if self.tile(iFrom).count() == 0 or clockDir == 0 :
+        tbtop= self.tabletop()
+        if tbtop.tile(iFrom).numberOfEntities() == 0 or clockDir == 0 :
             return iFrom
         if random.random() < self.encumber(iFrom) :
             return iFrom
-        iTo= self.clockposition( iFrom, clockDir ) 
+        iTo= tbtop.clockPosition( iFrom, clockDir ) 
         return self.teleport(iFrom, iTo)
 
     def teleport( self, iFrom, iTo ):
-        if self.tile(iFrom).count() == 0 or self.tile(iTo).count() :
+        tbtop= self.tabletop()
+        if tbtop.tile(iFrom).numberOfEntities() == 0 or tbtop.tile(iTo).numberOfEntities() :
             return False
         # move:
         # Get from iFrom
-        carrier= self.tile(iFrom).entity()
-        self.tile(iFrom).clear()
+        carrier= tbtop.tile(iFrom).entity()
+        tbtop.tile(iFrom).clear()
 
         # Set on iTo
-        self.tile(iTo).append(carrier)
+        tbtop.tile(iTo).append(carrier)
         #carrier.setTile( iTo )
-        carrier.setPose( self.tile(iTo).position(), self.orientation() )
+        carrier.setPose( tbtop.tile(iTo).position(), carrier.orientation() )
         return iTo
     
     # Hacka.DataTree interface:
@@ -226,7 +230,7 @@ class Land(tll.Land):
         return aDataTree.digit(1)
     
     # Rendering :
-    def renderOn(self, artist, marketBrush= tll.artist.palette.background[6]):
+    def renderOn(self, artist, marketBrush= tild.artist.palette.background[6]):
         self.tabletop().renderOn( artist )
         # Market:
         artist.drawPolygon(

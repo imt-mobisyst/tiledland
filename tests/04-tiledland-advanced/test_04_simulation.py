@@ -2,7 +2,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-import src.tiledland as tll
+import src.tiledland as tild
 from src.tiledland.geometry import Convex, Point
 
 # ------------------------------------------------------------------------ #
@@ -10,11 +10,11 @@ from src.tiledland.geometry import Convex, Point
 # ------------------------------------------------------------------------ #
 
 def test_fast_simulation_agent_init():
-    agent= tll.Agent()
+    agent= tild.Agent()
     assert agent.decide() == None 
 
 def test_fast_simulation_tabletop_init():
-    land= tll.Tabletop()
+    land= tild.Tabletop()
     land.initHexa(
         [[0, 0, 0, -1, 0],    
         [0, -1, 0, 0, -1],    
@@ -25,16 +25,16 @@ def test_fast_simulation_tabletop_init():
     )
 
     # Create an artist to render this tabletop:
-    tll.draw( land, "shot-test.png", 400, 300 )
+    tild.draw( land, "shot-test.png", 400, 300 )
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
     refsFile= open( "tests/refs/05.01-land-00.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
     # Add the agent:
-    bod= land.tileAppendEntity( 10, tll.Entity(name="1") )
+    bod= land.tileAppendEntity( 10, tild.Entity(name="1") )
 
-    tll.draw( land, "shot-test.png", 400, 300 )
+    tild.draw( land, "shot-test.png", 400, 300 )
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
     refsFile= open( "tests/refs/05.01-land-01.png", mode='rb' ).read()

@@ -2,7 +2,7 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-import src.tiledland as tll
+import src.tiledland as tild
 from src.tiledland.geometry import Convex, Point
 
 # ------------------------------------------------------------------------ #
@@ -10,37 +10,37 @@ from src.tiledland.geometry import Convex, Point
 # ------------------------------------------------------------------------ #
 
 def test_fast_agent_init():
-    agent= tll.Agent()
-    assert type(agent) == tll.Agent
+    agent= tild.Agent()
+    assert type(agent) == tild.Agent
 
     assert agent.stateInfinitWait.__self__ == agent
-    assert agent.stateInfinitWait.__func__ == tll.Agent.stateInfinitWait
+    assert agent.stateInfinitWait.__func__ == tild.Agent.stateInfinitWait
 
-    assert agent._statePs == tll.Agent.stateInitialize
-
-    a= agent.runStateProcessus()
-    assert a.identifier() == tll.Action.WAIT
-    assert a.attributes() == []
-    assert agent._statePs == tll.Agent.stateInfinitWait
+    assert agent._statePs == tild.Agent.stateInitialize
 
     a= agent.runStateProcessus()
-    assert a.identifier() == tll.Action.WAIT
+    assert a.identifier() == tild.Action.WAIT
     assert a.attributes() == []
-    assert agent._statePs == tll.Agent.stateInfinitWait
+    assert agent._statePs == tild.Agent.stateInfinitWait
+
+    a= agent.runStateProcessus()
+    assert a.identifier() == tild.Action.WAIT
+    assert a.attributes() == []
+    assert agent._statePs == tild.Agent.stateInfinitWait
 
 def test_fast_agent_copy():
-    model= tll.Agent()
+    model= tild.Agent()
     agent= model.copy()
     
-    assert agent._statePs ==  tll.Agent.stateInitialize
+    assert agent._statePs ==  tild.Agent.stateInitialize
     
     a= agent.runStateProcessus()
-    assert a.identifier() == tll.Action.WAIT
+    assert a.identifier() == tild.Action.WAIT
     assert a.attributes() == []
 
-    assert agent._statePs == tll.Agent.stateInfinitWait
-    assert model._statePs ==  tll.Agent.stateInitialize
+    assert agent._statePs == tild.Agent.stateInfinitWait
+    assert model._statePs ==  tild.Agent.stateInitialize
     
     model= agent.copy()
 
-    assert model._statePs ==  tll.Agent.stateInfinitWait
+    assert model._statePs ==  tild.Agent.stateInfinitWait

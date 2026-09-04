@@ -39,10 +39,10 @@ Then, as an example, the following code will generate a grid-tabletop with sever
 The tabletop is then rendered as a _png_ graphic.
 
 ```python
-import tiledland as tll
+import tiledland as tild
 
 # Create a new land (a tiled tabletop and entities inside it) :
-tabletop= tll.Tabletop()
+tabletop= tild.Tabletop()
 tabletop.initGrid([
 	[0, 1, 1, -1, 0, 0, 0, 0], # -1 : means no cell at this selector
 	[5, -1, 0, 2, 0, -1, 5, 0], # 0 - n : give the group identifier
@@ -52,18 +52,18 @@ tabletop.initGrid([
 ])
 
 # Define a small shape for our entities...
-shape= tll.Convex().initRegular( 0.4, 5 )
+shape= tild.Convex().initRegular( 0.4, 5 )
 
 # Add several entities associate to different groups...
-tabletop.tileAppendEntity( 8, tll.Entity(1, shape, name="A1") )
-tabletop.tileAppendEntity( 16, tll.Entity(1, shape, name="A2") )
-tabletop.tileAppendEntity( 4, tll.Entity(2, shape, name="B1") )
-tabletop.tileAppendEntity( 19, tll.Entity(2, shape, name="B2") )
-tabletop.tileAppendEntity( 24, tll.Entity(3, shape, name="C1") )
-tabletop.tileAppendEntity( 28, tll.Entity(3, shape, name="C2") )
+tabletop.tileAppendEntity( 8, tild.Entity(1, shape, name="A1") )
+tabletop.tileAppendEntity( 16, tild.Entity(1, shape, name="A2") )
+tabletop.tileAppendEntity( 4, tild.Entity(2, shape, name="B1") )
+tabletop.tileAppendEntity( 19, tild.Entity(2, shape, name="B2") )
+tabletop.tileAppendEntity( 24, tild.Entity(3, shape, name="C1") )
+tabletop.tileAppendEntity( 28, tild.Entity(3, shape, name="C2") )
 
 # Create an artist to render this tabletop:
-tll.draw( tabletop, "shot-demo.png", 800, 600 )
+tild.draw( tabletop, "shot-demo.png", 800, 600 )
 
 print( f"You can open now the './shot-demo.png' file." )
 ```

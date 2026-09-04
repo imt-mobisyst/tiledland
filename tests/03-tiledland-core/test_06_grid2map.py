@@ -1,14 +1,14 @@
 import sys
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src import tiledland as tll
+from src import tiledland as tild
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
 def test_g2s_makeRectangles_small():
-    grid= tll.Grid()
+    grid= tild.Grid()
     grid.init([
         [1, 1, 0,  0, 0],
         [1, 1, 0,  0, 0],
@@ -36,7 +36,7 @@ def test_g2s_makeRectangles_small():
     ]
 
     # Tabletop Construction :
-    tabletop= tll.Tabletop( epsilon=0.06 )
+    tabletop= tild.Tabletop( epsilon=0.06 )
     shapes= grid.makeRectangles(0)
     i= 0
     for s in shapes :
@@ -96,7 +96,7 @@ Tabletop : : 0.06
 """
 
     # Tabletop Construction, in short:
-    tabletop= tll.Tabletop().fromGridRectangles(grid)
+    tabletop= tild.Tabletop().fromGridRectangles(grid)
     tabletop._epsilon= round( tabletop._epsilon, 6 )
 
     for t in tabletop.tiles() :
@@ -107,7 +107,7 @@ Tabletop : : 0.06
     print( '-'*10 )
     print( tabletop.asDataTree() )
 
-    tll.draw(tabletop)
+    tild.draw(tabletop)
 
     assert True or "\n"+ str(tabletop.asDataTree()) +"\n" =="""
 Tabletop: [0.06]
@@ -120,7 +120,7 @@ Tabletop: [0.06]
 """
 
 def test_g2s_makeRectangles_medium():
-    grid= tll.Grid()
+    grid= tild.Grid()
     grid.init([
         [1, 1, 1,  0, 0, 0,  0, 0, 0],
         [1, 1, 0,  0, 0, 0,  0, 0, 0],
@@ -168,7 +168,7 @@ def test_g2s_makeRectangles_medium():
         assert True or shape.asZipped() ==  ref
     
     # Tabletop from grid:
-    tabletop= tll.Tabletop().fromGridRectangles(grid)
+    tabletop= tild.Tabletop().fromGridRectangles(grid)
 
     for t in tabletop.tiles() :
         t.position().round(2)
@@ -178,7 +178,7 @@ def test_g2s_makeRectangles_medium():
     data= tabletop.asDataTree()
     data.round(3)
 
-    tll.draw(tabletop, "shot-test.png", 800, 600)
+    tild.draw(tabletop, "shot-test.png", 800, 600)
 
     print( '-'*10 )
     print( data )
@@ -199,8 +199,8 @@ Tabletop : : 0.04
 """
 
 def test_g2s_makeRectangles_medium_limit():
-    tabletop= tll.Tabletop()
-    grid= tll.Grid()
+    tabletop= tild.Tabletop()
+    grid= tild.Grid()
     grid.init([
         [1, 1, 1,  0, 0, 0,  0, 0, 0],
         [1, 1, 0,  0, 0, 0,  0, 0, 0],
@@ -220,7 +220,7 @@ def test_g2s_makeRectangles_medium_limit():
     tabletop.fromShapes(shapes, 0)
     tabletop.connectAllClose( 0.021 )
 
-    tll.draw(tabletop)
+    tild.draw(tabletop)
     
     assert len(shapes) == 11
     referes= [
@@ -249,13 +249,13 @@ def test_g2s_makeRectangles_medium_limit():
     assert tabletop.selectIdSmallbox(0.16) == [5, 7, 10, 11]
 
     assert( tabletop.mergeTile(5, 0.06, 1.0) )
-    #tll.draw(tabletop, "shot-1.png")
+    #tild.draw(tabletop, "shot-1.png")
     body4= tabletop.tile(4).projectedShape().round(2).asZipped()
     print( body4 )
     assert body4 ==  [(0.01, 0.31), (0.01, 0.59), (0.39, 0.59), (0.39, 0.31)]
     
     assert( tabletop.mergeTile(6, 0.06, 1.0) )
-    #tll.draw(tabletop, "shot-2.png")
+    #tild.draw(tabletop, "shot-2.png")
     body6= tabletop.tile(6).projectedShape().round(2).asZipped()
     print(body6)
     assert body6 ==  [(0.11, 0.61), (0.11, 0.69), (0.21, 0.79), (0.39, 0.79), (0.39, 0.61)]
@@ -265,7 +265,7 @@ def test_g2s_makeRectangles_medium_limit():
         t.position().round(2)
         t.referenceShape().round(2)
         t.updateProjection()
-    tll.draw(tabletop)
+    tild.draw(tabletop)
 
     print( f"---\n{tabletop.asDataTree()}." )
     assert "\n"+ str(tabletop.asDataTree()) +"\n" == """
@@ -289,7 +289,7 @@ Tabletop : : 0.01
 """
 
 def test_makeConvexes_small():
-    grid= tll.Grid([
+    grid= tild.Grid([
         [0, 0, 0, 0, 1,  1, 1, 1, 1, 1 ],
         [0, 0, 0, 0, 0,  1, 1, 0, 0, 0 ],
         [0, 0, 0, 0, 0,  1, 1, 0, 0, 0 ],
@@ -301,11 +301,11 @@ def test_makeConvexes_small():
         [0, 0, 1, 0, 0,  0, 0, 0, 0, 0 ],
         [0, 0, 0, 0, 0,  0, 0, 0, 0, 0 ],
         [0, 0, 0, 0, 0,  0, 0, 0, 0, 0 ]
-    ], tll.Point(0.5, 0.5), 1.0 )
+    ], tild.Point(0.5, 0.5), 1.0 )
     print(grid)
     
-    tabletop= tll.Tabletop().fromGridConvexes(grid, 1.0, pixelValues=[tll.Grid.STATE_FREE])
-    tll.draw( tabletop )
+    tabletop= tild.Tabletop().fromGridConvexes(grid, 1.0, pixelValues=[tild.Grid.STATE_FREE])
+    tild.draw( tabletop )
 
     print('\n'+ str(tabletop) +'.')
     assert '\n'+str(tabletop) == """
@@ -315,8 +315,8 @@ Tabletop:
 - 0:Tile 0-3 ⌊(1.5, 6.5), (5.5, 10.5)⌉ adjs[1, 4] entities(0)
 - 0:Tile 0-4 ⌊(1.5, 1.5), (3.5, 5.5)⌉ adjs[1, 3] entities(0)"""
 
-    tabletop= tll.Tabletop().fromGridConvexes(grid, 1.0)
-    tll.draw( tabletop )
+    tabletop= tild.Tabletop().fromGridConvexes(grid, 1.0)
+    tild.draw( tabletop )
 
     print('\n'+ str(tabletop) +'.')
     assert '\n'+str(tabletop) == """
@@ -329,7 +329,7 @@ Tabletop:
 - 1:Tile 0-6 ⌊(5.5, 8.5), (10.5, 10.5)⌉ adjs[2, 3, 5] entities(0)"""
  
 def test_makeConvexes_medium():
-    grid= tll.Grid([
+    grid= tild.Grid([
         [0, 0, 0, 0, 1,  1, 1, 1, 1, 1,  1, 1, 1, 1, 1,  1, 1, 1, 1, 1,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  1, 1, 1, 1, 1 ],
         [0, 0, 0, 0, 0,  1, 1, 0, 0, 0,  1, 1, 1, 1, 1,  1, 1, 1, 1, 1,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  1, 1, 1, 1, 1 ],
         [1, 0, 0, 0, 0,  1, 1, 0, 0, 0,  0, 0, 0, 0, 0,  1, 1, 1, 1, 1,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  1, 1, 1, 1, 1 ],
@@ -365,11 +365,11 @@ def test_makeConvexes_medium():
         [0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 1,  1, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0 ],
         [0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 1,  1, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0 ],
         [0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 1,  1, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0, 0, 0 ]
-    ], tll.Point(0.5, 0.5), 1.0 )
+    ], tild.Point(0.5, 0.5), 1.0 )
     print(grid)
     
-    tabletop= tll.Tabletop().fromGridConvexes(grid, 8.0, 0.01, pixelValues=[tll.Grid.STATE_FREE])
-    tll.draw( tabletop )
+    tabletop= tild.Tabletop().fromGridConvexes(grid, 8.0, 0.01, pixelValues=[tild.Grid.STATE_FREE])
+    tild.draw( tabletop )
 
     print('\n'+ str(tabletop) +'.')
     assert '\n'+str(tabletop) == """
@@ -391,8 +391,8 @@ Tabletop:
 - 0:Tile 0-15 ⌊(1.5, 20.5), (7.5, 30.5)⌉ adjs[8, 12] entities(0)"""
 
     
-    tabletop= tll.Tabletop().fromGridConvexes(grid, 8.0)
-    tll.draw( tabletop )
+    tabletop= tild.Tabletop().fromGridConvexes(grid, 8.0)
+    tild.draw( tabletop )
 
     print('\n'+ str(tabletop) +'.')
     assert '\n'+str(tabletop) == """

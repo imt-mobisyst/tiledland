@@ -2,10 +2,10 @@
 # Simple Tabletop rendering using streamlit.
 """
 import streamlit as st
-import tiledland as tll
+import tiledland as tild
 
 # Create a new TiledTabletop as a grid:
-tabletop= tll.Tabletop()
+tabletop= tild.Tabletop()
 tabletop.initGrid(
     [[0, 1, 1, -1, 0, 0, 0, 0],              #  -1 : means no cell at this selector
     [5, -1, 0, 2, 0, -1, 5, 0],              #  0 - n : give the group identifier of the cell to create.
@@ -19,7 +19,7 @@ tabletop.connectAllDistance( 1.2 )
 
 # Add some objects on the tabletop:
 def newAgent( identifier, group ):
-    return tll.Agent( identifier, group, shape=tll.Convex().initRegular(0.7, 6) )
+    return tild.Agent( identifier, group, shape=tild.Convex().initRegular(0.7, 6) )
 
 tabletop.setAgentFactory( newAgent )
 
@@ -33,7 +33,7 @@ bod= tabletop.popAgentOn(26)
 bod.setId(3).setMatter(13)
 
 # Create an artist to render this tabletop:
-pablo= tll.createArtistSVG( filePath= "shot-web-rendering.svg" )
+pablo= tild.createArtistSVG( filePath= "shot-web-rendering.svg" )
 pablo.fitBox( tabletop.box() )
 tabletop.renderOn(pablo)
 

@@ -2,7 +2,7 @@ import sys
 workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
-import src.tiledland as tll
+import src.tiledland as tild
 from src.tiledland.geometry import Point, Convex
 from src.tiledland.artist import palette
 
@@ -13,7 +13,7 @@ from src.tiledland.artist import palette
 # Test firstAI launch
 def test_fast_artist_palette():
     shotImg= "shot-test.svg"
-    pablo= tll.createArtistSVG( shotImg, 800, 600 )
+    pablo= tild.createArtistSVG( shotImg, 800, 600 )
 
     shape= Convex().fromZipped( [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
     pablo.drawConvex( shape, palette.background[1] )
@@ -55,7 +55,7 @@ def test_fast_artist_palette():
 
 def test_fast_artist_palette_png():
     shotImg= "shot-test.png"
-    pablo= tll.createArtistPNG(shotImg, 800, 600)
+    pablo= tild.createArtistPNG(shotImg, 800, 600)
 
     shape= Convex().fromZipped([(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
     pablo.drawConvex( shape, palette.background[1] )

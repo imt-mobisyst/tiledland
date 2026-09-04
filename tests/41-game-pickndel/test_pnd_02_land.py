@@ -1,4 +1,4 @@
-import sys, hacka, tiledland as tll
+import sys, hacka, tiledland as tild
 
 """
 Test - Pick'n Del Games Class
@@ -37,9 +37,9 @@ def test_pnd_land():
     model= pnd.Land( "Cool-Land" )
     assert model.name() == "Cool-Land"
 
-    model.initTabletop( tll.Tabletop().initGrid( refMatrix, 0.9, 0.1 ) )
+    model.initTabletop( tild.Tabletop().initGrid( refMatrix, 0.9, 0.1 ) )
 
-    pablo= tll.createArtistPNG("shot-test.png", 800, 600)
+    pablo= tild.createArtistPNG("shot-test.png", 800, 600)
     pablo.fitBox( model.tabletop().box(), 10 )
 
     model.tabletop().renderOn(pablo)
@@ -49,7 +49,7 @@ def test_pnd_land():
     refsFile= open( "tests/refs/41.pickndel-map-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-    bob= model.popSimpleActor( tll.Agent(), 1 )
+    bob= model.popSimpleActor( tild.Agent(), 1 )
 
     assert bob == 1
     
@@ -66,7 +66,7 @@ def test_pnd_land():
 
 def test_pnd_graph():
     # Game MoveIt:
-    land= pnd.Land( "Testland", tll.Tabletop().initGrid( refMatrix, 0.9, 0.1 ) )
+    land= pnd.Land( "Testland", tild.Tabletop().initGrid( refMatrix, 0.9, 0.1 ) )
     model= land.tabletop()
 
     print( f">>> {model.neighbours(11)}" )
@@ -91,15 +91,15 @@ def test_pnd_graph():
 
 def test_pnd_withCarrier():
     # Game MoveIt:
-    land= pnd.Land( "Testland", tll.Tabletop().initGrid( refMatrix, 0.9, 0.1 ), numberOfActors=2 )
+    land= pnd.Land( "Testland", tild.Tabletop().initGrid( refMatrix, 0.9, 0.1 ), numberOfActors=2 )
     tabletop= land.tabletop()
 
-    assert land.popSimpleActor(tll.Agent(), 1)  == 1
+    assert land.popSimpleActor(tild.Agent(), 1)  == 1
     assert land.popActorBody(1, 25).selector() == (25, 1)
-    assert land.popSimpleActor(tll.Agent(), 7)  == 2
+    assert land.popSimpleActor(tild.Agent(), 7)  == 2
     assert land.popActorBody(2, 44).selector() == (44, 1)
     
-    tll.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
 
     print(land.body(1)) 
     assert str( land.body(1) ) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
@@ -124,24 +124,23 @@ def test_pnd_withCarrier():
 
     #moveEntity
 
-    assert land.move( 11, 12 ) == 11
-    assert land.move( 1, 6 ) == 10
+    assert land.moveEntity( 11, 12 ) == 11
+    assert land.moveEntity( 1, 6 ) == 10
 
     #assert model.entityTiles(1) == [10, 25]
     #assert model.entityTiles(2) == [7, 44]
 
-    assert str( land.tile(10).entity() ) == 'Carrier-1.1 ⌊(-0.18, 4.82), (0.18, 5.18)⌉ |0, 0|'
+    print( land.tile(10).entity() )
+    assert str( land.tile(10).entity() ) == '1:A-1 10-1 ⌊(-0.26, 4.7), (0.3, 5.3)⌉ |0, 0|'
 
-    assert land.clockBearing(44) == [9, 3]
-
-    assert land.move( 44, 12 ) == False
-    assert land.move( 44, 3 ) == 45
-    assert land.move( 45, 12 ) == 39
-    assert land.move( 39,  0 ) == 39
-    assert land.move( 39,  3 ) == False
+    assert land.moveEntity( 44, 12 ) == False
+    assert land.moveEntity( 44, 3 ) == 45
+    assert land.moveEntity( 45, 12 ) == 39
+    assert land.moveEntity( 39,  0 ) == 39
+    assert land.moveEntity( 39,  3 ) == False
     
-    pablo= tll.createArtistPNG("shot-test.png", 800, 600)
-    pablo.fitBox( land.box(), 10 )
+    pablo= tild.createArtistPNG("shot-test.png", 800, 600)
+    pablo.fitBox( land.tabletop().box(), 10 )
     
     land.renderOn(pablo)
     pablo.flip()
@@ -151,7 +150,7 @@ def test_pnd_withCarrier():
     assert( shotFile == refsFile )
 
 
-    assert model.clockposition( 11, 12 ) == 3
+    assert land.tabletop().clockPosition( 11, 12 ) == 3
     
 """
     [ 1,  2,  3,   ,  4,  5,  6,  7,  8,  9],
@@ -165,14 +164,14 @@ def test_pnd_withCarrier():
 
 def test_long_pnd_emcomber():
     # Game MoveIt:
-    model= pnd.Land( numberOfPlayers=2 )
+    model= pnd.Land( numberOfActors=2 )
     model.initGrid( refMatrix, 0.9, 0.1 )
 
     for i in range(1, 49) :
         assert model.encumber(i) == 0.0
 
     # Game MoveIt:
-    model= pnd.Land( numberOfPlayers=2 )
+    model= pnd.Land( numberOfActors=2 )
     encumber= [
         [ 25,  20,  32  ],
         [ 0.6, 0.5, 0.4 ]
@@ -187,12 +186,12 @@ def test_long_pnd_emcomber():
     assert model.encumber(25) == 0.6
     assert model.encumber(32) == 0.4
 
-    model.tileAppendEntity( 25, Entity(1) )
-    assert str( model.tile(25).entity() ) == 'Carrier-1.1 ⌊(0.82, 2.82), (1.18, 3.18)⌉ |0, 0|'
+    model.popActorBody(0, 25, 1 )
+    assert str( model.tile(25).entity() ) == '1:A-1 25-1 ⌊(0.74, 2.7), (1.3, 3.3)⌉ |0, 0|'
 
     encumberCount= 0
     for i in range(10000) :
-        if model.move(25, 3) == 25 :
+        if model.moveEntity(25, 3) == 25 :
             encumberCount+= 1
         model.teleport(26, 25)
     assert round(encumberCount/10000, 1) == 0.6
@@ -200,17 +199,17 @@ def test_long_pnd_emcomber():
     model.teleport(25, 20)
     encumberCount= 0
     for i in range(10000) :
-        if model.move(20, 6) == 20 :
+        if model.moveEntity(20, 6) == 20 :
             encumberCount+= 1
         model.teleport(28, 20)
 
     assert round(encumberCount/10000, 1) == 0.5
 
     model.teleport(20, 32)
-    assert str( model.tile(32).entity() ) == 'Carrier-1.1 ⌊(8.82, 2.82), (9.18, 3.18)⌉ |0, 0|'
+    assert str( model.tile(32).entity() ) == '1:A-1 32-1 ⌊(8.74, 2.7), (9.3, 3.3)⌉ |0, 0|'
     encumberCount= 0
     for i in range(10000) :
-        if model.move(32, 9) == 32 :
+        if model.moveEntity(32, 9) == 32 :
             encumberCount+= 1
         model.teleport(31, 32)
 

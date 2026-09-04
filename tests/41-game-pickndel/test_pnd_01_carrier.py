@@ -1,4 +1,4 @@
-import sys, hacka, tiledland as tll
+import sys, hacka, tiledland as tild
 
 """
 Test - Pick'n Del Games Class

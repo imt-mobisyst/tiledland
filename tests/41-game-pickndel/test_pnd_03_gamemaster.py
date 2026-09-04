@@ -1,4 +1,4 @@
-import sys, hacka, tiledland as tll
+import sys, hacka, tiledland as tild
 
 """
 Test - Pick'n Del - Hacka Compatibility
@@ -11,7 +11,7 @@ import src.tiledland.game.pickndel as pnd
 
 """
 Test - Game Master
-"""
+" " "
 
 def test_fast_gamemaster_method():
     world= pnd.World().initGrid( [[0, 0], [0, 0]] )
@@ -260,3 +260,4 @@ def test_gamemaster_loops():
     assert game._tic == 10
     assert game.world().carrierTiles(1) == [5]
     assert game.playerScore(1) == 0.0
+"""

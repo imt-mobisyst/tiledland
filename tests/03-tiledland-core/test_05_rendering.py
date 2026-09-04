@@ -2,7 +2,7 @@ import sys
 workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
-import src.tiledland as tll
+import src.tiledland as tild
 from src.tiledland.geometry import Point, Convex
 
 # ------------------------------------------------------------------------ #
@@ -12,8 +12,8 @@ shotImg= "shot-test.svg"
 
 # Test artist on tiles
 def test_fast_tile_rendering():
-    pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    tile= tll.Tile()
+    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    tile= tild.Tile()
     
     tile.renderOn( pablo )
     pablo.flip()
@@ -21,7 +21,7 @@ def test_fast_tile_rendering():
     assert( open(shotImg).read()
         == open("tests/refs/03.05-tile-01.svg").read() )
     
-    tile= tll.Tile( 3, 0, Convex().initSquare(4.0) )
+    tile= tild.Tile( 3, 0, Convex().initSquare(4.0) )
     tile.setPosition(1.3, 0.9)
     tile.renderOn( pablo )
     pablo.flip()
@@ -29,7 +29,7 @@ def test_fast_tile_rendering():
     assert( open(shotImg).read()
         == open("tests/refs/03.05-tile-02.svg").read() )
 
-    tile= tll.Tile(1, 1).setPosition(0.4, 0.2)
+    tile= tild.Tile(1, 1).setPosition(0.4, 0.2)
     tile.setShapeRegular( 2.0, 6 )
     tile.renderOn( pablo )
     pablo.flip()
@@ -46,8 +46,8 @@ def test_fast_tile_rendering():
     
 # Test artist on tabletop
 def test_fast_tabletop_tile_rendering():
-    pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    tabletop= tll.Tabletop()
+    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    tabletop= tild.Tabletop()
 
     assert tabletop.epsilon() == 0.01
         
@@ -57,7 +57,7 @@ def test_fast_tabletop_tile_rendering():
     assert( open(shotImg).read()
         == open("tests/refs/03.05-map-00.svg" ).read() )
 
-    tabletop= tll.Tabletop().initLine(3)
+    tabletop= tild.Tabletop().initLine(3)
 
     assert tabletop.epsilon() == 0.01
 
@@ -79,8 +79,8 @@ def test_fast_tabletop_tile_rendering():
         == open("tests/refs/03.05-map-02.svg" ).read() )
 
 def test_fast_tabletop_net_rendering():
-    pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    tabletop= tll.Tabletop()
+    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    tabletop= tild.Tabletop()
     tabletop.initGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [0, -1, 0, 0, 0, -1, 0, 0],
@@ -122,8 +122,8 @@ def test_fast_tabletop_net_rendering():
 
 # Test artist on tabletop
 def test_gridmap_piece():
-    pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    tabletop= tll.Tabletop()
+    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    tabletop= tild.Tabletop()
     tabletop.initGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [5, -1, 0, 2, 0, -1, 5, 0],
@@ -141,8 +141,8 @@ def test_gridmap_piece():
         == open("tests/refs/03.05-entity-01.svg" ).read() )
 
     def popEntity( iRobot, iGroup, iTile ):
-        bob= tll.Entity( iGroup,
-            tll.Convex().initRegular(0.7, 6),
+        bob= tild.Entity( iGroup,
+            tild.Convex().initRegular(0.7, 6),
             Point(0.1, 0.1)+tabletop.tile(iTile).position(),
             name= str(iRobot)
         )
@@ -209,8 +209,8 @@ def test_gridmap_piece():
 
 # Test artist on tabletop
 def test_hexatabletop_piece():
-    pablo= tll.createArtistSVG( shotImg, 800, 600 )
-    tabletop= tll.Tabletop()
+    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    tabletop= tild.Tabletop()
     tabletop.initHexa(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [5, -1, 0, 2, 0, -1, 5, 0],
@@ -228,8 +228,8 @@ def test_hexatabletop_piece():
         == open("tests/refs/03.05-entity-11.svg" ).read() )
 
     def popEntity( iRobot, iTile, iGroup ):
-        bod= tll.Entity( iGroup,
-            tll.Convex().initRegular(0.7, 6),
+        bod= tild.Entity( iGroup,
+            tild.Convex().initRegular(0.7, 6),
             Point(0.1, 0.1)+tabletop.tile(iTile).position(),
             name= str(iRobot)
         )
@@ -271,7 +271,7 @@ def test_hexatabletop_piece():
 
 
 def test_gridtabletop_appendpiece():
-    tabletop= tll.Tabletop()
+    tabletop= tild.Tabletop()
     tabletop.initGrid([
         [0, 1, 1, -1, 0, 0, 0, 0], # -1 : means no cell at this selector
         [5, -1, 0, 2, 0, -1, 5, 0], # 0 - n : give the group identifier
@@ -280,31 +280,31 @@ def test_gridtabletop_appendpiece():
         [-1, -1, 0, 0, 0, -1, -1, -1]
     ])
 
-    tll.draw( tabletop, "shot-test.png", 800, 600 )
-    tll.draw( tabletop, "shot-test.svg", 800, 600 )
+    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.draw( tabletop, "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-01.svg" ).read() )
 
     # Add a first default entity on tile 2
-    tabletop.tileAppendEntity( 2, tll.Entity() )
+    tabletop.tileAppendEntity( 2, tild.Entity() )
 
-    tll.draw( tabletop, "shot-test.png", 800, 600 )
-    tll.draw( tabletop, "shot-test.svg", 800, 600 )
+    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.draw( tabletop, "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-02.svg" ).read() )
 
     # Add several entities associate to different groups...
-    tabletop.tileAppendEntity( 8, tll.Entity(1) )
-    tabletop.tileAppendEntity( 16, tll.Entity(1) )
-    tabletop.tileAppendEntity( 4, tll.Entity(2) )
-    tabletop.tileAppendEntity( 19, tll.Entity(2) )
-    tabletop.tileAppendEntity( 24, tll.Entity(3) )
-    tabletop.tileAppendEntity( 30, tll.Entity(3) )
+    tabletop.tileAppendEntity( 8, tild.Entity(1) )
+    tabletop.tileAppendEntity( 16, tild.Entity(1) )
+    tabletop.tileAppendEntity( 4, tild.Entity(2) )
+    tabletop.tileAppendEntity( 19, tild.Entity(2) )
+    tabletop.tileAppendEntity( 24, tild.Entity(3) )
+    tabletop.tileAppendEntity( 30, tild.Entity(3) )
 
-    tll.draw( tabletop, "shot-test.png", 800, 600 )
-    tll.draw( tabletop, "shot-test.svg", 800, 600 )
+    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.draw( tabletop, "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-03.svg" ).read() )

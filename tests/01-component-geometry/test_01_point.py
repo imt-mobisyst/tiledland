@@ -2,7 +2,7 @@
 import sys, math
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-import src.tiledland as tll
+import src.tiledland as tild
 from src.tiledland import geometry
 from src.tiledland.geometry import Point
 
@@ -11,10 +11,10 @@ from src.tiledland.geometry import Point
 # ------------------------------------------------------------------------ #
 
 def test_fast_load_geometry():
-    aPoint= tll.Point()
-    aLine= tll.Line()
-    aConvex= tll.Convex()
-    aGrid= tll.Grid()
+    aPoint= tild.Point()
+    aLine= tild.Line()
+    aConvex= tild.Convex()
+    aGrid= tild.Grid()
 
 def test_fast_geometry_clocks():
     assert (

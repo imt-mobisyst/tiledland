@@ -2,7 +2,7 @@ import sys
 workDir= __file__.split('/tests/')[0]
 sys.path.insert( 1, workDir )
 
-import src.tiledland as tll
+import src.tiledland as tild
 
 # ------------------------------------------------------------------------ #
 #                 T E S T   I N T E R F A C E    A R T I S T
@@ -10,8 +10,8 @@ import src.tiledland as tll
 
 # Test firstAI launch
 def test_fast_support_load():
-    sup= tll.artist.support.SupportSVG()
-    assert( type(sup) ) == tll.artist.support.SupportSVG
+    sup= tild.artist.support.SupportSVG()
+    assert( type(sup) ) == tild.artist.support.SupportSVG
 
     print( sup.render() )
     assert( sup.render() == """<svg width="800" height="600">
@@ -19,7 +19,7 @@ def test_fast_support_load():
 
 # Test firstAI launch
 def test_fast_support_draw():
-    suppo= tll.artist.support.SupportSVG()
+    suppo= tild.artist.support.SupportSVG()
     
     assert( suppo.render() == """<svg width="800" height="600">
 </svg>""" )
@@ -60,7 +60,7 @@ def test_fast_support_draw():
     #suppo.save( "shot-test.svg" )
 
 def test_fast_support_write():
-    suppo= tll.artist.support.SupportSVG()
+    suppo= tild.artist.support.SupportSVG()
 
     suppo.fillCircle( 250, 150, 2, 0xffe3f2 )
     suppo.write( 250, 150, "Hello", 0x25e3f2, 12 )
@@ -82,14 +82,14 @@ def test_fast_support_write():
 
 
 def test_fast_artist_load():
-    pablo= tll.Artist()
+    pablo= tild.Artist()
 
-    assert( type( pablo ) ) == tll.Artist
-    assert( type( pablo.support() ) ) == tll.artist.support.Support
+    assert( type( pablo ) ) == tild.Artist
+    assert( type( pablo.support() ) ) == tild.artist.support.Support
 
     pablo.init("shot-test.svg", 800, 600) 
 
-    assert( type( pablo.support() ) ) == tll.artist.support.SupportSVG
+    assert( type( pablo.support() ) ) == tild.artist.support.SupportSVG
 
     print(pablo.render())
     assert( pablo.render() == """<svg width="800" height="600">
@@ -127,7 +127,7 @@ def test_fast_artist_load():
 
 def test_fast_artist_flip():
     shotImg= "shot-test.svg"
-    pablo= tll.createArtistSVG( shotImg, 800, 600 )
+    pablo= tild.createArtistSVG( shotImg, 800, 600 )
 
     assert( pablo.support().filePath() == shotImg )
 
