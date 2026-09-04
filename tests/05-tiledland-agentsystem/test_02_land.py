@@ -30,9 +30,14 @@ def test_fast_land_first():
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-00.svg", mode='rb' ).read() )
 
-    actorId= land.appendActor( tll.Agent(),
-        [9], [tll.Entity(0, Convex().initArrowTip(0.4), name="E-1")]
-    )
+    land.setBankOfEntities([
+        tll.Entity(0, Convex().initArrowTip(0.6), name="X"),
+        tll.Entity(0, Convex().initArrowTip(0.4), name="E"),
+        tll.Entity(0, Convex().initArrowTip(0.3), name="C")
+    ])
+
+
+    actorId= land.appendActor( tll.Agent(), [9], [1] )
     assert actorId == 1  
 
     tll.draw( land.tabletop(), "shot-test.png", 800, 600 )

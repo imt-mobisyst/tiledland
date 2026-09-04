@@ -39,7 +39,6 @@ Then, as an example, the following code will generate a grid-tabletop with sever
 The tabletop is then rendered as a _png_ graphic.
 
 ```python
-#!/usr/bin/python3
 import tiledland as tll
 
 # Create a new land (a tiled tabletop and entities inside it) :

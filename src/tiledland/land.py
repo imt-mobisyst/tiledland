@@ -34,6 +34,12 @@ class Land():
             tabletop= Tabletop()
         self.initTabletop(tabletop)
     
+    # Initializing:
+    def initTabletop( self, tabletop ):
+        self.clear()
+        self._tabletop= tabletop
+        return self
+    
     def initializeDefaultBankOfEntities(self, bankOfEntitiesSize= 8, arrowtipSize= 0.8):
         names= ['X'] + [ chr( ord('A') + i%26 ) for i in range(bankOfEntitiesSize) ]
         self._bankOfEntities= [
@@ -84,23 +90,23 @@ class Land():
         i= num%(len(self._bankOfEntities))
         return self._bankOfEntities[i]
 
-    # Initializing:
-    def initTabletop( self, tabletop ):
-        self.clear()
-        self._tabletop= tabletop
-        return self
-
     # Construction:
     def clear( self ):
         self._actors= [ Actor(0, [], self) ]
     
-    def appendActor(self, agent, tileIds= [], bodies= [] ):
+    def appendActor(self, agent, tileIds= [], bodyIds= [] ):
         newId= len(self._actors)
-        for b, t in zip(bodies, tileIds ) :
-            self._tabletop.tileAppendEntity( t, b )
+        bodies= []
+        i= 1
+        for bi, t in zip(bodyIds, tileIds ) :
+            body= self.bankEntity( bi ).copy()
+            body.setName( body.name() + f"-{i}" )
+            self._tabletop.tileAppendEntity( t, body )
+            bodies.append(body)
+            i+= 1
         self._actors.append( Actor(newId, bodies, agent) )
         return newId
-        
+
     def popActorBody(self, iActor, iTile, entityNum= -1):
             a= self.actor(iActor)
             nextId= a.numberOfBodies()+1
@@ -111,12 +117,10 @@ class Land():
             self._tabletop.tileAppendEntity( iTile, body )
             a.appendBody(body)
             return body
-    
+
     def popSimpleActor(self, agent, iTile ):
         entityNum= len(self._actors)
-        b= self.bankEntity( entityNum ).copy()
-        b.setName( b.name() + "-1" )
-        return self.appendActor( agent, [iTile], [b] )
+        return self.appendActor( agent, [iTile], [entityNum] )
 
     def setBankOfEntities( self, aListOfEntities ):
         self._bankOfEntities= aListOfEntities
