@@ -1,80 +1,33 @@
-# TiledLand: A Polygon-Based Simulation Engine.
+# TiledLand
 
-This project is a `Python` package oriented toward multi-agent simulation relying on convex polygonal objects.
-The main idea is to model a planar world (the land) as a collection of convex-polygon cells (the tiles).
-Then, the land is mainly composed of a tabletop - interconnected tiles - and agents distributed inside it.
+TiledLand is a Python library for simulating flat worlds composed of convex polygonal tiles. Each tile can contain mobile objects; its connections to other tiles form a movement graph.
 
-To notice that, _TiledLand_ is more a sandbox project to test approaches than an optimized, ready-to-use and well documented toolbox.
+![](fig-tiledland-01.png)
 
-- On github: [imt-mobisyst/tiledland](https://github.com/imt-mobisyst/tiledland)
-- On PyPip: [project tiledland](https://pypi.org/project/tiledland/)
+The project is used to experiment with geometry, navigation, and multi-agent systems. This documentation describes the local code of version **0.1.6**, including its current capabilities and limitations.
 
-## Not what are you looking for ?
+## Getting Started
 
-You can look at concurrent/complementary projects:
+1. [Install the library and create your first scene](getting-started.md).
+2. [Understand entities](core-entity.md) and [tiles and tabletops](core-tabletop.md).
+3. [Produce an SVG or PNG rendering](core-rendering.md).
+4. [Associate bodies with actors](as-land.md) and [program a decision](as-agent.md).
 
-- [box2d](https://box2d.org) - 2d physics game engine (in _C_ language but with a lot of binds)
-- [pygame](https://www.pygame.org) - python-based game engine
-- [raylib](https://www.raylib.com/) - simple cross language game engine
-- [shapely](https://pypi.org/project/shapely) to manipulate, in python geometric objects in the Cartesian plane (based on [GEOS](https://libgeos.org/)).
-- [cgal](https://www.cgal.org) another Computational Geometry Algorithms Library (c++)
+## Model Organization
 
+| Object | Role |
+| --- | --- |
+| `Point`, `Line`, `Convex`, `Box`, `Grid` | Geometry and discrete maps |
+| `Entity` | Object with a shape, position, and orientation |
+| `Tile` | Entity representing an area, its neighbors, and its content |
+| `Tabletop` | Collection of tiles and connection graph |
+| `Actor` | Association between an agent and one or more bodies |
+| `Land` | Board, body models, and actor collection |
+| `Agent`, `Action` | Behavioral sketch using state machines |
+| `Artist` | Rendering on a graphic medium |
 
-## Install
+## Scope
 
-The project and its dependencies can be installed with the _pip_ tool.
+Scene constructions, transformations, and renderings already allow for experiments. The `Agent` layer remains partial; the examples in this documentation avoid its currently defective methods. Consult the [known limitations](limitations.md) before building a simulation loop.
 
-```sh
-pip install tiledland
-```
-
-For information, _TiledLand_ relies on [pyyaml](https://pypi.org/project/PyYAML) to read _yaml_ configuration files, on [hacka](https://github.com/ktorz-net/hacka-py) for distributed game programming, and on  [Cairo](https://pypi.org/project/pycairo/) library for _PNG_ image rendering. 
-
-You can also install _TiledLand_ from source: [github.com - tiledland](https://github.com/imt-mobisyst/tiledland).
-
-
-## Get started
-
-Then, as an example, the following code will generate a grid-tabletop with several entities.
-The tabletop is then rendered as a _png_ graphic.
-
-```python
-import tiledland as tild
-
-# Create a new land (a tiled tabletop and entities inside it) :
-tabletop= tild.Tabletop()
-tabletop.initGrid([
-	[0, 1, 1, -1, 0, 0, 0, 0], # -1 : means no cell at this selector
-	[5, -1, 0, 2, 0, -1, 5, 0], # 0 - n : give the group identifier
-	[0, 0, 0, -1, 0, 1, 1, 0], # of the cell to create.
-	[0, 4, 0, -1, 0, 2, 1, 6],
-	[-1, -1, 0, 0, 0, -1, -1, -1]
-])
-
-# Define a small shape for our entities...
-shape= tild.Convex().initRegular( 0.4, 5 )
-
-# Add several entities associate to different groups...
-tabletop.tileAppendEntity( 8, tild.Entity(1, shape, name="A1") )
-tabletop.tileAppendEntity( 16, tild.Entity(1, shape, name="A2") )
-tabletop.tileAppendEntity( 4, tild.Entity(2, shape, name="B1") )
-tabletop.tileAppendEntity( 19, tild.Entity(2, shape, name="B2") )
-tabletop.tileAppendEntity( 24, tild.Entity(3, shape, name="C1") )
-tabletop.tileAppendEntity( 28, tild.Entity(3, shape, name="C2") )
-
-# Create an artist to render this tabletop:
-tild.draw( tabletop, "shot-demo.png", 800, 600 )
-
-print( f"You can open now the './shot-demo.png' file." )
-```
-
-## Structure
-
-_TiledLand_ is structured with several sub-modules, each one dedicated to a functionality.
-
-- _geometry_ :  Polygon-based objects and the tabletop definition.
-- _artist_ : for rendering geometry objects
-- _core_ : Build on top of `geometry` and `artist`, it defines the main tiledland elements: `entities`, `tiles` and `tabletops`.
-- _agent system_ : A upper-layer built on top of _TiledLand core_  elements with `land` and `agents` for agent-based modeling.
-- _games_ : few example games.
-- _interfaces_ : offering tools making _TiledLand_ easily integrable with external solutions like ROS2, Web IHM (with Remi). To notice that _TiledLand_ is not dependent on the Python packages targeted with _interface_ components.
+The [geometry](geometry.md), [map import](maps.md), [serialization](serialization.md), and [practical reference](api.md) pages complete the journey. The [contribution guide](development.md) explains how to test and build this documentation.

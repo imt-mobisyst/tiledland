@@ -141,7 +141,7 @@ class Entity(AbsEntity) :
         return self
    
     def setShapeArrowTip(self, size, theta= 0.0):
-        self._refShape= Convex().initArrowTip(self, size, theta)
+        self._refShape= Convex().initArrowTip(size, theta)
         self.updateProjection()
         return self
     

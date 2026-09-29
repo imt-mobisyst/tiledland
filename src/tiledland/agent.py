@@ -62,7 +62,7 @@ class Agent:
 
     # Accessor:
     def perceivedBody(self):
-        return self._tabletop
+        return self._body
 
     def perceivedTabletop(self):
         return self._tabletop

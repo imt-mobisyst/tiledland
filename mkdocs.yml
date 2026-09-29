@@ -1,35 +1,36 @@
-site_name: Tiled-Land
-
+site_name: TiledLand
+site_description: Polygonal world simulation and multi-agent systems in Python
 nav:
-  - Home: 'index.md'
-  - Core Components:
-    - First is the Entity: 'core-entity.md'
-    - Tiles and Tabletop: 'core-tabletop.md'
-    - Rendering: 'core-rendering.md'
-  - Agent-Based Modeling :
-    - Land and Actors: 'as-land.md'
-    - Then, Agents: 'as-agent.md'
-  - Interactive:
-    - Classical GUI: 'ihm-gui.md'
-    - Web App: 'ihm-web.md'
-    - Multithreading: 'ihm-thread.md'
-  - Geometry: 'geometry.md'
-  - F.A.Q: 'faq.md'
-
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Spatial Model:
+      - Entities: core-entity.md
+      - Tiles and Tabletop: core-tabletop.md
+      - Geometry: geometry.md
+      - Maps: maps.md
+  - Simulation:
+      - Land and Actors: as-land.md
+      - Agents and Decisions: as-agent.md
+      - Serialization: serialization.md
+  - Display and Interfaces:
+      - Rendering: core-rendering.md
+      - Desktop Interface: ihm-gui.md
+      - Web Interface: ihm-web.md
+      - Execution and Concurrency: ihm-thread.md
+  - Practical Reference: api.md
+  - Known Limitations: limitations.md
+  - FAQ: faq.md
+  - Development: development.md
+  - Package Presentation: pypip-index.md
 markdown_extensions:
   - attr_list
-  - pymdownx.arithmatex:
-      generic: true
-
 theme:
   name: readthedocs
-  collapse_navigation: True
-  titles_only: True
-  # include_homepage_in_sidebar: False
-
-extra_javascript:
-  - javascripts/mathjax.js
-  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
-
+  locale: en
+  collapse_navigation: true
+  titles_only: true
+plugins:
+  - search:
+      lang: en
 extra_css:
   - style.css

@@ -1,61 +1,32 @@
-# Land and Actors - An introduction to Agent-Modeling
+# Land and Actors
 
-A _Land_ is a supper-object that integrate a model of an environnement (a tabletop with all thes tiles and entities its includes) linked to an agents collections. 
+A `Land` associates a `Tabletop`, a bank of entity models, and a list of actors. An `Actor` links an agent to several bodies. Bodies are the entities actually placed on the tabletop.
 
-### Simple land with one simple actor: (agent + one body to control)
-
-```python
-import tiledland as tild
-
-# Land defnition
-land= tild.Land()
-land.tabletop().initHexa(
-    [[-1, 0, 0, 0], 
-    [0, 0, 0, 0], 
-    [-1, 0, 0, 0]], 1.4
-)
-
-# Population
-land.popSimpleActor( tild.Agent(), 4 )
-land.popSimpleActor( tild.Agent(), 7 )
-
-# Draw the land's tabletop:
-tild.draw( land.tabletop(), "shot-demo.png", 800, 600 )
-print( f"You can open now the './shot-demo.png' file." )
-```
-
-### Bank of entiries: 
+## Adding an Actor
 
 ```python
-import tiledland as tild
+from tiledland import Land, Tabletop, Entity, Convex, Agent, draw
 
-# Land defnition
-land= tild.Land()
-land.tabletop().initHexa(
-    [[-1, 0, 0, 0], 
-    [0, 0, 0, 0], 
-    [-1, 0, 0, 0]], 1.4
+land = Land(
+    tabletop=Tabletop().initLine(3),
+    bankOfEntities=[Entity(shape=Convex().initArrowTip(0.6), name="Robot")],
 )
-
-bank= [
-    tild.Entity( 0, tild.Convex().initArrowTip(0.6), orientation= 0.8,  name= "x" ),
-    tild.Entity( 1, tild.Convex().initSquare(0.8), orientation= 0.6,  name= "A" ),
-    tild.Entity( 2, tild.Convex().initRegular(0.4, 8), name= "B" )
-]
-land.setBankOfEntities(bank)
-
-# Population
-land.appendActor( tild.Agent(), [4, 8], [1, 1] )
-
-ia= land.appendActor( tild.Agent())
-land.popActorBody( ia, 3, 2 )
-land.popActorBody( ia, 7, 2 )
-
-land.popActorBody( 0, 5, 0 )
-land.popActorBody( 0, 6, 0 )
-
-
-# Draw the land's tabletop:
-tild.draw( land.tabletop(), "shot-demo.png", 800, 600 )
-print( f"You can open now the './shot-demo.png' file." )
+acteur_id = land.appendActor(Agent(), tileIds=[1], bodyIds=[0])
+corps = land.body(acteur_id)
+assert corps.location() == 1
+land.tabletop().tileMoveEntity(corps.location(), corps.index(), 2)
+assert corps.location() == 2
+draw(land.tabletop(), "acteur.svg", 800, 300)
 ```
+
+`bodyIds` selects models from the bank; `tileIds` selects placement tiles. Both lists must have the same length: the implementation iterates through them using `zip` and therefore ignores excess elements.
+
+## Identifiers
+
+Actor 0 is reserved during initialization. Added actors receive identifiers starting from 1. In an actor, `body(1)` designates the first body. Bank models use indexing starting from 0 and `bankEntity()` applies a modulo to the bank size: provide a non-empty bank and explicit identifiers.
+
+`popSimpleActor(agent, tuile)` creates an actor with one body. `popActorBody(acteur, tuile, entityNum)` adds a body to an existing actor. `actor(id).bodies()` allows enumerating its bodies.
+
+## Limits
+
+The presence of an agent in `Land` does not trigger any automatic perception-decision-action loop. The application must orchestrate the simulation flow. Provide an explicit bank as in the example: the default parameter currently shares objects between instances.

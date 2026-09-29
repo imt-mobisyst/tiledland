@@ -1,9 +1,9 @@
-# TiledLand: a Polygon-based Multi-Agents Simulation Engine.
+# TiledLand: Simulation of Polygonal Worlds
 
-The main idea is to model a plan world as a collection of structured convex-polygons objects.
-The world is mainly composed of an environnement with items and agents distributed inside it.
-The environment is composed by interconnected convex-polygons: _Tiles_.
+TiledLand is an experimental Python library that represents flat environments using interconnected convex polygonal tiles. Entities can be placed and moved within these tiles.
 
-Its is more a sandbox project to test approaches than an optimized, ready-to-use and well documented toolbox.
+The project offers geometric primitives, rectangular and hexagonal constructions, map conversions, SVG and PNG rendering, and a basis for experimenting with multi-agent systems.
 
-The documention can be found on [imt-mobisyst.github.io/tiledland](https://imt-mobisyst.github.io/tiledland).
+Python 3.10 or later is required. Declared dependencies are hacka, pyyaml, pycairo, and msgpack. The agents layer remains under development.
+
+Project documentation contains a quick start, concepts, examples, and known limits. In a clone of the repository, build the site with MkDocs from `mkdocs.yml`.
