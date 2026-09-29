@@ -6,22 +6,22 @@ nav:
   - Spatial Model:
       - Entities: core-entity.md
       - Tiles and Tabletop: core-tabletop.md
-      - Geometry: geometry.md
-      - Maps: maps.md
+      - Geometry: core-geometry.md
+      - Maps: core-maps.md
   - Simulation:
       - Land and Actors: as-land.md
       - Agents and Decisions: as-agent.md
-      - Serialization: serialization.md
+      - Serialization: as-serialization.md
   - Display and Interfaces:
-      - Rendering: core-rendering.md
+      - Rendering: ihm-rendering.md
       - Desktop Interface: ihm-gui.md
       - Web Interface: ihm-web.md
       - Execution and Concurrency: ihm-thread.md
-  - Practical Reference: api.md
-  - Known Limitations: limitations.md
-  - FAQ: faq.md
-  - Development: development.md
-  - Package Presentation: pypip-index.md
+  - --- --- --- --- --- --- --- --- ---:
+    - Practical Reference: api.md
+    - FAQ: faq.md
+    - Development: development.md
+
 markdown_extensions:
   - attr_list
 theme:
