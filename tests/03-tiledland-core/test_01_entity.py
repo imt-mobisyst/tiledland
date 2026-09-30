@@ -94,7 +94,22 @@ def test_fast_simpleEnt_transform():
     assert bodyPoints == [(1.79, -2.44), (1.3, -2.49), (1.01, -2.08), (1.45, -1.54), (2.0, -1.98)]
     ent.setPose( Point(0.0, 0.0), 0.0 )
 
-def test_fast_entity_body():
+def test_fast_simpleEnt_str():
+    entity= tild.SimpleEnt(tild.Convex())
+    entity.shape().initSquare(1.0)
+    entity.setPosition( Point(1.0, 2.0) )
+    entity.setSelector(12, 6)
+    
+    print(entity)
+    assert str(entity) == "42:Entity 12-6 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
+
+    entity= tild.Entity( 42, tild.Convex().initSquare(1.0) )
+    entity.setPosition(1.0, 2.0)
+    print(entity)
+    assert str(entity) == "42:Entity 0-0 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
+
+
+def test_fast_entity_draw():
     ent= tild.Entity(name="0")
 
     print(ent)
@@ -119,18 +134,6 @@ def test_fast_entity_body():
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.01-entity-body-02.svg").read() )
-
-def test_fast_entity_str():
-    entity= tild.Entity( 42, tild.Convex().initSquare(1.0), Point(1.0, 2.0) )
-    entity.setSelector(12, 6)
-
-    print(entity)
-    assert str(entity) == "42:Entity 12-6 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
-
-    entity= tild.Entity( 42, tild.Convex().initSquare(1.0) )
-    entity.setPosition(1.0, 2.0)
-    print(entity)
-    assert str(entity) == "42:Entity 0-0 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 
 def test_fast_entity_hacka():
     entity= tild.Entity( 4 ).setPose( Point(1.0, 2.0), 1.5 ).setSelector(3, 42)
