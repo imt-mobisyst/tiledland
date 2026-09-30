@@ -49,6 +49,7 @@ TiledLand agents perception and actions are mainly defined regarding the capabil
 
 Have the posibility to swith on a C-based librairie for computations...
 
+- [ ] Make `Convex.initRegular()` centerd on (0, 0) - with test.
 - [ ] Tabletop vs Tabletop a semantic tabletop ie. structured tiled obj (and in oposition to GridMap).
 - [x] Fast position requestest : add a grid canvas to Tabletop get a tiles from a position (getTile at, closest, inRadius ...)
 - [ ] PointCloud (potentially from Scan) to Envellope, a centered and ordered PointCloud.

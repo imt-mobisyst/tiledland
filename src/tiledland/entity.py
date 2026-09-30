@@ -2,26 +2,70 @@ import math, hacka
 from .geometry import radian, Point, Convex
 from .artist import palette, Brush
 
-class AbsEntity() :
-    def box(self):
-        assert( False and "Should be defined" )
-        # return a tiledland.Box object, encapsulating the entity.
+#_defaultOutline= Convex().initRegular(1.0, 3)
+_defaultOutline= Convex().initSquare(1.0)
 
-    def asDataTree( self, aDataTree ):
-        assert( False and "Should be defined" )
-        # return a hacka.DataTree object descrybing the entity.
+class SimpleEnt :
+    # Initialization / Destruction:
+    def __init__(self,
+                outline= _defaultOutline.copy(),
+                color=0, enclave=0, index=0):
+        self._outline= outline
+        self._color= color
+        self._enclave= enclave
+        self._index= index
 
-    def fromDataTree( self, aDataTree ):
-        assert( False and "Should be defined" )
-        # build the entity from a hacka.DataTree
+    def copy(self):
+        return type(self)( self._outline, self._color, self._enclave, self._index )
+    
+    # Accessor: 
+    def outline(self):
+        return self._outline
+
+    def shape(self):
+        return self._outline
+    
+    def position(self):
+        return self.shape().center()
+
+    def orientation(self):
+        return 0.0
+
+    def color(self):
+        return self._color    
+
+    def enclave(self):
+        return self._enclave
+
+    def index(self):
+        return self._index
+    
+    def selector(self):
+        return (self._enclave, self._index)
+
+    # Construction: 
+    def setShape( self, shape, position= Point().copy(), orientation= 0.0):
+        self._outline= shape
+        self.setPose(position, orientation)
         return self
+
+    # Transformation: 
+    def setPosition(self, position):
+        self._outline.setCenter(position)
+        return self
+     
+    def setPose(self, position, angle):
+        angle= radian(angle)
+        toZero= self.position().negative()
+        self._outline.translate( toZero )
+        self._outline.rotate( angle )
+        self._outline.translate( position )
+        return self
+
+    # Artist:
+
     
-    def dataTreeCopy(self):
-        cpy= type(self)()
-        cpy.fromDataTree( self.asDataTree() )
-        return cpy
-    
-class Entity(AbsEntity) :
+class Entity :
     defaultShape= Convex().initArrowTip(1.0)
     defaultPalette= palette.foreground
 

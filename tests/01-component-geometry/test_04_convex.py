@@ -5,7 +5,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 from src.tiledland.geometry import Point, Line, Convex, Box
 
 # ------------------------------------------------------------------------ #
-#         T E S T   H A C K A G A M E S - C O M P O N E N T
+#         T E S T   T I L E D L A N D - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
 def test_fast_Convex_init():
@@ -25,7 +25,37 @@ def test_fast_Convex_initSquare():
 
     convex.initSquare( 2.0 )
     assert convex.asZipped() == [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
-  
+
+def test_fast_Convex_transformSqure():
+    convex= Convex().initSquare(2.0)
+    
+    assert convex.center() == Point(0.0, 0.0)
+
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in convex.asZipped() ]
+    print( env )
+    assert env == [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
+
+    convex.translate( Point(-0.5, 0.3) )    
+    print( f"{convex.center()} == {Point(-0.5, 0.3)}" )
+    assert convex.center().round(1) == Point(-0.5, 0.3)
+    
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in convex.asZipped() ]
+    print( env )
+    assert env == [(-1.5, -0.7), (-1.5, 1.3), (0.5, 1.3), (0.5, -0.7)]
+    
+    toZero= convex.center().negative().round(1)
+    print( f"{toZero} == {Point(0.5, -0.3)}" )
+    assert toZero == Point(0.5, -0.3)
+
+    convex.translate( toZero )    
+    print( f"{convex.center()} == {Point(0.0, 0.0)}" )
+    assert convex.center() == Point(0.0, 0.0)
+
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in convex.asZipped() ]
+    print( env )
+    assert env == [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
+
+
 def test_fast_Convex_initRegular():
     convex= Convex().initRegular( 20.0, 6 )
     assert len(convex.asZipped()) == 6

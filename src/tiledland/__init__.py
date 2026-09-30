@@ -2,7 +2,8 @@
 from .geometry import Point, Line, Box, Convex, Grid
 
 # core components: 
-from .entity import AbsEntity, Entity
+from .entity import SimpleEnt, Entity
+from .mobile import Mobile
 from .tile import Tile
 from .tabletop import CLOCK_ANGLE, CLOCK_ANGLES, Tabletop
 

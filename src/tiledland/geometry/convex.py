@@ -70,7 +70,7 @@ class Convex():
     
     def points(self):
         return self._points
-    
+
     def box(self):
         if self.size() == 0 :
             return Box()
@@ -98,6 +98,9 @@ class Convex():
     def asZipped(self):
         return [ (p.x(), p.y()) for p in self._points ]
 
+    def asRoundZipped(self, r=4):
+        return [(round(p.x(), r), round(p.y(), r)) for p in self._points]
+
     def fromZipped( self, zipedList ):
         self.init( [ Point(x, y) for x, y in zipedList ] )
         return self
@@ -120,6 +123,11 @@ class Convex():
             p.translate(vector2)
         return self
     
+    def setCenter(self, position):
+        toZero= self.center().negative()
+        self.translate( toZero+position )
+        return self
+
     def rotate(self, angle):
         angleCos = math.cos(angle)
         angleSin = math.sin(angle)

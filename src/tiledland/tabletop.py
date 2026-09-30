@@ -1,6 +1,6 @@
 import hacka
 from .geometry import Point, Box, Convex
-from .entity import AbsEntity, Entity
+from .entity import Entity
 from .tile import Tile
 
 import math
@@ -9,7 +9,7 @@ CLOCK_ANGLE= math.pi/6
 CLOCK_START= math.pi/2
 CLOCK_ANGLES= [ CLOCK_START - i*CLOCK_ANGLE for i in range(0,9) ] + [math.pi - i*CLOCK_ANGLE for i in range(0,4) ]
 
-class Tabletop(AbsEntity):
+class Tabletop():
 
     def __init__(self, epsilon= 0.01):
         assert( type(epsilon) == float )
@@ -519,6 +519,11 @@ class Tabletop(AbsEntity):
             assert( t.index() == self.numberOfTiles()+1 )
             self.appendTile(t)
         return self
+
+    def dataTreeCopy(self):
+        cpy= type(self)()
+        cpy.fromDataTree( self.asDataTree() )
+        return cpy
 
     # string:
     def str(self, name="Tabletop"):

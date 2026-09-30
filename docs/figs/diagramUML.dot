@@ -1,0 +1,30 @@
+digraph TiledLand {
+    node [shape=record, fontname="Arial"];
+    edge [fontname="Arial", fontsize=10];
+
+    // Classes
+    AbsEntity [label="{AbsEntity|<<abstract>>|+ box()\l+ asDataTree()\l+ fromDataTree()\l}"];
+    Entity [label="{Entity|- String _name\l- int _group\l- Point _position\l- float _theta\l- Convex _refShape\l- Convex _projShape\l|+ setPose()\l+ renderOn(artist)\l}"];
+    Tile [label="{Tile|- List _adjacencies\l- List _entities\l|+ append(entity)\l+ connect(iTo)\l+ renderOn(artist)\l}"];
+    Tabletop [label="{Tabletop|- List _tiles\l- float _epsilon\l|+ fromGridRectangles()\l+ createTile()\l+ tileMoveEntity()\l+ renderOn(artist)\l}"];
+    Land [label="{Land|- Tabletop _tabletop\l- List _bankOfEntities\l- List _actors\l|+ appendActor()\l+ actBodyMove()\l}"];
+    Actor [label="{Actor|- int _id\l- List _bodies\l- Agent _agent\l}"];
+    Agent [label="{Agent|- Body _body\l- Tabletop _tabletop\l- Function _statePs\l|+ perceive()\l+ decide()\l}"];
+    Action [label="{Action|+ int WAIT\l+ int MOVE\l+ int ROTATE\l}"];
+
+    // Inheritance (empty arrow for generalization)
+    Entity -> AbsEntity [arrowhead=empty];
+    Tabletop -> AbsEntity [arrowhead=empty];
+    Tile -> Entity [arrowhead=empty];
+
+    // Composition/Aggregation
+    Tabletop -> Tile [label="contains (many)", arrowhead=diamond];
+    Land -> Tabletop [label="manages (1)", arrowhead=diamond];
+    Land -> Actor [label="manages (many)", arrowhead=diamond];
+    Actor -> Entity [label="controls (bodies)", arrowhead=diamond];
+    Actor -> Agent [label="driven by (1)", arrowhead=diamond];
+    Tile -> Entity [label="hosts (many)", arrowhead=diamond];
+    
+    // Dependency
+    Agent -> Action [label="decides", style=dashed, arrowhead=vee];
+}

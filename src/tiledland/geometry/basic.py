@@ -43,9 +43,15 @@ class Point():
     # Polymorphing :
     def asTuple(self): 
         return (self._x, self._y)
+   
+    def asRoundTuple(self, r=2): 
+        return (round(self._x, r), round(self._y, r))
     
-    def asList(self): 
+    def asList(self, r=2): 
         return [self._x, self._y]
+    
+    def asRoundList(self): 
+        return [round(self._x, r), round(self._y, r)]
     
     # Construction
     def setx(self, value):
@@ -59,7 +65,7 @@ class Point():
     def set( self, x, y ):
         return self.setx(x).sety(y)
     
-    def round( self, precision=0 ):
+    def round( self, precision=4 ):
         self._x= round( self._x, precision )
         self._y= round( self._y, precision )
         return self

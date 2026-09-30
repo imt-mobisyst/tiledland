@@ -5,7 +5,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 from src.tiledland.geometry import Grid
 
 # ------------------------------------------------------------------------ #
-#         T E S T   H A C K A G A M E S - C O M P O N E N T
+#         T E S T   T I L E D L A N D - C O M P O N E N T
 # ------------------------------------------------------------------------ #
 
 def test_grid_init():

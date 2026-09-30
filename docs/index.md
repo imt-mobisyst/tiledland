@@ -2,7 +2,7 @@
 
 TiledLand is a Python library for simulating flat worlds composed of convex polygonal tiles. Each tile can contain mobile objects; its connections to other tiles form a movement graph.
 
-![](fig-tiledland-01.png)
+![](figs/tiledland-ex01.png)
 
 The project is used to experiment with geometry, navigation, and multi-agent systems. This documentation describes the local code of version **0.1.6**, including its current capabilities and limitations.
 
@@ -10,7 +10,7 @@ The project is used to experiment with geometry, navigation, and multi-agent sys
 
 1. [Install the library and create your first scene](getting-started.md).
 2. [Understand entities](core-entity.md) and [tiles and tabletops](core-tabletop.md).
-3. [Produce an SVG or PNG rendering](core-rendering.md).
+3. [Produce an SVG or PNG rendering](ihm-rendering.md).
 4. [Associate bodies with actors](as-land.md) and [program a decision](as-agent.md).
 
 ## Model Organization
@@ -28,6 +28,6 @@ The project is used to experiment with geometry, navigation, and multi-agent sys
 
 ## Scope
 
-Scene constructions, transformations, and renderings already allow for experiments. The `Agent` layer remains partial; the examples in this documentation avoid its currently defective methods. Consult the [known limitations](limitations.md) before building a simulation loop.
+Scene constructions, transformations, and renderings already allow for experiments. The `Agent` layer remains partial; the examples in this documentation avoid its currently defective methods.
 
-The [geometry](geometry.md), [map import](maps.md), [serialization](serialization.md), and [practical reference](api.md) pages complete the journey. The [contribution guide](development.md) explains how to test and build this documentation.
+The [geometry](core-geometry.md), [map import](core-maps.md), [serialization](as-serialization.md), and [practical reference](api.md) pages complete the journey. The [contribution guide](development.md) explains how to test and build this documentation.
