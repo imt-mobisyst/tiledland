@@ -82,7 +82,7 @@ def test_fast_simpleEnt_transform():
     
     bodyPoints= ent.shape().asRoundZipped(2)
     print( f"> transfom  : {bodyPoints}" )
-    assert bodyPoints == [(1.79, -2.44), (1.3, -2.49), (1.01, -2.08), (1.45, -1.54), (2.0, -1.98)]
+    assert bodyPoints == [(1.79, -2.43), (1.29, -2.48), (1.0, -2.07), (1.45, -1.52), (2.0, -1.97)]
     ent.setPose( Point(0.0, 0.0), 0.0 )
 
 def test_fast_simpleEnt_str():

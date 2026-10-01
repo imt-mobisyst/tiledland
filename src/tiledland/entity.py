@@ -48,7 +48,7 @@ class SimpleEnt :
     def radius(self):
         r= 0.0
         zero= Point()
-        for p in self.Shape().points() :
+        for p in self.shape().points() :
             d= zero.distance( p )
             r= max( d, r )
         return r
@@ -57,6 +57,10 @@ class SimpleEnt :
     def setOutline( self, shape):
         self._outline= shape
         return self
+    
+    def setShape(self, shape, position, orientation=0.0 ):
+        self._outline= shape
+        self.setPose(position, orientation)
 
     def setPosition(self, position):
         self._outline.setCenter(position)
@@ -69,13 +73,20 @@ class SimpleEnt :
         angle= radian(angle)
         toZero= self.position().negative()
         self._outline.translate( toZero )
-        self._outline.rotate( angle )
-        self._outline.translate( position )
+        if angle != 0.0 :
+            self._outline.rotate( angle )
+        self.setPosition( position )
         return self
     
+    def setEnclave(self, e):
+        self._enclave= e
+    
+    def setIndex(self, i):
+        self._index= i
+
     def setSelector(self, enclave, index):
-        self._enclave= enclave
-        self._index= index
+        self.setEnclave(enclave)
+        self.setIndex(index)
         return self
 
     # Artist:

@@ -1,19 +1,34 @@
 import math, hacka
 from . import geometry
 from .geometry import Point, Convex
-from .entity import Entity
+from .entity import SimpleEnt, Entity
 from .artist import palette
 
-class Tile(Entity):
-    defaultShape= Convex().initSquare(1.0)
-    defaultPalette= palette.background
+_defaultOutline= Convex().initSquare(1.0)
 
-    def __init__( self, identifier= 0, group=0, shape= None, position= Point(0.0, 0.0), orientation= 0.0):
-        super(Tile, self).__init__( group, shape, position, orientation, None, 0, identifier, "Tile")
+class Tile(SimpleEnt):
+    # Initialization / Destruction:
+    def __init__(self,
+                outline= _defaultOutline.copy(),
+                color=0x000000, enclave=0, index=0):
+        super(Tile, self).__init__(outline, color, enclave, index)
         self._adjacencies= []
         self._entities= []
         self._size= 0
-        
+    
+    def copy(self):
+        cpy= type(self)(
+            self._group,
+            self._refShape,
+            self._position, self._theta,
+            self._brush,
+            self._local, self._index,
+            self._name
+        )
+        cpy._adjacencies= [nei for nei in self._adjacencies]
+        cpy._entities= [ent for ent in self._entities]
+        self._size= len(cpy._entities)
+
     # Accessor:
     def adjacencies(self):
         return self._adjacencies
@@ -30,14 +45,14 @@ class Tile(Entity):
     # Construction:
     def setIndex(self, index):
         for e in self.entities() :
-            e.setArea(index)
+            e.setEnclave(index)
         self._index= index
         return self
     
     def setAdjacencies( self, aList ):
         self._adjacencies= aList
         return self
-    
+
     # Connection:
     def isConnecting(self, iTile):
         return (iTile in self.adjacencies())
@@ -99,6 +114,54 @@ class Tile(Entity):
         self._size= 0
         return self
     
+    # to String
+    def str(self): 
+        # Myself :
+        s= super(Tile, self).str()
+        s+= " adjs"+ str(self._adjacencies)
+        s+= f" entities({ len(self.entities()) })"
+        return s
+    
+    def __str__(self): 
+        return self.str()
+
+
+
+
+class OldTile(Entity):
+    defaultShape= Convex().initSquare(1.0)
+    defaultPalette= palette.background
+
+    def __init__( self, identifier= 0, group=0, shape= None, position= Point(0.0, 0.0), orientation= 0.0):
+        super(Tile, self).__init__( group, shape, position, orientation, None, 0, identifier, "Tile")
+        self._adjacencies= []
+        self._entities= []
+        self._size= 0
+        
+    # Accessor:
+    def adjacencies(self):
+        return self._adjacencies
+
+    def entities(self):
+        return self._entities
+    
+    def numberOfEntities(self):
+        return self._size
+
+    def entity(self, i=1) :
+        return self._entities[i-1]
+    
+    # Construction:
+    def setIndex(self, index):
+        for e in self.entities() :
+            e.setArea(index)
+        self._index= index
+        return self
+    
+    def setAdjacencies( self, aList ):
+        self._adjacencies= aList
+        return self
+    
     # Comparison :
     def centerDistance(self, another):
         return self.position().distance( another.position() )
@@ -146,14 +209,4 @@ class Tile(Entity):
         y= y+(miny-y)*2/3
         artist.write( x, y, str(self.index()), self.brush() )
 
-    # to str
-    def str(self): 
-        # Myself :
-        s= super(Tile, self).str()
-        s+= " adjs"+ str(self._adjacencies)
-        s+= f" entities({ len(self.entities()) })"
-        return s
-    
-    def __str__(self): 
-        return self.str()
     
