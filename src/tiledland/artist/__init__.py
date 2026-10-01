@@ -1,8 +1,9 @@
-from .color import color, colorRatio, colorRatio, rgbColor, percentColor, webColor, colorFromWeb
 from .support import AbsSupport, Support, SupportSVG
+from . import color
 
-def draw(anEntity, filePath="shot-tiledland.png", width= 1600, height= 1200):
+def drawSimpleEnt(anEntity, tag, filePath="shot-tiledland.png", width= 1600, height= 1200):
     pablo= Artist()
+
     fileExtend= filePath.split(".")[-1]
     if fileExtend in ["png", "PNG"]:
         from .supportCairo import SupportPNG
@@ -11,14 +12,16 @@ def draw(anEntity, filePath="shot-tiledland.png", width= 1600, height= 1200):
         pablo.init( filePath, width, height, SupportSVG )    
     
     pablo.fit(anEntity)
-    anEntity.renderOn(pablo)
+    anEntity.artistDraw(pablo)
+    anEntity.artistTag(pablo, tag)
     pablo.flip()
+
     return pablo
 
-def createArtistSVG(filePath, width, height):
+def openSVG(filePath, width, height):
     return Artist().init(filePath, width, height, SupportSVG)
 
-def createArtistPNG(filePath, width, height):
+def openPNG(filePath, width, height):
     from .supportCairo import SupportPNG
     return Artist().init(filePath, width, height, SupportPNG)
 

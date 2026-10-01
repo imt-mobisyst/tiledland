@@ -9,10 +9,14 @@ from src.tiledland.geometry import Point
 # ------------------------------------------------------------------------ #
 
 def test_fast_load_local_tildcore():
-    anEntity= tild.Entity()
+    anEntity= tild.SimpleEnt()
+    assert type(anEntity) is tild.SimpleEnt
     aMobile= tild.Mobile()
+    assert type(aMobile) is tild.Mobile
     aTile= tild.Tile()
+    assert type(aTile) is tild.Tile
     tabletop= tild.Tabletop()
+    assert type(tabletop) is tild.Tabletop
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - E N T I T Y
@@ -77,7 +81,7 @@ def test_fast_simpleEnt_transform():
 
     ent.setPose( Point(1.5, -2.0), 1.67 )
 
-    artist= tild.createArtistPNG("shot-test.png", 800, 600)
+    artist= tild.artist.openPNG("shot-test.png", 800, 600)
     artist.drawConvex( refShape, tild.artist.palette.foreground[3] )
     artist.drawConvex( ent.shape(), tild.artist.palette.foreground[5] )
     artist.flip()
@@ -99,23 +103,45 @@ def test_fast_simpleEnt_str():
     entity.shape().initSquare(1.0)
     entity.setPosition( Point(1.0, 2.0) )
     entity.setSelector(12, 6)
+
+    print(entity)
+    assert str(entity) == "SimpleEnt 12-6 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
+
+    entity= tild.SimpleEnt(tild.Convex().initSquare(1.0) )
+    entity.setCoordinates(-1.0, 2.0)
+    print(entity)
+    assert str(entity) == "SimpleEnt 0-0 ⌊(-1.5, 1.5), (-0.5, 2.5)⌉"
+
+
+def test_fast_SimpleEnt_draw():
+    ent= tild.SimpleEnt( tild.Convex().initArrowTip(1.0) )
+    ent.setCoordinates(0.0, 0.0)
     
-    print(entity)
-    assert str(entity) == "42:Entity 12-6 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
+    r, g, b= tild.color.decompose(0x80673A)
+    print(f"color: {r} {r:02X}, {g} {g:02X}, {b} {b:02X}") 
+    print(f"color: {tild.color.rgbColor( 0x80673A )}" )
+    print(f"color: {tild.color.recompose(r, g, b):06X}") 
+    print(f"color: {tild.color.lightest(0x80673A, 0.5):06X}") 
+    print(f"color: {tild.color.darckest(0x80673A, 0.5):06X}") 
 
-    entity= tild.Entity( 42, tild.Convex().initSquare(1.0) )
-    entity.setPosition(1.0, 2.0)
-    print(entity)
-    assert str(entity) == "42:Entity 0-0 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
+    assert ent.brush().fill == 0x000000
+    assert ent.brush().stroke == 0x808080
 
+    ent.setBrush(0x603800, 0xffcd80, 4)
 
-def test_fast_entity_draw():
-    ent= tild.Entity(name="0")
+    print(f"fill:   {ent.brush().fill:06X}") 
+    print(f"stroke: {ent.brush().stroke:06X}") 
 
-    print(ent)
-    tild.draw(ent, "shot-test.svg", 800, 600)
+    print(f"{ent.brush().fill:08X}") 
+    print(f"{ent.brush().stroke:08X}")
+
+    assert ent.brush().fill == 0x603800
+    assert ent.brush().stroke == 0xffcd80
+
+    tild.drawSimpleEnt(ent, "0", "shot-test.svg", 800, 600)
+
     assert( open("shot-test.svg").read()
-        == open("tests/refs/03.01-entity-body-01.svg").read() )
+        == open("tests/refs/03.01-entity-draw-01.svg").read() )
 
     assert ent.position().asTuple() == (0.0, 0.0)
     assert ent.orientation() == 0.0
@@ -124,40 +150,19 @@ def test_fast_entity_draw():
     shape.rotate(2.2)
     shape.translate( Point(1.0, 0.6) )
 
-    ent.setProjectedShape(shape)
-    tild.draw(ent, "shot-test.svg", 800, 600)
+    print( f"{shape} - center: {shape.center().round(1).asTuple()}" )
 
-    assert shape.round(4).points() == ent.projectedShape().round(4).points()
-    
+    ent.setShape( shape.copy() )
+    print( f"{ent} ~ position: {ent.position().round(1).asTuple()}" )
+
+    tild.drawSimpleEnt(ent, "0", "shot-test.svg", 800, 600)
+
+    assert shape.asRoundZipped() == ent.shape().asRoundZipped()
+
+    print( f"{ent} ~ position: {ent.position().round(1).asTuple()}" )
+
     assert ent.position().round(1).asTuple() == (1.0, 0.6)
     assert ent.orientation() == 0.0
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.01-entity-body-02.svg").read() )
-
-def test_fast_entity_hacka():
-    entity= tild.Entity( 4 ).setPose( Point(1.0, 2.0), 1.5 ).setSelector(3, 42)
-    tree= entity.asDataTree()
-
-    assert tree.label() == "Entity"
-    assert tree.numberOfDigits() == 3
-    assert tree.digits() == [4, 3, 42]
-    assert tree.digit(1) == 4
-    assert tree.digit(2) == 3
-    assert tree.digit(3) == 42
-    assert tree.numberOfValues() == 3
-    assert tree.values() == [1.0, 2.0, 1.5]
-    assert tree.value(1) == 1.0
-    assert tree.value(2) == 2.0
-    assert tree.value(3) == 1.5
-    assert tree.numberOfChildren() == 1
-    assert tree.children() == [ entity.referenceShape().asDataTree() ]
-
-    entity2= tild.Entity().fromDataTree(tree)
-    tree2= entity2.asDataTree()
-
-    print(tree)
-    print("vs")
-    print(tree2)
-    
-    assert str(tree2) == str(tree)

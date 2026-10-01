@@ -1,6 +1,6 @@
 import math, hacka
 from .geometry import radian, Point, Convex
-from .artist import palette, Brush
+from . import artist
 
 #_defaultOutline= Convex().initRegular(1.0, 3)
 _defaultOutline= Convex().initSquare(1.0)
@@ -9,9 +9,9 @@ class SimpleEnt :
     # Initialization / Destruction:
     def __init__(self,
                 outline= _defaultOutline.copy(),
-                color=0, enclave=0, index=0):
+                color=0x000000, enclave=0, index=0):
         self._outline= outline
-        self._color= color
+        self._brush= artist.Brush( color, artist.color.lightest(color, 0.5), 4)
         self._enclave= enclave
         self._index= index
 
@@ -31,9 +31,6 @@ class SimpleEnt :
     def orientation(self):
         return 0.0
 
-    def color(self):
-        return self._color    
-
     def enclave(self):
         return self._enclave
 
@@ -43,17 +40,30 @@ class SimpleEnt :
     def selector(self):
         return (self._enclave, self._index)
 
+    # Convex accessor : 
+    def box(self):
+        return self.shape().box()
+    
+    def radius(self):
+        r= 0.0
+        zero= Point()
+        for p in self.Shape().points() :
+            d= zero.distance( p )
+            r= max( d, r )
+        return r
+    
     # Construction: 
-    def setShape( self, shape, position= Point().copy(), orientation= 0.0):
+    def setShape( self, shape):
         self._outline= shape
-        self.setPose(position, orientation)
         return self
 
-    # Transformation: 
     def setPosition(self, position):
         self._outline.setCenter(position)
         return self
      
+    def setCoordinates(self, x, y):
+        return self.setPosition( Point(x, y) )
+    
     def setPose(self, position, angle):
         angle= radian(angle)
         toZero= self.position().negative()
@@ -61,13 +71,45 @@ class SimpleEnt :
         self._outline.rotate( angle )
         self._outline.translate( position )
         return self
+    
+    def setSelector(self, enclave, index):
+        self._enclave= enclave
+        self._index= index
+        return self
 
     # Artist:
-
+    def brush(self):
+        return self._brush
     
+    def setBrush( self, fillColor, strokeColor, width= 4 ):
+        self._brush= artist.Brush(fillColor, strokeColor, width)
+        return self
+
+    def artistDraw( self, artist ):
+        artist.fillConvex( self.shape(), self.brush() )
+        return self
+
+    def artistTag( self, artist, text ):
+        minx, miny= self.box().leftFloor().asTuple()
+        cx, cy= self.position().asTuple()
+        x= minx + 0.1 * (cx - minx)
+        artist.write( x, cy, text, self.brush() )
+        return self
+    
+    # str:
+    def str(self): 
+        return self.strIdentity() + f" {self.box()}"
+    
+    def strIdentity(self):
+        return f"{type(self).__name__} {self.enclave()}-{self.index()}"
+
+    def __str__(self):
+        return self.str()
+
+
 class Entity :
     defaultShape= Convex().initArrowTip(1.0)
-    defaultPalette= palette.foreground
+    defaultPalette= artist.palette.foreground
 
     # Initialization Destruction:
     def __init__( self,

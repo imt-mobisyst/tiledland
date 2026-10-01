@@ -12,5 +12,5 @@ from .agent import Action, Agent
 from .land import Actor, Land
 
 # rendering:
-from .artist import Brush, Artist, draw, createArtistSVG, createArtistPNG
-
+from . import artist
+from .artist import color, drawSimpleEnt

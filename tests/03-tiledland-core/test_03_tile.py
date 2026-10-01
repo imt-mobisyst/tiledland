@@ -2,7 +2,7 @@
 import sys, hacka
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland import Entity, Tile, draw
+from src.tiledland import Entity, Tile, artist
 from src.tiledland.geometry import Point, Convex
 
 # ------------------------------------------------------------------------ #

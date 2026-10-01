@@ -1,13 +1,24 @@
 # Color transform:
 
-def color( red, green, blue ):
-    if red > 0xFF :
-        red= 0xFF
-    if green > 0xFF :
-        green= 0xFF
-    if blue > 0xFF :
-        blue= 0xFF
-    return (red<<16) + (green<<8) + (blue)
+def decompose(color):
+    return (color>>16)&0xFF, (color>>8)&0xFF, (color)&0xFF
+
+def recompose(r, g, b):
+    return (r&0xFF)<<16 | (g&0xFF)<<8 | b&0xFF
+
+def lightest(color, ratio):
+    r, g, b= decompose(color)
+    r= r + int( (0x100-r)*ratio )
+    g= g + int( (0x100-g)*ratio )
+    b= b + int( (0x100-b)*ratio )
+    return recompose(r, g, b)
+
+def darckest(color, ratio):
+    r, g, b= decompose(color)
+    r= int( r*ratio )
+    g= int( g*ratio )
+    b= int( b*ratio )
+    return recompose(r, g, b)
 
 def colorFromWeb( webColor ):
     return int( webColor[1:], base=16)
@@ -32,7 +43,7 @@ def webColor( color ):
         string+= hex( c&0xF )[2]
     return string
 
-def colorRatio( color, ratio ):
+def oldColorRatio( color, ratio ):
     r,g,b= rgbColor( color )
     r= int( r*ratio )
     g= int( r*ratio )
