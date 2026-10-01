@@ -156,7 +156,7 @@ class World( tabletop.Tabletop ):
         # Set on iTo
         self.tile(iTo).append(carrier)
         carrier.setTile( iTo )
-        carrier.setPosition( self.tile(iTo).position() )
+        carrier.setCoordinates( self.tile(iTo).position() )
         return iTo
     
     # Hacka.DataTree interface:

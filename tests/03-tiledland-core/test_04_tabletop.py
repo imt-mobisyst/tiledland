@@ -78,10 +78,10 @@ def test_fast_tabletop_hacka():
                        [3, 1], [3, 2], [4, 1], [4, 2]
                         ] )
 
-    tabletop.tile(1).setPosition( 5.0, 3.0 )
-    tabletop.tile(2).setPosition( 5.0, 15.0 )
-    tabletop.tile(3).setPosition( 1.0, 9.0 )
-    tabletop.tile(4).setPosition( 9.0, 9.0 )
+    tabletop.tile(1).setCoordinates( 5.0, 3.0 )
+    tabletop.tile(2).setCoordinates( 5.0, 15.0 )
+    tabletop.tile(3).setCoordinates( 1.0, 9.0 )
+    tabletop.tile(4).setCoordinates( 9.0, 9.0 )
 
     print(f">>>\n{tabletop}")
     assert '\n'+ str(tabletop) +'\n' == """

@@ -26,7 +26,7 @@ def test_fast_tile_init():
     assert tile.adjacencies() == []
     assert tile.entities() == []
 
-    tile.setIndex(1).setGroupAndBrush(8).setPosition(1.0, 1.0)
+    tile.setIndex(1).setGroupAndBrush(8).setCoordinates(1.0, 1.0)
     tile.setShapeSquare( 2.0 )
 
     assert tile.index() == 1
@@ -38,7 +38,7 @@ def test_fast_tile_init():
 
 def test_fast_tile_regular():
     tile= Tile( 1 )
-    tile.setPosition(10.0, 10.0)
+    tile.setCoordinates(10.0, 10.0)
     tile.setShapeRegular( 20.0, 6 )
     assert tile.index() == 1
     assert tile.position().asTuple() == (10.0, 10.0)
@@ -63,7 +63,7 @@ def test_fast_tile_adjencies():
 
 def test_fast_tile_str():
     tile= Tile(8)
-    tile.setPosition(18.5, 4.07)
+    tile.setCoordinates(18.5, 4.07)
     
     print(f">>> {tile}")
     assert str(tile) == "0:Tile 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] entities(0)"
@@ -82,7 +82,7 @@ def test_fast_tile_str():
 
 def test_fast_tile_absobj():
     tile= Tile(8)
-    tile.setPosition(18.5, 4.07)
+    tile.setCoordinates(18.5, 4.07)
     tile.connectAll( [ 1, 3, 7, 19 ] )
     tree= tile.asDataTree()
 
@@ -128,7 +128,7 @@ def test_fast_tile_absobj():
 
 def test_fast_tile_DataTreeCopy():
     tile= Tile(8)
-    tile.setPosition(18.5, 4.07)
+    tile.setCoordinates(18.5, 4.07)
     tile.connectAll( [ 1, 3, 7, 19 ] )
     tile.append( Entity(1) )
 
@@ -161,7 +161,7 @@ def test_fast_tile_clockDirection():
     
     p= Point( 1.2, -0.5 )
     tile= Tile( shape=Convex().initRegular( 0.2, 12 ) )
-    tile.setPosition(p.x(), p.y())
+    tile.setCoordinates(p.x(), p.y())
     
     assert tile.clockDirection( p ) == 0
     assert tile.clockDirection( p + Point(  0.0,  2.0 ) ) == 12

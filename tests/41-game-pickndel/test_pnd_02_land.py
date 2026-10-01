@@ -115,7 +115,7 @@ def test_pnd_withCarrier():
     assert [ e.group() for e in tabletop.tile(44).entities() ] == [2]
     
     bodyIdentifiers= [
-        (b.location(), b.group()) 
+        (b.enclave(), b.group()) 
         for b in land.allBodies()
     ]
 

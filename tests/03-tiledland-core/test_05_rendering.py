@@ -22,14 +22,14 @@ def test_fast_tile_rendering():
         == open("tests/refs/03.05-tile-01.svg").read() )
     
     tile= tild.Tile( 3, 0, Convex().initSquare(4.0) )
-    tile.setPosition(1.3, 0.9)
+    tile.setCoordinates(1.3, 0.9)
     tile.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-tile-02.svg").read() )
 
-    tile= tild.Tile(1, 1).setPosition(0.4, 0.2)
+    tile= tild.Tile(1, 1).setCoordinates(0.4, 0.2)
     tile.setShapeRegular( 2.0, 6 )
     tile.renderOn( pablo )
     pablo.flip()

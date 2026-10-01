@@ -4,19 +4,6 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 from src import tiledland as tild
 from src.tiledland.geometry import Point
 
-# ------------------------------------------------------------------------ #
-#         T E S T   T I L E D L A N D - C O M P O N E N T
-# ------------------------------------------------------------------------ #
-
-def test_fast_load_local_tildcore():
-    anEntity= tild.SimpleEnt()
-    assert type(anEntity) is tild.SimpleEnt
-    aMobile= tild.Mobile()
-    assert type(aMobile) is tild.Mobile
-    aTile= tild.Tile()
-    assert type(aTile) is tild.Tile
-    tabletop= tild.Tabletop()
-    assert type(tabletop) is tild.Tabletop
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - E N T I T Y
@@ -46,7 +33,7 @@ def test_fast_simpleent_init2():
     print( env ) 
     assert env == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
 
-    entity.setShape( tild.Convex().initRegular(0.5, 8) )
+    entity.setOutline( tild.Convex().initRegular(0.5, 8) )
     env= [ ( round(x, 2), round(y, 2) ) for x, y in entity.shape().asZipped() ]
     print( env )
     assert env == [(-0.23, -0.1), (-0.23, 0.1), (-0.1, 0.23), (0.1, 0.23), (0.23, 0.1), (0.23, -0.1), (0.1, -0.23), (-0.1, -0.23)]
@@ -152,7 +139,7 @@ def test_fast_SimpleEnt_draw():
 
     print( f"{shape} - center: {shape.center().round(1).asTuple()}" )
 
-    ent.setShape( shape.copy() )
+    ent.setOutline( shape.copy() )
     print( f"{ent} ~ position: {ent.position().round(1).asTuple()}" )
 
     tild.drawSimpleEnt(ent, "0", "shot-test.svg", 800, 600)
@@ -165,4 +152,4 @@ def test_fast_SimpleEnt_draw():
     assert ent.orientation() == 0.0
 
     assert( open("shot-test.svg").read()
-        == open("tests/refs/03.01-entity-body-02.svg").read() )
+        == open("tests/refs/03.01-entity-draw-02.svg").read() )

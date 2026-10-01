@@ -13,9 +13,9 @@ land = Land(
 )
 acteur_id = land.appendActor(Agent(), tileIds=[1], bodyIds=[0])
 corps = land.body(acteur_id)
-assert corps.location() == 1
-land.tabletop().tileMoveEntity(corps.location(), corps.index(), 2)
-assert corps.location() == 2
+assert corps.enclave() == 1
+land.tabletop().tileMoveEntity(corps.enclave(), corps.index(), 2)
+assert corps.enclave() == 2
 draw(land.tabletop(), "acteur.svg", 800, 300)
 ```
 

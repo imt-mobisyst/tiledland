@@ -7,7 +7,7 @@ Model objects offer a `hacka.DataTree` representation. It allows transmitting a 
 ```python
 from tiledland import Entity
 
-source = Entity(group=2, name="Robot").setPosition(1.0, 2.0)
+source = Entity(group=2, name="Robot").setCoordinates(1.0, 2.0)
 arbre = source.asDataTree()
 restauree = Entity().fromDataTree(arbre)
 assert restauree.name() == "Robot"

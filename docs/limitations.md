@@ -8,7 +8,7 @@ This page describes the state of the examined code, not fixed features. Regressi
 | `Agent.copy()` | Fails with a `Tabletop`; incorrect assignment of the tabletop copy | Explicitly build a new agent |
 | `Agent.perceive()` / `HackaAgent` | Features not implemented | Define perception and transport in the application |
 | `Entity.setShapeArrowTip()` | Incorrect call to the shape constructor | Use `setReferenceShape(Convex().initArrowTip(...))` |
-| `Entity.setProjectedShape()` | Does not reset the effective orientation attribute | Prefer a reference shape and `setPose()` |
+| `Entity.setOutline()` | Does not reset the effective orientation attribute | Prefer a reference shape and `setPose()` |
 | Default `Land` bank | List and models shared between instances | Provide a new list of new entities |
 | Copies and collections | Some internal data remains shared or directly modifiable | Explicitly define object ownership |
 

@@ -31,7 +31,7 @@ robot = tild.Entity(
 plateau.tileAppendEntity(1, robot)
 tild.draw(plateau, "premiere-scene.svg", 800, 500)
 assert plateau.numberOfTiles() == 5
-assert robot.location() == 1
+assert robot.enclave() == 1
 print("Scene saved to premiere-scene.svg")
 ```
 
@@ -44,7 +44,7 @@ import tiledland as tild
 
 plateau = tild.Tabletop().initLine(3)
 robot = plateau.tileAppendEntity(1, tild.Entity(name="Robot"))
-plateau.tileMoveEntity(robot.location(), robot.index(), 2)
+plateau.tileMoveEntity(robot.enclave(), robot.index(), 2)
 assert robot.selector() == (2, 1)
 tild.draw(plateau, "deplacement.svg", 800, 300)
 ```

@@ -134,13 +134,13 @@ class Land():
     # Actor action :
     def actBodyMove(self, iActor, iBody, clockDir):
         body= self.actor(iActor).body(iBody)
-        self._tabletop.tileClockOrientEntity( body.location(), body.index(), clockDir )
-        newlocation= self._tabletop.tileClockMoveEntity( body.location(), body.index(), clockDir )
+        self._tabletop.tileClockOrientEntity( body.enclave(), body.index(), clockDir )
+        newlocation= self._tabletop.tileClockMoveEntity( body.enclave(), body.index(), clockDir )
         return newlocation
 
     def actBodyOrient(self, iActor, iBody, clockDir):
         body= self.actor(iActor).body(iBody)
-        out= self._tabletop.tileClockOrientEntity( body.location(), body.index(), clockDir )
+        out= self._tabletop.tileClockOrientEntity( body.enclave(), body.index(), clockDir )
         return out
     
     def actBodyRotateLeft(self, iActor, iBody, nbClockAngles= 1):

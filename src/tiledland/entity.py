@@ -10,6 +10,7 @@ class SimpleEnt :
     def __init__(self,
                 outline= _defaultOutline.copy(),
                 color=0x000000, enclave=0, index=0):
+        assert type(outline) == Convex
         self._outline= outline
         self._brush= artist.Brush( color, artist.color.lightest(color, 0.5), 4)
         self._enclave= enclave
@@ -53,7 +54,7 @@ class SimpleEnt :
         return r
     
     # Construction: 
-    def setShape( self, shape):
+    def setOutline( self, shape):
         self._outline= shape
         return self
 
@@ -164,11 +165,6 @@ class Entity :
     def referenceShape(self):
         return self._refShape
     
-    def orientation(self):
-        return self._theta
-
-    def position(self):
-        return self._position
     
     def projectedShape(self):
         return self._projShape
@@ -326,7 +322,7 @@ class Entity :
         return self.strIdentity() + f" {self.box()}"
     
     def strIdentity(self):
-        return f"{self.group()}:{self._name} {self.location()}-{self.index()}"
+        return f"{self.group()}:{self._name} {self.enclave()}-{self.index()}"
 
     def __str__(self):
         return self.str()

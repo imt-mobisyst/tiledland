@@ -150,8 +150,8 @@ def test_fast_land_popBis():
     assert len( land.actor(1).bodies() ) == 4
     assert len( land.actor(2).bodies() ) == 3
 
-    assert [ (b.location()) for b in land.actor(0).bodies() ] == [3, 26]
-    assert [ (b.location()) for b in land.actor(1).bodies() ] == [15, 6, 10 , 21]
+    assert [ (b.enclave()) for b in land.actor(0).bodies() ] == [3, 26]
+    assert [ (b.enclave()) for b in land.actor(1).bodies() ] == [15, 6, 10 , 21]
 
 
 def test_fast_land_orients():

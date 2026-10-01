@@ -134,7 +134,7 @@ class Tabletop():
                         matrix[i][j],
                         shape
                     )
-                    tile.setPosition(delta+dist*j, vdist*iLine )
+                    tile.setCoordinates(delta+dist*j, vdist*iLine )
                     self._tiles.append( tile )
                     #matrix[i][j]= iTile
         self._size= iTile
@@ -233,7 +233,7 @@ class Tabletop():
         aShape= aTileShape.copy()
         x, y= aShape.setOnCenter().asTuple()
         tile= Tile( 0, group, aShape )
-        tile.setPosition(x, y)
+        tile.setCoordinates(x, y)
         self.appendTile(tile)
         return self._size
     
@@ -414,7 +414,7 @@ class Tabletop():
         
         # Do merge:
         newConvex.simplify( self.epsilon() )
-        tile.setProjectedShape(newConvex)
+        tile.setOutline(newConvex)
         deadTile= self.tile(iTile2)
         # merge all entities
         for ag in deadTile.entities() :

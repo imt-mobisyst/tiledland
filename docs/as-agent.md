@@ -33,9 +33,9 @@ agent = Agent(state=lambda agent: Action(Action.MOVE, 2))
 action = agent.runStateProcessus()
 if action.identifier() == Action.MOVE:
     destination = action.attribute(0)  # Local convention: tile identifier.
-    if plateau.isEdge(corps.location(), destination):
-        plateau.tileMoveEntity(corps.location(), corps.index(), destination)
-assert corps.location() == 2
+    if plateau.isEdge(corps.enclave(), destination):
+        plateau.tileMoveEntity(corps.enclave(), corps.index(), destination)
+assert corps.enclave() == 2
 ```
 
 This example explicitly chooses a tile as an action attribute; the previous example chose a direction. `Action` does not impose a schema: fix a convention in each simulation.

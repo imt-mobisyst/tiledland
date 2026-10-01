@@ -35,7 +35,7 @@ from tiledland import Entity, Convex
 original = Entity(name="Original")
 copie = original.copy()
 copie.setReferenceShape(Convex().initSquare(0.4))
-copie.setPosition(2.0, 0.0)
+copie.setCoordinates(2.0, 0.0)
 assert original.position().asTuple() == (0.0, 0.0)
 ```
 

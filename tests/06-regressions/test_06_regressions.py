@@ -24,7 +24,7 @@ def test_fast_agent_perceives_its_body_separately_from_tabletop():
 
 
 def ttest_fast_agent_copy_with_tabletop_preserves_independent_perception():
-    body = Entity(name="robot").setPosition(2.0, 3.0)
+    body = Entity(name="robot").setCoordinates(2.0, 3.0)
     tabletop = Tabletop().initLine(2)
     original = Agent(body, tabletop)
     clone = original.copy()
@@ -32,7 +32,7 @@ def ttest_fast_agent_copy_with_tabletop_preserves_independent_perception():
     assert clone.perceivedBody().name() == "robot"
     assert clone.perceivedTabletop() is not tabletop
     assert clone.perceivedTabletop().numberOfTiles() == 2
-    clone.perceivedBody().setPosition(9.0, 8.0)
+    clone.perceivedBody().setCoordinates(9.0, 8.0)
     clone.perceivedTabletop().clear()
     assert body.position().asTuple() == (2.0, 3.0)
     assert tabletop.numberOfTiles() == 2
@@ -40,7 +40,7 @@ def ttest_fast_agent_copy_with_tabletop_preserves_independent_perception():
 
 @pytest.mark.parametrize("size,theta", [(0.6, 0.0), (1.5, 0.4)])
 def ttest_fast_entity_arrow_tip_setter_matches_shape_constructor(size, theta):
-    entity = Entity().setPosition(2.0, -1.0)
+    entity = Entity().setCoordinates(2.0, -1.0)
     entity.setShapeArrowTip(size, theta)
     expected = Convex().initArrowTip(size, theta)
     assert coordinates(entity.referenceShape()) == pytest.approx(coordinates(expected))
@@ -54,7 +54,7 @@ def ttest_fast_projected_shape_replaces_previous_orientation_consistently():
     shape.rotate(0.3)
     shape.translate(Point(4.0, -2.0))
     expected = coordinates(shape)
-    entity.setProjectedShape(shape)
+    entity.setOutline(shape)
     assert entity.orientation() == pytest.approx(0.0)
     assert coordinates(entity.projectedShape()) == pytest.approx(expected)
     # Reapplying the declared pose must not rotate the shape a second time.
@@ -86,7 +86,7 @@ def ttest_fast_default_land_templates_do_not_share_mutable_entities():
 
 
 def ttest_fast_entity_copy_can_move_without_moving_original():
-    original = Entity(name="robot").setPosition(2.0, 3.0)
+    original = Entity(name="robot").setCoordinates(2.0, 3.0)
     before = coordinates(original.projectedShape())
     clone = original.copy()
     clone.translate(Point(5.0, -1.0))
