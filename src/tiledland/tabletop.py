@@ -1,5 +1,6 @@
 import hacka
 from .geometry import Point, Box, Convex
+from .artist import Brush
 from .entity import Entity
 from .tile import Tile
 
@@ -9,8 +10,33 @@ CLOCK_ANGLE= math.pi/6
 CLOCK_START= math.pi/2
 CLOCK_ANGLES= [ CLOCK_START - i*CLOCK_ANGLE for i in range(0,9) ] + [math.pi - i*CLOCK_ANGLE for i in range(0,4) ]
 
-class Tabletop():
+_paletteTile= [
+    Brush(0xffcd80, 0x603800, 4), # 0-Free
+    Brush(0xff6644, 0x991100, 4), # 1-Red
+    Brush(0x70f050, 0x20770a, 4), # 2-Green
+    Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
+    Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
+    Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
+    Brush(0x66ddee, 0x117799, 4), # 6-Cian
+    Brush(0xffffff, 0xbbbbbb, 4), # 7-White
+    Brush(0x888888, 0x555555, 4), # 8-Grey
+    Brush(0x444444, 0x000000, 4)  # 9-Black
+]
 
+_paletteEntity= [
+    Brush(0x603800, 0xffcd80, 4), # 10-Background
+    Brush(0x991100, 0xff6644, 4), # 11-Red
+    Brush(0x20770a, 0x70f050, 4), # 12-Green
+    Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
+    Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
+    Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
+    Brush(0x117799, 0x66ddee, 4), # 16-Cian
+    Brush(0xbbbbbb, 0xffffff, 4), # 17-White
+    Brush(0x555555, 0x888888, 4), # 18-Grey
+    Brush(0x000000, 0x444444, 4)  # 19-Black
+]
+
+class Tabletop():
     def __init__(self, epsilon= 0.01):
         assert( type(epsilon) == float )
         super().__init__()
@@ -24,37 +50,65 @@ class Tabletop():
         self._size= 0
         return self
 
-    def fromShapes(self, shapes, group=0):
-        # Clean basis:
-        self.clear()
-        for s in shapes :
-            self.createTile(s, group)
+    def initLine( self, size, tileSize= 1.0, separation= 0.1, connect=True, brush=_paletteTile[0]):
+        dist= tileSize+separation
+        outline= Convex().initSquare(tileSize)
+        self._tiles= [
+            Tile(outline.copy(), index=i+1).setCoordinates(dist*i, 0.0).setBrush(brush)
+            for i in range(size)
+        ]        
+        self._size= size
+        if connect :
+            self.connectAllClose(1.1*separation)
         return self
     
-    def fromGridRectangles(self, aGrid, tileSize= 1.0):
-        self.clear()
-        self._epsilon= aGrid.resolution() * 0.4
-
-        # Foreach value possibility:
-        minVal, maxVal= aGrid.valueMinMax()
-        i= 0
-        for pixval in range( minVal, maxVal+1 ):
-            # Add all shapes
-            shapes= aGrid.makeRectangles(pixval, tileSize)
-            for s in shapes :
-                i+= 1
-                assert self.createTile(s, pixval) == i
+    def initGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True, palette=_paletteTile):
+        dist= tileSize+separation
+        outLine= Convex().initSquare(tileSize)
+        self._tiles= []
+        iTile= 0
+        maxLine= len(matrix)-1
+        for i in range( len(matrix) ) :
+            for j in range( len(matrix[i]) ) :
+                if matrix[i][j] >= 0 :
+                    iTile+= 1
+                    tile= Tile( outLine.copy(), index=iTile )
+                    tile.setPosition(Point(dist*j, dist*(maxLine-i)))
+                    tile.setBrush(palette[matrix[i][j]])
+                    self._tiles.append( tile )
         
-        # Connect all elements:
-        self.connectAllClose( aGrid.resolution() )
-
-        # Optimize the definition:
-        for factor in [0.2, 0.4, 0.6, 0.8] :
-            self.mergeAllPossible( aGrid.resolution() * factor, tileSize)
-
+        self._size= iTile
+        if connect :
+            self.connectAllClose(1.1*separation)
         return self
-    
-    def fromGridConvexes(self, aGrid, tileSize=1.0, minSizeRatio=0.1, pixelValues= False):
+
+    def initHexa(self, matrix, tileSize= 1.0, separation=0.1, connect=True, palette=_paletteTile):
+        cosPi06= math.cos(math.pi/6)
+        dist= tileSize*cosPi06 + separation
+        vdist= dist*cosPi06
+        hdelta= dist*0.5
+        outLine= Convex().initRegular(tileSize, 6)
+        self._tiles= []
+        
+        iTile= 0
+        maxLine= len(matrix)-1
+        for i in range( len(matrix) ) :
+            for j in range( len(matrix[i]) ) :
+                if matrix[i][j] >= 0 : 
+                    iTile+= 1
+                    iLine= maxLine-i
+                    delta= (iLine%2) * hdelta
+                    tile= Tile( outLine.copy(), index=iTile )
+                    tile.setPosition(Point(dist*j, dist*(maxLine-i)))
+                    tile.setBrush(palette[matrix[i][j]])
+                    tile.setCoordinates(delta+dist*j, vdist*iLine )
+                    self._tiles.append( tile )
+        self._size= iTile
+        if connect :
+            self.connectAllClose(1.1*separation)
+        return self
+
+    def fromGridConvexes(self, aGrid, tileSize=1.0, minSizeRatio=0.1, pixelValues= False, palette=_paletteTile):
         self.clear()
         seam= aGrid.resolution() * 1.001
         self._epsilon= aGrid.resolution() * 0.001
@@ -70,77 +124,43 @@ class Tabletop():
         for pixval in pixelValues :
             convexes= aGrid.makeConvexes(pixval, gridConvexRadius, minSize)
             for conv in convexes :
-                self.createTile(conv, pixval)
+                self.createTile(conv, palette[pixval])
 
         # Connect all elements:
         self.connectAllClose( seam )
 
         return self
 
-    def initLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
-        dist= tileSize+separation
-        shape= Convex().initSquare(tileSize)
-        self._tiles= [
-            Tile( i+1, 0, shape, Point(dist*i, 0.0) )
-            for i in range(size)
-        ]
-        self._size= size
-        if connect :
-            self.connectAllClose(1.1*separation)
+    def fromShapes(self, shapes, brush=_paletteTile[0]):
+        # Clean basis:
+        self.clear()
+        for s in shapes :
+            self.createTile(s, brush)
         return self
     
-    def initGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
-        dist= tileSize+separation
-        shape= Convex().initSquare(tileSize)
-        self._tiles= []
-        
-        iTile= 0
-        maxLine= len(matrix)-1
-        for i in range( len(matrix) ) :
-            for j in range( len(matrix[i]) ) :
-                if matrix[i][j] >= 0 : 
-                    iTile+= 1
-                    tile= Tile(
-                        iTile,
-                        matrix[i][j],
-                        shape,
-                        Point(dist*j, dist*(maxLine-i))
-                    )
-                    self._tiles.append( tile )
-        
-        self._size= iTile
-        if connect :
-            self.connectAllClose(1.1*separation)
-        return self
+    def fromGridRectangles(self, aGrid, tileSize= 1.0, palette=_paletteTile):
+        self.clear()
+        self._epsilon= aGrid.resolution() * 0.4
 
-    def initHexa( self, matrix, tileSize= 1.0, separation=0.1, connect=True ):
-        cosPi06= math.cos(math.pi/6)
-        dist= tileSize*cosPi06 + separation
-        vdist= dist*cosPi06
-        hdelta= dist*0.5
-        shape= Convex().initRegular(tileSize, 6)
-        self._tiles= []
+        # Foreach value possibility:
+        minVal, maxVal= aGrid.valueMinMax()
+        i= 0
+        for pixval in range( minVal, maxVal+1 ):
+            # Add all shapes
+            shapes= aGrid.makeRectangles(pixval, tileSize)
+            for s in shapes :
+                i+= 1
+                assert self.createTile(s, palette[pixval]) == i
         
-        iTile= 0
-        maxLine= len(matrix)-1
-        for i in range( len(matrix) ) :
-            for j in range( len(matrix[i]) ) :
-                if matrix[i][j] >= 0 : 
-                    iTile+= 1
-                    iLine= maxLine-i
-                    delta= (iLine%2) * hdelta
-                    tile= Tile(
-                        iTile,
-                        matrix[i][j],
-                        shape
-                    )
-                    tile.setCoordinates(delta+dist*j, vdist*iLine )
-                    self._tiles.append( tile )
-                    #matrix[i][j]= iTile
-        self._size= iTile
-        if connect :
-            self.connectAllClose(1.1*separation)
+        # Connect all elements:
+        self.connectAllClose( aGrid.resolution() )
+
+        # Optimize the definition:
+        for factor in [0.2, 0.4, 0.6, 0.8] :
+            self.mergeAllPossible( aGrid.resolution() * factor, tileSize)
+
         return self
+    
 
     # Accessor:
     def epsilon(self):
@@ -225,14 +245,16 @@ class Tabletop():
         self._tiles.append( aTile )
         return aTile
     
-    def createSeveralTiles(self, convexes, group):
+    def createSeveralTiles(self, convexes, brush=_paletteTile[0]):
         for c in convexes :
-            self.createTile( c, group )
+            self.createTile( c, brush )
         
-    def createTile( self, aTileShape, group= 0 ):
+    def createTile( self, aTileShape, brush=_paletteTile[0] ):
+        assert type(brush) == Brush
         aShape= aTileShape.copy()
         x, y= aShape.setOnCenter().asTuple()
-        tile= Tile( 0, group, aShape )
+        tile= Tile(aShape )
+        tile.setBrush(brush)
         tile.setCoordinates(x, y)
         self.appendTile(tile)
         return self._size
@@ -340,7 +362,7 @@ class Tabletop():
 
     def connectAllClose(self, distance):
         return self.connectAllConditions(
-            conditionFromTo=lambda tileFrom, tileTo : tileFrom != tileTo and tileFrom.bodyDistance( tileTo ) < distance )
+            conditionFromTo=lambda tileFrom, tileTo : tileFrom != tileTo and tileFrom.shapeDistance( tileTo ) < distance )
 
     # Distance :
     def computeDistances(self):
@@ -400,8 +422,8 @@ class Tabletop():
             return self.mergeTilesIfPossible(iTile2, iTile1, maxError, maxSize)
 
         tile= self.tile(iTile1)
-        newConvex= tile.projectedShape().copy()
-        convex2= self.tile(iTile2).projectedShape()
+        newConvex= tile.shape().copy()
+        convex2= self.tile(iTile2).shape()
         removed= newConvex.merge( convex2 )
         w, h= newConvex.box().dimention()
         if w > maxSize or h > maxSize :
@@ -485,9 +507,9 @@ class Tabletop():
 
     def renderTilesOn( self, artist):
         for tile in self.tiles() :
-            tile.renderOn( artist )
+            tile.artistDraw( artist )
         for tile in self.tiles() :
-            tile.writeOn( artist )
+            tile.artistTag( artist, str(tile.index()) )
         return self
     
     def renderEntitiesOn( self, artist ):
@@ -495,35 +517,19 @@ class Tabletop():
             x, y= tile.position().asTuple()
             position= (x+0.1, y+0.1)
             for entity in tile.entities() :
-                entity.renderOn( artist )
+                entity.artistDraw( artist )
         return self
 
-    def renderOn( self, artist ):
+    def artistDraw( self, artist ):
         self.renderNetworkOn(artist)
         self.renderTilesOn(artist)
         self.renderEntitiesOn(artist)
         return self
 
-    # Hacka.DataTree interface:
-    def asDataTree( self, name= "Tabletop" ):
-        return hacka.DataTree(name, [], [self._epsilon],
-            [ t.asDataTree() for t in self.tiles() ]
-        )
-    
-    def fromDataTree( self, aDataTree ):
-        self.clear()
-        self._epsilon= aDataTree.value(1)
-        allEntities= []
-        for absTile in aDataTree.children() :
-            t= Tile().fromDataTree( absTile )
-            assert( t.index() == self.numberOfTiles()+1 )
-            self.appendTile(t)
+    def artistTag( self, artist, text):
+        if text != "" :
+            return self
         return self
-
-    def dataTreeCopy(self):
-        cpy= type(self)()
-        cpy.fromDataTree( self.asDataTree() )
-        return cpy
 
     # string:
     def str(self, name="Tabletop"):

@@ -15,14 +15,14 @@ convexes= grid.makeConvexes(0, radius)
 
 ## Instanciate the tabletop with this layer
 tabletop= tild.Tabletop(convexes)
-tild.draw( tabletop, "shot-demo.png" )
+tild.drawEntity( tabletop, "", "shot-demo.png" )
 
 ## Add obstables (1), but with a finest definition:
 radius= 0.5/grid.resolution()
 convexes= grid.makeConvexes(1, radius)
 tabletop.createSeveralTiles( convexes, 1 )
-tild.draw( tabletop, "shot-demo.png" )
+tild.drawEntity( tabletop, "", "shot-demo.png" )
 
 ## Finnally connect close cells together :
 tabletop.connectAllClose( grid.resolution()*1.001 )
-tild.draw( tabletop, "shot-demo.png" )
+tild.drawEntity( tabletop, "", "shot-demo.png" )

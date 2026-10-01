@@ -10,8 +10,8 @@ from src.tiledland.geometry import Point
 # ------------------------------------------------------------------------ #
 
 def test_fast_simpleent_init():
-    ent= tild.SimpleEnt()
-    assert type( ent ) == tild.SimpleEnt
+    ent= tild.Entity()
+    assert type( ent ) == tild.Entity
 
     assert type( ent.shape() ) == tild.geometry.Convex
     assert ent.outline() is ent.shape()
@@ -23,7 +23,7 @@ def test_fast_simpleent_init():
     assert ent.orientation() == 0.0
 
 def test_fast_simpleent_init2():
-    entity= tild.SimpleEnt()
+    entity= tild.Entity()
 
     print( f"{entity.position()} == {Point(0.0, 0.0)}") 
     assert entity.position() == Point(0.0, 0.0)
@@ -49,7 +49,7 @@ def test_fast_simpleent_init3():
     shape.rotate(0.4)
     shape.setCenter( Point(1.0, 2.0) )
 
-    entity= tild.SimpleEnt( shape, 0xFF00FF00, 12, 42 )
+    entity= tild.Entity( shape, 0xFF00FF00, 12, 42 )
 
     assert entity.position().round(4) == Point(1.0, 2.0)
     assert entity.orientation() == 0.0
@@ -64,7 +64,7 @@ def test_fast_simpleent_init3():
     
 def test_fast_simpleEnt_transform():
     refShape= tild.Convex().initArrowTip(1.0).setCenter( tild.Point() )
-    ent= tild.SimpleEnt( refShape.copy() )
+    ent= tild.Entity( refShape.copy() )
 
     ent.setPose( Point(1.5, -2.0), 1.67 )
 
@@ -86,22 +86,22 @@ def test_fast_simpleEnt_transform():
     ent.setPose( Point(0.0, 0.0), 0.0 )
 
 def test_fast_simpleEnt_str():
-    entity= tild.SimpleEnt(tild.Convex())
+    entity= tild.Entity(tild.Convex())
     entity.shape().initSquare(1.0)
     entity.setPosition( Point(1.0, 2.0) )
     entity.setSelector(12, 6)
 
     print(entity)
-    assert str(entity) == "SimpleEnt 12-6 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
+    assert str(entity) == "Entity 12-6 ⌊(0.5, 1.5), (1.5, 2.5)⌉"
 
-    entity= tild.SimpleEnt(tild.Convex().initSquare(1.0) )
+    entity= tild.Entity(tild.Convex().initSquare(1.0) )
     entity.setCoordinates(-1.0, 2.0)
     print(entity)
-    assert str(entity) == "SimpleEnt 0-0 ⌊(-1.5, 1.5), (-0.5, 2.5)⌉"
+    assert str(entity) == "Entity 0-0 ⌊(-1.5, 1.5), (-0.5, 2.5)⌉"
 
 
-def test_fast_SimpleEnt_draw():
-    ent= tild.SimpleEnt( tild.Convex().initArrowTip(1.0) )
+def test_fast_Entity_draw():
+    ent= tild.Entity( tild.Convex().initArrowTip(1.0) )
     ent.setCoordinates(0.0, 0.0)
     
     r, g, b= tild.color.decompose(0x80673A)
@@ -114,7 +114,7 @@ def test_fast_SimpleEnt_draw():
     assert ent.brush().fill == 0x000000
     assert ent.brush().stroke == 0x808080
 
-    ent.setBrush(0x603800, 0xffcd80, 4)
+    ent.setColors(0x603800, 0xffcd80, 4)
 
     print(f"fill:   {ent.brush().fill:06X}") 
     print(f"stroke: {ent.brush().stroke:06X}") 
@@ -125,7 +125,7 @@ def test_fast_SimpleEnt_draw():
     assert ent.brush().fill == 0x603800
     assert ent.brush().stroke == 0xffcd80
 
-    tild.drawSimpleEnt(ent, "0", "shot-test.svg", 800, 600)
+    tild.drawEntity(ent, "0", "shot-test.svg", 800, 600)
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.01-entity-draw-01.svg").read() )
@@ -142,7 +142,7 @@ def test_fast_SimpleEnt_draw():
     ent.setOutline( shape.copy() )
     print( f"{ent} ~ position: {ent.position().round(1).asTuple()}" )
 
-    tild.drawSimpleEnt(ent, "0", "shot-test.svg", 800, 600)
+    tild.drawEntity(ent, "0", "shot-test.svg", 800, 600)
 
     assert shape.asRoundZipped() == ent.shape().asRoundZipped()
 

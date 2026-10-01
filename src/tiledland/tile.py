@@ -1,12 +1,12 @@
 import math, hacka
 from . import geometry
 from .geometry import Point, Convex
-from .entity import SimpleEnt, Entity
+from .entity import Entity, Entity
 from .artist import palette
 
 _defaultOutline= Convex().initSquare(1.0)
 
-class Tile(SimpleEnt):
+class Tile(Entity):
     # Initialization / Destruction:
     def __init__(self,
                 outline= _defaultOutline.copy(),
@@ -114,6 +114,18 @@ class Tile(SimpleEnt):
         self._size= 0
         return self
     
+    # Artist drawing:
+    def artistDraw(self, artist):
+        artist.drawConvex( self.shape(), self.brush() )
+
+    def artistTag(self, artist, text):
+        minx, miny= self.box().leftFloor().asTuple()
+        x, y= self.position().asTuple()
+        x= x+(minx-x)*2/3
+        y= y+(miny-y)*2/3
+        artist.write( x, y, text, self.brush() )
+
+
     # to String
     def str(self): 
         # Myself :
@@ -124,9 +136,6 @@ class Tile(SimpleEnt):
     
     def __str__(self): 
         return self.str()
-
-
-
 
 class OldTile(Entity):
     defaultShape= Convex().initSquare(1.0)
@@ -162,12 +171,6 @@ class OldTile(Entity):
         self._adjacencies= aList
         return self
     
-    # Comparison :
-    def centerDistance(self, another):
-        return self.position().distance( another.position() )
-
-    def bodyDistance(self, another):
-        return self.projectedShape().distance( another.projectedShape() )
 
     # hacka.DataTree Interface:
     def asDataTree(self):
@@ -198,15 +201,5 @@ class OldTile(Entity):
         cpy= type(self)()
         return cpy.fromDataTree( self.asDataTree() )
     
-    # Artist drawing:
-    def renderOn(self, artist):
-        artist.drawConvex( self.projectedShape(), self.brush() )
-
-    def writeOn(self, artist):
-        minx, miny= self.box().leftFloor().asTuple()
-        x, y= self.position().asTuple()
-        x= x+(minx-x)*2/3
-        y= y+(miny-y)*2/3
-        artist.write( x, y, str(self.index()), self.brush() )
 
     

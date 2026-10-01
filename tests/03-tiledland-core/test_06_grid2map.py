@@ -250,13 +250,13 @@ def test_g2s_makeRectangles_medium_limit():
 
     assert( tabletop.mergeTile(5, 0.06, 1.0) )
     #tild.draw(tabletop, "shot-1.png")
-    body4= tabletop.tile(4).projectedShape().round(2).asZipped()
+    body4= tabletop.tile(4).shape().round(2).asZipped()
     print( body4 )
     assert body4 ==  [(0.01, 0.31), (0.01, 0.59), (0.39, 0.59), (0.39, 0.31)]
     
     assert( tabletop.mergeTile(6, 0.06, 1.0) )
     #tild.draw(tabletop, "shot-2.png")
-    body6= tabletop.tile(6).projectedShape().round(2).asZipped()
+    body6= tabletop.tile(6).shape().round(2).asZipped()
     print(body6)
     assert body6 ==  [(0.11, 0.61), (0.11, 0.69), (0.21, 0.79), (0.39, 0.79), (0.39, 0.61)]
     tabletop.mergeAllPossible( 0.06, 0.31 )

@@ -160,14 +160,14 @@ def test_gridmap_piece():
 
     bob= tabletop.tile(12).entity()
 
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.projectedShape().asZipped() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.shape().asZipped() ]
     print( env )
     assert env == [
         (6.4, 3.23), (6.4, 3.58), (6.7, 3.75),
         (7.0, 3.58), (7.0, 3.23), (6.7, 3.05)
     ]
 
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.projectedShape().asZipped() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.shape().asZipped() ]
     print( env )
     assert env == [
         (6.4, 3.23), (6.4, 3.58), (6.7, 3.75),
@@ -280,8 +280,8 @@ def test_gridtabletop_appendpiece():
         [-1, -1, 0, 0, 0, -1, -1, -1]
     ])
 
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
-    tild.draw( tabletop, "shot-test.svg", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-01.svg" ).read() )
@@ -289,8 +289,8 @@ def test_gridtabletop_appendpiece():
     # Add a first default entity on tile 2
     tabletop.tileAppendEntity( 2, tild.Entity() )
 
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
-    tild.draw( tabletop, "shot-test.svg", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-02.svg" ).read() )
@@ -303,8 +303,8 @@ def test_gridtabletop_appendpiece():
     tabletop.tileAppendEntity( 24, tild.Entity(3) )
     tabletop.tileAppendEntity( 30, tild.Entity(3) )
 
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
-    tild.draw( tabletop, "shot-test.svg", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-03.svg" ).read() )

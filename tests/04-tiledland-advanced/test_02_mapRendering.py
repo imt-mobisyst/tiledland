@@ -33,7 +33,7 @@ def test_tabletop_incremental():
 
     print( tabletop.tile(1) )
     assert tabletop.tile(1).position().asTuple() == (0.0, 0.0)
-    assert tabletop.tile(1).projectedShape().asZipped() == []
+    assert tabletop.tile(1).shape().asZipped() == []
 
     index= tabletop.appendTile( Tile( shape= Convex() ) ).index()
     assert index == 2
@@ -83,7 +83,7 @@ def test_Tabletop_initLine():
     assert tabletop.edges() == []
 
     assert tabletop.tile(1).position().asTuple() == (0.0, 0.0)
-    assert tabletop.tile(1).projectedShape().asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
+    assert tabletop.tile(1).shape().asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
 
     assert tabletop.tile(2).position().asTuple() == (1.1, 0.0)
     assert tabletop.tile(3).position().asTuple() == (2.2, 0.0)

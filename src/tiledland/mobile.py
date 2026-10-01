@@ -1,10 +1,10 @@
-from .entity import SimpleEnt
+from .entity import Entity
 from .geometry import radian, Point, Convex
 from . import artist
 
 _defaultOutline= Convex().initArrowTip(1.0)
 
-class Mobile(SimpleEnt) :
+class Mobile(Entity) :
 
     # Initialization / Destruction:
     def __init__(self,

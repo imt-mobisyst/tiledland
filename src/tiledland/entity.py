@@ -1,25 +1,29 @@
-import math, hacka
+import math
 from .geometry import radian, Point, Convex
 from . import artist
 
 #_defaultOutline= Convex().initRegular(1.0, 3)
 _defaultOutline= Convex().initSquare(1.0)
 
-class SimpleEnt :
+class Entity :
     # Initialization / Destruction:
     def __init__(self,
-                outline= _defaultOutline.copy(),
+                outline= _defaultOutline,
                 color=0x000000, enclave=0, index=0):
         assert type(outline) == Convex
-        self._outline= outline
+        self._outline= outline.copy()
         self._brush= artist.Brush( color, artist.color.lightest(color, 0.5), 4)
         self._enclave= enclave
         self._index= index
+        self._name= type(self).__name__
 
     def copy(self):
         return type(self)( self._outline, self._color, self._enclave, self._index )
     
     # Accessor: 
+    def name(self):
+        return self._name
+    
     def outline(self):
         return self._outline
 
@@ -48,12 +52,16 @@ class SimpleEnt :
     def radius(self):
         r= 0.0
         zero= Point()
-        for p in self.shape().points() :
+        for p in self.outline().points() :
             d= zero.distance( p )
             r= max( d, r )
         return r
     
     # Construction: 
+    def setName(self, aName):
+        self._name= aName
+        return self
+    
     def setOutline( self, shape):
         self._outline= shape
         return self
@@ -80,21 +88,34 @@ class SimpleEnt :
     
     def setEnclave(self, e):
         self._enclave= e
+        return self
     
     def setIndex(self, i):
         self._index= i
+        return self
 
     def setSelector(self, enclave, index):
         self.setEnclave(enclave)
         self.setIndex(index)
         return self
 
+    # Comparison :
+    def centerDistance(self, another):
+        return self.position().distance( another.position() )
+
+    def shapeDistance(self, another):
+        return self.shape().distance( another.shape() )
+
     # Artist:
     def brush(self):
         return self._brush
-    
-    def setBrush( self, fillColor, strokeColor, width= 4 ):
-        self._brush= artist.Brush(fillColor, strokeColor, width)
+
+    def setBrush(self, aBrush):
+        self._brush= aBrush
+        return self
+        
+    def setColors( self, fillColor, strokeColor, width= 4 ):
+        self.setBrush( artist.Brush(fillColor, strokeColor, width) )
         return self
 
     def artistDraw( self, artist ):
@@ -113,13 +134,13 @@ class SimpleEnt :
         return self.strIdentity() + f" {self.box()}"
     
     def strIdentity(self):
-        return f"{type(self).__name__} {self.enclave()}-{self.index()}"
+        return f"{self._name} {self.enclave()}-{self.index()}"
 
     def __str__(self):
         return self.str()
 
 
-class Entity :
+class OldEntity :
     defaultShape= Convex().initArrowTip(1.0)
     defaultPalette= artist.palette.foreground
 
@@ -245,7 +266,7 @@ class Entity :
 
     # Convex accessor : 
     def box(self):
-        return self.projectedShape().box()
+        return self.shape().box()
     
     def radius(self):
         r= 0.0
@@ -296,7 +317,7 @@ class Entity :
         return self
     
     def renderOn( self, artist ):
-        artist.fillConvex( self.projectedShape(), self.brush() )
+        artist.fillConvex( self.shape(), self.brush() )
         minx, miny= self.box().leftFloor().asTuple()
         cx, cy= self.position().asTuple()
         x= minx + 0.1 * (cx - minx)

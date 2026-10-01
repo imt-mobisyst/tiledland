@@ -21,46 +21,46 @@ def test_fast_tabletop_clock():
         [0, 0, 0], 
         [-1, 0, 0]] 
     )
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
 
     bob= tild.Entity()
     tabletop.tileAppendEntity( 4, bob )
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
 
     assert round( bob.orientation(), 4) == 0.0
 
     tabletop.tileOrientEntity(4, 1, 1.2)
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == 1.2
 
     tabletop.tileRotateEntity(4, 1, 0.8)
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == 2.0
 
     tabletop.tileClockOrientEntity(4, 1, 7)
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == -2.0944
 
     tabletop.tileRotateEntityLeft(4, 1)
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == -1.5708
     
     tabletop.tileRotateEntityRight(4, 1)
     tabletop.tileRotateEntityRight(4, 1)
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == -2.618
 
     tabletop.tileRotateEntityRight(4, 1)
     tabletop.tileRotateEntityRight(4, 1)
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == 2.618
     
     tabletop.tileOrientEntity(4, 1, 387.2)
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == -2.3575
 
     tabletop.tileOrientEntity(4, 1, -55.2)
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == 1.3487
 
 def test_fast_tabletop_hexaclock():
@@ -72,7 +72,7 @@ def test_fast_tabletop_hexaclock():
         [-1, 0, 0, 0, 0, -1, -1, -1]]  #
     )
 
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
 
     neibors= tabletop.neighbours(22)
     print( neibors )
@@ -109,10 +109,10 @@ def test_fast_tabletop_hexamove():
     for t in tabletop.tiles() :
         assert len( t.entities() ) == 0 
     
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     
     tabletop.tileAppendEntity( 10, tild.Entity() )
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
 
     assert len( tabletop.tile(10).entities() ) == 1
     for t in tabletop.tiles() :
@@ -120,7 +120,7 @@ def test_fast_tabletop_hexamove():
             assert len( t.entities() ) == 0 
 
     assert tabletop.tileClockMoveEntity(10, 1, 0) == 10
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
 
     assert len( tabletop.tile(10).entities() ) == 1
     for t in tabletop.tiles() :
@@ -128,16 +128,16 @@ def test_fast_tabletop_hexamove():
             assert len( t.entities() ) == 0 
 
     assert tabletop.tileClockMoveEntity(10, 1, 3) == 11
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
 
     assert tabletop.tileClockMoveEntity(11, 1, 7) == 17
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
 
     assert tabletop.tileClockMoveEntity(17, 1, 2) == 17
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
 
     assert tabletop.tileClockMoveEntity(17, 1, 5) == 24
-    tild.draw( tabletop, "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     
     assert len( tabletop.tile(24).entities() ) == 1
     for t in tabletop.tiles() :

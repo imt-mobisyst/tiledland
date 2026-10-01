@@ -10,6 +10,13 @@
 - [x] Convex obj. min/max radius, and collision
 - [x] Tabletop: Gridmap to Tiled Tabletops
 
+
+## Code Convention 
+
+- [ ] Create agent that check Code COnvention
+- [ ] All setMethode should return self
+- [ ] That all method are directly tested like (shapeDistance)
+
 ## Artist Rendering :
 
 
@@ -25,7 +32,6 @@ the core component of TiledLand refere to the `Tiles` composing a `Tabletop` and
 - [x] `Tabletop` : a mabletop is an `AbsEntity`. It contains several tiles. Its shape (not necessarily convex) is the fusion of all contained tiles.
 - [x] Initialize artist rendering: abstract entities can be rendered through an Artist object.
 - [x] HackaGame (DataTree) compatible
-
 
 ## Tiled land Advanced :
 
@@ -50,6 +56,7 @@ TiledLand agents perception and actions are mainly defined regarding the capabil
 Have the posibility to swith on a C-based librairie for computations...
 
 - [ ] Make `Convex.initRegular()` centerd on (0, 0) - with test.
+- [ ] Is rotate at the writh location in Entity ?
 - [ ] Tabletop vs Tabletop a semantic tabletop ie. structured tiled obj (and in oposition to GridMap).
 - [x] Fast position requestest : add a grid canvas to Tabletop get a tiles from a position (getTile at, closest, inRadius ...)
 - [ ] PointCloud (potentially from Scan) to Envellope, a centered and ordered PointCloud.

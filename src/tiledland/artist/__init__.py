@@ -1,7 +1,7 @@
 from .support import AbsSupport, Support, SupportSVG
 from . import color
 
-def drawSimpleEnt(anEntity, tag, filePath="shot-tiledland.png", width= 1600, height= 1200):
+def drawEntity(anEntity, tag, filePath="shot-tiledland.png", width= 1600, height= 1200):
     pablo= Artist()
 
     fileExtend= filePath.split(".")[-1]
