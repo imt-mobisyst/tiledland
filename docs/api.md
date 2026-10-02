@@ -8,6 +8,7 @@ This reference selects the operations necessary for tutorials. It does not repla
 | `Entity` | `position()`, `orientation()`, `selector()` | Read position, angle, and ownership |
 | `Entity` | `referenceShape()`, `projectedShape()`, `box()` | Local and world geometry |
 | `Entity` | `copy()` | Copy with some shared attributes |
+| `Mobile` | Inherits `Entity` | Specialized entity for mobile objects |
 | `Tabletop` | `initLine`, `initGrid`, `initHexa`, `fromShapes` | Build the world |
 | `Tabletop` | `tile(i)`, `entity(i, j=1)` | Access with indices starting from 1 |
 | `Tabletop` | `numberOfTiles()`, `numberOfEntities()` | Count elements |

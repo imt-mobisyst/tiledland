@@ -32,4 +32,4 @@ assert source.numberOfTiles() == 2
 
 Restoring a tabletop containing entities currently fails: `Tile.setIndex()` calls a missing `Entity.setArea()` method. This example is therefore limited to tabletops without entities.
 
-`Tabletop` exposes `dataTreeCopy()` via `AbsEntity`, and not `copy()`. Subclasses and their additional attributes are not automatically preserved: define an explicit format before serializing custom business objects. Defects in managing shared shapes make a check for data independence necessary for advanced uses.
+`Tabletop` exposes `dataTreeCopy()`, and not `copy()`. Subclasses and their additional attributes are not automatically preserved: define an explicit format before serializing custom business objects. Defects in managing shared shapes make a check for data independence necessary for advanced uses.

@@ -1,6 +1,6 @@
 # Entities and Transformations
 
-An `Entity` has a name, a group, a reference shape, a position, an orientation, and a selector `(location, index)`.
+An `Entity` has a name, a group, a reference shape, a position, an orientation, and a selector `(location, index)`. The `Mobile` class is a specialized `Entity` used for objects that change position frequently (e.g., robots).
 
 ## Two Shape Representations
 

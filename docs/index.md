@@ -4,7 +4,7 @@ TiledLand is a Python library for simulating flat worlds composed of convex poly
 
 ![](figs/tiledland-ex01.png)
 
-The project is used to experiment with geometry, navigation, and multi-agent systems. This documentation describes the local code of version **0.1.6**, including its current capabilities and limitations.
+The project is used to experiment with geometry, navigation, and multi-agent systems. This documentation describes the local code of version **0.2.0**, including its current capabilities and limitations.
 
 ## Getting Started
 

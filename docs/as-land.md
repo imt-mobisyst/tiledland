@@ -5,11 +5,11 @@ A `Land` associates a `Tabletop`, a bank of entity models, and a list of actors.
 ## Adding an Actor
 
 ```python
-from tiledland import Land, Tabletop, Entity, Convex, Agent, draw
+from tiledland import Land, Tabletop, Mobile, Convex, Agent, draw
 
 land = Land(
     tabletop=Tabletop().initLine(3),
-    bankOfEntities=[Entity(shape=Convex().initArrowTip(0.6), name="Robot")],
+    bankOfEntities=[Mobile(shape=Convex().initArrowTip(0.6), name="Robot")],
 )
 acteur_id = land.appendActor(Agent(), tileIds=[1], bodyIds=[0])
 corps = land.body(acteur_id)

@@ -3,8 +3,8 @@ digraph TiledLand {
     edge [fontname="Arial", fontsize=10];
 
     // Classes
-    AbsEntity [label="{AbsEntity|<<abstract>>|+ box()\l+ asDataTree()\l+ fromDataTree()\l}"];
     Entity [label="{Entity|- String _name\l- int _group\l- Point _position\l- float _theta\l- Convex _refShape\l- Convex _projShape\l|+ setPose()\l+ renderOn(artist)\l}"];
+    Mobile [label="{Mobile||+ move()\l+ rotate()\l}"];
     Tile [label="{Tile|- List _adjacencies\l- List _entities\l|+ append(entity)\l+ connect(iTo)\l+ renderOn(artist)\l}"];
     Tabletop [label="{Tabletop|- List _tiles\l- float _epsilon\l|+ fromGridRectangles()\l+ createTile()\l+ tileMoveEntity()\l+ renderOn(artist)\l}"];
     Land [label="{Land|- Tabletop _tabletop\l- List _bankOfEntities\l- List _actors\l|+ appendActor()\l+ actBodyMove()\l}"];
@@ -13,8 +13,7 @@ digraph TiledLand {
     Action [label="{Action|+ int WAIT\l+ int MOVE\l+ int ROTATE\l}"];
 
     // Inheritance (empty arrow for generalization)
-    Entity -> AbsEntity [arrowhead=empty];
-    Tabletop -> AbsEntity [arrowhead=empty];
+    Mobile -> Entity [arrowhead=empty];
     Tile -> Entity [arrowhead=empty];
 
     // Composition/Aggregation
