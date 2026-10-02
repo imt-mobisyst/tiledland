@@ -19,19 +19,19 @@ def test_fast_support_load():
 
 # Test firstAI launch
 def test_fast_support_color():
-    assert artist.rgbColor( 0x56f4ee ) == (0x56, 0xf4, 0xee)
-    assert artist.percentColor( 0x56f4ee ) == (0.3373, 0.9569, 0.9333)
-    assert artist.webColor( 0x56f4ee ) == '#56f4ee'
-    assert artist.colorFromWeb( '#56f4ee' ) == 0x56f4ee
-    assert artist.color( 0x56, 0xf4, 0xee ) == 0x56f4ee
+    assert artist.color.decompose( 0x56f4ee ) == (0x56, 0xf4, 0xee)
+    assert artist.color.percent( 0x56f4ee ) == (0.3373, 0.9569, 0.9333)
+    assert artist.color.web( 0x56f4ee ) == '#56f4ee'
+    assert artist.color.fromWeb( '#56f4ee' ) == 0x56f4ee
+    assert artist.color.compose( 0x56, 0xf4, 0xee ) == 0x56f4ee
 
-    assert artist.color( 0, 300, 128 ) == 0x00ff80
+    assert artist.color.compose( 0, 300, 128 ) == 0x00ff80
 
-    print( artist.webColor( artist.colorRatio( 0x56f4ee, 0.1 ) ) )
-    print( artist.webColor( artist.colorRatio( 0x56f4ee, 1.1 ) ) )
+    print( artist.color.web( artist.color.ratio( 0x56f4ee, 0.1 ) ) )
+    print( artist.color.web( artist.color.ratio( 0x56f4ee, 1.1 ) ) )
 
-    assert artist.colorRatio( 0x56f4ee, 0.1 ) == 0x56f4ee
-    assert artist.colorRatio( 0x56f4ee, 1.1 ) == 0x56f4ee
+    assert artist.color.ratio( 0x56f4ee, 0.1 ) == 0x081817
+    assert artist.color.ratio( 0x56f4ee, 1.1 ) == 0x5effff
 
 # Test firstAI launch
 def test_fast_artist_load():

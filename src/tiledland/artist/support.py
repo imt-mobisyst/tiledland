@@ -1,4 +1,4 @@
-from .color import webColor
+from . import color
 
 class AbsSupport():
 
@@ -89,39 +89,39 @@ class Support( AbsSupport ):
 
     # Drawing primitives:
     def traceLine( self, pixxA, pixyA, pixxB, pixyB, strokeColor, strokeWidth ):
-        self._canvas.append( f'<line x1="{pixxA}" y1="{pixyA}" x2="{pixxB}" y2="{pixyB}" style="stroke:{webColor(strokeColor)};stroke-width:{strokeWidth}"/>' )
+        self._canvas.append( f'<line x1="{pixxA}" y1="{pixyA}" x2="{pixxB}" y2="{pixyB}" style="stroke:{color.web(strokeColor)};stroke-width:{strokeWidth}"/>' )
         return self
 
     def traceCircle( self, pixx, pixy, radius, strokeColor, strokeWidth ):
-        self._canvas.append( f'<circle r="{radius}" cx="{pixx}" cy="{pixy}" fill="none" stroke="{webColor(strokeColor)}" stroke-width="{strokeWidth}" />' )
+        self._canvas.append( f'<circle r="{radius}" cx="{pixx}" cy="{pixy}" fill="none" stroke="{color.web(strokeColor)}" stroke-width="{strokeWidth}" />' )
         return self
 
     def fillCircle( self, pixx, pixy, radius, fillColor ):
-        self._canvas.append( f'<circle r="{radius}" cx="{pixx}" cy="{pixy}" fill="{webColor(fillColor)}" />' )
+        self._canvas.append( f'<circle r="{radius}" cx="{pixx}" cy="{pixy}" fill="{color.web(fillColor)}" />' )
         return self
 
     def drawCircle( self, pixx, pixy, radius, fillColor, strokeColor, strokeWidth):
-        self._canvas.append( f'<circle r="{radius}" cx="{pixx}" cy="{pixy}" fill="{webColor(fillColor)}" stroke="{webColor(strokeColor)}" stroke-width="{strokeWidth}" />' )
+        self._canvas.append( f'<circle r="{radius}" cx="{pixx}" cy="{pixy}" fill="{color.web(fillColor)}" stroke="{color.web(strokeColor)}" stroke-width="{strokeWidth}" />' )
         return self
     
     def tracePolygon( self, pixXs, pixYs, strokeColor, strokeWidth ):
         points= " ".join( [ f'{x},{y}' for x, y in zip(pixXs, pixYs) ] )
-        self._canvas.append( f'<polygon points="{points}" style="fill:none;stroke:{webColor(strokeColor)};stroke-width:{strokeWidth}" />' )
+        self._canvas.append( f'<polygon points="{points}" style="fill:none;stroke:{color.web(strokeColor)};stroke-width:{strokeWidth}" />' )
         return self
 
     def fillPolygon( self, pixXs, pixYs, fillColor ):
         points= " ".join( [ f'{x},{y}' for x, y in zip(pixXs, pixYs) ] )
-        self._canvas.append( f'<polygon points="{points}" fill="{webColor(fillColor)}" />' )
+        self._canvas.append( f'<polygon points="{points}" fill="{color.web(fillColor)}" />' )
         return self
 
     def drawPolygon( self, pixXs, pixYs, fillColor, strokeColor, strokeWidth ):
         points= " ".join( [ f'{x},{y}' for x, y in zip(pixXs, pixYs) ] )
-        self._canvas.append( f'<polygon points="{points}" style="fill:{webColor(fillColor)};stroke:{webColor(strokeColor)};stroke-width:{strokeWidth}" />' )
+        self._canvas.append( f'<polygon points="{points}" style="fill:{color.web(fillColor)};stroke:{color.web(strokeColor)};stroke-width:{strokeWidth}" />' )
         return self
     
     # Writting primitives:
-    def write( self, pixXs, pixYs, text, color, fontSize ):
-        self._canvas.append( f'<text x="{pixXs}" y="{pixYs}" fill="{webColor(color)}" font-family="Verdana" font-size="{fontSize}">{text}</text>" />' )
+    def write( self, pixXs, pixYs, text, aColor, fontSize ):
+        self._canvas.append( f'<text x="{pixXs}" y="{pixYs}" fill="{color.web(aColor)}" font-family="Verdana" font-size="{fontSize}">{text}</text>" />' )
         return self
 
 class SupportSVG( Support ):

@@ -106,8 +106,8 @@ def test_fast_Entity_draw():
     
     r, g, b= tild.color.decompose(0x80673A)
     print(f"color: {r} {r:02X}, {g} {g:02X}, {b} {b:02X}") 
-    print(f"color: {tild.color.rgbColor( 0x80673A )}" )
-    print(f"color: {tild.color.recompose(r, g, b):06X}") 
+    print(f"color: {tild.color.decompose( 0x80673A )}" )
+    print(f"color: {tild.color.compose(r, g, b):06X}") 
     print(f"color: {tild.color.lightest(0x80673A, 0.5):06X}") 
     print(f"color: {tild.color.darckest(0x80673A, 0.5):06X}") 
 

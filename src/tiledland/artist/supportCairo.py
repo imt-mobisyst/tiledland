@@ -1,4 +1,4 @@
-from .color import percentColor
+from . import color
 from .support import AbsSupport
 
 import math, cairo
@@ -47,7 +47,7 @@ class SupportPNG( AbsSupport ):
     # Drawing primitives:
     def traceLine( self, pixxA, pixyA, pixxB, pixyB, strokeColor, strokeWidth ):
         ctx = cairo.Context( self._canvas )
-        r, g, b= percentColor(strokeColor)
+        r, g, b= color.percent(strokeColor)
         ctx.set_line_width(strokeWidth)
         ctx.move_to(pixxA, pixyA)
         ctx.line_to(pixxB, pixyB)
@@ -57,7 +57,7 @@ class SupportPNG( AbsSupport ):
     
     def traceCircle( self, pixx, pixy, radius, strokeColor, strokeWidth ):
         ctx = cairo.Context( self._canvas )
-        r, g, b= percentColor( strokeColor )
+        r, g, b= color.percent( strokeColor )
         ctx.set_line_width( strokeWidth )
         ctx.arc(pixx, pixy, radius, 0, 2.0*math.pi)
         ctx.set_source_rgb( r, g, b )
@@ -66,7 +66,7 @@ class SupportPNG( AbsSupport ):
 
     def fillCircle( self, pixx, pixy, radius, fillColor ):
         ctx = cairo.Context( self._canvas )
-        r, g, b= percentColor( fillColor )
+        r, g, b= color.percent( fillColor )
         ctx.arc(pixx, pixy, radius, 0, 2.0*math.pi)
         ctx.set_source_rgb( r, g, b )
         ctx.fill()
@@ -74,8 +74,8 @@ class SupportPNG( AbsSupport ):
 
     def drawCircle( self, pixx, pixy, radius, fillColor, strokeColor, strokeWidth):
         ctx = cairo.Context( self._canvas )
-        sr, sg, sb= percentColor(strokeColor)
-        fr, fg, fb= percentColor( fillColor )
+        sr, sg, sb= color.percent(strokeColor)
+        fr, fg, fb= color.percent( fillColor )
         ctx.set_line_width(strokeWidth)
         ctx.arc(pixx, pixy, radius, 0, 2.0*math.pi)
         ctx.set_source_rgb( fr, fg, fb )
@@ -86,7 +86,7 @@ class SupportPNG( AbsSupport ):
     
     def tracePolygon( self, pixXs, pixYs, strokeColor, strokeWidth ):
         ctx = cairo.Context( self._canvas )
-        r, g, b= percentColor(strokeColor)
+        r, g, b= color.percent(strokeColor)
         ctx.set_line_width(strokeWidth)
         if len(pixXs) > 0 :
             ctx.move_to( pixXs[0], pixYs[0] )
@@ -99,7 +99,7 @@ class SupportPNG( AbsSupport ):
 
     def fillPolygon( self, pixXs, pixYs, fillColor ):
         ctx = cairo.Context( self._canvas )
-        r, g, b= percentColor( fillColor )
+        r, g, b= color.percent( fillColor )
         if len(pixXs) > 0 :
             ctx.move_to( pixXs[0], pixYs[0] )
             for pixx, pixy in zip( pixXs[1:], pixYs[1:] ) :
@@ -111,8 +111,8 @@ class SupportPNG( AbsSupport ):
 
     def drawPolygon( self, pixXs, pixYs, fillColor, strokeColor, strokeWidth ):
         ctx = cairo.Context( self._canvas )
-        sr, sg, sb= percentColor(strokeColor)
-        fr, fg, fb= percentColor(fillColor)
+        sr, sg, sb= color.percent(strokeColor)
+        fr, fg, fb= color.percent(fillColor)
         ctx.set_line_width(strokeWidth)
         if len(pixXs) > 0 :
             ctx.move_to( pixXs[0], pixYs[0] )
@@ -126,9 +126,9 @@ class SupportPNG( AbsSupport ):
         return self
 
     # Writting primitives:
-    def write( self, pixX, pixY, text, color, fontSize ):
+    def write( self, pixX, pixY, text, aColor, fontSize ):
         ctx = cairo.Context( self._canvas )
-        r, g, b= percentColor(color)
+        r, g, b= color.percent(aColor)
         ctx.set_font_size(fontSize)
         ctx.set_source_rgb( r, g, b )
         ctx.move_to( pixX, pixY )
