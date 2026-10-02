@@ -16,7 +16,7 @@ def coordinates(shape):
 
 
 def test_fast_agent_perceives_its_body_separately_from_tabletop():
-    body = Entity(name="robot")
+    body = Entity()
     tabletop = Tabletop().initLine(2)
     agent = Agent(body, tabletop)
     assert agent.perceivedTabletop() is tabletop
@@ -24,7 +24,7 @@ def test_fast_agent_perceives_its_body_separately_from_tabletop():
 
 
 def ttest_fast_agent_copy_with_tabletop_preserves_independent_perception():
-    body = Entity(name="robot").setCoordinates(2.0, 3.0)
+    body = Entity().setCoordinates(2.0, 3.0)
     tabletop = Tabletop().initLine(2)
     original = Agent(body, tabletop)
     clone = original.copy()

@@ -25,20 +25,21 @@ def test_fast_simulation_tabletop_init():
     )
 
     # Create an artist to render this tabletop:
-    tild.draw( land, "shot-test.png", 400, 300 )
+    tild.quickDraw(land, "", "shot-test.png", 400, 300)
 
-    shotFile= open( "shot-test.png", mode='rb' ).read()
-    refsFile= open( "tests/refs/05.01-land-00.png", mode='rb' ).read()
+    shotFile= open("shot-test.png", mode='rb').read()
+    refsFile= open("tests/refs/05.01-land-00.png", mode='rb').read()
     assert( shotFile == refsFile )
 
     # Add the agent:
-    bod= land.tileAppendEntity( 10, tild.Entity(name="1") )
+    bod= tild.Mobile().setName("1").setBrush( tild.artist.palette01[0] )
+    land.tileAppendEntity(10, bod)
 
-    tild.draw( land, "shot-test.png", 400, 300 )
+    tild.quickDraw(land, "", "shot-test.png", 400, 300)
 
     shotFile= open( "shot-test.png", mode='rb' ).read()
     refsFile= open( "tests/refs/05.01-land-01.png", mode='rb' ).read()
-    assert( shotFile == refsFile )
+    assert(shotFile == refsFile)
 
     
 

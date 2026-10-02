@@ -230,7 +230,7 @@ class Land(tild.Land):
         return aDataTree.digit(1)
     
     # Rendering :
-    def renderOn(self, artist, marketBrush= tild.artist.palette.background[6]):
+    def renderOn(self, artist, marketBrush= tild.artist.palette00[6]):
         self.tabletop().renderOn( artist )
         # Market:
         artist.drawPolygon(

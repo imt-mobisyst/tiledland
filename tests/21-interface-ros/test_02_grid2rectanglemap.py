@@ -4,6 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Box, Convex
+from src.tiledland.artist import palette00, palette01
 from src.tiledland import Agent, Tile, Tabletop 
 
 # ------------------------------------------------------------------------ #
@@ -40,7 +41,7 @@ def test_long_gridmap_rectangletabletop():
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
     tabletop.renderOn(pablo)
     pablo.flip()
 
@@ -59,7 +60,7 @@ def test_long_gridmap_smallTabletop():
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
     tabletop.renderOn(pablo)
     pablo.flip()
 
@@ -70,7 +71,7 @@ def test_long_gridmap_smallTabletop():
 
     tabletop.mergeAllPossible( 0.2, 2.0 )
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
     tabletop.renderOn(pablo)
     pablo.flip()
 
@@ -103,7 +104,7 @@ def test_long_gridmap_mediumTabletop_inside():
         shapes= grid.makeRectangles(pixval, tileSize)
         for s in shapes :
             i+= 1
-            assert tabletop.createTile(s, pixval) == i
+            assert tabletop.createTile(s, palette00[pixval]) == i
 
     # Connect all elements:
     tabletop.connectAllClose( grid.resolution() )
@@ -119,7 +120,7 @@ def test_long_gridmap_mediumTabletop_inside():
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
     tabletop.renderOn(pablo)
     pablo.flip()
 
@@ -139,7 +140,7 @@ def test_long_gridmap_mediumTabletop():
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
     tabletop.renderOn(pablo)
     pablo.flip()
 
@@ -160,7 +161,7 @@ def test_gridmap_largeTabletop():
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
     tabletop.renderOn(pablo)
     pablo.flip()
 

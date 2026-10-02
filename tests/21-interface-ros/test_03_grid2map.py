@@ -19,18 +19,18 @@ def test_long_gridmap_loadSmallTabletop():
     assert gridmap.resolution() == 0.1
 
     convexes= grid.makeConvexes(0, 8)
-    tild.artist.draw( tild.Tabletop().fromShapes( convexes ) )
+    tild.quickDraw( tild.Tabletop().fromShapes(convexes) )
     assert len(convexes) == 17
     
     tabletop= tild.Tabletop().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
 
     shotImg= "shot-test.svg"
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
 
     tabletop.renderOn(pablo)
     pablo.flip()
@@ -42,7 +42,7 @@ def test_long_gridmap_loadSmallTabletop():
 
     tabletop= tild.Tabletop().fromGridConvexes( grid, 2.0 )
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
     
     tabletop.renderOn(pablo)
     pablo.flip()
@@ -63,7 +63,7 @@ def test_long_gridmap_loadLargeTabletop():
 
     tabletop= tild.Tabletop().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
 
     pablo.fit(tabletop)
     tabletop.renderOn(pablo)
@@ -76,7 +76,7 @@ def test_long_gridmap_loadLargeTabletop():
 
     tabletop= tild.Tabletop().fromGridConvexes( grid, 2.0 )
     
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
     
     pablo.fit(tabletop)
     tabletop.renderOn(pablo)

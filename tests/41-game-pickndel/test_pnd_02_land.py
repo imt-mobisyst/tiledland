@@ -99,23 +99,23 @@ def test_pnd_withCarrier():
     assert land.popSimpleActor(tild.Agent(), 7)  == 2
     assert land.popActorBody(2, 44).selector() == (44, 1)
     
-    tild.draw( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.quickDraw( land.tabletop(), "PND", "shot-test.png", 800, 600 )
 
     print(land.body(1)) 
-    assert str( land.body(1) ) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
+    assert str( land.body(1) ) == 'A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
 
-    assert [ e.group() for e in tabletop.tile(1).entities() ] == [1]
-    assert str(tabletop.entity(1, 1)) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
-    assert str(tabletop.entity(1)) == '1:A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
+    assert [ e.owner() for e in tabletop.tile(1).entities() ] == [1]
+    assert str(tabletop.entity(1, 1)) == 'A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
+    assert str(tabletop.entity(1)) == 'A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
 
-    assert [ e.group() for e in tabletop.tile(2).entities() ] == []
-    assert [ e.group() for e in tabletop.tile(7).entities() ] == [2]
-    assert [ e.group() for e in tabletop.tile(12).entities() ] == []
-    assert [ e.group() for e in tabletop.tile(25).entities() ] == [1]
-    assert [ e.group() for e in tabletop.tile(44).entities() ] == [2]
+    assert [ e.owner() for e in tabletop.tile(2).entities() ] == []
+    assert [ e.owner() for e in tabletop.tile(7).entities() ] == [2]
+    assert [ e.owner() for e in tabletop.tile(12).entities() ] == []
+    assert [ e.owner() for e in tabletop.tile(25).entities() ] == [1]
+    assert [ e.owner() for e in tabletop.tile(44).entities() ] == [2]
     
     bodyIdentifiers= [
-        (b.enclave(), b.group()) 
+        (b.enclave(), b.owner()) 
         for b in land.allBodies()
     ]
 
@@ -131,7 +131,7 @@ def test_pnd_withCarrier():
     #assert model.entityTiles(2) == [7, 44]
 
     print( land.tile(10).entity() )
-    assert str( land.tile(10).entity() ) == '1:A-1 10-1 ⌊(-0.26, 4.7), (0.3, 5.3)⌉ |0, 0|'
+    assert str( land.tile(10).entity() ) == 'A-1 10-1 ⌊(-0.26, 4.7), (0.3, 5.3)⌉ |0, 0|'
 
     assert land.moveEntity( 44, 12 ) == False
     assert land.moveEntity( 44, 3 ) == 45
@@ -187,7 +187,7 @@ def test_long_pnd_emcomber():
     assert model.encumber(32) == 0.4
 
     model.popActorBody(0, 25, 1 )
-    assert str( model.tile(25).entity() ) == '1:A-1 25-1 ⌊(0.74, 2.7), (1.3, 3.3)⌉ |0, 0|'
+    assert str( model.tile(25).entity() ) == 'A-1 25-1 ⌊(0.74, 2.7), (1.3, 3.3)⌉ |0, 0|'
 
     encumberCount= 0
     for i in range(10000) :
@@ -206,7 +206,7 @@ def test_long_pnd_emcomber():
     assert round(encumberCount/10000, 1) == 0.5
 
     model.teleport(20, 32)
-    assert str( model.tile(32).entity() ) == '1:A-1 32-1 ⌊(8.74, 2.7), (9.3, 3.3)⌉ |0, 0|'
+    assert str( model.tile(32).entity() ) == 'A-1 32-1 ⌊(8.74, 2.7), (9.3, 3.3)⌉ |0, 0|'
     encumberCount= 0
     for i in range(10000) :
         if model.moveEntity(32, 9) == 32 :

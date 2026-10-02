@@ -49,7 +49,7 @@ def test_fast_simpleent_init3():
     shape.rotate(0.4)
     shape.setCenter( Point(1.0, 2.0) )
 
-    entity= tild.Entity( shape, 0xFF00FF00, 12, 42 )
+    entity= tild.Entity(shape).setColor(0xFF00FF00).setSelector(12, 42)
 
     assert entity.position().round(4) == Point(1.0, 2.0)
     assert entity.orientation() == 0.0
@@ -69,8 +69,8 @@ def test_fast_simpleEnt_transform():
     ent.setPose( Point(1.5, -2.0), 1.67 )
 
     artist= tild.artist.openPNG("shot-test.png", 800, 600)
-    artist.drawConvex( refShape, tild.artist.palette.foreground[3] )
-    artist.drawConvex( ent.shape(), tild.artist.palette.foreground[5] )
+    artist.drawConvex( refShape, tild.artist.palette01[3] )
+    artist.drawConvex( ent.shape(), tild.artist.palette01[5] )
     artist.flip()
 
     assert ent.orientation() == 0.0
@@ -116,6 +116,8 @@ def test_fast_Entity_draw():
 
     ent.setColors(0x603800, 0xffcd80, 4)
 
+    ent= ent.copy()
+    
     print(f"fill:   {ent.brush().fill:06X}") 
     print(f"stroke: {ent.brush().stroke:06X}") 
 
@@ -125,7 +127,7 @@ def test_fast_Entity_draw():
     assert ent.brush().fill == 0x603800
     assert ent.brush().stroke == 0xffcd80
 
-    tild.drawEntity(ent, "0", "shot-test.svg", 800, 600)
+    tild.quickDraw(ent, "0", "shot-test.svg", 800, 600)
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.01-entity-draw-01.svg").read() )
@@ -142,7 +144,7 @@ def test_fast_Entity_draw():
     ent.setOutline( shape.copy() )
     print( f"{ent} ~ position: {ent.position().round(1).asTuple()}" )
 
-    tild.drawEntity(ent, "0", "shot-test.svg", 800, 600)
+    tild.quickDraw(ent, "0", "shot-test.svg", 800, 600)
 
     assert shape.asRoundZipped() == ent.shape().asRoundZipped()
 

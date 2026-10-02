@@ -81,6 +81,13 @@ class Convex():
         box= self.box()
         return box.center()
 
+    def radius(self):
+        r= 0.0
+        center= self.center()
+        for p in self.points() :
+            r= max(center.distance(p), r)
+        return r
+
     # Morphing:
     def asList(self):
         l= []

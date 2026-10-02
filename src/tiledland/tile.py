@@ -1,20 +1,19 @@
 import math, hacka
-from . import geometry
+from . import geometry, artist
 from .geometry import Point, Convex
 from .entity import Entity, Entity
-from .artist import palette
 
 _defaultOutline= Convex().initSquare(1.0)
 
 class Tile(Entity):
     # Initialization / Destruction:
     def __init__(self,
-                outline= _defaultOutline.copy(),
-                color=0x000000, enclave=0, index=0):
-        super(Tile, self).__init__(outline, color, enclave, index)
+                    outline= _defaultOutline, position=Point(), angle=0.0,
+                    color0x=0x000000, enclave=0, index=0 ):
         self._adjacencies= []
         self._entities= []
         self._size= 0
+        super(Tile, self).__init__(outline, position, angle, color0x, enclave, index)
     
     def copy(self):
         cpy= type(self)(
@@ -142,7 +141,7 @@ class Tile(Entity):
 
 class OldTile(Entity):
     defaultShape= Convex().initSquare(1.0)
-    defaultPalette= palette.background
+    defaultPalette= artist.palette00
 
     def __init__( self, identifier= 0, group=0, shape= None, position= Point(0.0, 0.0), orientation= 0.0):
         super(Tile, self).__init__( group, shape, position, orientation, None, 0, identifier, "Tile")

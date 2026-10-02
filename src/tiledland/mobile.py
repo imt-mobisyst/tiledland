@@ -6,24 +6,24 @@ _defaultOutline= Convex().initArrowTip(1.0)
 
 class Mobile(Entity) :
 
-    # Initialization / Destruction:
+    # Initialization/Destruction:
     def __init__(self,
-                outline= _defaultOutline.copy(),
-                color=0x000000, enclave=0, index=0):
-        super(Mobile, self).__init__(outline, color, enclave, index)
-        self._position= Point(0.0, 0.0)
+                    outline= _defaultOutline, position=Point(), orientation=0.0,
+                    color0x=0x000000, enclave=0, index=0 ):
         self._orientation= 0.0
+        self._position= Point()
+        super(Mobile, self).__init__(outline, position, orientation, color0x, enclave, index)
 
     def copy(self):
         cpy= type(self)(
-            self._group,
-            self._refShape,
-            self._position, self._theta,
-            self._brush,
-            self._local, self._index,
-            self._name
+            self._outline,
+            self._position, self._orientation,
+            self._brush.fill,
+            self._enclave, self._index
         )
-        cpy.setPose( self.position(), self.orientation() )
+        cpy.setBrush( self.brush() )
+        cpy.setName( self.name() )
+        return cpy
 
     # Accessor: 
     def position(self):
@@ -39,6 +39,10 @@ class Mobile(Entity) :
         return shape
 
     # Construction:
+    def setOutline( self, aConvex):
+        self._outline= aConvex
+        return self
+    
     def setPosition(self, position):
         self._position= position
         return self

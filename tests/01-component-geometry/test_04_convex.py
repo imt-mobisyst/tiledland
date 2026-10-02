@@ -30,6 +30,7 @@ def test_fast_Convex_transformSqure():
     convex= Convex().initSquare(2.0)
     
     assert convex.center() == Point(0.0, 0.0)
+    assert round( convex.radius(), 4 ) == 1.4142
 
     env= [ ( round(x, 2), round(y, 2) ) for x, y in convex.asZipped() ]
     print( env )

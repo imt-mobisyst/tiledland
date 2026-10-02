@@ -13,4 +13,4 @@ from .land import Actor, Land
 
 # rendering:
 from . import artist
-from .artist import color, drawEntity, Brush, Artist
+from .artist import color, quickDraw, Brush, Artist

@@ -70,8 +70,8 @@ def test_g2s_makeRectangles_small():
     assert tabletop.size() == i
     assert i == 2
 
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.06-grid-makeRectangles-small-01.svg" ).read() )
@@ -84,16 +84,16 @@ def test_g2s_makeRectangles_small():
         tabletop.tile(i).outline().round(2)
     assert tabletop.size() == 3
 
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.06-grid-makeRectangles-small-02.svg" ).read() )
 
     tabletop.connectAllClose( grid.resolution() )
 
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.06-grid-makeRectangles-small-03.svg" ).read() )
@@ -106,8 +106,8 @@ def test_g2s_makeRectangles_small():
         t.position().round(2)
         t.outline().round(2)
     
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.06-grid-makeRectangles-small-03.svg" ).read() )
@@ -168,8 +168,8 @@ def test_g2s_makeRectangles_medium():
         t.position().round(2)
         t.outline().round(2)
     
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.06-grid-makeRectangles-medium.svg" ).read() )
@@ -197,7 +197,7 @@ def test_g2s_makeRectangles_medium_limit():
     tabletop.fromShapes(shapes, palette[0])
     tabletop.connectAllClose( 0.021 )
 
-    tild.drawEntity( tabletop, "Tabletop", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "Tabletop", "shot-test.png", 800, 600 )
     
     assert len(shapes) == 11
     referes= [
@@ -227,13 +227,13 @@ def test_g2s_makeRectangles_medium_limit():
     assert tabletop.selectIdSmallbox(0.16) == [5, 7, 10, 11]
 
     assert( tabletop.mergeTile(5, 0.06, 1.0) )
-    #tild.draw(tabletop, "shot-1.png")
+    
     body4= tabletop.tile(4).shape().round(2).asZipped()
     print( body4 )
     assert body4 ==  [(0.01, 0.31), (0.01, 0.59), (0.39, 0.59), (0.39, 0.31)]
     
     assert( tabletop.mergeTile(6, 0.06, 1.0) )
-    #tild.draw(tabletop, "shot-2.png")
+    
     body6= tabletop.tile(6).shape().round(2).asZipped()
     print(body6)
     assert body6 ==  [(0.11, 0.61), (0.11, 0.69), (0.21, 0.79), (0.39, 0.79), (0.39, 0.61)]
@@ -243,8 +243,8 @@ def test_g2s_makeRectangles_medium_limit():
         t.position().round(2)
         t.outline().round(2)
     
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.06-grid-makeRectangles-medium-02.svg" ).read() )
@@ -267,7 +267,7 @@ def test_makeConvexes_small():
     
     tabletop= tild.Tabletop().fromGridConvexes(grid, 1.0, pixelValues=[tild.Grid.STATE_FREE])
 
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
     
     print('\n'+ str(tabletop) +'.')
     assert '\n'+str(tabletop) == """
@@ -279,7 +279,7 @@ Tabletop:
 
     tabletop= tild.Tabletop().fromGridConvexes(grid, 1.0)
 
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
 
     print('\n'+ str(tabletop) +'.')
     assert '\n'+str(tabletop) == """
@@ -332,7 +332,7 @@ def test_makeConvexes_medium():
     print(grid)
     
     tabletop= tild.Tabletop().fromGridConvexes(grid, 8.0, 0.01, pixelValues=[tild.Grid.STATE_FREE])
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
 
     print('\n'+ str(tabletop) +'.')
     assert '\n'+str(tabletop) == """
@@ -355,7 +355,7 @@ Tabletop:
 
     
     tabletop= tild.Tabletop().fromGridConvexes(grid, 8.0)
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
 
     print('\n'+ str(tabletop) +'.')
     assert '\n'+str(tabletop) == """
@@ -387,8 +387,8 @@ Tabletop:
 - Tile 0-25 ⌊(30.5, 23.5), (35.5, 30.5)⌉ adjs[11, 14] entities(0)
 - Tile 0-26 ⌊(1.5, 26.5), (2.5, 28.5)⌉ adjs[15] entities(0)"""
 
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
           == open("tests/refs/03.06-grid-makeConvexe-medium.svg" ).read() )

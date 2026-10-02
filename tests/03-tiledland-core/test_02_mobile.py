@@ -78,10 +78,10 @@ def test_fast_mobile_transform():
     ent.translate( Point(1.5, -2.0) )
 
     artist= tild.artist.openSVG("shot-test.svg", 800, 600)
-    artist.drawConvex( ent.outline(), tild.artist.palette.foreground[3] )
-    artist.drawConvex( ent.shape(), tild.artist.palette.foreground[5] )
+    artist.drawConvex( ent.outline(), tild.artist.palette01[3] )
+    artist.drawConvex( ent.shape(), tild.artist.palette01[5] )
     artist.flip()
-
+    
     assert ent.orientation() == 1.67
     assert ent.position().asTuple() == (1.5, -2.0)
 
@@ -116,8 +116,8 @@ def test_fast_mobile_draw():
 
     print(ent)
 
-    tild.drawEntity(ent, "0", "shot-test.png", 800, 600)
-    tild.drawEntity(ent, "0", "shot-test.svg", 800, 600)
+    tild.quickDraw(ent, "0", "shot-test.png", 800, 600)
+    tild.quickDraw(ent, "0", "shot-test.svg", 800, 600)
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.01-mobile-draw-01.svg").read() )
@@ -133,8 +133,8 @@ def test_fast_mobile_draw():
     shape.rotate(2.2)
     shape.translate(Point(1.0, 0.6))
 
-    tild.drawEntity(ent, "0", "shot-test.png", 800, 600)
-    tild.drawEntity(ent, "0", "shot-test.svg", 800, 600)
+    tild.quickDraw(ent, "0", "shot-test.png", 800, 600)
+    tild.quickDraw(ent, "0", "shot-test.svg", 800, 600)
 
     assert shape.round(4).points() == ent.shape().round(4).points()
 

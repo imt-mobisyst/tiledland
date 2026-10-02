@@ -8,17 +8,22 @@ _defaultOutline= Convex().initSquare(1.0)
 class Entity :
     # Initialization / Destruction:
     def __init__(self,
-                outline= _defaultOutline,
-                color=0x000000, enclave=0, index=0):
+                    outline= _defaultOutline, position=Point(), orientation=0.0,
+                    color0x=0x000000, enclave=0, index=0 ):
         assert type(outline) == Convex
-        self._outline= outline.copy()
-        self._brush= artist.Brush( color, artist.color.lightest(color, 0.5), 4)
-        self._enclave= enclave
-        self._index= index
-        self._name= type(self).__name__
+        self.setOutline(outline)
+        self.rotate(orientation)
+        self.translate(position)
+        self.setColor(color0x)
+        self.setSelector(enclave, index)
+        self.setName( type(self).__name__ )
 
     def copy(self):
-        return type(self)( self._outline, self._color, self._enclave, self._index )
+        cpy= type(self)(self._outline)
+        cpy.setBrush( self.brush() )
+        cpy.setSelector( self.enclave(), self.index() )
+        cpy.setName( self.name() )
+        return cpy
     
     # Accessor: 
     def name(self):
@@ -53,24 +58,19 @@ class Entity :
         return self.shape().box()
     
     def radius(self):
-        r= 0.0
-        zero= Point()
-        for p in self.outline().points() :
-            d= zero.distance( p )
-            r= max( d, r )
-        return r
+        return self.outline().radius()
     
     # Construction: 
     def setName(self, aName):
         self._name= aName
         return self
     
-    def setOutline( self, shape):
-        self._outline= shape
+    def setOutline( self, aConvex):
+        self._outline= aConvex.copy()
         return self
     
-    def setShape(self, shape, position, orientation=0.0 ):
-        self._outline= shape
+    def setShape(self, aConvex, position, orientation=0.0 ):
+        self.setOutline(aConvex)
         self.setPose(position, orientation)
 
     def setPosition(self, position):
@@ -79,6 +79,9 @@ class Entity :
      
     def setCoordinates(self, x, y):
         return self.setPosition( Point(x, y) )
+
+    def setOrientation(self, angle):
+        return self.setPose( self.position(), angle )
     
     def setPose(self, position, angle):
         angle= radian(angle)
@@ -102,6 +105,15 @@ class Entity :
         self.setIndex(index)
         return self
 
+    #transform:
+    def rotate(self, angle):
+        self._outline.rotate( angle )
+        return self
+    
+    def translate(self, v2):
+        self._outline.translate(v2)
+        return self
+
     # Comparison :
     def centerDistance(self, another):
         return self.position().distance( another.position() )
@@ -121,6 +133,10 @@ class Entity :
         self.setBrush( artist.Brush(fillColor, strokeColor, width) )
         return self
 
+    def setColor( self, fillColor, width= 4 ):
+        self._brush= artist.Brush( fillColor, artist.color.lightest(fillColor, 0.5), width)
+        return self
+    
     def renderOn( self, artist ):
         artist.fillConvex( self.shape(), self.brush() )
         return self
@@ -138,226 +154,6 @@ class Entity :
     
     def strIdentity(self):
         return f"{self._name} {self.enclave()}-{self.index()}"
-
-    def __str__(self):
-        return self.str()
-
-
-class OldEntity :
-    defaultShape= Convex().initArrowTip(1.0)
-    defaultPalette= artist.palette.foreground
-
-    # Initialization Destruction:
-    def __init__( self,
-            group= 0,
-            shape= None,
-            position= Point(0.0, 0.0), orientation= 0.0,
-            brush= None,
-            location=0, index= 0,
-            name= "Entity"):
-        self._refShape= shape
-        if self._refShape is None :
-            self._refShape= type(self).defaultShape
-        self._brush= brush
-        if self._brush is None :
-            self.setGroupAndBrush(group)
-        else :
-            self._group= group
-        self._position= position.copy()
-        self._theta= orientation
-        self._local= location
-        self._index= index
-        self._projShape= Convex()
-        self.setPose(self._position, self._theta)
-        self._name= name
-    
-    def copy(self):
-        return type(self)(
-            self._group,
-            self._refShape,
-            self._position, self._theta,
-            self._brush,
-            self._local, self._index,
-            self._name
-        )
-    
-    # Accessor: 
-    def name(self):
-        return self._name
-
-    def group(self):
-        return self._group
-    
-    def location(self):
-        return self._local
-    
-    def index(self):
-        return self._index
-    
-    def selector(self):
-        return (self._local, self._index)
-
-    def referenceShape(self):
-        return self._refShape
-    
-    
-    def projectedShape(self):
-        return self._projShape
-
-    def brush(self):
-        return self._brush
-
-    # Construction:
-    def setName(self, aString):
-        self._name= aString
-        return self
-
-    def setLocation(self, aInteger):
-        self._local= aInteger
-        return self
-
-    def setIndex(self, aInteger):
-        self._index= aInteger
-        return self
-    
-    def setSelector(self, location, index=1):
-        self._local= location
-        self._index= index
-        return self
-    
-    def setGroup(self, aInteger):
-        self._group= aInteger
-        return self
-
-    def setGroupAndBrush(self, aInteger):
-        self._brush= type(self).defaultPalette[aInteger%len(type(self).defaultPalette)]
-        self._group= aInteger
-        return self
-    
-    def setReferenceShape(self, aConvex):
-        self._refShape= aConvex
-        self.updateProjection()
-        return self
-    
-    def setProjectedShape(self, aConvex):
-        self._projShape= aConvex
-        x, y= self._projShape.center().asTuple()
-        self._position= Point(x, y)
-        self._refShape= self._projShape.copy()
-        self._refShape.translate( Point( -x, -y ) )
-        self._orientation= 0.0
-    
-    def setShapeSquare(self, size):
-        self._refShape= Convex().initSquare(size)
-        self.updateProjection()
-        return self
-
-    def setShapeRegular(self, size, numberOfVertex= 6):
-        self._refShape= Convex().initRegular(size, numberOfVertex)
-        self.updateProjection()
-        return self
-   
-    def setShapeArrowTip(self, size, theta= 0.0):
-        self._refShape= Convex().initArrowTip(size, theta)
-        self.updateProjection()
-        return self
-    
-    def updateProjection(self):
-        self._projShape= self._refShape.copy()
-        self.setPose( self._position, self._theta )
-        return self
-
-    # Convex accessor : 
-    def box(self):
-        return self.shape().box()
-    
-    def radius(self):
-        r= 0.0
-        zero= Point()
-        for p in self.referenceShape().points() :
-            d= zero.distance( p )
-            r= max( d, r )
-        return r
-
-    # Transformation: 
-    def setPose(self, position, angle):
-        angle= radian(angle)
-        # Redress
-        self._projShape.initAs( self._refShape )
-        if angle != 0.0 :
-            self._projShape.rotate( angle )
-        self._theta= angle
-        if position.x() != 0.0 or position.y() != 0.0 :
-            self._projShape.translate( position )
-        self._position= position
-        return self
-
-    def setPosition(self, x, y):
-        return self.setPose( Point(x, y), self._theta )
-
-    def setOrientation(self, angle):
-        return self.setPose( self._position, angle )
-
-    def translate(self, vector2):
-        for p in self._projShape.points() :
-            p.translate(vector2)
-        self._position+= vector2
-        return self
-
-    def rotate(self, angle):
-        self._theta+= angle
-        v2pi= 2*math.pi
-        while self._theta > v2pi :
-            self._theta-= v2pi
-        while self._theta < -v2pi :
-            self._theta+= v2pi
-        self.setPose( self._position, self._theta )
-        return self
-
-    # Artist :
-    def setBrush(self, aBrush):
-        self._brush= aBrush
-        return self
-    
-    def renderOn( self, artist ):
-        artist.fillConvex( self.shape(), self.brush() )
-        minx, miny= self.box().leftFloor().asTuple()
-        cx, cy= self.position().asTuple()
-        x= minx + 0.1 * (cx - minx)
-        artist.write( x, cy, self._name, self.brush() )
-        return self
-    
-    # Hacka.DataTree interface:
-    def asDataTree(self):
-        x, y= self.position().asTuple()
-        return hacka.DataTree( 
-            self._name, 
-            [self.group(), self._local, self._index],
-            [x, y, self.orientation()],
-            [ self.referenceShape().asDataTree() ]
-        )
-
-    def fromDataTree( self, aDataTree ):
-        self._name= aDataTree.label()
-        digits= aDataTree.digits()
-        values= aDataTree.values()
-        self.setReferenceShape( Convex().fromDataTree( aDataTree.children()[0] ) )
-        self.setGroup( digits[0] )
-        self.setSelector( digits[1], digits[2] )
-        self.setPose( Point(values[0], values[1]), values[2] )
-        return self
-    
-    def dataTreeCopy(self):
-        cpy= type(self)()
-        cpy.fromDataTree( self.asDataTree() )
-        return cpy
-
-    # str:
-    def str(self): 
-        return self.strIdentity() + f" {self.box()}"
-    
-    def strIdentity(self):
-        return f"{self.group()}:{self._name} {self.enclave()}-{self.index()}"
 
     def __str__(self):
         return self.str()

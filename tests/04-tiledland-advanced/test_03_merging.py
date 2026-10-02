@@ -4,7 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Line, Convex
-from src.tiledland.artist import palette
+from src.tiledland.artist import palette00
 
 # ------------------------------------------------------------------------ #
 #         T E S T   S C E N E   B U I L D
@@ -24,7 +24,7 @@ def test_tabletop_fromConvex():
     pablo.setCamera( 4.0, 3.0 )
 
     for shape in shapes :
-        pablo.drawConvex( shape, palette.background[0] )
+        pablo.drawConvex( shape, palette00[0] )
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -207,11 +207,11 @@ def test_tabletop_mergeFew():
     tabletop.renderOn(pablo)
     pablo.flip()
     
-    shotFile= open( shotImg ) 
-    refsFile= open( "tests/refs/04.03-mergeConvex-few-01.svg" ) 
+    shotFile= open(shotImg)
+    refsFile= open("tests/refs/04.03-mergeConvex-few-01.svg")
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
-
+    
     ## Merge 1-2 :
     ok= tabletop.mergeTilesIfPossible(1, 2, 0.09, 10.0)
 
@@ -240,7 +240,7 @@ def test_tabletop_mergeFew():
 
     ## Merge all :
     tabletop.mergeAllPossible(0.09, 10.0)
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
 
     tabletop.renderOn(pablo)
     pablo.flip()
@@ -293,7 +293,7 @@ def test_tabletop_mergeConplex():
     ## Merge all :
     nbMerges= tabletop.mergeAllPossible()
 
-    tild.draw(tabletop)
+    tild.quickDraw(tabletop)
     assert nbMerges == 12
 
     tabletop.renderOn(pablo)

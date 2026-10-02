@@ -18,7 +18,7 @@ def test_fast_tile_init():
     assert tile.adjacencies() == []
     assert tile.entities() == []
     
-    tile= Tile( Convex().initSquare(42.0), 0xff00ff, 0, 3 )
+    tile= Tile( Convex().initSquare(42.0) ).setSelector(0, 3)
     tile.setPosition( Point(10.3, 9.7) )
 
     assert tile.index() == 3
@@ -37,7 +37,7 @@ def test_fast_tile_init():
     assert tile.entities() == []
 
 def test_fast_tile_regular():
-    tile= Tile(index=1)
+    tile= Tile( index= 1)
     tile.setShape( Convex().initRegular(20.0, 6), Point(10.0, 10.0) )
 
     assert tile.index() == 1
@@ -54,7 +54,7 @@ def test_fast_tile_regular():
     assert box.asZip() == [ (1.34, 0.0), (18.66, 20.0) ]
     
 def test_fast_tile_adjencies():
-    tile= Tile(index=1)
+    tile= Tile( index= 1)
     assert tile.adjacencies() == []
     tile.connect(2)
     assert tile.adjacencies() == [2]
@@ -62,7 +62,7 @@ def test_fast_tile_adjencies():
     assert tile.adjacencies() == [2, 3, 4]
 
 def test_fast_tile_str():
-    tile= Tile(index=8)
+    tile= Tile( index= 8)
     tile.setCoordinates(18.5, 4.07)
     
     print(f">>> {tile}")

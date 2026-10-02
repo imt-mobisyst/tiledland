@@ -1,7 +1,7 @@
 from .support import AbsSupport, Support, SupportSVG
 from . import color
 
-def drawEntity(anEntity, tag, filePath="shot-tiledland.png", width= 1600, height= 1200):
+def quickDraw(anEntity, tag=None, filePath="shot-tiledland.png", width= 1600, height= 1200):
     pablo= Artist()
 
     fileExtend= filePath.split(".")[-1]
@@ -13,7 +13,8 @@ def drawEntity(anEntity, tag, filePath="shot-tiledland.png", width= 1600, height
     
     pablo.fit(anEntity)
     anEntity.renderOn(pablo)
-    anEntity.writeOn(pablo, tag)
+    if tag :
+        anEntity.writeOn(pablo, tag)
     pablo.flip()
 
     return pablo
@@ -32,31 +33,31 @@ class Brush():
         self.stroke= stroke
         self.width= width
 
-class palette :
-    background= [
-        Brush(0xffcd80, 0x603800, 4), # 0-Free
-        Brush(0xff6644, 0x991100, 4), # 1-Red
-        Brush(0x70f050, 0x20770a, 4), # 2-Green
-        Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
-        Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
-        Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
-        Brush(0x66ddee, 0x117799, 4), # 6-Cian
-        Brush(0xffffff, 0xbbbbbb, 4), # 7-White
-        Brush(0x888888, 0x555555, 4), # 8-Grey
-        Brush(0x444444, 0x000000, 4)  # 9-Black
-    ]
-    foreground= [
-        Brush(0x603800, 0xffcd80, 4), # 10-Background
-        Brush(0x991100, 0xff6644, 4), # 11-Red
-        Brush(0x20770a, 0x70f050, 4), # 12-Green
-        Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
-        Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
-        Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
-        Brush(0x117799, 0x66ddee, 4), # 16-Cian
-        Brush(0xbbbbbb, 0xffffff, 4), # 17-White
-        Brush(0x555555, 0x888888, 4), # 18-Grey
-        Brush(0x000000, 0x444444, 4)  # 19-Black
-    ]
+palette00= [
+    Brush(0xffcd80, 0x603800, 4), # 0-Free
+    Brush(0xff6644, 0x991100, 4), # 1-Red
+    Brush(0x70f050, 0x20770a, 4), # 2-Green
+    Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
+    Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
+    Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
+    Brush(0x66ddee, 0x117799, 4), # 6-Cian
+    Brush(0xffffff, 0xbbbbbb, 4), # 7-White
+    Brush(0x888888, 0x555555, 4), # 8-Grey
+    Brush(0x444444, 0x000000, 4)  # 9-Black
+]
+
+palette01= [
+    Brush(0x603800, 0xffcd80, 4), # 10-Background
+    Brush(0x991100, 0xff6644, 4), # 11-Red
+    Brush(0x20770a, 0x70f050, 4), # 12-Green
+    Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
+    Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
+    Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
+    Brush(0x117799, 0x66ddee, 4), # 16-Cian
+    Brush(0xbbbbbb, 0xffffff, 4), # 17-White
+    Brush(0x555555, 0x888888, 4), # 18-Grey
+    Brush(0x000000, 0x444444, 4)  # 19-Black
+]
 
 class Artist():
     def __init__(self):
@@ -240,7 +241,7 @@ class Artist():
         height= self._support.height()
 
         if not color :
-            color= palette.background[0].stroke
+            color= palette00[0].stroke
         
         # Vertical
         for i in range( (int)(width/pixStep)+1 ) :

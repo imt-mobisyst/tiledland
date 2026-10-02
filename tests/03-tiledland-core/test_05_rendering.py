@@ -56,7 +56,7 @@ def test_fast_tile_rendering():
     assert( open(shotImg).read()
         == open("tests/refs/03.05-tile-02.svg").read() )
 
-    tile= tild.Tile(index=1).setCoordinates(0.4, 0.2).setBrush(palette[1])
+    tile= tild.Tile( index= 1).setCoordinates(0.4, 0.2).setBrush(palette[1])
     tile.setOutline( tild.Convex().initRegular( 2.0, 6 ) )
     tile.renderOn( pablo )
     pablo.flip()
@@ -306,8 +306,8 @@ def test_gridtabletop_appendpiece():
         [-1, -1, 0, 0, 0, -1, -1, -1]
     ])
 
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-01.svg" ).read() )
@@ -315,8 +315,8 @@ def test_gridtabletop_appendpiece():
     # Add a first default entity on tile 2
     tabletop.tileAppendEntity( 2, tild.Mobile().setBrush(palette[10]) )
 
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-02.svg" ).read() )
@@ -329,8 +329,8 @@ def test_gridtabletop_appendpiece():
     tabletop.tileAppendEntity( 24, tild.Mobile().setBrush(palette[13]) )
     tabletop.tileAppendEntity( 30, tild.Mobile().setBrush(palette[13]) )
 
-    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-03.svg" ).read() )

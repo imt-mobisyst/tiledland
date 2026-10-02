@@ -29,7 +29,7 @@ robot = tild.Entity(
     name="Robot",
 )
 plateau.tileAppendEntity(1, robot)
-tild.draw(plateau, "premiere-scene.svg", 800, 500)
+tild.quickDraw(plateau, "", "premiere-scene.svg", 800, 500)
 assert plateau.numberOfTiles() == 5
 assert robot.enclave() == 1
 print("Scene saved to premiere-scene.svg")
@@ -46,7 +46,7 @@ plateau = tild.Tabletop().initLine(3)
 robot = plateau.tileAppendEntity(1, tild.Entity(name="Robot"))
 plateau.tileMoveEntity(robot.enclave(), robot.index(), 2)
 assert robot.selector() == (2, 1)
-tild.draw(plateau, "deplacement.svg", 800, 300)
+tild.quickDraw(plateau, "", "deplacement.svg", 800, 300)
 ```
 
 This operation replaces the entity at the center of the target tile. It does not control the existence of an edge between the two tiles. To respect the graph, verify `plateau.isEdge(depart, arrivee)` before movement.
