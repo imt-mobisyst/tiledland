@@ -12,8 +12,8 @@ def drawEntity(anEntity, tag, filePath="shot-tiledland.png", width= 1600, height
         pablo.init( filePath, width, height, SupportSVG )    
     
     pablo.fit(anEntity)
-    anEntity.artistDraw(pablo)
-    anEntity.artistTag(pablo, tag)
+    anEntity.renderOn(pablo)
+    anEntity.writeOn(pablo, tag)
     pablo.flip()
 
     return pablo

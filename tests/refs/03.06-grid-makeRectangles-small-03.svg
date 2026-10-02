@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600">
+<polygon points="0,0 0,600 800,600 800,0" fill="#b86e00" />
+<circle r="4" cx="400.0" cy="400.0" fill="#603800" />
+<circle r="4" cx="500.0" cy="99.99999999999997" fill="#603800" />
+<circle r="4" cx="249.99999999999997" cy="99.99999999999997" fill="#991100" />
+<line x1="400.0" y1="400.0" x2="500.0" y2="99.99999999999997" style="stroke:#603800;stroke-width:4"/>
+<line x1="400.0" y1="400.0" x2="249.99999999999997" y2="99.99999999999997" style="stroke:#603800;stroke-width:4"/>
+<line x1="500.0" y1="99.99999999999997" x2="400.0" y2="400.0" style="stroke:#603800;stroke-width:4"/>
+<line x1="500.0" y1="99.99999999999997" x2="249.99999999999997" y2="99.99999999999997" style="stroke:#603800;stroke-width:4"/>
+<line x1="249.99999999999997" y1="99.99999999999997" x2="400.0" y2="400.0" style="stroke:#991100;stroke-width:4"/>
+<line x1="249.99999999999997" y1="99.99999999999997" x2="500.0" y2="99.99999999999997" style="stroke:#991100;stroke-width:4"/>
+<polygon points="159.99999999999997,590.0 159.99999999999997,209.99999999999997 640.0,209.99999999999997 640.0,590.0" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<polygon points="360.0,190.0 360.0,10.0 640.0,10.0 640.0,190.0" style="fill:#ffcd80;stroke:#603800;stroke-width:4" />
+<polygon points="159.99999999999997,190.0 159.99999999999997,10.0 340.0,10.0 340.0,190.0" style="fill:#ff6644;stroke:#991100;stroke-width:4" />
+<text x="239.99999999999997" y="526.6666666666667" fill="#603800" font-family="Verdana" font-size="16">1</text>" />
+<text x="406.66666666666663" y="159.99999999999997" fill="#603800" font-family="Verdana" font-size="16">2</text>" />
+<text x="189.99999999999994" y="159.99999999999997" fill="#991100" font-family="Verdana" font-size="16">3</text>" />
+</svg>

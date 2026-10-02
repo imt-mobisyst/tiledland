@@ -4,16 +4,43 @@ sys.path.insert( 1, workDir )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Convex
+from src.tiledland.artist import Brush
 
 # ------------------------------------------------------------------------ #
 #                 T E S T   I N T E R F A C E    A R T I S T
 # ------------------------------------------------------------------------ #
 shotImg= "shot-test.svg"
 
+palette= [
+    Brush(0xffcd80, 0x603800, 4), # 0-Free
+    Brush(0xff6644, 0x991100, 4), # 1-Red
+    Brush(0x70f050, 0x20770a, 4), # 2-Green
+    Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
+    Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
+    Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
+    Brush(0x66ddee, 0x117799, 4), # 6-Cian
+    Brush(0xffffff, 0xbbbbbb, 4), # 7-White
+    Brush(0x888888, 0x555555, 4), # 8-Grey
+    Brush(0x444444, 0x000000, 4), # 9-Black
+
+    Brush(0x603800, 0xffcd80, 4), # 10-Background
+    Brush(0x991100, 0xff6644, 4), # 11-Red
+    Brush(0x20770a, 0x70f050, 4), # 12-Green
+    Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
+    Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
+    Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
+    Brush(0x117799, 0x66ddee, 4), # 16-Cian
+    Brush(0xbbbbbb, 0xffffff, 4), # 17-White
+    Brush(0x555555, 0x888888, 4), # 18-Grey
+    Brush(0x000000, 0x444444, 4)  # 19-Black
+]
+
+
 # Test artist on tiles
 def test_fast_tile_rendering():
-    pablo= tild.createArtistSVG( shotImg, 800, 600 )
-    tile= tild.Tile()
+    pablo= tild.artist.openSVG( shotImg, 800, 600 )
+
+    tile= tild.Tile().setBrush(palette[0])
     
     tile.renderOn( pablo )
     pablo.flip()
@@ -21,7 +48,7 @@ def test_fast_tile_rendering():
     assert( open(shotImg).read()
         == open("tests/refs/03.05-tile-01.svg").read() )
     
-    tile= tild.Tile( 3, 0, Convex().initSquare(4.0) )
+    tile= tild.Tile( Convex().initSquare(4.0) ).setBrush(palette[0])
     tile.setCoordinates(1.3, 0.9)
     tile.renderOn( pablo )
     pablo.flip()
@@ -29,8 +56,8 @@ def test_fast_tile_rendering():
     assert( open(shotImg).read()
         == open("tests/refs/03.05-tile-02.svg").read() )
 
-    tile= tild.Tile(1, 1).setCoordinates(0.4, 0.2)
-    tile.setShapeRegular( 2.0, 6 )
+    tile= tild.Tile(index=1).setCoordinates(0.4, 0.2).setBrush(palette[1])
+    tile.setOutline( tild.Convex().initRegular( 2.0, 6 ) )
     tile.renderOn( pablo )
     pablo.flip()
 
@@ -38,7 +65,7 @@ def test_fast_tile_rendering():
         == open("tests/refs/03.05-tile-03.svg").read() )
     
     tile.renderOn( pablo )
-    tile.writeOn( pablo )
+    tile.writeOn( pablo, str(tile.index()) )
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -46,7 +73,7 @@ def test_fast_tile_rendering():
     
 # Test artist on tabletop
 def test_fast_tabletop_tile_rendering():
-    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    pablo= tild.artist.openSVG( shotImg, 800, 600 )
     tabletop= tild.Tabletop()
 
     assert tabletop.epsilon() == 0.01
@@ -79,7 +106,7 @@ def test_fast_tabletop_tile_rendering():
         == open("tests/refs/03.05-map-02.svg" ).read() )
 
 def test_fast_tabletop_net_rendering():
-    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    pablo= tild.artist.openSVG( shotImg, 800, 600 )
     tabletop= tild.Tabletop()
     tabletop.initGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
@@ -92,7 +119,6 @@ def test_fast_tabletop_net_rendering():
     tabletop.renderOn( pablo )
     pablo.flip()
 
-
     assert( open(shotImg).read()
         == open("tests/refs/03.05-map-04.svg" ).read() )
 
@@ -104,17 +130,16 @@ def test_fast_tabletop_net_rendering():
     tabletop.renderOn( pablo )
     pablo.flip()
 
-
     assert( open(shotImg).read()
         == open("tests/refs/03.05-map-05.svg" ).read() )
 
+    color= tabletop.tile(1).color()
     tabletop.connectAllConditions(
-        lambda tileFrom : tileFrom.group() == 0,
-        lambda tileFrom, tileTo : tileTo.group() == 0 and tileFrom.centerDistance( tileTo ) < 1.2
+        lambda tileFrom : tileFrom.color() == color,
+        lambda tileFrom, tileTo : tileTo.color() == 0 and tileFrom.centerDistance( tileTo ) < 1.2
     )
     tabletop.renderOn( pablo )
     pablo.flip()
-
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-map-06.svg" ).read() )
@@ -122,7 +147,7 @@ def test_fast_tabletop_net_rendering():
 
 # Test artist on tabletop
 def test_gridmap_piece():
-    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    pablo= tild.artist.openSVG( shotImg, 800, 600 )
     tabletop= tild.Tabletop()
     tabletop.initGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
@@ -141,17 +166,17 @@ def test_gridmap_piece():
         == open("tests/refs/03.05-entity-01.svg" ).read() )
 
     def popEntity( iRobot, iGroup, iTile ):
-        bob= tild.Entity( iGroup,
-            tild.Convex().initRegular(0.7, 6),
-            Point(0.1, 0.1)+tabletop.tile(iTile).position(),
-            name= str(iRobot)
-        )
+        bob= tild.Mobile( tild.Convex().initRegular(0.7, 6) )
+        bob.setPosition( Point(0.1, 0.1)+tabletop.tile(iTile).position() )
+        bob.setBrush( palette[iGroup] )
+        bob.setName( str(iRobot) )
+        palette
         tabletop.tile(iTile).append( bob )
         return bob
     
     bob= popEntity(1, 13, 12)
 
-    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.referenceShape().asZipped() ]
+    env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.outline().asZipped() ]
     print( env )
     assert env == [
         (-0.3, -0.18), (-0.3, 0.17), (-0.0, 0.35),
@@ -192,7 +217,7 @@ def test_gridmap_piece():
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-03.svg" ).read() )
 
-    popEntity(1, 1, 17)
+    popEntity(1, 11, 17)
     
     tabletop.renderOn( pablo )
     pablo.flip()
@@ -209,7 +234,7 @@ def test_gridmap_piece():
 
 # Test artist on tabletop
 def test_hexatabletop_piece():
-    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    pablo= tild.artist.openSVG( shotImg, 800, 600 )
     tabletop= tild.Tabletop()
     tabletop.initHexa(
        [[0, 1, 1, -1, 0, 0, 0, 0],
@@ -228,12 +253,13 @@ def test_hexatabletop_piece():
         == open("tests/refs/03.05-entity-11.svg" ).read() )
 
     def popEntity( iRobot, iTile, iGroup ):
-        bod= tild.Entity( iGroup,
-            tild.Convex().initRegular(0.7, 6),
-            Point(0.1, 0.1)+tabletop.tile(iTile).position(),
-            name= str(iRobot)
-        )
-        tabletop.tile(iTile).append( bod )
+        bob= tild.Mobile( tild.Convex().initRegular(0.7, 6) )
+        bob.setPosition( Point(0.1, 0.1)+tabletop.tile(iTile).position() )
+        bob.setBrush( palette[iGroup] )
+        bob.setName( str(iRobot) )
+        palette
+        tabletop.tile(iTile).append( bob )
+        return bob
     
     popEntity(1, 12, 13)
 
@@ -287,7 +313,7 @@ def test_gridtabletop_appendpiece():
         == open("tests/refs/03.05-render-grid-01.svg" ).read() )
 
     # Add a first default entity on tile 2
-    tabletop.tileAppendEntity( 2, tild.Entity() )
+    tabletop.tileAppendEntity( 2, tild.Mobile().setBrush(palette[10]) )
 
     tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
@@ -296,12 +322,12 @@ def test_gridtabletop_appendpiece():
         == open("tests/refs/03.05-render-grid-02.svg" ).read() )
 
     # Add several entities associate to different groups...
-    tabletop.tileAppendEntity( 8, tild.Entity(1) )
-    tabletop.tileAppendEntity( 16, tild.Entity(1) )
-    tabletop.tileAppendEntity( 4, tild.Entity(2) )
-    tabletop.tileAppendEntity( 19, tild.Entity(2) )
-    tabletop.tileAppendEntity( 24, tild.Entity(3) )
-    tabletop.tileAppendEntity( 30, tild.Entity(3) )
+    tabletop.tileAppendEntity( 8, tild.Mobile().setBrush(palette[11]) )
+    tabletop.tileAppendEntity( 16, tild.Mobile().setBrush(palette[11]) )
+    tabletop.tileAppendEntity( 4, tild.Mobile().setBrush(palette[12]) )
+    tabletop.tileAppendEntity( 19, tild.Mobile().setBrush(palette[12]) )
+    tabletop.tileAppendEntity( 24, tild.Mobile().setBrush(palette[13]) )
+    tabletop.tileAppendEntity( 30, tild.Mobile().setBrush(palette[13]) )
 
     tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
     tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )

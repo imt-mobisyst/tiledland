@@ -45,6 +45,9 @@ class Entity :
     def selector(self):
         return (self._enclave, self._index)
 
+    def color(self):
+        return self._brush.fill
+
     # Convex accessor : 
     def box(self):
         return self.shape().box()
@@ -118,11 +121,11 @@ class Entity :
         self.setBrush( artist.Brush(fillColor, strokeColor, width) )
         return self
 
-    def artistDraw( self, artist ):
+    def renderOn( self, artist ):
         artist.fillConvex( self.shape(), self.brush() )
         return self
 
-    def artistTag( self, artist, text ):
+    def writeOn( self, artist, text ):
         minx, miny= self.box().leftFloor().asTuple()
         cx, cy= self.position().asTuple()
         x= minx + 0.1 * (cx - minx)

@@ -29,7 +29,7 @@ bod.setMatter(15)
 
 
 # Create an artist to render this tabletop:
-anArtist= tild.createArtistPNG( "shot-demo.png", 800, 600 )
+anArtist= tild.artist.openPNG( "shot-demo.png", 800, 600 )
 anArtist.fitBox( tabletop.box() )
 tabletop.renderOn(anArtist)
 anArtist.flip() # Uptate the support and return to a blanc page.

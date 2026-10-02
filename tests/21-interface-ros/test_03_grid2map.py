@@ -27,7 +27,7 @@ def test_long_gridmap_loadSmallTabletop():
     tild.draw(tabletop)
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
     tild.draw(tabletop)
@@ -59,7 +59,7 @@ def test_long_gridmap_loadLargeTabletop():
     assert gridmap.resolution() == 0.1
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
 
     tabletop= tild.Tabletop().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
 
@@ -147,7 +147,7 @@ def test_gridmap_rosGridMap_webots():
     assert gridmap.dimention() == (103, 162)
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
 
     tabletop= tild.Tabletop().fromGridConvexes( gridmap, 2.0, pixelValues=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
     pablo.fit(tabletop)

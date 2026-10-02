@@ -37,7 +37,7 @@ def test_long_gridmap_rectangletabletop():
     tabletop= tild.Tabletop().fromGridRectangles(grid)
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
     tild.draw(tabletop)
@@ -56,7 +56,7 @@ def test_long_gridmap_smallTabletop():
     tabletop= tild.Tabletop().fromGridRectangles( grid )
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
     tild.draw(tabletop)
@@ -116,7 +116,7 @@ def test_long_gridmap_mediumTabletop_inside():
     ## end fromGrid
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
     tild.draw(tabletop)
@@ -136,7 +136,7 @@ def test_long_gridmap_mediumTabletop():
     tabletop= tild.Tabletop().fromGridRectangles( grid, 4.0 )
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
     tild.draw(tabletop)
@@ -157,7 +157,7 @@ def test_gridmap_largeTabletop():
     tabletop= tild.Tabletop().fromGridRectangles( grid, 4.0 )
     
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
     tild.draw(tabletop)

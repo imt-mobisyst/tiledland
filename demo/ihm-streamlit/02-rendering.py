@@ -33,7 +33,7 @@ bod= tabletop.popAgentOn(26)
 bod.setId(3).setMatter(13)
 
 # Create an artist to render this tabletop:
-pablo= tild.createArtistSVG( filePath= "shot-web-rendering.svg" )
+pablo= tild.artist.openSVG( filePath= "shot-web-rendering.svg" )
 pablo.fitBox( tabletop.box() )
 tabletop.renderOn(pablo)
 

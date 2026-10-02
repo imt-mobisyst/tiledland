@@ -459,7 +459,7 @@ class Tabletop():
         neighborhood= [ (i, (tb + self.tile(i).box()).score() ) for i in t.adjacencies() ]
         neighborhood.sort(key=lambda tup: tup[1])
         for neighbor, val in neighborhood :
-            if ( self.tile(neighbor).group() == t.group()
+            if ( self.tile(neighbor).color() == t.color()
                 and self.mergeTilesIfPossible( neighbor, iTile, maxError, maxSize )
             ) :
                 return True
@@ -507,9 +507,9 @@ class Tabletop():
 
     def renderTilesOn( self, artist):
         for tile in self.tiles() :
-            tile.artistDraw( artist )
+            tile.renderOn( artist )
         for tile in self.tiles() :
-            tile.artistTag( artist, str(tile.index()) )
+            tile.writeOn( artist, str(tile.index()) )
         return self
     
     def renderEntitiesOn( self, artist ):
@@ -517,18 +517,22 @@ class Tabletop():
             x, y= tile.position().asTuple()
             position= (x+0.1, y+0.1)
             for entity in tile.entities() :
-                entity.artistDraw( artist )
+                entity.renderOn( artist )
+                entity.writeOn( artist, str(entity.name()) )
         return self
 
-    def artistDraw( self, artist ):
+    def renderOn( self, artist ):
         self.renderNetworkOn(artist)
         self.renderTilesOn(artist)
         self.renderEntitiesOn(artist)
         return self
 
-    def artistTag( self, artist, text):
-        if text != "" :
+    def writeOn( self, artist, text):
+        if text == "" :
             return self
+        minx, miny= self.box().leftFloor().asTuple()
+        maxx, maxy= self.box().rightCeiling().asTuple()
+        artist.write( minx, maxy, text, _paletteTile[0] )
         return self
 
     # string:

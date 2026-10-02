@@ -115,17 +115,20 @@ class Tile(Entity):
         return self
     
     # Artist drawing:
-    def artistDraw(self, artist):
+    def renderOn(self, artist):
         artist.drawConvex( self.shape(), self.brush() )
+        return self
 
-    def artistTag(self, artist, text):
+    def writeOn(self, artist, text):
+        if text == "" :
+            return self
         minx, miny= self.box().leftFloor().asTuple()
         x, y= self.position().asTuple()
         x= x+(minx-x)*2/3
         y= y+(miny-y)*2/3
         artist.write( x, y, text, self.brush() )
-
-
+        return self
+    
     # to String
     def str(self): 
         # Myself :

@@ -127,7 +127,7 @@ def test_fast_artist_load():
 
 def test_fast_artist_flip():
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    pablo= tild.artist.openSVG( shotImg, 800, 600 )
 
     assert( pablo.support().filePath() == shotImg )
 

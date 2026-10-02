@@ -39,7 +39,7 @@ def test_pnd_land():
 
     model.initTabletop( tild.Tabletop().initGrid( refMatrix, 0.9, 0.1 ) )
 
-    pablo= tild.createArtistPNG("shot-test.png", 800, 600)
+    pablo= tild.artist.openPNG("shot-test.png", 800, 600)
     pablo.fitBox( model.tabletop().box(), 10 )
 
     model.tabletop().renderOn(pablo)
@@ -139,7 +139,7 @@ def test_pnd_withCarrier():
     assert land.moveEntity( 39,  0 ) == 39
     assert land.moveEntity( 39,  3 ) == False
     
-    pablo= tild.createArtistPNG("shot-test.png", 800, 600)
+    pablo= tild.artist.openPNG("shot-test.png", 800, 600)
     pablo.fitBox( land.tabletop().box(), 10 )
     
     land.renderOn(pablo)

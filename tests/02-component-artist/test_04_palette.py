@@ -13,7 +13,7 @@ from src.tiledland.artist import palette
 # Test firstAI launch
 def test_fast_artist_palette():
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG( shotImg, 800, 600 )
+    pablo= tild.artist.openSVG( shotImg, 800, 600 )
 
     shape= Convex().fromZipped( [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
     pablo.drawConvex( shape, palette.background[1] )
@@ -55,7 +55,7 @@ def test_fast_artist_palette():
 
 def test_fast_artist_palette_png():
     shotImg= "shot-test.png"
-    pablo= tild.createArtistPNG(shotImg, 800, 600)
+    pablo= tild.artist.openPNG(shotImg, 800, 600)
 
     shape= Convex().fromZipped([(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
     pablo.drawConvex( shape, palette.background[1] )

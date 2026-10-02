@@ -98,8 +98,8 @@ def test_fast_tabletop_box():
 
     tabletop= Tabletop().initLine(4, connect=False)
 
-    tild.drawEntity( tabletop, "Tabletop", "shot-test.png", 800, 600 )
-    tild.drawEntity( tabletop, "Tabletop", "shot-test.svg", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.png", 800, 600 )
+    tild.drawEntity( tabletop, "", "shot-test.svg", 800, 600 )
 
     print( tabletop.box() )
     assert str(tabletop.box()) == "⌊(-0.5, -0.5), (3.8, 0.5)⌉"

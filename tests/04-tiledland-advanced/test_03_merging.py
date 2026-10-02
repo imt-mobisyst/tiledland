@@ -20,7 +20,7 @@ def test_tabletop_fromConvex():
     ]
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.setCamera( 4.0, 3.0 )
 
     for shape in shapes :
@@ -100,7 +100,7 @@ def test_tabletop_mergeOne():
     tabletop.connectAllClose(0.16)
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -136,7 +136,7 @@ def test_tabletop_mergeNoOne():
     tabletop.connectAllClose( 0.16 )
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -200,7 +200,7 @@ def test_tabletop_mergeFew():
     assert tabletop.numberOfTiles() == 10
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -278,7 +278,7 @@ def test_tabletop_mergeConplex():
     tabletop.connectAllClose(0.11)
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
@@ -332,7 +332,7 @@ def test_tabletop_mergeButNo():
     tabletop.connectAllClose(0.11)
 
     shotImg= "shot-test.svg"
-    pablo= tild.createArtistSVG(shotImg, 800, 600)
+    pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 

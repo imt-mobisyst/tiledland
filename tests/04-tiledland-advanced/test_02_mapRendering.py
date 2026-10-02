@@ -10,7 +10,7 @@ from src.tiledland import Entity, Tile, Tabletop
 # ----------------------------------------------------------------------- #
 
 def draw(tabletop, filePath= "shot-test.png"):
-    pablo= tild.createArtistPNG( filePath, 800, 600 )
+    pablo= tild.artist.openPNG( filePath, 800, 600 )
     
     pablo.drawFrameGrid()
     pablo.drawFrameAxes()
