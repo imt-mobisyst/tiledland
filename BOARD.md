@@ -1,43 +1,60 @@
 # Board:
 
 
-**-- Board V0.1.x --**
+**-- Board V1.x.x --**
 
-## Geometrical Toolbox :
+
+## Plan Convex Geometry :
+
+**TiledLand** aims to model spatio-temporal entities and their interaction.
+It is based on convex poligon shaping implemented in the geometric functionality.
 
 - [x] Basic point, line, and polygon objects in 2D frame.
 - [x] Simple rectangular boxing.
 - [x] Main Convex object to represent a convex polygon.
-- [x] Convex obj. min/max radius, and collision
-- [x] Tabletop: Gridmap to Tiled Tabletops
+- [x] Convex obj. min/max radius, and collision.
+- [ ] Canva, Grid based collection of Convex Object...
+- [ ] Have the posibility to swith on a C-based librairie.
+- [ ] Make `Convex.initRegular()` centered on (0, 0) - with test.
+- [ ] Remove rotate from Entity ?
+- [ ] PointCloud (potentially from Scan) to Envellope: a centered and ordered PointCloud.
+- [ ] Based on an appropriation of BOX2D c-library ?
+- [ ] Georeferenced solution (import GIS Data)
+- [ ] Encapsulate _Convex_ in _Motif_ object (ie. one or several join convexes)
 
-
-## Code Convention 
-
-- [ ] Create agent that check Code COnvention
-- [ ] All setMethode should return self
-- [ ] That all method are directly tested like (shapeDistance)
 
 ## Artist Rendering :
 
+On top of geometric objects, _Artist_ include functionalities to draw and produce visual rendering.
+Artist is designed independant to graphical librairie, the glue is implemented in Support interface.
 
-## Tiledland Core Structures
+- [ ] Convex: Search for good text zones (header, body, footer)
+- [ ] Sprites...
+- [ ] Play 2.5D world.
+- [ ] Projection simple : (vertical ratio)
+- [ ] Free Projection : (rotation + translation)
 
-the core component of TiledLand refere to the `Tiles` composing a `Tabletop` and comtainning `Entities`.
+
+## Tiledland collection of geometries
 
 - [x] `Entity` the root class with group, id and shape, a convex delimitation of the element.
-- [x] The `Entity` shape is defined with a reference shape (static, centered on (0.0, 0.0 and potentially shared between several entities) and a projected shape (a transformed reference shape in the tabletop / land).
-- [x] An abstract entity `AbsEntity` that regroups the core, expected methods for an `Entity` : box, pose definition, and hackagame methods. An `Entity` is a `AbsEntity` 
+- [x] `Mobile`, derivated from `Entity`, disotiate a fixe outline shape reference and transformation (position, orientation).
+- [ ] `Canva` element is used to better organise tiles.
+- [x] Initialize artist rendering: entities can be rendered with an Artist object.
+
+## Tiledland a Graph
+
+The core component of TiledLand refere to the `Tiles` composing a `Tabletop` and comtainning `Entities`.
+
 - [x] `Tiles`: a tile is an `Entity` interconnected with other tiles. 
-- [x] a tile contains entities. The elements are positioned in the tile. 
-- [x] `Tabletop` : a mabletop is an `AbsEntity`. It contains several tiles. Its shape (not necessarily convex) is the fusion of all contained tiles.
-- [x] Initialize artist rendering: abstract entities can be rendered through an Artist object.
-- [x] HackaGame (DataTree) compatible
-
-## Tiled land Advanced :
-
-- [ ] tabletop.completeClock : make a more complete function...
-- [ ] A tile should not be an entity...
+- [x] A tile contains entities. The elements are positioned in the tile. 
+- [x] `Tabletop` : It contains several tiles.
+- [ ] `Tabletop` derivated from `Entity. Its shape is the fusion of all contained tiles.
+- [x] Implement topological clock positioning.
+- [ ] Tabletop: Generation from Graph (+ read SVG)
+- [ ] Tabletop: Generation from Voroi, gabriel.
+- [x] Grid and Hexa-grid based tabletop initilization.
+- [ ] tabletop with _epsilon_ and _seam_ distance
 
 
 ## Multi-Agent System (MAS) framework
@@ -45,72 +62,62 @@ the core component of TiledLand refere to the `Tiles` composing a `Tabletop` and
 Agent-model is derivated from Hackagames. Agent is mainly defined by a `perception`, `decide` loop, itsel included in a `wake-up` and `sleep` super-loop.
 TiledLand agents perception and actions are mainly defined regarding the capability to move in a graph-model of the environment. 
 
+- [x] Agent's bodys: Position, clock-orientation and Convex
 - [ ] `Agent` can decide an action to perform.
 - [ ] `Land` mainly a Tabletop, but also an Agent manager, with agents linked to the Tabletop's entities.
-- [ ] _'agent'_ vs _'behavio'_ : Think state machine...
+- [ ] `RoadLand`, derived from `Land`, mainly dedicated to `Mobile` entities.
+- [ ] `HackaGame`: MAS component natively compatible to `HackaGame` lib. Encapsulating a basic agent for distributed computing.
+- [ ] _'agent'_ vs _'behavior'_ : Think state machine...
 - [ ] a 'basic' agent : with several moving strategies...
-- [ ] HackaAgent: encapsulating a basic agent for distributed computing.
-
-
-## Simple, but strong plan geometry
-
-Have the posibility to swith on a C-based librairie for computations...
-
-- [ ] Make `Convex.initRegular()` centerd on (0, 0) - with test.
-- [ ] Is rotate at the writh location in Entity ?
-- [ ] Tabletop vs Tabletop a semantic tabletop ie. structured tiled obj (and in oposition to GridMap).
-- [x] Fast position requestest : add a grid canvas to Tabletop get a tiles from a position (getTile at, closest, inRadius ...)
-- [ ] PointCloud (potentially from Scan) to Envellope, a centered and ordered PointCloud.
-- [ ] Tabletop: Apply a grid and use it on connectClose...
-- [ ] Tabletop: Generation from Voroi, gabriel, ....
-- [ ] Tile: Search for text zones (header, body, footer)
-- [ ] Based on an appropriation of BOX2D c-library...
-- [ ] Georeferenced solution (import GIS Data)
-
-
-## Geometrical Land :
-
-- [x] Agent's bodys: Position, clock-orientation and Convex
-- [x] Grid and Hexa-grid based tabletop initilization.
-- [ ] Agents: update position and Convex function (auto-centering) (Agent: `perceive(Obs)`, `decide()` and Environement/Game/Tabletop: `forward(agent, action)` (But on Hacka?) )
 - [ ] Basic Tabletop manipulation: doSomething ... doTeleportOn(tile, agent, group).
-- [ ] Be topological: Clockdir manipulation.
-- [ ] Generate tabletop from point-graph (mesh).
-- [ ] No geometry artifact on Agent and Tiles...
 
 
+## Tiledland Project 
+
+- [ ] Establish code conventions.
+- [ ] Create agent that check Code Convention.
+- [ ] All setMethode should return self.
+- [ ] That all method are directly tested like (shapeDistance).
+- [ ] Push tiledland on pypip.
+- [ ] Specific _imt-mobisyst_ webpages.
+- [x] Write doc contents.
+- [ ] labelise test cases : `fast` and `long`.
 
 ## Web IHM
 
 - [x] Artist + support architectur.
 - [x] SVG Support and PNG Support with Cairo.
-- [ ] Interactive Simulation (Move-To)
-- [ ] With Sprites
+- [ ] Interactive Simulation (Move-To).
+- [ ] With Sprites.
 
 
 ## Robotique
 
 - [x] Transform GridMap to TiledLand.Tabletop.
 - [ ] Integrate TiledLand in Tiled ROS packages.
-- [ ] Be resilent to hugly tabletops
+- [ ] Be resilent to hugly tabletops.
 - [ ] Be resilent on 'all' ".png" format. 
 - [ ] Cloud point on frontiere cell (position on frontiers not cell center).
 - [ ] Correction on colliding convexes paving a matter.
 
 
-## HackaGames - Chopes
+## Game - SalesRun
+
+Concurent Salesmen game. 
+Make it as the default/vitrine TiledLand game.
+
+
+## Game - Chopes
 
 Catch-me if you can, from RIP-Astrid.
 
 
-
-## HackaGames - Cofee Fleet
+## Game - Cofee Fleet
 
 Multi-Path planning problem (with uncertainty).
 
 
-
-## HackaGames - Pick'n Del
+## Game - Pick'n Del
 
 Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 
@@ -126,82 +133,4 @@ Multi-Modal (Dynamic) Pick-up and Delivery with hiden random congestion.
 - [ ] encumbered value function of population/directions
 
 
-## Documentaion :
-
-- [ ] Push tiled-land on pypip
-- [ ] Specific pages.
-- [ ] Write doc contents...
-- [ ] labelise test cases : `fast` and `long`
-
-**-- Board V2.0 --**
-
-
-## Go efficient :
-
-- [ ] Migrate geometry module on a _C_ library (from `box2d` or new `LibEGG` Euclidean Graspable Geometry).
-- [ ] Encapsulate _Convex_ in _Motif_ object (ie. one or several join convexes)
-- [ ] Migrade Tabletop geometry function into a Texture dedicated object (collection of _Motif_).
-
-
-## Rendering :
-
-- [ ] Sprites...
-- [ ] Play 2.5D world.
-- [ ] Projection simple : (vertical ratio)
-- [ ] Free Projection : (rotation + translation)
-
-
-## Tabletop, Tiles and Agents :
-
-- [ ] tabletop with _epsilon_ and _seam_ distance
-
-
-## HackaGames - Multi-Bot Delivery
-
-Simple multiple robots game focused on 1 piece at a time delivery.
-
-
-## HackaGames - Robot SocNav
-
-Social complient navigation.
-
-- [ ] Human simulation model
-
-
-## Documentation :
-
-- [ ] Presentation of _Core_ components
-- [ ] Presentation of _Hacka Distribution_
-- [ ] Presentation of _Geometry_ submodule
-- [ ] Presentation of _Rendering_ solution
-- [ ] Tuto _Web IHM_
-- [ ] Tuto _pygame IHM_
-- [ ] Tuto _create a game_
-- [ ] Developpers expectation: (template from Convex + class structure + tests)
-
-
-# HackaGames - Move-It
-
-Based on MultiPath solving problem.
-
-- [ ] Mobile from Agent and World from Tabletop.
-- [ ] Mission: position to reach, where something need to be done.
-- [ ] NPC and Collision between mobiles.
-- [ ] Hacka compatible GameMaster.
-- [ ] Dedicated documentation on ktorz-net.github.io
-- [ ] Handle seral Mobiles.
-- [ ] MultiPlayer version.
-
-
-## Web Rendering :
-
-- [ ] Identifing a tool _flask_, _streamlit_, _django_, _dash by plotly_
-- [ ] Visualize tabletop (Static/Dynamic)
-- [ ] Add a monitor/control panel
-- [ ] Make the tabletop clickable...
-
-
-## Explorations
-
-- [ ] decide lib-based or independant - (Explore [igraph](https://python.igraph.org) possibilities)
-- [ ] Agent Based Model (or not ?): Step engine, also in a way compatible to hackagames
+**-- Board V2.x.x --**
