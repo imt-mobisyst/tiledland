@@ -103,7 +103,7 @@ TiledLand agents perception and actions are mainly defined regarding the capabil
 
 ## Game - SalesRun
 
-Concurent Salesmen game. 
+Concurent Sellers game. 
 Make it as the default/vitrine TiledLand game.
 
 

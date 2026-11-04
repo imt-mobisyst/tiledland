@@ -4,6 +4,7 @@ config.toml
 
 # Submodules
 #-----------------
+game-*
 
 # Generated
 #-----------------

@@ -80,6 +80,7 @@ class GridMap :
 
     # File managment
     def load( self, path, file ):
+        print( f"loading {file}" )
         config= {}
         with open( path+"/"+file, "r") as file:
             # Charger le contenu du fichier en tant que dictionnaire Python
@@ -96,8 +97,21 @@ class GridMap :
         self._occupied= config['occupied_thresh']
         self._free= config['free_thresh']
     
-        # build the grid :
+        # Force on RGB24:
+        if image.get_format() != cairo.Format.RGB24:
+            print( f"Convert" )
+            rgb24 = cairo.ImageSurface(
+                cairo.Format.RGB24,
+                image.get_width(),
+                image.get_height()
+            )
+            cr = cairo.Context(rgb24)
+            cr.set_source_surface(image, 0, 0)
+            cr.paint()
+            image = rgb24
         assert image.get_format() == cairo.Format.RGB24
+
+        # Build the grid :
         height= image.get_height()
         stride= image.get_stride()
         memoryview = image.get_data()
