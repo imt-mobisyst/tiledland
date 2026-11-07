@@ -1,19 +1,20 @@
 import math, hacka
 from . import geometry, artist
 from .geometry import Point, Convex
-from .entity import Entity, Entity
+from .shaped import AbsShaped, Shaped
 
-_defaultOutline= Convex().initSquare(1.0)
+def _defaultShape():
+    return Convex().initSquare(1.0)
 
-class Tile(Entity):
+class Tile(Shaped):
     # Initialization / Destruction:
-    def __init__(self,
-                    outline= _defaultOutline, position=Point(), angle=0.0,
-                    color0x=0x000000, enclave=0, index=0 ):
+    def __init__(self, shape= _defaultShape(),
+            owner=0, category=0, index=0, name="Tile"):
+        super().__init__(shape, owner, category, index, name)
+        assert type(shape) == Convex
         self._adjacencies= []
-        self._entities= []
+        self._units= []
         self._size= 0
-        super(Tile, self).__init__(outline, position, angle, color0x, enclave, index)
     
     def copy(self):
         cpy= type(self)(
@@ -25,25 +26,25 @@ class Tile(Entity):
             self._name
         )
         cpy._adjacencies= [nei for nei in self._adjacencies]
-        cpy._entities= [ent for ent in self._entities]
-        self._size= len(cpy._entities)
+        cpy._units= [ent for ent in self._units]
+        self._size= len(cpy._units)
 
     # Accessor:
     def adjacencies(self):
         return self._adjacencies
 
-    def entities(self):
-        return self._entities
+    def units(self):
+        return self._units
     
     def numberOfEntities(self):
         return self._size
 
-    def entity(self, i=1) :
-        return self._entities[i-1]
+    def unit(self, i=1) :
+        return self._units[i-1]
     
     # Construction:
     def setIndex(self, index):
-        for e in self.entities() :
+        for e in self.units() :
             e.setEnclave(index)
         self._index= index
         return self
@@ -89,7 +90,7 @@ class Tile(Entity):
 
     # Entity managment
     def append(self, anEntity ): 
-        self._entities.append( anEntity )
+        self._units.append( anEntity )
         self._size+= 1
         anEntity.setSelector( self._index, self._size )
         return self
@@ -102,14 +103,14 @@ class Tile(Entity):
     
     def remove(self, iEntity):
         i= iEntity-1
-        ent= self._entities.pop(i)
-        self._size= len(self._entities)
+        ent= self._units.pop(i)
+        self._size= len(self._units)
         for j in range( i, self._size ) :
-            self._entities[j].setIndex(j+1)
+            self._units[j].setIndex(j+1)
         return ent
     
     def clear(self):
-        self._entities = []
+        self._units = []
         self._size= 0
         return self
     
@@ -133,7 +134,7 @@ class Tile(Entity):
         # Myself :
         s= super(Tile, self).str()
         s+= " adjs"+ str(self._adjacencies)
-        s+= f" entities({ len(self.entities()) })"
+        s+= f" entities({ len(self.units()) })"
         return s
     
     def __str__(self): 

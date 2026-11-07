@@ -43,7 +43,7 @@
 <text text-anchor="middle" x="157.59" y="-332.9" font-family="Arial" font-size="14.00" style="">Tile</text>
 <polyline fill="none" stroke="black" points="91.62,-324.7 223.57,-324.7" style=""/>
 <text text-anchor="start" x="99.62" y="-308.1" font-family="Arial" font-size="14.00" style="">- List _adjacencies</text>
-<text text-anchor="start" x="99.62" y="-291.3" font-family="Arial" font-size="14.00" style="">- List _entities</text>
+<text text-anchor="start" x="99.62" y="-291.3" font-family="Arial" font-size="14.00" style="">- List _units</text>
 <polyline fill="none" stroke="black" points="91.62,-283.1 223.57,-283.1" style=""/>
 <text text-anchor="start" x="99.62" y="-266.5" font-family="Arial" font-size="14.00" style="">+ append(entity)</text>
 <text text-anchor="start" x="99.62" y="-249.7" font-family="Arial" font-size="14.00" style="">+ connect(iTo)</text>

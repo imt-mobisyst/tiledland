@@ -166,7 +166,7 @@ def test_gridmap_piece():
         == open("tests/refs/03.05-entity-01.svg" ).read() )
 
     def popEntity( iRobot, iGroup, iTile ):
-        bob= tild.Mobile( tild.Convex().initRegular(0.7, 6) )
+        bob= tild.Unit( tild.Convex().initRegular(0.7, 6) )
         bob.setPosition( Point(0.1, 0.1)+tabletop.tile(iTile).position() )
         bob.setBrush( palette[iGroup] )
         bob.setName( str(iRobot) )
@@ -183,7 +183,7 @@ def test_gridmap_piece():
         (0.3, 0.18), (0.3, -0.17), (0.0, -0.35),
     ]
 
-    bob= tabletop.tile(12).entity()
+    bob= tabletop.tile(12).unit()
 
     env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.shape().asZipped() ]
     print( env )
@@ -253,7 +253,7 @@ def test_hexatabletop_piece():
         == open("tests/refs/03.05-entity-11.svg" ).read() )
 
     def popEntity( iRobot, iTile, iGroup ):
-        bob= tild.Mobile( tild.Convex().initRegular(0.7, 6) )
+        bob= tild.Unit( tild.Convex().initRegular(0.7, 6) )
         bob.setPosition( Point(0.1, 0.1)+tabletop.tile(iTile).position() )
         bob.setBrush( palette[iGroup] )
         bob.setName( str(iRobot) )
@@ -313,7 +313,7 @@ def test_gridtabletop_appendpiece():
         == open("tests/refs/03.05-render-grid-01.svg" ).read() )
 
     # Add a first default entity on tile 2
-    tabletop.tileAppendEntity( 2, tild.Mobile().setBrush(palette[10]) )
+    tabletop.tileAppendEntity( 2, tild.Unit().setBrush(palette[10]) )
 
     tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
     tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
@@ -322,12 +322,12 @@ def test_gridtabletop_appendpiece():
         == open("tests/refs/03.05-render-grid-02.svg" ).read() )
 
     # Add several entities associate to different groups...
-    tabletop.tileAppendEntity( 8, tild.Mobile().setBrush(palette[11]) )
-    tabletop.tileAppendEntity( 16, tild.Mobile().setBrush(palette[11]) )
-    tabletop.tileAppendEntity( 4, tild.Mobile().setBrush(palette[12]) )
-    tabletop.tileAppendEntity( 19, tild.Mobile().setBrush(palette[12]) )
-    tabletop.tileAppendEntity( 24, tild.Mobile().setBrush(palette[13]) )
-    tabletop.tileAppendEntity( 30, tild.Mobile().setBrush(palette[13]) )
+    tabletop.tileAppendEntity( 8, tild.Unit().setBrush(palette[11]) )
+    tabletop.tileAppendEntity( 16, tild.Unit().setBrush(palette[11]) )
+    tabletop.tileAppendEntity( 4, tild.Unit().setBrush(palette[12]) )
+    tabletop.tileAppendEntity( 19, tild.Unit().setBrush(palette[12]) )
+    tabletop.tileAppendEntity( 24, tild.Unit().setBrush(palette[13]) )
+    tabletop.tileAppendEntity( 30, tild.Unit().setBrush(palette[13]) )
 
     tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
     tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )

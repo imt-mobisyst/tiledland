@@ -3,7 +3,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 from src import tiledland as tild
 from src.tiledland.geometry import Point, Convex, Box
-from src.tiledland import Entity, Mobile, Tile, Tabletop
+from src.tiledland import Unit, Tile, Tabletop
 
 # ----------------------------------------------------------------------- #
 #           T E S T   T I L E D L A N D - I N T E G R A T E D   
@@ -146,7 +146,7 @@ def test_Tabletop_construction():
 def test_Tabletop_str():
     tabletop= Tabletop().initLine(3, connect=False)
     tabletop.connectAll( [ [1, 3], [1, 1], [2, 2], [2, 1], [3, 2], [3, 2] ] )
-    tabletop.tile(2).append( Mobile() )
+    tabletop.tile(2).append( Unit() )
 
     print( f">>>\n{tabletop}." )
 

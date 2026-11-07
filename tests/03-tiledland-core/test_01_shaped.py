@@ -42,7 +42,7 @@ def test_fast_shaped_init():
 
     assert shaped.isValidShaped() == False
 
-def test_fast_reactangle_init():
+def test_fast_shaped_reactangle():
     rect= tild.Rectangle()
 
     assert type( rect ) == tild.Rectangle
@@ -76,3 +76,33 @@ def test_fast_reactangle_init():
     assert rect.isValidShaped()
 
     assert str(rect) == "Rectangle 0-0 ⌊(0.0, -0.5), (2.0, 0.5)⌉"
+
+def test_fast_shaped_shaped():
+    shaped= tild.Shaped()
+
+    assert type( shaped ) == tild.Shaped
+
+    assert shaped.position().asTuple() == (0.0, 0.0)
+    assert shaped.orientation() == 0.0
+    assert str(shaped.box()) == "⌊(-0.5, -0.5), (0.5, 0.5)⌉"
+    assert shaped.radius() ==  math.sqrt(0.5)
+    assert str( shaped.shape().asRoundZipped() ) == "[(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]"
+
+    assert shaped.isValidShaped()
+
+    assert shaped.owner() == 0
+    assert shaped.category() == 0
+    assert shaped.index() == 0
+
+    shaped= tild.Shaped( tild.Convex().initSquare(2.0) )
+    shaped.setPosition( Point(1.0, 0.0) )
+
+    assert shaped.position().asTuple() == (1.0, 0.0)
+    assert shaped.orientation() == 0.0
+    assert str(shaped.box()) ==  "⌊(0.0, -1.0), (2.0, 1.0)⌉"
+    assert shaped.radius() ==  math.sqrt(2)
+    assert str( shaped.shape().asRoundZipped() ) == "[(0.0, -1.0), (0.0, 1.0), (2.0, 1.0), (2.0, -1.0)]"
+
+    assert shaped.isValidShaped()
+
+    assert str(shaped) == "Shaped 0-0 ⌊(0.0, -1.0), (2.0, 1.0)⌉"

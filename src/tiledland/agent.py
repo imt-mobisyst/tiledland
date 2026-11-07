@@ -1,6 +1,6 @@
 import hacka
 from .geometry import Point, Convex
-from .entity import Entity
+from .unit import Unit
 
 class Action:
     WAIT= 0

@@ -57,16 +57,16 @@ class Land(tild.Land):
         return self._name
     
     def carrierTile(self, iCarrier= 1, iPlayer= 1):
-        return self.entity(iCarrier, iPlayer).tile()
+        return self.unit(iCarrier, iPlayer).tile()
     
     def carrierMission(self, iCarrier= 1, iPlayer= 1):
-        mission= self.entity(iCarrier, iPlayer).mission()
+        mission= self.unit(iCarrier, iPlayer).mission()
         if mission != 0 : 
             return mission
         return self.missionIndexes()[0]
 
     def carrierGoal(self, iCarrier= 1, iPlayer= 1):
-        mission= self.entity(iCarrier, iPlayer).mission()
+        mission= self.unit(iCarrier, iPlayer).mission()
         if mission != 0 : 
             return self.mission( mission ).final
         mission= self.missionIndexes()[0]
@@ -134,7 +134,7 @@ class Land(tild.Land):
         self._missions= []
         for group in range(self.numberOfGroups()+1) :
             for iCarrier in range(1, self.numberOfEntities(group)+1) :
-                self.entity( iCarrier, group ).setMission(0)
+                self.unit( iCarrier, group ).setMission(0)
         return self
 
     def addMission( self, iFrom, iTo, pay= 124 ):
@@ -173,7 +173,7 @@ class Land(tild.Land):
             return False
         # move:
         # Get from iFrom
-        carrier= tbtop.tile(iFrom).entity()
+        carrier= tbtop.tile(iFrom).unit()
         tbtop.tile(iFrom).clear()
 
         # Set on iTo
@@ -222,7 +222,7 @@ class Land(tild.Land):
             carrier= self.tileAppendEntity( pos, Entiry(iPlayer) )
             assert carrier.id() == iCarrier
             carrier.setMission(mis)
-        return self._entities
+        return self._units
 
     def setOnState(self, aDataTree):
         self.missionsFromDataTree( aDataTree.child(1) )

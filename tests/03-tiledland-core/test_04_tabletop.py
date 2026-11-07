@@ -4,7 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Box, Convex
-from src.tiledland import Entity, Mobile, Tile, Tabletop 
+from src.tiledland import Unit, Tile, Tabletop 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - C O M P O N E N T
@@ -161,7 +161,7 @@ def test_fast_tabletop_withEntities():
     assert tabletop.tile(2).numberOfEntities() == 1
     assert tabletop.tile(3).numberOfEntities() == 0
 
-    bod= tabletop.tileAppendEntity(2, Mobile())
+    bod= tabletop.tileAppendEntity(2, Unit())
 
     assert tabletop.numberOfEntities() == 3
     assert tabletop.tile(1).numberOfEntities() == 1
@@ -196,25 +196,25 @@ def test_fast_tabletop_popEntities():
 
     assert type(bod) == Entity
     assert bod.selector() == (2, 1)
-    assert tabletop.entity(2, 1) == bod
+    assert tabletop.unit(2, 1) == bod
 
     assert tabletop.numberOfEntities() == 1
     assert tabletop.tile(1).numberOfEntities() == 0
     assert tabletop.tile(2).numberOfEntities() == 1
     assert tabletop.tile(3).numberOfEntities() == 0
 
-    bod= tabletop.tileAppendEntity(1, Mobile())
+    bod= tabletop.tileAppendEntity(1, Unit())
 
     assert type(bod) == Mobile
     assert bod.selector() == (1, 1)
-    assert tabletop.entity(1, 1) == bod
+    assert tabletop.unit(1, 1) == bod
 
     bod= tabletop.tileAppendEntity(1, Entity())
 
     assert type(bod) == Entity
     assert bod.selector() == (1, 2)
-    assert tabletop.entity(1, 1) != bod
-    assert tabletop.entity(1, 2) == bod
+    assert tabletop.unit(1, 1) != bod
+    assert tabletop.unit(1, 2) == bod
 
     assert tabletop.numberOfEntities() == 3
     assert tabletop.tile(1).numberOfEntities() == 2
@@ -252,7 +252,7 @@ def test_fast_tabletop_moveEntities():
     c= 1
     entShape= Convex().initArrowTip(0.4)
     for i in [1, 1, 2, 2, 3] :
-        tabletop.tileAppendEntity( i, Mobile(entShape).setName(f"M.{c}") )
+        tabletop.tileAppendEntity( i, Unit(entShape).setName(f"M.{c}") )
         c+= 1
 
     tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )

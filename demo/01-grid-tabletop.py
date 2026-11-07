@@ -12,9 +12,9 @@ tabletop.initGrid(
 )
 
 
-tabletop.tileAppendEntity(2, tild.Mobile(color0x=0x004455))
-tabletop.tileAppendEntity(12, tild.Mobile(color0x=0x000000))
-tabletop.tileAppendEntity(24, tild.Mobile(color0x=0x770022))
+tabletop.tileAppendEntity(2, tild.Unit(color0x=0x004455))
+tabletop.tileAppendEntity(12, tild.Unit(color0x=0x000000))
+tabletop.tileAppendEntity(24, tild.Unit(color0x=0x770022))
 
 # Create an artist to render this tabletop:
 anArtist= tild.artist.openPNG( "shot-demo.png", 800, 600 )

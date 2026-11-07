@@ -118,7 +118,7 @@ class Convex():
             p.round(precision)
         return self
     
-    def setOnCenter(self):
+    def setCenterZero(self):
         position= self.center()
         for p in self._points :
             p.set( p._x-position._x, p._y-position._y )

@@ -97,7 +97,7 @@ class GameEngine( hacka.AbsGame ) :
         # Security:
         if not(self._model.isEntity(iCarrier, iPlayer) and 0 <= clockDir and clockDir <= 12):
             return False
-        self._model.entity(iCarrier, iPlayer).setMove(clockDir)
+        self._model.unit(iCarrier, iPlayer).setMove(clockDir)
         return True
     
     def setMissionAction(self, iPlayer, iCarrier, iMission):
@@ -106,7 +106,7 @@ class GameEngine( hacka.AbsGame ) :
         if not( model.isEntity(iPlayer, iCarrier) and model.isMission(iMission) ) :
             return False
         # Localvariable:
-        carrier= model.entity(iCarrier, iPlayer)
+        carrier= model.unit(iCarrier, iPlayer)
         iFrom, iTo, pay, owner= model.mission(iMission).asTuple()
         # Mission start:
         if carrier.mission() == 0 : 

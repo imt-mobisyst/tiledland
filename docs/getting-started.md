@@ -23,7 +23,7 @@ plateau = tild.Tabletop().initGrid([
     [0, 0, 1],
     [0, -1, 0],
 ])
-robot = tild.Entity(
+robot = tild.unit(
     group=1,
     shape=tild.Convex().initArrowTip(0.6),
     name="Robot",
@@ -43,7 +43,7 @@ Open the SVG in a browser. Positive or zero values in the matrix designate the g
 import tiledland as tild
 
 plateau = tild.Tabletop().initLine(3)
-robot = plateau.tileAppendEntity(1, tild.Entity(name="Robot"))
+robot = plateau.tileAppendEntity(1, tild.unit(name="Robot"))
 plateau.tileMoveEntity(robot.enclave(), robot.index(), 2)
 assert robot.selector() == (2, 1)
 tild.quickDraw(plateau, "", "deplacement.svg", 800, 300)

@@ -1,7 +1,7 @@
 import hacka
 from .geometry import Point, Box, Convex
 from .artist import palettes, Brush
-from .entity import Entity
+from .unit import Unit
 from .tile import Tile
 
 import math
@@ -30,7 +30,7 @@ class Tabletop():
         dist= tileSize+separation
         outline= Convex().initSquare(tileSize)
         self._tiles= [
-            Tile(outline, index= i+1).setCoordinates(dist*i, 0.0).setBrush(brush)
+            Tile(outline, category= dist*i, index= i+1).setPosition( Point(, 0.0) )
             for i in range(size)
         ]        
         self._size= size
@@ -152,7 +152,7 @@ class Tabletop():
         return self._tiles[iTile-1]
 
     def entity(self, iTile, index= 1):
-        return self.tile(iTile).entity(index)
+        return self.tile(iTile).unit(index)
 
     def numberOfTiles(self):
         return self._size
@@ -160,7 +160,7 @@ class Tabletop():
     def numberOfEntities(self):
         c= 0
         for t in self._tiles :
-            c+= len( t.entities() )
+            c+= len( t.units() )
         return c
 
     # Graph:
@@ -266,7 +266,7 @@ class Tabletop():
     def isEntity(self, iTile, index):
         return (self.isTile(iTile) 
             and 0 < index 
-            and index <= len( self.tile(iTile).entities() )
+            and index <= len( self.tile(iTile).units() )
         )
 
     def clearEntities(self):
@@ -297,14 +297,14 @@ class Tabletop():
     def tileOrientEntity(self, iTile, iEntity, angle):
         anEntity= None
         if self.isEntity(iTile, iEntity) :
-            anEntity= self.tile(iTile).entity()
+            anEntity= self.tile(iTile).unit()
             anEntity.setOrientation(angle)
         return anEntity
 
     def tileRotateEntity(self, iTile, iEntity, angle):
         anEntity= None
         if self.isEntity(iTile, iEntity) :
-            anEntity= self.tile(iTile).entity()
+            anEntity= self.tile(iTile).unit()
             anEntity.rotate(angle)
         return anEntity
     
@@ -415,7 +415,7 @@ class Tabletop():
         tile.setOutline(newConvex)
         deadTile= self.tile(iTile2)
         # merge all entities
-        for ag in deadTile.entities() :
+        for ag in deadTile.units() :
             tile.append( ag )
         
         # merge connections
@@ -492,7 +492,7 @@ class Tabletop():
         for tile in self.tiles() :
             x, y= tile.position().asTuple()
             position= (x+0.1, y+0.1)
-            for entity in tile.entities() :
+            for entity in tile.units() :
                 entity.renderOn( artist )
                 entity.writeOn( artist, str(entity.name()) )
         return self
@@ -516,7 +516,7 @@ class Tabletop():
         eltStrs =[]
         for t in self.tiles() :
             eltStrs.append( f"- {t}" )
-            for ag in t.entities() :
+            for ag in t.units() :
                 eltStrs.append( f"  - {ag}" )
         return f"{name}:\n" + "\n".join( eltStrs )
     

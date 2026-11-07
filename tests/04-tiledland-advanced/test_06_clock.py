@@ -4,7 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Box, Convex
-from src.tiledland import Mobile, Tile, Tabletop 
+from src.tiledland import Unit, Tile, Tabletop 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - C O M P O N E N T
@@ -23,7 +23,7 @@ def test_fast_tabletop_clock():
     )
     tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
 
-    bob= tild.Mobile()
+    bob= tild.Unit()
     tabletop.tileAppendEntity( 4, bob )
     tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
 
@@ -124,25 +124,25 @@ def test_fast_tabletop_hexamove():
     )
 
     for t in tabletop.tiles() :
-        assert len( t.entities() ) == 0 
+        assert len( t.units() ) == 0 
     
     tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
     
-    tabletop.tileAppendEntity( 10, tild.Mobile() )
+    tabletop.tileAppendEntity( 10, tild.Unit() )
     tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
 
-    assert len( tabletop.tile(10).entities() ) == 1
+    assert len( tabletop.tile(10).units() ) == 1
     for t in tabletop.tiles() :
         if t.index() != 10 :
-            assert len( t.entities() ) == 0 
+            assert len( t.units() ) == 0 
 
     assert tabletop.tileClockMoveEntity(10, 1, 0) == 10
     tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
 
-    assert len( tabletop.tile(10).entities() ) == 1
+    assert len( tabletop.tile(10).units() ) == 1
     for t in tabletop.tiles() :
         if t.index() != 10 :
-            assert len( t.entities() ) == 0 
+            assert len( t.units() ) == 0 
 
     assert tabletop.tileClockMoveEntity(10, 1, 3) == 11
     tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
@@ -156,8 +156,8 @@ def test_fast_tabletop_hexamove():
     assert tabletop.tileClockMoveEntity(17, 1, 5) == 24
     tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
     
-    assert len( tabletop.tile(24).entities() ) == 1
+    assert len( tabletop.tile(24).units() ) == 1
     for t in tabletop.tiles() :
         if t.index() != 24 :
-            assert len( t.entities() ) == 0
+            assert len( t.units() ) == 0
     

@@ -34,9 +34,9 @@ def test_fast_land_first():
         == open( "tests/refs/05.02-land-00.svg", mode='rb' ).read() )
 
     land.setBankOfEntities([
-        tild.Mobile(Convex().initArrowTip(0.6)).setName("X").setBrush(palettes[1][0]),
-        tild.Mobile(Convex().initArrowTip(0.4)).setName("E").setBrush(palettes[1][0]),
-        tild.Mobile(Convex().initArrowTip(0.3)).setName("C").setBrush(palettes[1][0])
+        tild.Unit(Convex().initArrowTip(0.6)).setName("X").setBrush(palettes[1][0]),
+        tild.Unit(Convex().initArrowTip(0.4)).setName("E").setBrush(palettes[1][0]),
+        tild.Unit(Convex().initArrowTip(0.3)).setName("C").setBrush(palettes[1][0])
     ])
 
 

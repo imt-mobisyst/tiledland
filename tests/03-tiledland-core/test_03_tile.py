@@ -1,8 +1,8 @@
 # HackaGames UnitTest - `pytest`
-import sys, hacka
+import sys, math
 sys.path.insert( 1, __file__.split('tests')[0] )
 
-from src.tiledland import Entity, Tile, artist
+from src.tiledland import Unit, Tile, artist
 from src.tiledland.geometry import Point, Convex
 
 # ------------------------------------------------------------------------ #
@@ -12,33 +12,45 @@ from src.tiledland.geometry import Point, Convex
 def test_fast_tile_init():
     tile= Tile( Convex().initSquare(1.0) )
 
-    assert tile.index() == 0
+    assert type( tile ) == Tile
+
     assert tile.position().asTuple() == (0.0, 0.0)
+    assert tile.orientation() == 0.0
+    assert str(tile.box()) == "⌊(-0.5, -0.5), (0.5, 0.5)⌉"
+    assert tile.radius() ==  math.sqrt(0.5)
+    assert str( tile.shape().asRoundZipped() ) == "[(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]"
     assert tile.shape().asZipped() == [(-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5), (0.5, -0.5)]
+
+    assert tile.isValidShaped()
+
+    assert tile.owner() == 0
+    assert tile.category() == 0
+    assert tile.index() == 0
     assert tile.adjacencies() == []
-    assert tile.entities() == []
+    assert tile.units() == []
     
-    tile= Tile( Convex().initSquare(42.0) ).setSelector(0, 3)
+    tile= Tile( Convex().initSquare(42.0) ).setIndex(3)
     tile.setPosition( Point(10.3, 9.7) )
 
     assert tile.index() == 3
     assert tile.position().asTuple() == (10.3, 9.7)
     assert tile.shape().asZipped() == [(-10.7, -11.3), (-10.7, 30.7), (31.3, 30.7), (31.3, -11.3)]
     assert tile.adjacencies() == []
-    assert tile.entities() == []
+    assert tile.units() == []
 
-    tile.setIndex(1).setCoordinates(1.0, 1.0)
-    tile.setShape( Convex().initSquare(2.0), tile.position() )
-
+    tile.setShape( Convex().initSquare(2.0) )
+    tile.setIndex(1).setPosition( Point(1.0, 1.0) )
+    
     assert tile.index() == 1
     assert tile.position().asTuple() == (1.0, 1.0)
     assert tile.shape().asZipped() == [(0.0, 0.0), (0.0, 2.0), (2.0, 2.0), (2.0, 0.0)]
     assert tile.adjacencies() == []
-    assert tile.entities() == []
+    assert tile.units() == []
 
 def test_fast_tile_regular():
     tile= Tile( index= 1)
-    tile.setShape( Convex().initRegular(20.0, 6), Point(10.0, 10.0) )
+    tile.setShape( Convex().initRegular(20.0, 6) )
+    tile.setPosition( Point(10.0, 10.0) )
 
     assert tile.index() == 1
     assert tile.position().asTuple() == (10.0, 10.0)
@@ -63,7 +75,7 @@ def test_fast_tile_adjencies():
 
 def test_fast_tile_str():
     tile= Tile( index= 8)
-    tile.setCoordinates(18.5, 4.07)
+    tile.setPosition( Point(18.5, 4.07) )
     
     print(f">>> {tile}")
     assert str(tile) == "Tile 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] entities(0)"
@@ -97,7 +109,7 @@ def test_fast_tile_clockDirection():
     
     p= Point( 1.2, -0.5 )
     tile= Tile( Convex().initRegular( 0.2, 12 ) )
-    tile.setCoordinates(p.x(), p.y())
+    tile.setPosition( Point(p.x(), p.y()) )
     
     assert tile.clockDirection( p ) == 0
     assert tile.clockDirection( p + Point(  0.0,  2.0 ) ) == 12

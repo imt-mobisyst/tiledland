@@ -23,7 +23,7 @@ palette= [
 ]
 paletteSize= len(palette)
 
-class Carrier(tild.Mobile):
+class Carrier(tild.Unit):
     def __init__(self, owner=0, enclave= 0, index= 0, name= "Car", mission= 0):
         super(Carrier, self).__init__(_carrierOutine, enclave= enclave, index= index)
         self._owner= owner

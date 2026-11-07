@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from src.tiledland import Action, Agent, Convex, Entity, Land, Point, Tabletop
+from src.tiledland import Action, Agent, Convex, Shaped, Unit, Land, Point, Tabletop
 
 
 def coordinates(shape):
@@ -73,7 +73,7 @@ def ttest_fast_default_land_banks_do_not_share_list_mutations():
         bank.pop()  # Restore the shared default even while the regression fails.
 
 
-def ttest_fast_default_land_templates_do_not_share_mutable_entities():
+def ttest_fast_default_land_templates_do_not_share_mutable_units():
     first, second = Land(), Land()
     template = first.bankEntity()
     original_name = template.name()

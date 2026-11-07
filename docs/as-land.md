@@ -9,7 +9,7 @@ from tiledland import Land, Tabletop, Mobile, Convex, Agent, draw
 
 land = Land(
     tabletop=Tabletop().initLine(3),
-    bankOfEntities=[Mobile(shape=Convex().initArrowTip(0.6), name="Robot")],
+    bankOfEntities=[Unit(shape=Convex().initArrowTip(0.6), name="Robot")],
 )
 acteur_id = land.appendActor(Agent(), tileIds=[1], bodyIds=[0])
 corps = land.body(acteur_id)

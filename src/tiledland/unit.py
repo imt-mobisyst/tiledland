@@ -8,8 +8,8 @@ class Unit(AbsShaped) :
     # Initialization / Destruction:
     def __init__(self,
             outline= _defaultOutline, position=Point(), orientation=0.0,
-            owner=0, category=0, identifier=0, name="Unit"):
-        super().__init__(owner, category, identifier, name)
+            owner=0, category=0, index=0, name="Unit"):
+        super().__init__(owner, category, index, name)
         assert type(outline) == Convex
         assert type(position) == Point
         self._outline= outline
@@ -19,7 +19,7 @@ class Unit(AbsShaped) :
     def copy(self):
         cpy= type(self)(
             self._outline, self._position, self._orientation, 
-            self._owner, self._category, self._identifier, self._name
+            self._owner, self._category, self._index, self._name
         )
         return cpy
 

@@ -32,7 +32,7 @@ def test_fast_simulation_tabletop_init():
     assert( shotFile == refsFile )
 
     # Add the agent:
-    bod= tild.Mobile().setName("1").setBrush( tild.artist.palettes[1][0] )
+    bod= tild.Unit().setName("1").setBrush( tild.artist.palettes[1][0] )
     land.tileAppendEntity(10, bod)
 
     tild.quickDraw(land, "", "shot-test.png", 400, 300)

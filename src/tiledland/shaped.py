@@ -7,10 +7,10 @@ _defaultOutline= Convex().initSquare(1.0)
 
 class AbsShaped :
     # Constructor
-    def __init__(self, owner=0, category=0, identifier=0, name="Shaped"):
+    def __init__(self, owner=0, category=0, index=0, name="AbsShaped"):
         self._owner= owner
         self._category= category
-        self._identifier= identifier
+        self._index= index
         self._name= name
     
     # Shape Accessor:
@@ -33,8 +33,8 @@ class AbsShaped :
     def category(self):
         return self._category
 
-    def identifier(self):
-        return self._identifier
+    def index(self):
+        return self._index
 
     def name(self):
         return self._name
@@ -52,8 +52,8 @@ class AbsShaped :
         self._category= aCategory
         return self
 
-    def setIdentifier(self, identifier):
-        self._identifier= identifier
+    def setIndex(self, index):
+        self._index= index
         return self
 
     def setName(self, aName):
@@ -77,7 +77,7 @@ class AbsShaped :
         return self.strIdentity() + f" {self.box()}"
     
     def strIdentity(self):
-        return f"{self._name} {self.owner()}-{self.identifier()}"
+        return f"{self._name} {self._owner}-{self._index}"
 
     def __str__(self):
         return self.str()
@@ -85,8 +85,8 @@ class AbsShaped :
 class Rectangle(AbsShaped) :
     # Constructor
     def __init__(self, width=1.0, height= 1.0,
-            owner=0, category=0, identifier=0, name="Rectangle"):
-        super().__init__(owner, category, identifier, name)
+            owner=0, category=0, index=0, name="Rectangle"):
+        super().__init__(owner, category, index, name)
         self._halfWidth= width*0.5
         self._halfHeight= height*0.5
         self._position= Point()
@@ -125,4 +125,44 @@ class Rectangle(AbsShaped) :
     def setPosition(self, p):
         self._position= p
         return self
+
+def _defaultShape():
+    return Convex().initSquare(1.0)
+
+class Shaped(AbsShaped):
+    # Initialization / Destruction:
+    def __init__(self, shape= _defaultShape(),
+            owner=0, category=0, index=0, name="Shaped"):
+        super().__init__(owner, category, index, name)
+        self._shape= shape
+
+    # Shape Accessor:
+    def position(self):
+        return self._shape.center()
+
+    def orientation(self):
+        return 0.0
     
+    def radius(self):
+        return self._shape.radius()
+        
+    def shape(self):
+        return self._shape
+    
+    # Construction:
+    def setShape( self, aConvex ):
+        self._shape= aConvex
+        return self
+
+    #transform:
+    def rotate(self, angle):
+        self._shape.rotate( angle )
+        return self
+    
+    def translate(self, vector):
+        self._shape.translate( vector )
+        return self
+
+    def setPosition(self, p):
+        self._shape.setCenter(p)
+        return self

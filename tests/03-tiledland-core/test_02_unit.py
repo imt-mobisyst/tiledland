@@ -23,7 +23,7 @@ def test_fast_unit_init():
 
     assert unit.owner() == 0
     assert unit.category() == 0
-    assert unit.identifier() == 0
+    assert unit.index() == 0
 
     assert type( unit.outline() ) == tild.geometry.Convex
     assert type( unit.shape() ) == tild.geometry.Convex
@@ -56,7 +56,7 @@ def test_fast_unit_init2():
 
     assert unit.owner() == 1
     assert unit.category() == 2
-    assert unit.identifier() == 3
+    assert unit.index() == 3
 
     unit.setPosition( Point() )
     assert unit.position().asTuple() == (0.0, 0.0)
@@ -137,7 +137,7 @@ def test_fast_unit_draw():
 
 def test_fast_unit_str():
     unit= tild.Unit( tild.Convex().initSquare(1.0),
-        owner=1, category= 2, identifier=3 )
+        owner=1, category= 2, index=3 )
     unit.setPosition( Point(1.0, 2.0) )
 
     print(unit)
