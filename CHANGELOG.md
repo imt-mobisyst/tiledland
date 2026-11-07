@@ -32,7 +32,7 @@ Type of changes: **Added**, **Changed**, **Deprecated**, **Removed**, **Fixed** 
 
 ## [0.1.6] - 2026-06-11
 - Major refactor of Entity/Agent/Rendering systems.
-- Integration of `msgpack` for data serialization.
+- Integration of `msgpack` for data serialization (in tests).
 - Updated Python requirement to >= 3.10.
 
 ## [0.1.5] - 2026-06-11

@@ -2,6 +2,7 @@
 from .geometry import Point, Line, Box, Convex, Grid
 
 # core components: 
+from .shaped import AbsShaped, Rectangle
 from .entity import Entity
 from .mobile import Mobile
 from .tile import Tile

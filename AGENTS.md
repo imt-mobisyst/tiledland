@@ -6,7 +6,7 @@ Tiledland is a polygon-based interconnected tiles system used to model environme
 ## Conventions
 - Build system: `flit_core`
 - Python version: `>=3.10`
-- Key dependencies: `hacka`, `pyyaml`, `pycairo`, `msgpack`
+- Key dependencies: `hacka`, `pyyaml`, `pycairo`
 
 ## Important Commands
 - Lint/Typecheck: [Ask user for specific command if not found]

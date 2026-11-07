@@ -1,8 +1,6 @@
 # Board:
 
-
 **-- Board V1.x.x --**
-
 
 ## Plan Convex Geometry :
 
@@ -41,6 +39,7 @@ Artist is designed independant to graphical librairie, the glue is implemented i
 - [x] `Mobile`, derivated from `Entity`, disotiate a fixe outline shape reference and transformation (position, orientation).
 - [ ] `Canva` element is used to better organise tiles.
 - [x] Initialize artist rendering: entities can be rendered with an Artist object.
+
 
 ## Tiledland a Graph
 

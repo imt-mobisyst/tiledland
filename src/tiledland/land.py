@@ -93,6 +93,9 @@ class Land():
 
 
     # Tabletop sortcut:
+    def box(self):
+        return self._tabletop.box()
+
     def tile(self, iTile):
         return self._tabletop.tile(iTile)
 

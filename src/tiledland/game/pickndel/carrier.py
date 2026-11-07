@@ -1,9 +1,13 @@
 """
-Test - MoveIt Robot Class
+Pick'n Delivery - Carrier Class
+
+Carrier are mobile entities in the land, controled by players.
 """
 
 import tiledland as tild
 from tiledland.geometry import Point, Convex, Box
+
+_carrierOutine= Convex().initArrowTip(0.6)
 
 palette= [
     tild.Brush(0x603800, 0xffcd80, 4), # 10-Background
@@ -18,11 +22,10 @@ palette= [
     tild.Brush(0x000000, 0x444444, 4)  # 19-Black
 ]
 paletteSize= len(palette)
-carrierOutine= Convex().initArrowTip(0.6)
 
 class Carrier(tild.Mobile):
     def __init__(self, owner=0, enclave= 0, index= 0, name= "Car", mission= 0):
-        super(Carrier, self).__init__(carrierOutine, enclave= enclave, index= index)
+        super(Carrier, self).__init__(_carrierOutine, enclave= enclave, index= index)
         self._owner= owner
         self.setBrush(palette[owner%paletteSize])
         self.setName(name)

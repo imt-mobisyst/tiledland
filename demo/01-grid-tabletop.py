@@ -11,16 +11,10 @@ tabletop.initGrid(
     [-1, -1, 0, 0, 0, -1, -1, -1]]           #  
 )
 
-# Agent 1
-agent= tabletop.popAgentOn(9)
 
-# Agent 2
-agent= tabletop.popAgentOn(26)
-agent.setMatter(13)
-
-# Agent 3
-agent= tabletop.popAgentOn(14)
-agent.setMatter(15)
+tabletop.tileAppendEntity(2, tild.Mobile(color0x=0x004455))
+tabletop.tileAppendEntity(12, tild.Mobile(color0x=0x000000))
+tabletop.tileAppendEntity(24, tild.Mobile(color0x=0x770022))
 
 # Create an artist to render this tabletop:
 anArtist= tild.artist.openPNG( "shot-demo.png", 800, 600 )

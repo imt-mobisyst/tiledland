@@ -1,6 +1,6 @@
 # Land and Actors
 
-A `Land` associates a `Tabletop`, a bank of entity models, and a list of actors. An `Actor` links an agent to several bodies. Bodies are the entities actually placed on the tabletop.
+A `Land` associates a `Tabletop`, a bank of entity models, and a list of actors. An `Actor` links an agent to one or several bodies. Bodies are the entities actually placed on the tabletop.
 
 ## Adding an Actor
 

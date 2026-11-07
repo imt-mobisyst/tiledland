@@ -12,7 +12,7 @@ class Box(): # AABB Box
         cpy._min= self._min.copy()
         cpy._max= self._max.copy()
         return cpy
-     
+    
     # Initialization:
     def fromList( self, listOfPoint= [Point()] ):
         self._min= Point( listOfPoint[0].x(), listOfPoint[0].y() )

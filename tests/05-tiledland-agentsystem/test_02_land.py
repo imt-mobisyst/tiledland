@@ -25,6 +25,8 @@ def test_fast_land_first():
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
 
+    assert type( land.box() ) == tild.Box
+
     tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
     tild.quickDraw( land.tabletop(), "", "shot-test.svg", 800, 600 )
 
