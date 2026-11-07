@@ -78,8 +78,8 @@ def test_fast_mobile_transform():
     ent.translate( Point(1.5, -2.0) )
 
     artist= tild.artist.openSVG("shot-test.svg", 800, 600)
-    artist.drawConvex( ent.outline(), tild.artist.palette01[3] )
-    artist.drawConvex( ent.shape(), tild.artist.palette01[5] )
+    artist.drawConvex( ent.outline(), tild.artist.palettes[1][3] )
+    artist.drawConvex( ent.shape(), tild.artist.palettes[1][5] )
     artist.flip()
     
     assert ent.orientation() == 1.67

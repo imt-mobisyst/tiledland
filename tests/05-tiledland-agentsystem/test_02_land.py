@@ -4,7 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Convex, Point
-from src.tiledland.artist import palette00, palette01
+from src.tiledland.artist import palettes
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - C O M P O N E N T
@@ -34,9 +34,9 @@ def test_fast_land_first():
         == open( "tests/refs/05.02-land-00.svg", mode='rb' ).read() )
 
     land.setBankOfEntities([
-        tild.Mobile(Convex().initArrowTip(0.6)).setName("X").setBrush(palette01[0]),
-        tild.Mobile(Convex().initArrowTip(0.4)).setName("E").setBrush(palette01[0]),
-        tild.Mobile(Convex().initArrowTip(0.3)).setName("C").setBrush(palette01[0])
+        tild.Mobile(Convex().initArrowTip(0.6)).setName("X").setBrush(palettes[1][0]),
+        tild.Mobile(Convex().initArrowTip(0.4)).setName("E").setBrush(palettes[1][0]),
+        tild.Mobile(Convex().initArrowTip(0.3)).setName("C").setBrush(palettes[1][0])
     ])
 
 

@@ -1,6 +1,39 @@
 from .support import AbsSupport, Support, SupportSVG
 from . import color
 
+class Brush():
+    def __init__(self, fill= 0xff6644, stroke= 0x991100, width= 4 ):
+        self.fill= fill
+        self.stroke= stroke
+        self.width= width
+
+palettes= [
+    [
+        Brush(0xffcd80, 0x603800, 4), # 0-Free
+        Brush(0xff6644, 0x991100, 4), # 1-Red
+        Brush(0x70f050, 0x20770a, 4), # 2-Green
+        Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
+        Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
+        Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
+        Brush(0x66ddee, 0x117799, 4), # 6-Cian
+        Brush(0xffffff, 0xbbbbbb, 4), # 7-White
+        Brush(0x888888, 0x555555, 4), # 8-Grey
+        Brush(0x444444, 0x000000, 4)  # 9-Black
+    ],
+    [
+        Brush(0x603800, 0xffcd80, 4), # 10-Background
+        Brush(0x991100, 0xff6644, 4), # 11-Red
+        Brush(0x20770a, 0x70f050, 4), # 12-Green
+        Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
+        Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
+        Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
+        Brush(0x117799, 0x66ddee, 4), # 16-Cian
+        Brush(0xbbbbbb, 0xffffff, 4), # 17-White
+        Brush(0x555555, 0x888888, 4), # 18-Grey
+        Brush(0x000000, 0x444444, 4)  # 19-Black
+    ]
+]
+
 def quickDraw(anEntity, tag=None, filePath="shot-tiledland.png", width= 1600, height= 1200):
     pablo= Artist()
 
@@ -19,6 +52,23 @@ def quickDraw(anEntity, tag=None, filePath="shot-tiledland.png", width= 1600, he
 
     return pablo
 
+def drawUnit( aUnit, filePath="shot-tiledland.png", width= 1600, height= 1200, palettes= palettes ):
+    pablo= Artist(palettes)
+
+    fileExtend= filePath.split(".")[-1]
+    if fileExtend in ["png", "PNG"]:
+        from .supportCairo import SupportPNG
+        pablo.init( filePath, width, height, SupportPNG )
+    elif fileExtend in ["svg", "SVG"]:
+        pablo.init( filePath, width, height, SupportSVG )    
+    
+    pablo.fit(aUnit)
+    pablo.drawUnit(aUnit)
+    pablo.tagUnit(aUnit)
+    pablo.flip()
+
+    return pablo
+
 def openSVG(filePath, width, height):
     return Artist().init(filePath, width, height, SupportSVG)
 
@@ -27,45 +77,15 @@ def openPNG(filePath, width, height):
     return Artist().init(filePath, width, height, SupportPNG)
 
 # Artist:
-class Brush():
-    def __init__(self, fill= 0xff6644, stroke= 0x991100, width= 4 ):
-        self.fill= fill
-        self.stroke= stroke
-        self.width= width
-
-palette00= [
-    Brush(0xffcd80, 0x603800, 4), # 0-Free
-    Brush(0xff6644, 0x991100, 4), # 1-Red
-    Brush(0x70f050, 0x20770a, 4), # 2-Green
-    Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
-    Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
-    Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
-    Brush(0x66ddee, 0x117799, 4), # 6-Cian
-    Brush(0xffffff, 0xbbbbbb, 4), # 7-White
-    Brush(0x888888, 0x555555, 4), # 8-Grey
-    Brush(0x444444, 0x000000, 4)  # 9-Black
-]
-
-palette01= [
-    Brush(0x603800, 0xffcd80, 4), # 10-Background
-    Brush(0x991100, 0xff6644, 4), # 11-Red
-    Brush(0x20770a, 0x70f050, 4), # 12-Green
-    Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
-    Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
-    Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
-    Brush(0x117799, 0x66ddee, 4), # 16-Cian
-    Brush(0xbbbbbb, 0xffffff, 4), # 17-White
-    Brush(0x555555, 0x888888, 4), # 18-Grey
-    Brush(0x000000, 0x444444, 4)  # 19-Black
-]
 
 class Artist():
-    def __init__(self):
+    def __init__(self, palettes= palettes):
         #  Initialize support:
         self._support= Support()
 
         # Initialize brush :
         self._background= 0xb86e00
+        self._palettes= palettes
         self._fontSize= 16
 
         # Initialize Frame :
@@ -225,6 +245,22 @@ class Artist():
         )
         return self
 
+    # Drawing Tild' Shaped:
+    def brushUnit(self, aUnit):
+        l1= len(self._palettes[1])
+        return self._palettes[1][ aUnit.owner()%l1 ]
+        
+    def drawUnit(self, aUnit):
+        self.fillConvex( aUnit.shape(), self.brushUnit(aUnit) )
+        return self
+    
+    def tagUnit(self, aUnit):
+        minx, miny= aUnit.box().leftFloor().asTuple()
+        cx, cy= aUnit.position().asTuple()
+        x= minx + 0.1 * (cx - minx)
+        self.write( x, cy, aUnit.name(), self.brushUnit(aUnit) )
+        return self
+
     # Drawing frame:
     def drawFrameGrid( self, step= 1.0, color=None ):
         
@@ -241,7 +277,7 @@ class Artist():
         height= self._support.height()
 
         if not color :
-            color= palette00[0].stroke
+            color= self._palettes[0][0].stroke
         
         # Vertical
         for i in range( (int)(width/pixStep)+1 ) :

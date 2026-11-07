@@ -4,7 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Box, Convex
-from src.tiledland.artist import palette00, palette01
+from src.tiledland.artist import palettes
 from src.tiledland import Agent, Tile, Tabletop 
 
 # ------------------------------------------------------------------------ #
@@ -104,7 +104,7 @@ def test_long_gridmap_mediumTabletop_inside():
         shapes= grid.makeRectangles(pixval, tileSize)
         for s in shapes :
             i+= 1
-            assert tabletop.createTile(s, palette00[pixval]) == i
+            assert tabletop.createTile(s, palettes[0][pixval]) == i
 
     # Connect all elements:
     tabletop.connectAllClose( grid.resolution() )

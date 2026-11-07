@@ -6,23 +6,60 @@ from . import artist
 _defaultOutline= Convex().initSquare(1.0)
 
 class AbsShaped :
+    # Constructor
+    def __init__(self, owner=0, category=0, identifier=0, name="Shaped"):
+        self._owner= owner
+        self._category= category
+        self._identifier= identifier
+        self._name= name
     
-    # Shape Accessor: 
+    # Shape Accessor:
     def position(self):
         assert( "Should be implemented, and return a geometry::Point" == False )
 
     def orientation(self):
         assert( "Should be implemented, and return a radian angle" == False )
 
-    def box(self):
-        assert( "Should be implemented, and return a geometry::Box" == False )
-
     def radius(self):
-        assert( "Should be implemented, and return a geometry::Point" == False )
+        assert( "Should be implemented, and return a positive value" == False )
 
-    def convexhull(self):
-        assert( "Should be implemented, and return a geometry::Point" == False )
+    def shape(self):
+        assert( "Should be implemented, and return a geometry::Convex" == False )
 
+    # Who is Accessor:
+    def owner(self):
+        return self._owner
+
+    def category(self):
+        return self._category
+
+    def identifier(self):
+        return self._identifier
+
+    def name(self):
+        return self._name
+
+    # Derivated Accessor : 
+    def box(self):
+        return self.shape().box()
+
+    # Construction:
+    def setOwner(self, owner):
+        self._owner= owner
+        return self
+
+    def setCategory(self, aCategory):
+        self._category= aCategory
+        return self
+
+    def setIdentifier(self, identifier):
+        self._identifier= identifier
+        return self
+
+    def setName(self, aName):
+        self._name= aName
+        return self
+    
     # test : 
     def isValidShaped(self):
         try:
@@ -30,14 +67,26 @@ class AbsShaped :
             theta= self.orientation()
             box= self.box()
             r= self.radius()
-            conv= self.convexhull()
+            conv= self.shape()
         except:
             return False
         return True
 
+    # str:
+    def str(self): 
+        return self.strIdentity() + f" {self.box()}"
+    
+    def strIdentity(self):
+        return f"{self._name} {self.owner()}-{self.identifier()}"
+
+    def __str__(self):
+        return self.str()
+
 class Rectangle(AbsShaped) :
     # Constructor
-    def __init__(self, width=1.0, height= 1.0):
+    def __init__(self, width=1.0, height= 1.0,
+            owner=0, category=0, identifier=0, name="Rectangle"):
+        super().__init__(owner, category, identifier, name)
         self._halfWidth= width*0.5
         self._halfHeight= height*0.5
         self._position= Point()
@@ -59,7 +108,7 @@ class Rectangle(AbsShaped) :
     def radius(self):
         return math.sqrt( self._halfWidth*self._halfWidth + self._halfHeight*self._halfHeight )
     
-    def convexhull(self):
+    def shape(self):
         x, y= self._position.asTuple()
         x1= x-self._halfWidth
         y1= y-self._halfHeight

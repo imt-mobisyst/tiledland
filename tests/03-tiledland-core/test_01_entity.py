@@ -69,8 +69,8 @@ def test_fast_simpleEnt_transform():
     ent.setPose( Point(1.5, -2.0), 1.67 )
 
     artist= tild.artist.openPNG("shot-test.png", 800, 600)
-    artist.drawConvex( refShape, tild.artist.palette01[3] )
-    artist.drawConvex( ent.shape(), tild.artist.palette01[5] )
+    artist.drawConvex( refShape, tild.artist.palettes[1][3] )
+    artist.drawConvex( ent.shape(), tild.artist.palettes[1][5] )
     artist.flip()
 
     assert ent.orientation() == 0.0

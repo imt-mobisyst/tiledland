@@ -1,6 +1,6 @@
 import hacka
 from .geometry import Point, Box, Convex
-from .artist import palette00, Brush
+from .artist import palettes, Brush
 from .entity import Entity
 from .tile import Tile
 
@@ -9,6 +9,8 @@ import math
 CLOCK_ANGLE= math.pi/6
 CLOCK_START= math.pi/2
 CLOCK_ANGLES= [ CLOCK_START - i*CLOCK_ANGLE for i in range(0,9) ] + [math.pi - i*CLOCK_ANGLE for i in range(0,4) ]
+
+paletteFront= palettes[0]
 
 class Tabletop():
     def __init__(self, epsilon= 0.01):
@@ -24,7 +26,7 @@ class Tabletop():
         self._size= 0
         return self
 
-    def initLine( self, size, tileSize= 1.0, separation= 0.1, connect=True, brush=palette00[0]):
+    def initLine( self, size, tileSize= 1.0, separation= 0.1, connect=True, brush=paletteFront[0]):
         dist= tileSize+separation
         outline= Convex().initSquare(tileSize)
         self._tiles= [
@@ -36,7 +38,7 @@ class Tabletop():
             self.connectAllClose(1.1*separation)
         return self
     
-    def initGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True, palette=palette00):
+    def initGrid( self, matrix, tileSize= 1.0, separation=0.1, connect=True, palette=paletteFront):
         dist= tileSize+separation
         outLine= Convex().initSquare(tileSize)
         self._tiles= []
@@ -56,7 +58,7 @@ class Tabletop():
             self.connectAllClose(1.1*separation)
         return self
 
-    def initHexa(self, matrix, tileSize= 1.0, separation=0.1, connect=True, palette=palette00):
+    def initHexa(self, matrix, tileSize= 1.0, separation=0.1, connect=True, palette=paletteFront):
         cosPi06= math.cos(math.pi/6)
         dist= tileSize*cosPi06 + separation
         vdist= dist*cosPi06
@@ -82,7 +84,7 @@ class Tabletop():
             self.connectAllClose(1.1*separation)
         return self
 
-    def fromGridConvexes(self, aGrid, tileSize=1.0, minSizeRatio=0.1, pixelValues= False, palette=palette00):
+    def fromGridConvexes(self, aGrid, tileSize=1.0, minSizeRatio=0.1, pixelValues= False, palette=paletteFront):
         self.clear()
         seam= aGrid.resolution() * 1.001
         self._epsilon= aGrid.resolution() * 0.001
@@ -105,14 +107,14 @@ class Tabletop():
 
         return self
 
-    def fromShapes(self, shapes, brush=palette00[0]):
+    def fromShapes(self, shapes, brush=paletteFront[0]):
         # Clean basis:
         self.clear()
         for s in shapes :
             self.createTile(s, brush)
         return self
     
-    def fromGridRectangles(self, aGrid, tileSize= 1.0, palette=palette00):
+    def fromGridRectangles(self, aGrid, tileSize= 1.0, palette=paletteFront):
         self.clear()
         self._epsilon= aGrid.resolution() * 0.4
 
@@ -219,11 +221,11 @@ class Tabletop():
         self._tiles.append( aTile )
         return aTile
     
-    def createSeveralTiles(self, convexes, brush=palette00[0]):
+    def createSeveralTiles(self, convexes, brush=paletteFront[0]):
         for c in convexes :
             self.createTile( c, brush )
         
-    def createTile( self, aTileShape, brush=palette00[0] ):
+    def createTile( self, aTileShape, brush=paletteFront[0] ):
         assert type(brush) == Brush
         aShape= aTileShape.copy()
         x, y= aShape.setOnCenter().asTuple()
@@ -506,7 +508,7 @@ class Tabletop():
             return self
         minx, miny= self.box().leftFloor().asTuple()
         maxx, maxy= self.box().rightCeiling().asTuple()
-        artist.write( minx, maxy, text, palette00[0] )
+        artist.write( minx, maxy, text, paletteFront[0] )
         return self
 
     # string:

@@ -1,6 +1,6 @@
 from .tabletop import CLOCK_ANGLE, Tabletop
 from .geometry import Convex
-from .artist import palette01
+from .artist import palettes
 from .mobile import Mobile
 from .agent import Agent
 
@@ -44,14 +44,14 @@ class Land():
     def initializeDefaultBankOfEntities(self, bankOfEntitiesSize= 8, arrowtipSize= 0.8):
         names= ['X'] + [ chr( ord('A') + i%26 ) for i in range(bankOfEntitiesSize) ]
         self._bankOfEntities= [
-            Mobile(Convex().initArrowTip(arrowtipSize)).setName(names[i]).setBrush(palette01[i])
+            Mobile(Convex().initArrowTip(arrowtipSize)).setName(names[i]).setBrush(palettes[1][i])
             for i in range(bankOfEntitiesSize)
         ]
         return self
 
     def initializeArrowTipBankOfEntities(self, groups, arrowtipSizes, arrowtipAngles, names):
         self._bankOfEntities= [
-            Mobile(Convex().initArrowTip(s), orientation= a).setName(n).setBrush(palette01[i])
+            Mobile(Convex().initArrowTip(s), orientation= a).setName(n).setBrush(palettes[1][i])
             for i, s, a, n in zip( groups, arrowtipSizes, arrowtipAngles, names )
         ]
         return self

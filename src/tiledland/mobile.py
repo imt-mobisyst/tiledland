@@ -13,7 +13,7 @@ class Mobile(Entity) :
         self._orientation= 0.0
         self._position= Point()
         super(Mobile, self).__init__(outline, position, orientation, color0x, enclave, index)
-
+    
     def copy(self):
         cpy= type(self)(
             self._outline,
