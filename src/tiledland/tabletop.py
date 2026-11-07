@@ -26,11 +26,11 @@ class Tabletop():
         self._size= 0
         return self
 
-    def initLine( self, size, tileSize= 1.0, separation= 0.1, connect=True, brush=paletteFront[0]):
+    def initLine( self, size, tileSize= 1.0, separation= 0.1, connect=True ):
         dist= tileSize+separation
         outline= Convex().initSquare(tileSize)
         self._tiles= [
-            Tile(outline, category= dist*i, index= i+1).setPosition( Point(, 0.0) )
+            Tile(outline, index= i+1).setPosition( Point(dist*i, 0.0) )
             for i in range(size)
         ]        
         self._size= size
