@@ -10,7 +10,7 @@ class Tile(Shaped):
     # Initialization / Destruction:
     def __init__(self, shape= _defaultShape(),
             category=0, owner=0, index=0, name="Tile"):
-        super().__init__(shape, owner, category, index, name)
+        super().__init__(shape, category, owner, index, name)
         assert type(shape) == Convex
         self._adjacencies= []
         self._units= []
@@ -36,7 +36,7 @@ class Tile(Shaped):
     def units(self):
         return self._units
     
-    def numberOfEntities(self):
+    def numberOfUnits(self):
         return self._size
 
     def unit(self, i=1) :
@@ -96,37 +96,20 @@ class Tile(Shaped):
     
     def appendCenter(self, aUnit):
         index= self.append(aUnit)
-        aUnit.setPose( self.position(), anEntity.orientation() )
+        aUnit.setPose( self.position(), aUnit.orientation() )
         return index
     
-    def remove(self, iEntity):
-        i= iEntity-1
+    def remove(self, iUnit):
+        i= iUnit-1
         ent= self._units.pop(i)
         self._size= len(self._units)
-        for j in range( i, self._size ) :
-            self._units[j].setIndex(j+1)
         return ent
     
     def clear(self):
         self._units = []
         self._size= 0
         return self
-    
-    # Artist drawing:
-    def renderOn(self, artist):
-        artist.drawConvex( self.shape(), self.brush() )
-        return self
-
-    def writeOn(self, artist, text):
-        if text == "" :
-            return self
-        minx, miny= self.box().leftFloor().asTuple()
-        x, y= self.position().asTuple()
-        x= x+(minx-x)*2/3
-        y= y+(miny-y)*2/3
-        artist.write( x, y, text, self.brush() )
-        return self
-    
+        
     # to String
     def str(self): 
         # Myself :

@@ -40,7 +40,7 @@ palette= [
 def test_fast_tile_rendering():
     pablo= tild.artist.openSVG( shotImg, 800, 600 )
 
-    tile= tild.Tile().setBrush(palette[0])
+    tile= tild.Tile( category=0 )
     
     tile.renderOn( pablo )
     pablo.flip()
@@ -48,24 +48,25 @@ def test_fast_tile_rendering():
     assert( open(shotImg).read()
         == open("tests/refs/03.05-tile-01.svg").read() )
     
-    tile= tild.Tile( Convex().initSquare(4.0) ).setBrush(palette[0])
-    tile.setCoordinates(1.3, 0.9)
+    tile= tild.Tile( Convex().initSquare(4.0), category= 0 )
+    tile.setPosition( Point(1.3, 0.9) )
     tile.renderOn( pablo )
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-tile-02.svg").read() )
 
-    tile= tild.Tile( index= 1).setCoordinates(0.4, 0.2).setBrush(palette[1])
-    tile.setOutline( tild.Convex().initRegular( 2.0, 6 ) )
-    tile.renderOn( pablo )
+    tile= tild.Tile( index= 1).setCategory(1)
+    tile.setShape( tild.Convex().initRegular( 2.0, 6 ) )
+    tile.setPosition( Point(0.4, 0.2) )
+    pablo.drawTile(tile)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-tile-03.svg").read() )
     
-    tile.renderOn( pablo )
-    tile.writeOn( pablo, str(tile.index()) )
+    pablo.drawTile(tile)
+    pablo.tagTIle(tile, str(tile.index()))
     pablo.flip()
 
     assert( open(shotImg).read()

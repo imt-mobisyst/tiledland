@@ -144,14 +144,14 @@ class Map():
 
     def tile(self, iTile):
         return self._tiles[iTile-1]
-
-    def entity(self, iTile, index= 1):
+    
+    def unit(self, iTile, index= 1):
         return self.tile(iTile).unit(index)
 
     def numberOfTiles(self):
         return self._size
     
-    def numberOfEntities(self):
+    def numberOfUnits(self):
         c= 0
         for t in self._tiles :
             c+= len( t.units() )
@@ -263,30 +263,23 @@ class Map():
             and index <= len( self.tile(iTile).units() )
         )
 
-    def clearEntities(self):
+    def clearUnits(self):
         for t in self.tiles() :
             t.clear()
-        return self
-
-    def tileAppendUnit( self, iTile, aUnit ):
-        tile= self.tile(iTile)
-        tile.appendCenter(aUnit)
-        aUnit.setPose(tile.position(), aUnit.orientation())
-        return aUnit
+        return self 
 
     def tileRemoveUnit( self, iTile, iUnit ):
         aUnit= None
         if self.isUnit(iTile, iUnit) :
             aUnit= self.tile(iTile).remove(iUnit)
-            aUnit.setSelector(0, 0)
         return aUnit
 
     def tileMoveUnit( self, iTile, iUnit, tTile ):
         aUnit= self.tileRemoveUnit(iTile, iUnit)
         if aUnit is None :
             return aUnit
-        self.tileAppendUnit(tTile, aUnit)
-        return aUnit
+        i= self.tile(tTile).appendCenter(aUnit)
+        return i
 
     def tileOrientUnit(self, iTile, iUnit, angle):
         aUnit= None

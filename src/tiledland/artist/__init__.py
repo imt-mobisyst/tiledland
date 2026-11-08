@@ -282,15 +282,16 @@ class ArtistBasic(Artist):
         self.write( x, y, text, self.tileBrush(aTile) )
         return self
 
-        # Artist drawing:
+    # Artist drawing:
     def drawMapNetwork( self, aMap ):
         for tile in aMap.tiles() :
             cx, cy= tile.position().asTuple()
             self.tracePoint( cx, cy, self.tileBrush(tile) )
         for fromId, toId in aMap.edges() :
-            fromX, fromY= aMap.tile( fromId ).position().asTuple()
+            tileFrom= aMap.tile( fromId )
+            fromX, fromY= tileFrom.position().asTuple()
             toX, toY= aMap.tile( toId ).position().asTuple()
-            self.traceLine( fromX, fromY, toX, toY, aMap.tile(fromId).brush() )
+            self.traceLine( fromX, fromY, toX, toY, self.tileBrush(tileFrom) )
         return self
 
     def drawMapTiles( self, aMap):

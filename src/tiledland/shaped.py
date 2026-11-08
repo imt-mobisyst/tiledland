@@ -65,6 +65,13 @@ class AbsShaped :
         self._name= aName
         return self
     
+    # Comparison :
+    def centerDistance(self, another):
+        return self.position().distance( another.position() )
+
+    def shapeDistance(self, another):
+        return self.shape().distance( another.shape() )
+
     # test : 
     def isValidShaped(self):
         try:
