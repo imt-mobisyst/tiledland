@@ -8,8 +8,8 @@ class Unit(AbsShaped) :
     # Initialization / Destruction:
     def __init__(self,
             outline= _defaultOutline, position=Point(), orientation=0.0,
-            owner=0, category=0, index=0, name="Unit"):
-        super().__init__(owner, category, index, name)
+            category=0, owner=0, index=0, name="Unit"):
+        super().__init__(category, owner, index, name)
         assert type(outline) == Convex
         assert type(position) == Point
         self._outline= outline

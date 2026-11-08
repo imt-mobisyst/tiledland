@@ -4,7 +4,7 @@ sys.path.insert( 1, workDir )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Convex
-from src.tiledland.artist import palettes
+from src.tiledland.artist import _paletteTiles, _paletteUnits
 
 # ------------------------------------------------------------------------ #
 #                 T E S T   I N T E R F A C E    A R T I S T
@@ -16,36 +16,36 @@ def test_fast_artist_palette():
     pablo= tild.artist.openSVG( shotImg, 800, 600 )
 
     shape= Convex().fromZipped( [(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
-    pablo.drawConvex( shape, palettes[0][1] )
+    pablo.drawConvex( shape, _paletteTiles[1] )
     pablo.flip()
     
     shotFile= open( shotImg ).read() 
     refsFile= open( "tests/refs/02.04-palette-01.svg" ).read()
     assert( shotFile == refsFile )
 
-    pablo.drawConvex( shape,  palettes[0][0], -2.2, 1.7 )
-    pablo.drawConvex( shape,  palettes[0][1], -1.1, 1.7 )
-    pablo.drawConvex( shape,  palettes[0][2],    0, 1.7 )
-    pablo.drawConvex( shape,  palettes[0][3],  1.1, 1.7 )
-    pablo.drawConvex( shape,  palettes[0][4],  2.2, 1.7 )
+    pablo.drawConvex( shape,  _paletteTiles[0], -2.2, 1.7 )
+    pablo.drawConvex( shape,  _paletteTiles[1], -1.1, 1.7 )
+    pablo.drawConvex( shape,  _paletteTiles[2],    0, 1.7 )
+    pablo.drawConvex( shape,  _paletteTiles[3],  1.1, 1.7 )
+    pablo.drawConvex( shape,  _paletteTiles[4],  2.2, 1.7 )
 
-    pablo.drawConvex( shape,  palettes[1][0], -2.2, 0.6 )
-    pablo.drawConvex( shape,  palettes[1][1], -1.1, 0.6 )
-    pablo.drawConvex( shape,  palettes[1][2],    0, 0.6 )
-    pablo.drawConvex( shape,  palettes[1][3],  1.1, 0.6 )
-    pablo.drawConvex( shape,  palettes[1][4],  2.2, 0.6 )
+    pablo.drawConvex( shape,  _paletteUnits[0], -2.2, 0.6 )
+    pablo.drawConvex( shape,  _paletteUnits[1], -1.1, 0.6 )
+    pablo.drawConvex( shape,  _paletteUnits[2],    0, 0.6 )
+    pablo.drawConvex( shape,  _paletteUnits[3],  1.1, 0.6 )
+    pablo.drawConvex( shape,  _paletteUnits[4],  2.2, 0.6 )
 
-    pablo.drawConvex( shape,  palettes[0][5], -2.2, -0.5 )
-    pablo.drawConvex( shape,  palettes[0][6], -1.1, -0.5 )
-    pablo.drawConvex( shape,  palettes[0][7],    0, -0.5 )
-    pablo.drawConvex( shape,  palettes[0][8],  1.1, -0.5 )
-    pablo.drawConvex( shape,  palettes[0][9],  2.2, -0.5 )
+    pablo.drawConvex( shape,  _paletteTiles[5], -2.2, -0.5 )
+    pablo.drawConvex( shape,  _paletteTiles[6], -1.1, -0.5 )
+    pablo.drawConvex( shape,  _paletteTiles[7],    0, -0.5 )
+    pablo.drawConvex( shape,  _paletteTiles[8],  1.1, -0.5 )
+    pablo.drawConvex( shape,  _paletteTiles[9],  2.2, -0.5 )
     
-    pablo.drawConvex( shape,  palettes[1][5], -2.2, -1.6 )
-    pablo.drawConvex( shape,  palettes[1][6], -1.1, -1.6 )
-    pablo.drawConvex( shape,  palettes[1][7],    0, -1.6 )
-    pablo.drawConvex( shape,  palettes[1][8],  1.1, -1.6 )
-    pablo.drawConvex( shape,  palettes[1][9],  2.2, -1.6 )
+    pablo.drawConvex( shape,  _paletteUnits[5], -2.2, -1.6 )
+    pablo.drawConvex( shape,  _paletteUnits[6], -1.1, -1.6 )
+    pablo.drawConvex( shape,  _paletteUnits[7],    0, -1.6 )
+    pablo.drawConvex( shape,  _paletteUnits[8],  1.1, -1.6 )
+    pablo.drawConvex( shape,  _paletteUnits[9],  2.2, -1.6 )
 
     pablo.flip()
     
@@ -58,22 +58,22 @@ def test_fast_artist_palette_png():
     pablo= tild.artist.openPNG(shotImg, 800, 600)
 
     shape= Convex().fromZipped([(-0.5, -0.5),  (0.5, -0.5),  (0.5, 0.5),  (-0.5, 0.5)] )
-    pablo.drawConvex( shape, palettes[0][1] )
+    pablo.drawConvex( shape, _paletteTiles[1] )
     pablo.flip()
     
     shotFile= open( shotImg, mode='rb' ).read() 
     refsFile= open( "tests/refs/02.04-palette-01.png", mode='rb' ).read()
     assert( shotFile == refsFile )
 
-    pablo.drawConvex( shape,  palettes[0][0], -2.2, 0 )
-    pablo.drawConvex( shape,  palettes[0][1], -1.1, 0 )
-    pablo.drawConvex( shape,  palettes[0][2], 0, 0 )
-    pablo.drawConvex( shape,  palettes[0][3], 1.1, 0 )
-    pablo.drawConvex( shape,  palettes[0][4], 2.2, 0 )
-    pablo.drawConvex( shape,  palettes[0][5], -0.55, 1.1 )
-    pablo.drawConvex( shape,  palettes[0][6], 0.55, 1.1 )
-    pablo.drawConvex( shape,  palettes[0][7], -0.55, -1.1 )
-    pablo.drawConvex( shape,  palettes[0][8], 0.55, -1.1 )
+    pablo.drawConvex( shape,  _paletteTiles[0], -2.2, 0 )
+    pablo.drawConvex( shape,  _paletteTiles[1], -1.1, 0 )
+    pablo.drawConvex( shape,  _paletteTiles[2], 0, 0 )
+    pablo.drawConvex( shape,  _paletteTiles[3], 1.1, 0 )
+    pablo.drawConvex( shape,  _paletteTiles[4], 2.2, 0 )
+    pablo.drawConvex( shape,  _paletteTiles[5], -0.55, 1.1 )
+    pablo.drawConvex( shape,  _paletteTiles[6], 0.55, 1.1 )
+    pablo.drawConvex( shape,  _paletteTiles[7], -0.55, -1.1 )
+    pablo.drawConvex( shape,  _paletteTiles[8], 0.55, -1.1 )
     pablo.flip()
     
     shotFile= open( shotImg, mode='rb' ).read() 

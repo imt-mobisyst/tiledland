@@ -14,7 +14,7 @@ It is based on convex poligon shaping implemented in the geometric functionality
 - [ ] Canva, Grid based collection of Convex Object...
 - [ ] Have the posibility to swith on a C-based librairie.
 - [ ] Make `Convex.initRegular()` centered on (0, 0) - with test.
-- [ ] Remove rotate from Entity ?
+- [ ] Remove rotate from Unit ?
 - [ ] PointCloud (potentially from Scan) to Envellope: a centered and ordered PointCloud.
 - [ ] Based on an appropriation of BOX2D c-library ?
 - [ ] Georeferenced solution (import GIS Data)
@@ -35,23 +35,25 @@ Artist is designed independant to graphical librairie, the glue is implemented i
 
 ## Tiledland collection of geometries
 
-- [x] `Entity` the root class with group, id and shape, a convex delimitation of the element.
-- [x] `Mobile`, derivated from `Entity`, disotiate a fixe outline shape reference and transformation (position, orientation).
+- [x] `Unit` the root class with group, id and shape, a convex delimitation of the element.
+- [x] `Mobile`, derivated from `Unit`, disotiate a fixe outline shape reference and transformation (position, orientation).
 - [ ] `Canva` element is used to better organise tiles.
 - [x] Initialize artist rendering: entities can be rendered with an Artist object.
 
 
 ## Tiledland a Graph
 
-The core component of TiledLand refere to the `Tiles` composing a `Tabletop` and comtainning `Entities`.
+The core component of TiledLand refere to the `Tiles` composing a `Map` and comtainning `Units`.
 
-- [x] `Tiles`: a tile is an `Entity` interconnected with other tiles. 
+- [x] `Shaped` classes, as classes hierarchie. 
+- [x] `Tiles`: a tile is an `Shaped` interconnected with other tiles. 
 - [x] A tile contains entities. The elements are positioned in the tile. 
-- [x] `Tabletop` : It contains several tiles.
-- [ ] `Tabletop` derivated from `Entity. Its shape is the fusion of all contained tiles.
+- [x] `Map` : It contains several tiles.
+- [ ] `Map` derivated from `Unit. Its shape is the fusion of all contained tiles.
 - [x] Implement topological clock positioning.
-- [ ] Tabletop: Generation from Graph (+ read SVG)
-- [ ] Tabletop: Generation from Voroi, gabriel.
+- [ ] append `Unit` on tile with appropriate positionning (center, then top-right corner ext.) (replace `appendCenter` by `appendPosed`)
+- [ ] Map: Generation from Graph (+ read SVG)
+- [ ] Map: Generation from Voroi, gabriel.
 - [x] Grid and Hexa-grid based tabletop initilization.
 - [ ] tabletop with _epsilon_ and _seam_ distance
 
@@ -63,12 +65,12 @@ TiledLand agents perception and actions are mainly defined regarding the capabil
 
 - [x] Agent's bodys: Position, clock-orientation and Convex
 - [ ] `Agent` can decide an action to perform.
-- [ ] `Land` mainly a Tabletop, but also an Agent manager, with agents linked to the Tabletop's entities.
+- [ ] `Land` mainly a Map, but also an Agent manager, with agents linked to the Map's entities.
 - [ ] `RoadLand`, derived from `Land`, mainly dedicated to `Mobile` entities.
 - [ ] `HackaGame`: MAS component natively compatible to `HackaGame` lib. Encapsulating a basic agent for distributed computing.
 - [ ] _'agent'_ vs _'behavior'_ : Think state machine...
 - [ ] a 'basic' agent : with several moving strategies...
-- [ ] Basic Tabletop manipulation: doSomething ... doTeleportOn(tile, agent, group).
+- [ ] Basic Map manipulation: doSomething ... doTeleportOn(tile, agent, group).
 
 
 ## Tiledland Project 
@@ -92,7 +94,7 @@ TiledLand agents perception and actions are mainly defined regarding the capabil
 
 ## Robotique
 
-- [x] Transform GridMap to TiledLand.Tabletop.
+- [x] Transform GridMap to TiledLand.Map.
 - [ ] Integrate TiledLand in Tiled ROS packages.
 - [ ] Be resilent to hugly tabletops.
 - [ ] Be resilent on 'all' ".png" format. 

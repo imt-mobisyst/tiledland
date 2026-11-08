@@ -7,9 +7,9 @@ _defaultOutline= Convex().initSquare(1.0)
 
 class AbsShaped :
     # Constructor
-    def __init__(self, owner=0, category=0, index=0, name="AbsShaped"):
-        self._owner= owner
+    def __init__(self, category=0, owner=0, index=0, name="AbsShaped"):
         self._category= category
+        self._owner= owner
         self._index= index
         self._name= name
     
@@ -27,11 +27,11 @@ class AbsShaped :
         assert( "Should be implemented, and return a geometry::Convex" == False )
 
     # Who is Accessor:
-    def owner(self):
-        return self._owner
-
     def category(self):
         return self._category
+
+    def owner(self):
+        return self._owner
 
     def index(self):
         return self._index
@@ -44,18 +44,23 @@ class AbsShaped :
         return self.shape().box()
 
     # Construction:
-    def setOwner(self, owner):
-        self._owner= owner
-        return self
-
     def setCategory(self, aCategory):
         self._category= aCategory
+        return self
+    
+    def setOwner(self, owner):
+        self._owner= owner
         return self
 
     def setIndex(self, index):
         self._index= index
         return self
 
+    def setIdentity(self, owner, index):
+        self.setOwner(owner)
+        self.setIndex(index)
+        return self
+        
     def setName(self, aName):
         self._name= aName
         return self
@@ -85,8 +90,8 @@ class AbsShaped :
 class Rectangle(AbsShaped) :
     # Constructor
     def __init__(self, width=1.0, height= 1.0,
-            owner=0, category=0, index=0, name="Rectangle"):
-        super().__init__(owner, category, index, name)
+            category=0, owner=0, index=0, name="Rectangle"):
+        super().__init__(category, owner, index, name)
         self._halfWidth= width*0.5
         self._halfHeight= height*0.5
         self._position= Point()
@@ -132,8 +137,8 @@ def _defaultShape():
 class Shaped(AbsShaped):
     # Initialization / Destruction:
     def __init__(self, shape= _defaultShape(),
-            owner=0, category=0, index=0, name="Shaped"):
-        super().__init__(owner, category, index, name)
+            category=0, owner=0, index=0, name="Shaped"):
+        super().__init__(category, owner, index, name)
         self._shape= shape
 
     # Shape Accessor:

@@ -1,6 +1,6 @@
 import hacka
 from .geometry import Point, Box, Convex
-from .artist import palettes, Brush
+from .artist import Brush
 from .unit import Unit
 from .tile import Tile
 

@@ -1,6 +1,5 @@
-from .tabletop import CLOCK_ANGLE, Tabletop
+from .map import CLOCK_ANGLE, Map
 from .geometry import Convex
-from .artist import palettes
 from .unit import Unit
 from .agent import Agent
 

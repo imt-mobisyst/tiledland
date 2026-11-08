@@ -54,8 +54,8 @@ def test_fast_unit_init2():
     assert str( unit.outline().asRoundZipped(2) ) == "[(-0.43, -0.25), (-0.43, 0.25), (0.0, 0.5), (0.5, 0.0), (0.0, -0.5)]"
     assert str( unit.shape().asRoundZipped(2) ) == "[(3.07, 1.75), (3.07, 2.25), (3.5, 2.5), (4.0, 2.0), (3.5, 1.5)]"
 
-    assert unit.owner() == 1
-    assert unit.category() == 2
+    assert unit.owner() == 2
+    assert unit.category() == 1
     assert unit.index() == 3
 
     unit.setPosition( Point() )
@@ -71,8 +71,8 @@ def test_fast_mobile_transform():
     unit.translate( Point(1.5, -2.0) )
 
     artist= tild.artist.openPNG("shot-test.png", 800, 600)
-    artist.drawConvex( unit.outline(), tild.artist.palettes[1][3] )
-    artist.drawConvex( unit.shape(), tild.artist.palettes[1][5] )
+    artist.drawConvex( unit.outline(), tild.artist._paletteUnits[3] )
+    artist.drawConvex( unit.shape(), tild.artist._paletteUnits[5] )
     artist.flip()
 
     assert unit.orientation() == 1.67

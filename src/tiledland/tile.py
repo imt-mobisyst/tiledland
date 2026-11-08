@@ -9,7 +9,7 @@ def _defaultShape():
 class Tile(Shaped):
     # Initialization / Destruction:
     def __init__(self, shape= _defaultShape(),
-            owner=0, category=0, index=0, name="Tile"):
+            category=0, owner=0, index=0, name="Tile"):
         super().__init__(shape, owner, category, index, name)
         assert type(shape) == Convex
         self._adjacencies= []
@@ -89,17 +89,15 @@ class Tile(Shaped):
         return clock
 
     # Entity managment
-    def append(self, anEntity ): 
-        self._units.append( anEntity )
+    def append(self, aUnit): 
+        self._units.append(aUnit)
         self._size+= 1
-        anEntity.setSelector( self._index, self._size )
-        return self
-
-    def appendCenter(self, anEntity ):
-        self.append( anEntity )
-        anEntity.setPose( self.position(), anEntity.orientation() )
-        anEntity.setIndex( self.numberOfEntities() )
-        return anEntity
+        return self._size
+    
+    def appendCenter(self, aUnit):
+        index= self.append(aUnit)
+        aUnit.setPose( self.position(), anEntity.orientation() )
+        return index
     
     def remove(self, iEntity):
         i= iEntity-1

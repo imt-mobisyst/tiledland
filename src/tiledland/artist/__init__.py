@@ -7,85 +7,39 @@ class Brush():
         self.stroke= stroke
         self.width= width
 
-palettes= [
-    [
-        Brush(0xffcd80, 0x603800, 4), # 0-Free
-        Brush(0xff6644, 0x991100, 4), # 1-Red
-        Brush(0x70f050, 0x20770a, 4), # 2-Green
-        Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
-        Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
-        Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
-        Brush(0x66ddee, 0x117799, 4), # 6-Cian
-        Brush(0xffffff, 0xbbbbbb, 4), # 7-White
-        Brush(0x888888, 0x555555, 4), # 8-Grey
-        Brush(0x444444, 0x000000, 4)  # 9-Black
-    ],
-    [
-        Brush(0x603800, 0xffcd80, 4), # 10-Background
-        Brush(0x991100, 0xff6644, 4), # 11-Red
-        Brush(0x20770a, 0x70f050, 4), # 12-Green
-        Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
-        Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
-        Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
-        Brush(0x117799, 0x66ddee, 4), # 16-Cian
-        Brush(0xbbbbbb, 0xffffff, 4), # 17-White
-        Brush(0x555555, 0x888888, 4), # 18-Grey
-        Brush(0x000000, 0x444444, 4)  # 19-Black
-    ]
+_paletteTiles= [
+    Brush(0xffcd80, 0x603800, 4), # 0-Free
+    Brush(0xff6644, 0x991100, 4), # 1-Red
+    Brush(0x70f050, 0x20770a, 4), # 2-Green
+    Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
+    Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
+    Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
+    Brush(0x66ddee, 0x117799, 4), # 6-Cian
+    Brush(0xffffff, 0xbbbbbb, 4), # 7-White
+    Brush(0x888888, 0x555555, 4), # 8-Grey
+    Brush(0x444444, 0x000000, 4)  # 9-Black
+]
+_paletteUnits= [
+    Brush(0x603800, 0xffcd80, 4), # 10-Background
+    Brush(0x991100, 0xff6644, 4), # 11-Red
+    Brush(0x20770a, 0x70f050, 4), # 12-Green
+    Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
+    Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
+    Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
+    Brush(0x117799, 0x66ddee, 4), # 16-Cian
+    Brush(0xbbbbbb, 0xffffff, 4), # 17-White
+    Brush(0x555555, 0x888888, 4), # 18-Grey
+    Brush(0x000000, 0x444444, 4)  # 19-Black
 ]
 
-def quickDraw(anEntity, tag=None, filePath="shot-tiledland.png", width= 1600, height= 1200):
-    pablo= Artist()
-
-    fileExtend= filePath.split(".")[-1]
-    if fileExtend in ["png", "PNG"]:
-        from .supportCairo import SupportPNG
-        pablo.init( filePath, width, height, SupportPNG )
-    elif fileExtend in ["svg", "SVG"]:
-        pablo.init( filePath, width, height, SupportSVG )    
-    
-    pablo.fit(anEntity)
-    anEntity.renderOn(pablo)
-    if tag :
-        anEntity.writeOn(pablo, tag)
-    pablo.flip()
-
-    return pablo
-
-def drawUnit( aUnit, filePath="shot-tiledland.png", width= 1600, height= 1200, palettes= palettes ):
-    pablo= Artist(palettes)
-
-    fileExtend= filePath.split(".")[-1]
-    if fileExtend in ["png", "PNG"]:
-        from .supportCairo import SupportPNG
-        pablo.init( filePath, width, height, SupportPNG )
-    elif fileExtend in ["svg", "SVG"]:
-        pablo.init( filePath, width, height, SupportSVG )    
-    
-    pablo.fit(aUnit)
-    pablo.drawUnit(aUnit)
-    pablo.tagUnit(aUnit)
-    pablo.flip()
-
-    return pablo
-
-def openSVG(filePath, width, height):
-    return Artist().init(filePath, width, height, SupportSVG)
-
-def openPNG(filePath, width, height):
-    from .supportCairo import SupportPNG
-    return Artist().init(filePath, width, height, SupportPNG)
-
 # Artist:
-
 class Artist():
-    def __init__(self, palettes= palettes):
+    def __init__(self):
         #  Initialize support:
         self._support= Support()
 
         # Initialize brush :
         self._background= 0xb86e00
-        self._palettes= palettes
         self._fontSize= 16
 
         # Initialize Frame :
@@ -136,8 +90,8 @@ class Artist():
         self._scale= scale
         return self
     
-    def fit(self, anObj):
-        return self.fitBox( anObj.box() )
+    def fit(self, aShaped):
+        return self.fitBox(aShaped.box())
 
     def fitBox( self, aBox, marge=10 ):
         marge= marge*2
@@ -245,25 +199,11 @@ class Artist():
         )
         return self
 
-    # Drawing Tild' Shaped:
-    def brushUnit(self, aUnit):
-        l1= len(self._palettes[1])
-        return self._palettes[1][ aUnit.owner()%l1 ]
-        
-    def drawUnit(self, aUnit):
-        self.fillConvex( aUnit.shape(), self.brushUnit(aUnit) )
-        return self
-    
-    def tagUnit(self, aUnit):
-        minx, miny= aUnit.box().leftFloor().asTuple()
-        cx, cy= aUnit.position().asTuple()
-        x= minx + 0.1 * (cx - minx)
-        self.write( x, cy, aUnit.name(), self.brushUnit(aUnit) )
-        return self
-
     # Drawing frame:
     def drawFrameGrid( self, step= 1.0, color=None ):
-        
+        if not color :
+            color= 0x603800
+
         pixX, pixY= self.toFrame( 0, 0 )
         pixStep= step*self._scale
 
@@ -276,8 +216,6 @@ class Artist():
         width= self._support.width()
         height= self._support.height()
 
-        if not color :
-            color= self._palettes[0][0].stroke
         
         # Vertical
         for i in range( (int)(width/pixStep)+1 ) :
@@ -301,3 +239,116 @@ class Artist():
         ref= self._support.flip()
         self.clear()
         return ref
+
+class ArtistBasic(Artist):
+    def __init__(self, paletteTiles= _paletteTiles, paletteUnits= _paletteUnits):
+        super().__init__()
+        self._paletteTiles= paletteTiles
+        self._paletteUnits= paletteUnits
+    
+    # Drawing Tild' Shaped:
+    def unitBrush(self, aUnit):
+        l= len(self._paletteUnits)
+        return self._paletteUnits[ aUnit.owner()%l ]
+        
+    def drawUnit(self, aUnit):
+        self.fillConvex( aUnit.shape(), self.unitBrush(aUnit) )
+        return self
+    
+    def tagUnit(self, aUnit, text):
+        if text == "" :
+            return self
+        minx, miny= aUnit.box().leftFloor().asTuple()
+        cx, cy= aUnit.position().asTuple()
+        x= minx + 0.1 * (cx - minx)
+        self.write( x, cy, text, self.unitBrush(aUnit) )
+        return self
+
+    def tileBrush(self, aTile):
+        l= len(self._paletteTiles)
+        return self._paletteTiles[ aTile.category()%l ]
+        
+    def drawTile(self, aTile):
+        self.drawConvex( aTile.shape(), self.tileBrush(aTile) )
+        return self
+    
+    def tagTile(self, aTile, text):
+        if text == "" :
+            return self
+        minx, miny= aTile.box().leftFloor().asTuple()
+        x, y= aTile.position().asTuple()
+        x= x+(minx-x)*2/3
+        y= y+(miny-y)*2/3
+        self.write( x, y, text, self.tileBrush(aTile) )
+        return self
+
+        # Artist drawing:
+    def drawMapNetwork( self, aMap ):
+        for tile in aMap.tiles() :
+            cx, cy= tile.position().asTuple()
+            self.tracePoint( cx, cy, self.tileBrush(tile) )
+        for fromId, toId in aMap.edges() :
+            fromX, fromY= aMap.tile( fromId ).position().asTuple()
+            toX, toY= aMap.tile( toId ).position().asTuple()
+            self.traceLine( fromX, fromY, toX, toY, aMap.tile(fromId).brush() )
+        return self
+
+    def drawMapTiles( self, aMap):
+        for tile in aMap.tiles() :
+            self.drawTile( tile )
+        for tile in aMap.tiles() :
+            self.tagTile( tile, str(tile.index()) )
+        return self
+    
+    def drawMapUnits( self, aMap ):
+        for tile in aMap.tiles() :
+            x, y= tile.position().asTuple()
+            position= (x+0.1, y+0.1)
+            for unit in tile.units() :
+                self.drawUnit(unit)
+                self.tagUnit(unit, unit.name())
+        return self
+
+    def drawMap( self, aMap ):
+        self.drawMapNetwork(aMap)
+        self.drawMapTiles(aMap)
+        self.drawMapUnits(aMap)
+        return self
+
+# Quick functions: 
+def openSVG(filePath, width, height, artist= ArtistBasic()):
+    return artist.init(filePath, width, height, SupportSVG)
+
+def openPNG(filePath, width, height, artist= ArtistBasic()):
+    from .supportCairo import SupportPNG
+    return artist.init(filePath, width, height, SupportPNG)
+
+def openFile(filePath, width, height, artist= ArtistBasic()):
+    fileExtend= filePath.split(".")[-1]
+    if fileExtend in ["png", "PNG"]:
+        from .supportCairo import SupportPNG
+        artist.init( filePath, width, height, SupportPNG )
+    elif fileExtend in ["svg", "SVG"]:
+        artist.init( filePath, width, height, SupportSVG )
+    else :
+        assert "'filePath' sould be .png or .svg" == False
+    return artist
+
+def drawUnit( aUnit, filePath="shot-tiledland.png", width= 1600, height= 1200, artist= ArtistBasic()):
+    openFile( filePath, width, height, artist )
+    
+    artist.fit(aUnit)
+    artist.drawUnit(aUnit)
+    artist.tagUnit(aUnit, aUnit.name())
+    artist.flip()
+
+    return artist
+
+def drawMap( aUnit, filePath="shot-tiledland.png", width= 1600, height= 1200, artist= ArtistBasic()):
+    openFile( filePath, width, height, artist )
+    
+    artist.fit(aUnit)
+    artist.drawMap(aUnit)
+    artist.flip()
+
+    return artist

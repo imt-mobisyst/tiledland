@@ -4,7 +4,6 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Box, Convex
-from src.tiledland.artist import palettes
 from src.tiledland import Agent, Tile, Tabletop 
 
 # ------------------------------------------------------------------------ #
