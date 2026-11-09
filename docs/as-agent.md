@@ -28,7 +28,7 @@ An action is an intention; it does not modify the world. The application must re
 from tiledland import Agent, Action, Entity, Tabletop
 
 plateau = Tabletop().initLine(2)
-corps = plateau.tileAppendEntity(1, Entity())
+corps = plateau.tileAppendUnit(1, Entity())
 agent = Agent(state=lambda agent: Action(Action.MOVE, 2))
 action = agent.runStateProcessus()
 if action.identifier() == Action.MOVE:

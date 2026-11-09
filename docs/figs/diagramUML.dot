@@ -7,7 +7,7 @@ digraph TiledLand {
     Mobile [label="{Mobile||+ move()\l+ rotate()\l}"];
     Tile [label="{Tile|- List _adjacencies\l- List _units\l|+ append(entity)\l+ connect(iTo)\l+ renderOn(artist)\l}"];
     Tabletop [label="{Tabletop|- List _tiles\l- float _epsilon\l|+ fromGridRectangles()\l+ createTile()\l+ tileMoveEntity()\l+ renderOn(artist)\l}"];
-    Land [label="{Land|- Tabletop _tabletop\l- List _bankOfEntities\l- List _actors\l|+ appendActor()\l+ actBodyMove()\l}"];
+    Land [label="{Land|- Tabletop _tabletop\l- List _bankOfUnits\l- List _actors\l|+ appendActor()\l+ actBodyMove()\l}"];
     Actor [label="{Actor|- int _id\l- List _bodies\l- Agent _agent\l}"];
     Agent [label="{Agent|- Body _body\l- Tabletop _tabletop\l- Function _statePs\l|+ perceive()\l+ decide()\l}"];
     Action [label="{Action|+ int WAIT\l+ int MOVE\l+ int ROTATE\l}"];

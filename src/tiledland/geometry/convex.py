@@ -15,7 +15,7 @@ class Convex():
 
     # Initialization:
     def init(self, aListOfPoints):
-        self._points= aListOfPoints
+        self._points= [p for p in aListOfPoints]
         self.makeConvex()
         return self
 

@@ -156,7 +156,7 @@ class World( Map ):
         # Set on iTo
         self.tile(iTo).append(carrier)
         carrier.setTile( iTo )
-        carrier.setCoordinates( self.tile(iTo).position() )
+        carrier.setPosition( self.tile(iTo).position() )
         return iTo
     
     # Hacka.DataTree interface:

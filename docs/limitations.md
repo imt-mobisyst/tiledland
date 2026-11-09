@@ -9,12 +9,12 @@ This page describes the state of the examined code, not fixed features. Regressi
 | `Agent.perceive()` / `HackaAgent` | Features not implemented | Define perception and transport in the application |
 | `Entity.setShapeArrowTip()` | Incorrect call to the shape constructor | Use `setReferenceShape(Convex().initArrowTip(...))` |
 | `Entity.setOutline()` | Does not reset the effective orientation attribute | Prefer a reference shape and `setPose()` |
-| Default `Land` bank | List and models shared between instances | Provide a new list of new entities |
+| Default `Land` bank | List and models shared between instances | Provide a new list of new units |
 | Copies and collections | Some internal data remains shared or directly modifiable | Explicitly define object ownership |
 
 ## Tabletop Restoration
 
-Verification of examples revealed that `dataTreeCopy()` fails on a tabletop containing an entity: `Tile.setIndex()` calls `Entity.setArea()`, a missing method. The serialization example is therefore limited to a tabletop without entities.
+Verification of examples revealed that `dataTreeCopy()` fails on a tabletop containing an entity: `Tile.setIndex()` calls `Entity.setArea()`, a missing method. The serialization example is therefore limited to a tabletop without units.
 
 ## Movements and Orientations
 

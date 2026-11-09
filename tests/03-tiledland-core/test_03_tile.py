@@ -74,24 +74,26 @@ def test_fast_tile_adjencies():
     assert tile.adjacencies() == [2, 3, 4]
 
 def test_fast_tile_str():
-    tile= Tile( index= 8)
+    tile= Tile( index= 8 )
     tile.setPosition( Point(18.5, 4.07) )
     
     print(f">>> {tile}")
-    assert str(tile) == "Tile 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] entities(0)"
+    assert str(tile) == "Tile 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[] units(0)"
     
     tile.connectAll( [1, 2, 3] )
     print(f">>> {tile}")
-    assert str(tile) == "Tile 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] entities(0)"
+    assert str(tile) == "Tile 0-8 ⌊(18.0, 3.57), (19.0, 4.57)⌉ adjs[1, 2, 3] units(0)"
 
     tile= Tile( Convex() )
     print(f">>> {tile}")
-    assert str(tile) == "Tile 0-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] entities(0)"
+    assert str(tile) == "Tile 0-0 ⌊(0.0, 0.0), (0.0, 0.0)⌉ adjs[] units(0)"
 
     print(f">>> {tile.shape()}")
     assert tile.position().asTuple() == (0.0, 0.0)
     assert tile.shape().asZipped() == []
 
+    str(Tile()) == "Tile 0-0 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[] units(0)"
+    
 def test_fast_tile_clockDirection():
     tile= Tile( Convex().initRegular( 0.2, 12 ) )
 

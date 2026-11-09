@@ -26,37 +26,36 @@ def test_fast_land_first():
 
     assert type( land.box() ) == tild.Box
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
-    tild.quickDraw( land.tabletop(), "", "shot-test.svg", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-00.svg", mode='rb' ).read() )
 
-    land.setBankOfEntities([
-        tild.Unit(Convex().initArrowTip(0.6)).setName("X").setBrush(palettes[1][0]),
-        tild.Unit(Convex().initArrowTip(0.4)).setName("E").setBrush(palettes[1][0]),
-        tild.Unit(Convex().initArrowTip(0.3)).setName("C").setBrush(palettes[1][0])
+    land.setBankOfUnits([
+        tild.Unit( Convex().initArrowTip(0.6), name= "X" ),
+        tild.Unit( Convex().initArrowTip(0.4), name= "E" ),
+        tild.Unit( Convex().initArrowTip(0.3), name= "C" )
     ])
-
 
     actorId= land.appendActor( tild.Agent(), [9], [1] )
     assert actorId == 1  
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
-    tild.quickDraw( land.tabletop(), "", "shot-test.svg", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-01.svg", mode='rb' ).read() )
 
-    land.initializeDefaultBankOfEntities(4)
+    land.initializeDefaultBankOfUnits(4)
 
     actorId= land.appendActor( tild.Agent() )
     land.popActorBody( actorId, 3, 1 )
     
     assert actorId == 2
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
-    tild.quickDraw( land.tabletop(), "", "shot-test.svg", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-02.svg", mode='rb' ).read() )
@@ -72,9 +71,9 @@ def test_fast_land_popActor():
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
 
-    land.initializeArrowTipBankOfEntities( range(1, 6),
+    land.initializeArrowTipBankOfUnits( range(1, 6),
         [0.4, 0.4, 0.2, 0.8, 0.6],
         [0.0, 3.14, -1.57, 0.8, -2.6],
         ["A", "B", "C", "D", "E"] )
@@ -86,8 +85,8 @@ def test_fast_land_popActor():
 
     land.popActorBody( 0, 15, 0 )
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
-    tild.quickDraw( land.tabletop(), "", "shot-test.svg", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-03.svg", mode='rb' ).read() )
@@ -101,9 +100,9 @@ def test_fast_land_popBis():
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
 
-    land.initializeArrowTipBankOfEntities( range(3),
+    land.initializeArrowTipBankOfUnits( range(3),
         [0.4, 0.6, 0.6],
         [0.0, 3.14, -1.57],
         ["X", "A", "B"] )
@@ -120,14 +119,14 @@ def test_fast_land_popBis():
     
     assert actor2 == 2
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
 
     assert len( land.actors() ) == 3 
     assert len( land.actor(0).bodies() ) == 0
     assert len( land.actor(1).bodies() ) == 1
     assert len( land.actor(2).bodies() ) == 1
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.svg", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.svg", 800, 600 )
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-landpop-01.svg", mode='rb' ).read() )
 
@@ -141,8 +140,8 @@ def test_fast_land_popBis():
     land.popActorBody( actor2, 25, 2 )
     land.popActorBody( actor2, 30, 2 )
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
-    tild.quickDraw( land.tabletop(), "", "shot-test.svg", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.svg", 800, 600 )
 
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-landpop-02.svg", mode='rb' ).read() )
@@ -165,33 +164,33 @@ def test_fast_land_orients():
     )
 
     land.popSimpleActor( tild.Agent(), 4 )
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     bob= land.actor(1).body(1)
     
     assert round( bob.orientation(), 2) == 0.0
 
     land.actBodyOrient( 1, 1, tild.Action.DIR_W ) 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == 3.14
     
     land.actBodyOrient( 1, 1, tild.Action.DIR_SSE ) 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -1.05
 
     land.actBodyRotateLeft( 1, 1 ) 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -0.52
 
     land.actBodyRotateRight( 1, 1 ) 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -1.05
 
     land.actBodyRotateRight( 1, 1, 4 ) 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -3.14
 
     land.actBodyRotateRight( 1, 1, 2 ) 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == 2.09
 
 def test_fast_land_moves():
@@ -203,38 +202,38 @@ def test_fast_land_moves():
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
-    land.initializeDefaultBankOfEntities()
+    land.initializeDefaultBankOfUnits()
 
     land.popSimpleActor( tild.Agent(), 15 )
     land.popActorBody( 1, 29, 1 )
     land.popSimpleActor( tild.Agent(), 6 )
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     
     print( str(land.actor(1).body(1)) )
     assert land.actor(1).body(1).strIdentity() == "A-1 15-1"
 
     assert land.actBodyMove( 1, 1, 3 ) == 16
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     assert land.actor(1).body(1).strIdentity() == "A-1 16-1"
 
     assert land.actBodyMove( 1, 1, 3 ) == 16
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     assert land.actor(1).body(1).strIdentity() == "A-1 16-1"
 
     assert land.actBodyMove( 1, 1, tild.Action.DIR_NNE ) == 9
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     assert land.actor(1).body(1).strIdentity() == "A-1 9-1"
     assert round( land.actor(1).body(1).orientation(), 2 ) == 1.05
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
     
     assert land.actBodyMove( 1, 2, tild.Action.DIR_W ) == 28
     assert land.actBodyMove( 1, 2, tild.Action.DIR_NNW ) == 22
     assert land.actBodyMove( 1, 2, tild.Action.DIR_NNW ) == 15
     assert land.actBodyMove( 1, 2, tild.Action.DIR_NNW ) == 8
 
-    tild.quickDraw( land.tabletop(), "", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
 
     assert land.actor(1).body(1).strIdentity() == "A-1 9-1"
     assert land.actor(1).body(2).strIdentity() == "A-2 8-1"

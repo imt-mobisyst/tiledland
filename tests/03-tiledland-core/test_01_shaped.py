@@ -10,7 +10,7 @@ from src.tiledland.geometry import Point
 # ------------------------------------------------------------------------ #
 
 def test_fast_shaped_init():
-    shaped= tild.AbsShaped()
+    shaped= tild.AbsShaped(0, 0, 0, "AbsShaped")
 
     assert type( shaped ) == tild.AbsShaped
 

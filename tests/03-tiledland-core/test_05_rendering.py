@@ -11,38 +11,16 @@ from src.tiledland.artist import Brush
 # ------------------------------------------------------------------------ #
 shotImg= "shot-test.svg"
 
-palette= [
-    Brush(0xffcd80, 0x603800, 4), # 0-Free
-    Brush(0xff6644, 0x991100, 4), # 1-Red
-    Brush(0x70f050, 0x20770a, 4), # 2-Green
-    Brush(0x6666ff, 0x1111aa, 4), # 3-Blue
-    Brush(0xfd9622, 0xdd550a, 4), # 4-Orange
-    Brush(0xdd77ff, 0x8800aa, 4), # 5-Purple
-    Brush(0x66ddee, 0x117799, 4), # 6-Cian
-    Brush(0xffffff, 0xbbbbbb, 4), # 7-White
-    Brush(0x888888, 0x555555, 4), # 8-Grey
-    Brush(0x444444, 0x000000, 4), # 9-Black
-
-    Brush(0x603800, 0xffcd80, 4), # 10-Background
-    Brush(0x991100, 0xff6644, 4), # 11-Red
-    Brush(0x20770a, 0x70f050, 4), # 12-Green
-    Brush(0x1111aa, 0x6666ff, 4), # 13-Blue
-    Brush(0xdd550a, 0xfd9622, 4), # 14-Orange
-    Brush(0x8800aa, 0xdd77ff, 4), # 15-Purple
-    Brush(0x117799, 0x66ddee, 4), # 16-Cian
-    Brush(0xbbbbbb, 0xffffff, 4), # 17-White
-    Brush(0x555555, 0x888888, 4), # 18-Grey
-    Brush(0x000000, 0x444444, 4)  # 19-Black
-]
-
-
 # Test artist on tiles
 def test_fast_tile_rendering():
     pablo= tild.artist.openSVG( shotImg, 800, 600 )
+    assert type(pablo) == tild.artist.ArtistBasic
 
     tile= tild.Tile( category=0 )
+    assert tile.position().asTuple() == (0.0, 0.0)
+    assert str(tile) == "Tile 0-0 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[] units(0)"
     
-    tile.renderOn( pablo )
+    pablo.drawTile(tile)
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -50,7 +28,7 @@ def test_fast_tile_rendering():
     
     tile= tild.Tile( Convex().initSquare(4.0), category= 0 )
     tile.setPosition( Point(1.3, 0.9) )
-    tile.renderOn( pablo )
+    pablo.drawTile(tile)
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -66,7 +44,7 @@ def test_fast_tile_rendering():
         == open("tests/refs/03.05-tile-03.svg").read() )
     
     pablo.drawTile(tile)
-    pablo.tagTIle(tile, str(tile.index()))
+    pablo.tagTile(tile, str(tile.index()))
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -75,21 +53,21 @@ def test_fast_tile_rendering():
 # Test artist on tabletop
 def test_fast_tabletop_tile_rendering():
     pablo= tild.artist.openSVG( shotImg, 800, 600 )
-    tabletop= tild.Tabletop()
+    tabletop= tild.Map()
 
     assert tabletop.epsilon() == 0.01
         
-    tabletop.renderTilesOn( pablo )
+    pablo.drawMapTiles(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-map-00.svg" ).read() )
 
-    tabletop= tild.Tabletop().initLine(3)
+    tabletop= tild.Map().initLine(3)
 
     assert tabletop.epsilon() == 0.01
 
-    tabletop.renderTilesOn( pablo )
+    pablo.drawMapTiles(tabletop)
     pablo.flip()
 
 
@@ -99,7 +77,7 @@ def test_fast_tabletop_tile_rendering():
     pablo.setCamera( 1.1, 0.0 )
     pablo.setScale( 200 )
 
-    tabletop.renderTilesOn( pablo )
+    pablo.drawMapTiles(tabletop)
     pablo.flip()
 
 
@@ -108,7 +86,8 @@ def test_fast_tabletop_tile_rendering():
 
 def test_fast_tabletop_net_rendering():
     pablo= tild.artist.openSVG( shotImg, 800, 600 )
-    tabletop= tild.Tabletop()
+    pablo.setScale(100.0)
+    tabletop= tild.Map()
     tabletop.initGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [0, -1, 0, 0, 0, -1, 0, 0],
@@ -117,7 +96,7 @@ def test_fast_tabletop_net_rendering():
         [-1, -1, 0, 0, 0, -1, -1, -1]]
     )
 
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -128,18 +107,18 @@ def test_fast_tabletop_net_rendering():
     assert box.asZip() == [(-0.5, -0.5), (8.2, 4.9)] 
 
     pablo.fit( tabletop )
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-map-05.svg" ).read() )
 
-    color= tabletop.tile(1).color()
+    cat= tabletop.tile(1).category()
     tabletop.connectAllConditions(
-        lambda tileFrom : tileFrom.color() == color,
-        lambda tileFrom, tileTo : tileTo.color() == 0 and tileFrom.centerDistance( tileTo ) < 1.2
+        lambda tileFrom : tileFrom.category() == cat,
+        lambda tileFrom, tileTo : tileTo.category() == 0 and tileFrom.centerDistance( tileTo ) < 1.2
     )
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -149,7 +128,7 @@ def test_fast_tabletop_net_rendering():
 # Test artist on tabletop
 def test_gridmap_piece():
     pablo= tild.artist.openSVG( shotImg, 800, 600 )
-    tabletop= tild.Tabletop()
+    tabletop= tild.Map()
     tabletop.initGrid(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [5, -1, 0, 2, 0, -1, 5, 0],
@@ -160,22 +139,20 @@ def test_gridmap_piece():
     )
 
     pablo.fitBox( tabletop.box() )
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-01.svg" ).read() )
 
-    def popEntity( iRobot, iGroup, iTile ):
-        bob= tild.Unit( tild.Convex().initRegular(0.7, 6) )
+    def popUnit( iRobot, iGroup, iTile ):
+        bob= tild.Unit( tild.Convex().initRegular(0.7, 6), owner= iGroup )
         bob.setPosition( Point(0.1, 0.1)+tabletop.tile(iTile).position() )
-        bob.setBrush( palette[iGroup] )
         bob.setName( str(iRobot) )
-        palette
         tabletop.tile(iTile).append( bob )
         return bob
     
-    bob= popEntity(1, 13, 12)
+    bob= popUnit(1, 13, 12)
 
     env= [ ( round(x, 2), round(y, 2) ) for x, y in bob.outline().asZipped() ]
     print( env )
@@ -201,33 +178,33 @@ def test_gridmap_piece():
     ]
     
 
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-02.svg" ).read() )
     
-    popEntity(2, 13, 9)
-    popEntity(2, 15, 14)
-    popEntity(3, 13, 23)
-    popEntity(1, 15, 20)
+    popUnit(2, 13, 9)
+    popUnit(2, 15, 14)
+    popUnit(3, 13, 23)
+    popUnit(1, 15, 20)
 
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-03.svg" ).read() )
 
-    popEntity(1, 11, 17)
+    popUnit(1, 11, 17)
     
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-04.svg" ).read() )
 
-    tabletop.clearEntities()
-    tabletop.renderOn( pablo )
+    tabletop.clearUnits()
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
@@ -236,7 +213,7 @@ def test_gridmap_piece():
 # Test artist on tabletop
 def test_hexatabletop_piece():
     pablo= tild.artist.openSVG( shotImg, 800, 600 )
-    tabletop= tild.Tabletop()
+    tabletop= tild.Map()
     tabletop.initHexa(
        [[0, 1, 1, -1, 0, 0, 0, 0],
         [5, -1, 0, 2, 0, -1, 5, 0],
@@ -247,58 +224,57 @@ def test_hexatabletop_piece():
     )
 
     pablo.fitBox( tabletop.box() )
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-11.svg" ).read() )
 
-    def popEntity( iRobot, iTile, iGroup ):
+    def popUnit( iRobot, iTile, iGroup ):
         bob= tild.Unit( tild.Convex().initRegular(0.7, 6) )
         bob.setPosition( Point(0.1, 0.1)+tabletop.tile(iTile).position() )
-        bob.setBrush( palette[iGroup] )
+        bob.setOwner(iGroup)
         bob.setName( str(iRobot) )
-        palette
         tabletop.tile(iTile).append( bob )
         return bob
     
-    popEntity(1, 12, 13)
+    popUnit(1, 12, 13)
 
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-12.svg" ).read() )
     
-    popEntity(2,  9, 13)
-    popEntity(2, 14, 15)
-    popEntity(3, 23, 13)
-    popEntity(1, 20, 15)
+    popUnit(2,  9, 13)
+    popUnit(2, 14, 15)
+    popUnit(3, 23, 13)
+    popUnit(1, 20, 15)
 
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-13.svg" ).read() )
 
-    popEntity(1, 17, 1)
+    popUnit(1, 17, 1)
 
-    tabletop.renderOn( pablo )
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-14.svg" ).read() )
 
-    tabletop.clearEntities()
-    tabletop.renderOn( pablo )
+    tabletop.clearUnits()
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     assert( open(shotImg).read()
         == open("tests/refs/03.05-entity-11.svg" ).read() )
 
 
-def test_gridtabletop_appendpiece():
-    tabletop= tild.Tabletop()
+def test_gridtabletop_appendMobiles():
+    tabletop= tild.Map()
     tabletop.initGrid([
         [0, 1, 1, -1, 0, 0, 0, 0], # -1 : means no cell at this selector
         [5, -1, 0, 2, 0, -1, 5, 0], # 0 - n : give the group identifier
@@ -307,31 +283,32 @@ def test_gridtabletop_appendpiece():
         [-1, -1, 0, 0, 0, -1, -1, -1]
     ])
 
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
-    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
+    tild.drawMap( tabletop, "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-01.svg" ).read() )
 
     # Add a first default entity on tile 2
-    tabletop.tileAppendEntity( 2, tild.Unit().setBrush(palette[10]) )
+    mobile= tild.Unit(Convex().initArrowTip(1.0), owner= 10, name="Mobile")
+    tabletop.tileAppendUnit( 2, mobile.copy() )
 
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
-    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
+    tild.drawMap( tabletop, "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-02.svg" ).read() )
 
-    # Add several entities associate to different groups...
-    tabletop.tileAppendEntity( 8, tild.Unit().setBrush(palette[11]) )
-    tabletop.tileAppendEntity( 16, tild.Unit().setBrush(palette[11]) )
-    tabletop.tileAppendEntity( 4, tild.Unit().setBrush(palette[12]) )
-    tabletop.tileAppendEntity( 19, tild.Unit().setBrush(palette[12]) )
-    tabletop.tileAppendEntity( 24, tild.Unit().setBrush(palette[13]) )
-    tabletop.tileAppendEntity( 30, tild.Unit().setBrush(palette[13]) )
+    # Add several units associate to different groups...
+    tabletop.tileAppendUnit( 8, mobile.copy().setOwner(11) )
+    tabletop.tileAppendUnit( 16, mobile.copy().setOwner(11) )
+    tabletop.tileAppendUnit( 4, mobile.copy().setOwner(12) )
+    tabletop.tileAppendUnit( 19, mobile.copy().setOwner(12) )
+    tabletop.tileAppendUnit( 24, mobile.copy().setOwner(13) )
+    tabletop.tileAppendUnit( 30, mobile.copy().setOwner(13) )
 
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
-    tild.quickDraw( tabletop, "", "shot-test.svg", 800, 600 )
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
+    tild.drawMap( tabletop, "shot-test.svg", 800, 600 )
 
     assert( open("shot-test.svg").read()
         == open("tests/refs/03.05-render-grid-03.svg" ).read() )

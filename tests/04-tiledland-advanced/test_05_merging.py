@@ -23,7 +23,7 @@ def test_tabletop_fromConvex():
     pablo.setCamera( 4.0, 3.0 )
 
     for shape in shapes :
-        pablo.drawConvex( shape, palettes[0][0] )
+        pablo.drawConvex( shape, tild.artist._paletteTiles[0] )
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -31,14 +31,14 @@ def test_tabletop_fromConvex():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    tabletop= tild.Tabletop( epsilon=0.1 )
+    tabletop= tild.Map( epsilon=0.1 )
     assert tabletop.epsilon() == 0.1
     assert tabletop.numberOfTiles() == 0
 
     tabletop.createTile( shapes[0] )
     assert tabletop.numberOfTiles() == 1
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -50,7 +50,7 @@ def test_tabletop_fromConvex():
         tabletop.createTile( s )
     assert tabletop.numberOfTiles() == 5
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -60,7 +60,7 @@ def test_tabletop_fromConvex():
 
     tabletop.connectAllClose(0.5)
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -93,7 +93,7 @@ def test_tabletop_mergeOne():
         assert shape.distancePoint(p) < 0.09
     
     ## Create the tabletop : 
-    tabletop= tild.Tabletop( 0.09 ).fromShapes(shapes)
+    tabletop= tild.Map( 0.09 ).fromShapes(shapes)
     assert tabletop.numberOfTiles() == 2
 
     tabletop.connectAllClose(0.16)
@@ -103,7 +103,7 @@ def test_tabletop_mergeOne():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -116,7 +116,7 @@ def test_tabletop_mergeOne():
 
     assert ok
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -131,7 +131,7 @@ def test_tabletop_mergeNoOne():
     ]
 
     ## Create the tabletop : 
-    tabletop= tild.Tabletop().fromShapes( shapes )
+    tabletop= tild.Map().fromShapes( shapes )
     tabletop.connectAllClose( 0.16 )
 
     shotImg= "shot-test.svg"
@@ -139,7 +139,7 @@ def test_tabletop_mergeNoOne():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -154,7 +154,7 @@ def test_tabletop_mergeNoOne():
 
     assert not ok
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -168,7 +168,7 @@ def test_tabletop_mergeNoOne():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    tabletop= tild.Tabletop( 0.09 ).fromShapes(shapes)
+    tabletop= tild.Map( 0.09 ).fromShapes(shapes)
     tabletop.connectAllClose(0.11)
     ## Merge :
     assert not tabletop.mergeTilesIfPossible(1, 2, 0.09, 10.0)
@@ -190,7 +190,7 @@ def test_tabletop_mergeFew():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    tabletop= tild.Tabletop( epsilon=0.0999 )
+    tabletop= tild.Map( epsilon=0.0999 )
     for s in shapes :
         tabletop.createTile( s )
     
@@ -203,7 +203,7 @@ def test_tabletop_mergeFew():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open(shotImg)
@@ -218,7 +218,7 @@ def test_tabletop_mergeFew():
     assert len( tabletop.tiles() ) == 9
     assert tabletop.numberOfTiles() == 9
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -229,7 +229,7 @@ def test_tabletop_mergeFew():
     ## Merge 8-9 :
     assert tabletop.mergeTilesIfPossible(8, 9, 0.09, 10.0)
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -239,9 +239,9 @@ def test_tabletop_mergeFew():
 
     ## Merge all :
     tabletop.mergeAllPossible(0.09, 10.0)
-    tild.quickDraw(tabletop)
+    tild.drawMap(tabletop)
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -270,7 +270,7 @@ def test_tabletop_mergeConplex():
         Convex().fromZipped( [(1.85, 4.25), (1.85, 4.35), (4.95, 4.35), (4.95, 4.25)] )
     ]
 
-    tabletop= tild.Tabletop( epsilon=0.0999 )
+    tabletop= tild.Map( epsilon=0.0999 )
     for s in shapes :
         tabletop.createTile( s )
     
@@ -281,7 +281,7 @@ def test_tabletop_mergeConplex():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -292,10 +292,10 @@ def test_tabletop_mergeConplex():
     ## Merge all :
     nbMerges= tabletop.mergeAllPossible()
 
-    tild.quickDraw(tabletop)
+    tild.drawMap(tabletop)
     assert nbMerges == 12
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -324,7 +324,7 @@ def test_tabletop_mergeButNo():
         Convex().fromZipped( [(5.45, 0.65), (5.45, 3.35), (5.55, 3.35), (5.55, 0.65)] )
     ]
 
-    tabletop= tild.Tabletop( epsilon=0.0999 )
+    tabletop= tild.Map( epsilon=0.0999 )
     for s in shapes :
         tabletop.createTile( s )
     
@@ -335,7 +335,7 @@ def test_tabletop_mergeButNo():
     pablo.setScale( 100 )
     pablo.setCamera( 3.0, 2.0 )
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
     
     shotFile= open( shotImg ) 
@@ -346,7 +346,7 @@ def test_tabletop_mergeButNo():
     ## Merge all :
     tabletop.mergeAllPossible()
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 

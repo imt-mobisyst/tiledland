@@ -37,7 +37,7 @@ def test_pnd_land():
     model= pnd.Land( "Cool-Land" )
     assert model.name() == "Cool-Land"
 
-    model.initTabletop( tild.Tabletop().initGrid( refMatrix, 0.9, 0.1 ) )
+    model.initTabletop( tild.Map().initGrid( refMatrix, 0.9, 0.1 ) )
 
     pablo= tild.artist.openPNG("shot-test.png", 800, 600)
     pablo.fitBox( model.tabletop().box(), 10 )
@@ -66,7 +66,7 @@ def test_pnd_land():
 
 def test_pnd_graph():
     # Game MoveIt:
-    land= pnd.Land( "Testland", tild.Tabletop().initGrid( refMatrix, 0.9, 0.1 ) )
+    land= pnd.Land( "Testland", tild.Map().initGrid( refMatrix, 0.9, 0.1 ) )
     model= land.tabletop()
 
     print( f">>> {model.neighbours(11)}" )
@@ -91,7 +91,7 @@ def test_pnd_graph():
 
 def test_pnd_withCarrier():
     # Game MoveIt:
-    land= pnd.Land( "Testland", tild.Tabletop().initGrid( refMatrix, 0.9, 0.1 ), numberOfActors=2 )
+    land= pnd.Land( "Testland", tild.Map().initGrid( refMatrix, 0.9, 0.1 ), numberOfActors=2 )
     tabletop= land.tabletop()
 
     assert land.popSimpleActor(tild.Agent(), 1)  == 1
@@ -99,7 +99,7 @@ def test_pnd_withCarrier():
     assert land.popSimpleActor(tild.Agent(), 7)  == 2
     assert land.popActorBody(2, 44).selector() == (44, 1)
     
-    tild.quickDraw( land.tabletop(), "PND", "shot-test.png", 800, 600 )
+    tild.drawMap( land.tabletop(), "shot-test.png", 800, 600 )
 
     print(land.body(1)) 
     assert str( land.body(1) ) == 'A-1 1-1 ⌊(-0.26, 5.7), (0.3, 6.3)⌉ |0, 0|'
@@ -122,19 +122,19 @@ def test_pnd_withCarrier():
     print( bodyIdentifiers )
     assert bodyIdentifiers == [ (1, 1), (25, 1), (7, 2), (44, 2)]
 
-    #moveEntity
+    #moveUnit
 
-    assert land.moveEntity( 11, 12 ) == 11
-    assert land.moveEntity( 1, 6 ) == 10
+    assert land.moveUnit( 11, 12 ) == 11
+    assert land.moveUnit( 1, 6 ) == 10
 
     print( land.tile(10).unit() )
     assert str( land.tile(10).unit() ) == 'A-1 10-1 ⌊(-0.26, 4.7), (0.3, 5.3)⌉ |0, 0|'
 
-    assert land.moveEntity( 44, 12 ) == False
-    assert land.moveEntity( 44, 3 ) == 45
-    assert land.moveEntity( 45, 12 ) == 39
-    assert land.moveEntity( 39,  0 ) == 39
-    assert land.moveEntity( 39,  3 ) == False
+    assert land.moveUnit( 44, 12 ) == False
+    assert land.moveUnit( 44, 3 ) == 45
+    assert land.moveUnit( 45, 12 ) == 39
+    assert land.moveUnit( 39,  0 ) == 39
+    assert land.moveUnit( 39,  3 ) == False
     
     pablo= tild.artist.openPNG("shot-test.png", 800, 600)
     pablo.fitBox( land.tabletop().box(), 10 )
@@ -188,7 +188,7 @@ def test_long_pnd_emcomber():
 
     encumberCount= 0
     for i in range(10000) :
-        if model.moveEntity(25, 3) == 25 :
+        if model.moveUnit(25, 3) == 25 :
             encumberCount+= 1
         model.teleport(26, 25)
     assert round(encumberCount/10000, 1) == 0.6
@@ -196,7 +196,7 @@ def test_long_pnd_emcomber():
     model.teleport(25, 20)
     encumberCount= 0
     for i in range(10000) :
-        if model.moveEntity(20, 6) == 20 :
+        if model.moveUnit(20, 6) == 20 :
             encumberCount+= 1
         model.teleport(28, 20)
 
@@ -206,7 +206,7 @@ def test_long_pnd_emcomber():
     assert str( model.tile(32).unit() ) == 'A-1 32-1 ⌊(8.74, 2.7), (9.3, 3.3)⌉ |0, 0|'
     encumberCount= 0
     for i in range(10000) :
-        if model.moveEntity(32, 9) == 32 :
+        if model.moveUnit(32, 9) == 32 :
             encumberCount+= 1
         model.teleport(31, 32)
 

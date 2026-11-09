@@ -10,7 +10,7 @@ class Grid():
 
     # Initialization
     def __init__(self, values= [[0]], bottomleft= Point(0.0, 0.0), resolution=0.1):
-        self._bottomleft= bottomleft
+        self._bottomleft= bottomleft.copy()
         self._resolution= resolution
         self.init(values)
 

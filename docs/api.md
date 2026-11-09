@@ -11,11 +11,11 @@ This reference selects the operations necessary for tutorials. It does not repla
 | `Mobile` | Inherits `Entity` | Specialized entity for mobile objects |
 | `Tabletop` | `initLine`, `initGrid`, `initHexa`, `fromShapes` | Build the world |
 | `Tabletop` | `tile(i)`, `entity(i, j=1)` | Access with indices starting from 1 |
-| `Tabletop` | `numberOfTiles()`, `numberOfEntities()` | Count elements |
+| `Tabletop` | `numberOfTiles()`, `numberOfUnits()` | Count elements |
 | `Tabletop` | `connect(a, b)`, `isEdge(a, b)`, `adjacencies(i)` | Directed graph |
-| `Tabletop` | `tileAppendEntity(i, obj)` | Returns the added entity |
+| `Tabletop` | `tileAppendUnit(i, obj)` | Returns the added entity |
 | `Tabletop` | `tileMoveEntity(i, j, cible)` | Returns the moved entity or `None` |
-| `Tabletop` | `dataTreeCopy()` | Reconstruction via DataTree, currently limited to tabletops without entities |
+| `Tabletop` | `dataTreeCopy()` | Reconstruction via DataTree, currently limited to tabletops without units |
 | `Land` | `appendActor(agent, tileIds, bodyIds)` | Returns the actor identifier |
 | `Land` | `body(actorId, iBody=1)`, `actor(actorId)` | Find an actor or its body |
 | `Agent` | `setStateProcessus(method)`, `runStateProcessus()` | Define and execute a state |

@@ -12,7 +12,7 @@ Some demonstrations use `popAgentOn`, `setAgentFactory`, or `setMatter`, which a
 
 ## Why does my object change position after being added?
 
-`tileAppendEntity()` places the entity at the center of the tile. For a different position within the area, define the pose after adding. Geometry and logical ownership are not automatically resynchronized when moving an entity directly.
+`tileAppendUnit()` places the entity at the center of the tile. For a different position within the area, define the pose after adding. Geometry and logical ownership are not automatically resynchronized when moving an entity directly.
 
 ## Does a group represent an obstacle?
 

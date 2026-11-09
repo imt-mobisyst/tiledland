@@ -11,7 +11,7 @@ land.tabletop().initHexa(
     [-1, -1, 0, 0, 0, -1, -1, -1]]  #
 )
 
-land.initializeArrowTipBankOfEntities( range(1, 6),
+land.initializeArrowTipBankOfUnits( range(1, 6),
     [0.4, 0.4, 0.2, 0.8, 0.6],
     [0.0, 3.14, -1.57, 0.8, -2.6],
     ["A", "B", "C", "D", "E"] )

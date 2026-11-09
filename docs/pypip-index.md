@@ -1,6 +1,6 @@
 # TiledLand: Simulation of Polygonal Worlds
 
-TiledLand is an experimental Python library that represents flat environments using interconnected convex polygonal tiles. Entities can be placed and moved within these tiles.
+TiledLand is an experimental Python library that represents flat environments using interconnected convex polygonal tiles. Units can be placed and moved within these tiles.
 
 The project offers geometric primitives, rectangular and hexagonal constructions, map conversions, SVG and PNG rendering, and a basis for experimenting with multi-agent systems.
 

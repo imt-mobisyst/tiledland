@@ -1,4 +1,4 @@
-# Entities and Transformations
+# Units and Transformations
 
 An `Entity` has a name, a group, a reference shape, a position, an orientation, and a selector `(location, index)`. The `Mobile` class is a specialized `Entity` used for objects that change position frequently (e.g., robots).
 
@@ -35,7 +35,7 @@ from tiledland import Entity, Convex
 original = Entity(name="Original")
 copie = original.copy()
 copie.setReferenceShape(Convex().initSquare(0.4))
-copie.setCoordinates(2.0, 0.0)
+copie.setPosition( Poiint(2.0, 0.0) )
 assert original.position().asTuple() == (0.0, 0.0)
 ```
 

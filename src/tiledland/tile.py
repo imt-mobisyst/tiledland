@@ -3,15 +3,11 @@ from . import geometry, artist
 from .geometry import Point, Convex
 from .shaped import AbsShaped, Shaped
 
-def _defaultShape():
-    return Convex().initSquare(1.0)
-
 class Tile(Shaped):
     # Initialization / Destruction:
-    def __init__(self, shape= _defaultShape(),
+    def __init__(self, shape= None,
             category=0, owner=0, index=0, name="Tile"):
         super().__init__(shape, category, owner, index, name)
-        assert type(shape) == Convex
         self._adjacencies= []
         self._units= []
         self._size= 0
@@ -88,7 +84,7 @@ class Tile(Shaped):
                 distance= d
         return clock
 
-    # Entity managment
+    # Unit managment
     def append(self, aUnit): 
         self._units.append(aUnit)
         self._size+= 1
@@ -115,7 +111,7 @@ class Tile(Shaped):
         # Myself :
         s= super(Tile, self).str()
         s+= " adjs"+ str(self._adjacencies)
-        s+= f" entities({ len(self.units()) })"
+        s+= f" units({ len(self.units()) })"
         return s
     
     def __str__(self): 

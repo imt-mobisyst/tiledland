@@ -9,7 +9,7 @@ The project is used to experiment with geometry, navigation, and multi-agent sys
 ## Getting Started
 
 1. [Install the library and create your first scene](getting-started.md).
-2. [Understand entities](core-entity.md) and [tiles and tabletops](core-tabletop.md).
+2. [Understand units](core-entity.md) and [tiles and tabletops](core-tabletop.md).
 3. [Produce an SVG or PNG rendering](ihm-rendering.md).
 4. [Associate bodies with actors](as-land.md) and [program a decision](as-agent.md).
 

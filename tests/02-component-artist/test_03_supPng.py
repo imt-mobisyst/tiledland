@@ -77,7 +77,7 @@ def test_fast_support_write():
 def test_fast_artist_flip():
     pablo= tild.artist.openPNG( shotImg, 800, 600 )
 
-    assert( type( pablo ) ) == tild.Artist
+    assert( type( pablo ) ) == tild.ArtistBasic
     assert( type( pablo.support() ) ) == tild.artist.supportCairo.SupportPNG
 
     assert( pablo.support().filePath() == shotImg )

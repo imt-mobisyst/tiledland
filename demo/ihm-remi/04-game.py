@@ -6,7 +6,7 @@ import remi, remi.gui as gui
 class MyApp(remi.App):
     def __init__(self, *args):
         # Create a new TiledTabletop as a grid:
-        tabletop= tild.Tabletop()
+        tabletop= tild.Map()
         tabletop.initHexa(
             [[0, 0, 0, -1, 0, 0, 0, 0],              #  -1 : means no cell at this selector
             [0, -1, 0, 0, 0, -1, 0, 0],              #  0 - n : give the group identifier of the cell to create.

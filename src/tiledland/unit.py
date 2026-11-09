@@ -2,18 +2,16 @@ import math
 from .geometry import radian, Point, Convex
 from .shaped import AbsShaped
 
-_defaultOutline= Convex().initSquare(1.0)
-
 class Unit(AbsShaped) :
     # Initialization / Destruction:
     def __init__(self,
-            outline= _defaultOutline, position=Point(), orientation=0.0,
+            outline= None, position= Point(), orientation=0.0,
             category=0, owner=0, index=0, name="Unit"):
         super().__init__(category, owner, index, name)
-        assert type(outline) == Convex
-        assert type(position) == Point
+        if outline is None :
+            outline= Convex().initSquare(1.0)
         self._outline= outline
-        self._position= position
+        self._position= position.copy()
         self._orientation= radian(orientation)
         
     def copy(self):

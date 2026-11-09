@@ -1,7 +1,7 @@
 """
 Pick'n Delivery - Carrier Class
 
-Carrier are mobile entities in the land, controled by players.
+Carrier are mobile units in the land, controled by players.
 """
 
 import tiledland as tild

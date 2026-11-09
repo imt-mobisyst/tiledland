@@ -1,6 +1,6 @@
 # Land and Actors
 
-A `Land` associates a `Tabletop`, a bank of entity models, and a list of actors. An `Actor` links an agent to one or several bodies. Bodies are the entities actually placed on the tabletop.
+A `Land` associates a `Tabletop`, a bank of entity models, and a list of actors. An `Actor` links an agent to one or several bodies. Bodies are the units actually placed on the tabletop.
 
 ## Adding an Actor
 
@@ -9,7 +9,7 @@ from tiledland import Land, Tabletop, Mobile, Convex, Agent, draw
 
 land = Land(
     tabletop=Tabletop().initLine(3),
-    bankOfEntities=[Unit(shape=Convex().initArrowTip(0.6), name="Robot")],
+    bankOfUnits=[Unit(shape=Convex().initArrowTip(0.6), name="Robot")],
 )
 acteur_id = land.appendActor(Agent(), tileIds=[1], bodyIds=[0])
 corps = land.body(acteur_id)

@@ -5,7 +5,7 @@ import streamlit as st
 import tiledland as tild
 
 # Create a new TiledTabletop as a grid:
-tabletop= tild.Tabletop()
+tabletop= tild.Map()
 tabletop.initGrid(
     [[0, 1, 1, -1, 0, 0, 0, 0],              #  -1 : means no cell at this selector
     [5, -1, 0, 2, 0, -1, 5, 0],              #  0 - n : give the group identifier of the cell to create.
@@ -35,7 +35,7 @@ bod.setId(3).setMatter(13)
 # Create an artist to render this tabletop:
 pablo= tild.artist.openSVG( filePath= "shot-web-rendering.svg" )
 pablo.fitBox( tabletop.box() )
-tabletop.renderOn(pablo)
+pablo.drawMap(tabletop)
 
 # Rendering in a streamlit widget
 widget= st.empty()

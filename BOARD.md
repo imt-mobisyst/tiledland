@@ -4,7 +4,7 @@
 
 ## Plan Convex Geometry :
 
-**TiledLand** aims to model spatio-temporal entities and their interaction.
+**TiledLand** aims to model spatio-temporal units and their interaction.
 It is based on convex poligon shaping implemented in the geometric functionality.
 
 - [x] Basic point, line, and polygon objects in 2D frame.
@@ -38,8 +38,8 @@ Artist is designed independant to graphical librairie, the glue is implemented i
 - [x] `Unit` the root class with group, id and shape, a convex delimitation of the element.
 - [x] `Mobile`, derivated from `Unit`, disotiate a fixe outline shape reference and transformation (position, orientation).
 - [ ] `Canva` element is used to better organise tiles.
-- [x] Initialize artist rendering: entities can be rendered with an Artist object.
-
+- [x] Initialize artist rendering: units can be rendered with an Artist object.
+- [ ] `RegularMap` build over a fnit number or possible tile shape. 'createTile with index in a shape dico, and a position', keep a ref somewhere.
 
 ## Tiledland a Graph
 
@@ -47,7 +47,7 @@ The core component of TiledLand refere to the `Tiles` composing a `Map` and comt
 
 - [x] `Shaped` classes, as classes hierarchie. 
 - [x] `Tiles`: a tile is an `Shaped` interconnected with other tiles. 
-- [x] A tile contains entities. The elements are positioned in the tile. 
+- [x] A tile contains units. The elements are positioned in the tile. 
 - [x] `Map` : It contains several tiles.
 - [ ] `Map` derivated from `Unit. Its shape is the fusion of all contained tiles.
 - [x] Implement topological clock positioning.
@@ -65,8 +65,8 @@ TiledLand agents perception and actions are mainly defined regarding the capabil
 
 - [x] Agent's bodys: Position, clock-orientation and Convex
 - [ ] `Agent` can decide an action to perform.
-- [ ] `Land` mainly a Map, but also an Agent manager, with agents linked to the Map's entities.
-- [ ] `RoadLand`, derived from `Land`, mainly dedicated to `Mobile` entities.
+- [ ] `Land` mainly a Map, but also an Agent manager, with agents linked to the Map's units.
+- [ ] `RoadLand`, derived from `Land`, mainly dedicated to `Mobile` units.
 - [ ] `HackaGame`: MAS component natively compatible to `HackaGame` lib. Encapsulating a basic agent for distributed computing.
 - [ ] _'agent'_ vs _'behavior'_ : Think state machine...
 - [ ] a 'basic' agent : with several moving strategies...

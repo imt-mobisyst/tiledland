@@ -28,39 +28,44 @@ class Actor():
         return self
 
 class Land():
-    def __init__( self, tabletop= None, bankOfEntities= [Unit()] ):
-        self._bankOfEntities= bankOfEntities
+    def __init__( self, aMap= None, bankOfUnits= [] ):
+        self._bankOfUnits= [model for model in bankOfUnits]
+        if len(self._bankOfUnits) == 0 :
+            self._bankOfUnits= [ Unit() ]
         if tabletop is None :
-            tabletop= Tabletop()
-        self.initTabletop(tabletop)
+            aMap= Map()
+        self.initTabletop(aMap)
     
     # Initializing:
-    def initTabletop( self, tabletop ):
+    def clear( self ):
+        self._actors= [ Actor(0, [], self) ]
+    
+    def initMap( self, aMap ):
         self.clear()
-        self._tabletop= tabletop
+        self._map= aMap
         return self
     
-    def initializeDefaultBankOfEntities(self, bankOfEntitiesSize= 8, arrowtipSize= 0.8):
-        names= ['X'] + [ chr( ord('A') + i%26 ) for i in range(bankOfEntitiesSize) ]
-        self._bankOfEntities= [
-            Unit(Convex().initArrowTip(arrowtipSize)).setName(names[i]).setBrush(palettes[1][i])
-            for i in range(bankOfEntitiesSize)
+    def initializeDefaultBankOfUnits(self, bankOfUnitsSize= 8, arrowtipSize= 0.8):
+        names= ['X'] + [ chr( ord('A') + i%26 ) for i in range(bankOfUnitsSize) ]
+        self._bankOfUnits= [
+            Unit( Convex().initArrowTip(arrowtipSize), owner= i, name= names[i] )
+            for i in range(bankOfUnitsSize)
         ]
         return self
 
-    def initializeArrowTipBankOfEntities(self, groups, arrowtipSizes, arrowtipAngles, names):
-        self._bankOfEntities= [
-            Unit(Convex().initArrowTip(s), orientation= a).setName(n).setBrush(palettes[1][i])
+    def initializeArrowTipBankOfUnits(self, groups, arrowtipSizes, arrowtipAngles, names):
+        self._bankOfUnits= [
+            Unit( Convex().initArrowTip(s), orientation= a, owner= i, name= n )
             for i, s, a, n in zip( groups, arrowtipSizes, arrowtipAngles, names )
         ]
         return self
 
     # Accessor:
-    def tabletop(self):
-        return self._tabletop
+    def map(self):
+        return self._map
 
     def size(self):
-        return self._tabletop.size()
+        return self._map.size()
 
     def actors(self):
         return self._actors
@@ -83,33 +88,30 @@ class Land():
             bodies+= a.bodies()
         return bodies
 
-    def bankOfEntities( self ):
-        return self._bankOfEntities
+    def bankOfUnits( self ):
+        return self._bankOfUnits
 
-    def bankEntity( self, num=0 ):
-        i= num%(len(self._bankOfEntities))
-        return self._bankOfEntities[i]
+    def bankUnit( self, num=0 ):
+        i= num%(len(self._bankOfUnits))
+        return self._bankOfUnits[i]
 
 
     # Tabletop sortcut:
     def box(self):
-        return self._tabletop.box()
+        return self._map.box()
 
     def tile(self, iTile):
-        return self._tabletop.tile(iTile)
+        return self._map.tile(iTile)
 
     # Construction:
-    def clear( self ):
-        self._actors= [ Actor(0, [], self) ]
-    
     def appendActor(self, agent, tileIds= [], bodyIds= [] ):
         newId= len(self._actors)
         bodies= []
         i= 1
         for bi, t in zip(bodyIds, tileIds ) :
-            body= self.bankEntity( bi ).copy()
+            body= self.bankUnit( bi ).copy()
             body.setName( body.name() + f"-{i}" )
-            self._tabletop.tileAppendEntity( t, body )
+            self._map.tileAppendUnit( t, body )
             bodies.append(body)
             i+= 1
         self._actors.append( Actor(newId, bodies, agent) )
@@ -120,9 +122,9 @@ class Land():
             nextId= a.numberOfBodies()+1
             if entityNum < 0 :
                 entityNum= iActor
-            body= self.bankEntity( entityNum ).copy()
+            body= self.bankUnit( entityNum ).copy()
             body.setName( body.name() + "-" + str(nextId) )
-            self._tabletop.tileAppendEntity( iTile, body )
+            self._map.tileAppendUnit( iTile, body )
             a.appendBody(body)
             return body
 
@@ -130,29 +132,29 @@ class Land():
         entityNum= len(self._actors)
         return self.appendActor( agent, [iTile], [entityNum] )
 
-    def setBankOfEntities( self, aListOfEntities ):
-        self._bankOfEntities= aListOfEntities
+    def setBankOfUnits( self, aListOfUnits ):
+        self._bankOfUnits= aListOfUnits
         return self
 
     # Actor action :
     def actBodyMove(self, iActor, iBody, clockDir):
         body= self.actor(iActor).body(iBody)
-        self._tabletop.tileClockOrientEntity( body.enclave(), body.index(), clockDir )
-        newlocation= self._tabletop.tileClockMoveEntity( body.enclave(), body.index(), clockDir )
+        self._map.tileClockOrientUnit( body.enclave(), body.index(), clockDir )
+        newlocation= self._map.tileClockMoveUnit( body.enclave(), body.index(), clockDir )
         return newlocation
 
     def actBodyOrient(self, iActor, iBody, clockDir):
         body= self.actor(iActor).body(iBody)
-        out= self._tabletop.tileClockOrientEntity( body.enclave(), body.index(), clockDir )
+        out= self._map.tileClockOrientUnit( body.enclave(), body.index(), clockDir )
         return out
     
     def actBodyRotateLeft(self, iActor, iBody, nbClockAngles= 1):
         iTile, index= self.actor(iActor).body(iBody).selector()
-        out= self._tabletop.tileRotateEntityLeft( iTile, index, CLOCK_ANGLE*nbClockAngles )
+        out= self._map.tileRotateUnitLeft( iTile, index, CLOCK_ANGLE*nbClockAngles )
         return out
     
     def actBodyRotateRight(self, iActor, iBody, nbClockAngles= 1):
         iTile, index= self.actor(iActor).body(iBody).selector()
-        out= self._tabletop.tileRotateEntityLeft( iTile, index, -CLOCK_ANGLE*nbClockAngles )
+        out= self._map.tileRotateUnitLeft( iTile, index, -CLOCK_ANGLE*nbClockAngles )
         return out
     

@@ -4,7 +4,7 @@ nav:
   - Home: index.md
   - Getting Started: getting-started.md
   - Spatial Model:
-      - Entities: core-entity.md
+      - Units: core-entity.md
       - Tiles and Tabletop: core-tabletop.md
       - Geometry: core-geometry.md
       - Maps: core-maps.md

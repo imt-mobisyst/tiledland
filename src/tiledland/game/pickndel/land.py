@@ -29,7 +29,7 @@ class Land(tild.Land):
     def __init__(self, name= "Pick'n-Del", tabletop= None, numberOfActors= 14):
         super(Land, self).__init__(
             tabletop,
-            bankOfEntities= [
+            bankOfUnits= [
                 Carrier(i, name=n)
                 for i, n in zip(range(0, numberOfActors+1), ["-"] + [ chr( ord('A') + i%26 ) for i in range(numberOfActors) ])
             ]
@@ -46,7 +46,7 @@ class Land(tild.Land):
         return self
 
     def initGrid(self, matrix, tileSize= 1.0, separation=0.1, encumber= None):
-        self.initTabletop( tild.Tabletop().initGrid(matrix, tileSize, separation, True) )
+        self.initTabletop( tild.Map().initGrid(matrix, tileSize, separation, True) )
         if not encumber is None :
             for t, v in zip( encumber[0], encumber[1] ) :
                 self.setEncumber(t, v)
@@ -91,7 +91,7 @@ class Land(tild.Land):
         return l
     
     def carrierTiles(self, iPlayer):
-        return [ m.tile() for m in self.entities(iPlayer) ]
+        return [ m.tile() for m in self.units(iPlayer) ]
     
     def encumber(self, iTile):
         return self._encumbers[iTile-1]
@@ -99,7 +99,7 @@ class Land(tild.Land):
     # Construction:
     def initMoves(self):
         for group in range( self.numberOfGroups() ) :
-            for car in self.entities(group) :
+            for car in self.units(group) :
                 car.setMove(0)
 
     def append( self, tile, encumber= 0.0 ):
@@ -133,7 +133,7 @@ class Land(tild.Land):
     def clearMissions(self):
         self._missions= []
         for group in range(self.numberOfGroups()+1) :
-            for iCarrier in range(1, self.numberOfEntities(group)+1) :
+            for iCarrier in range(1, self.numberOfUnits(group)+1) :
                 self.unit( iCarrier, group ).setMission(0)
         return self
 
@@ -157,10 +157,10 @@ class Land(tild.Land):
         return iFrom, iTo, pay
 
     # Moving:
-    def moveEntity(self, iFrom, clockDir):
+    def moveUnit(self, iFrom, clockDir):
         #print( f">>> move {iFrom}, {clockDir} ({self.encumber(iFrom)})" )
         tbtop= self.tabletop()
-        if tbtop.tile(iFrom).numberOfEntities() == 0 or clockDir == 0 :
+        if tbtop.tile(iFrom).numberOfUnits() == 0 or clockDir == 0 :
             return iFrom
         if random.random() < self.encumber(iFrom) :
             return iFrom
@@ -169,7 +169,7 @@ class Land(tild.Land):
 
     def teleport( self, iFrom, iTo ):
         tbtop= self.tabletop()
-        if tbtop.tile(iFrom).numberOfEntities() == 0 or tbtop.tile(iTo).numberOfEntities() :
+        if tbtop.tile(iFrom).numberOfUnits() == 0 or tbtop.tile(iTo).numberOfUnits() :
             return False
         # move:
         # Get from iFrom
@@ -195,7 +195,7 @@ class Land(tild.Land):
     def carriersAsDataTree(self):
         mobiles= hacka.DataTree( "Carriers" )
         for group in range( self.numberOfGroups() ):
-            for car in self.entities( group ):
+            for car in self.units( group ):
                 mDataTree= hacka.DataTree( "carrier", [group, car.id(), car.mission()] )
                 mobiles.append(mDataTree)
         return mobiles
@@ -213,13 +213,13 @@ class Land(tild.Land):
         return self._missions
     
     def carriersFromDataTree(self, aDataTree):
-        self.clearEntities()
+        self.clearUnits()
         for c in aDataTree.children() :
             iPlayer= c.digit(1)
             iCarrier= c.digit(2)
             pos= c.digit(3)
             mis= c.digit(4)
-            carrier= self.tileAppendEntity( pos, Entiry(iPlayer) )
+            carrier= self.tileAppendUnit( pos, Entiry(iPlayer) )
             assert carrier.id() == iCarrier
             carrier.setMission(mis)
         return self._units

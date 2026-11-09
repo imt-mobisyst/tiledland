@@ -71,7 +71,7 @@ class Map():
                     delta= (iLine%2) * hdelta
                     tile= Tile( outLine.copy(), category= matrix[i][j], index= iTile)
                     tile.setPosition(Point(dist*j, dist*(maxLine-i)))
-                    tile.setCoordinates(delta+dist*j, vdist*iLine )
+                    tile.setPosition( Point(delta+dist*j, vdist*iLine ) )
                     self._tiles.append( tile )
         self._size= iTile
         if connect :
@@ -222,10 +222,9 @@ class Map():
     def createTile( self, aTileShape, category=0):
         assert type(category) == int
         aShape= aTileShape.copy()
-        x, y= aShape.setOnCenter().asTuple()
-        tile= Tile(aShape )
-        tile.setBrush(category)
-        tile.setCoordinates(x, y)
+        pos= aShape.setCenterZero()
+        tile= Tile(aShape, category= category)
+        tile.setPosition(pos)
         self.appendTile(tile)
         return self._size
     
@@ -268,6 +267,9 @@ class Map():
             t.clear()
         return self 
 
+    def tileAppendUnit( self, iTile, aUnit ):
+        return self.tile(iTile).appendCenter(aUnit)
+    
     def tileRemoveUnit( self, iTile, iUnit ):
         aUnit= None
         if self.isUnit(iTile, iUnit) :
@@ -399,9 +401,9 @@ class Map():
         
         # Do merge:
         newConvex.simplify( self.epsilon() )
-        tile.setOutline(newConvex)
+        tile.setShape(newConvex)
         deadTile= self.tile(iTile2)
-        # merge all entities
+        # merge all units
         for ag in deadTile.units() :
             tile.append( ag )
         
@@ -422,7 +424,7 @@ class Map():
         neighborhood= [ (i, (tb + self.tile(i).box()).score() ) for i in t.adjacencies() ]
         neighborhood.sort(key=lambda tup: tup[1])
         for neighbor, val in neighborhood :
-            if ( self.tile(neighbor).color() == t.color()
+            if ( self.tile(neighbor).category() == t.category()
                 and self.mergeTilesIfPossible( neighbor, iTile, maxError, maxSize )
             ) :
                 return True

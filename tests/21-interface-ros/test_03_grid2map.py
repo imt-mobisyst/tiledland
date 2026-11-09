@@ -5,7 +5,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Box, Convex, Grid
-from src.tiledland import Agent, Tile, Tabletop 
+from src.tiledland import Agent, Tile, Map 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - G R I D   T O   M A P
@@ -19,20 +19,20 @@ def test_long_gridmap_loadSmallTabletop():
     assert gridmap.resolution() == 0.1
 
     convexes= grid.makeConvexes(0, 8)
-    tild.quickDraw( tild.Tabletop().fromShapes(convexes) )
+    tild.drawMap( tild.Map().fromShapes(convexes) )
     assert len(convexes) == 17
     
-    tabletop= tild.Tabletop().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
+    tabletop= tild.Map().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
 
-    tild.quickDraw(tabletop)
+    tild.drawMap(tabletop)
 
     shotImg= "shot-test.svg"
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.quickDraw(tabletop)
+    tild.drawMap(tabletop)
 
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -40,11 +40,11 @@ def test_long_gridmap_loadSmallTabletop():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    tabletop= tild.Tabletop().fromGridConvexes( grid, 2.0 )
+    tabletop= tild.Map().fromGridConvexes( grid, 2.0 )
 
-    tild.quickDraw(tabletop)
+    tild.drawMap(tabletop)
     
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -61,12 +61,12 @@ def test_long_gridmap_loadLargeTabletop():
     shotImg= "shot-test.svg"
     pablo= tild.artist.openSVG(shotImg, 800, 600)
 
-    tabletop= tild.Tabletop().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
+    tabletop= tild.Map().fromGridConvexes( grid, 2.0, pixelValues=[Grid.STATE_FREE] )
 
-    tild.quickDraw(tabletop)
+    tild.drawMap(tabletop)
 
     pablo.fit(tabletop)
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -74,12 +74,12 @@ def test_long_gridmap_loadLargeTabletop():
     for lineShot, lineRef in zip( shotFile, refsFile ):
         assert( lineShot == lineRef )
 
-    tabletop= tild.Tabletop().fromGridConvexes( grid, 2.0 )
+    tabletop= tild.Map().fromGridConvexes( grid, 2.0 )
     
-    tild.quickDraw(tabletop)
+    tild.drawMap(tabletop)
     
     pablo.fit(tabletop)
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -149,9 +149,9 @@ def test_gridmap_rosGridMap_webots():
     shotImg= "shot-test.svg"
     pablo= tild.artist.openSVG(shotImg, 800, 600)
 
-    tabletop= tild.Tabletop().fromGridConvexes( gridmap, 2.0, pixelValues=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
+    tabletop= tild.Map().fromGridConvexes( gridmap, 2.0, pixelValues=[Grid.STATE_FREE, Grid.STATE_OCCUPIED] )
     pablo.fit(tabletop)
-    tabletop.renderOn(pablo)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 

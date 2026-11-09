@@ -7,7 +7,7 @@ _defaultOutline= Convex().initSquare(1.0)
 
 class AbsShaped :
     # Constructor
-    def __init__(self, category=0, owner=0, index=0, name="AbsShaped"):
+    def __init__(self, category, owner, index, name):
         self._category= category
         self._owner= owner
         self._index= index
@@ -138,14 +138,13 @@ class Rectangle(AbsShaped) :
         self._position= p
         return self
 
-def _defaultShape():
-    return Convex().initSquare(1.0)
-
 class Shaped(AbsShaped):
     # Initialization / Destruction:
-    def __init__(self, shape= _defaultShape(),
+    def __init__(self, shape= None,
             category=0, owner=0, index=0, name="Shaped"):
         super().__init__(category, owner, index, name)
+        if shape is None :
+            shape= Convex().initSquare(1.0)
         self._shape= shape
 
     # Shape Accessor:

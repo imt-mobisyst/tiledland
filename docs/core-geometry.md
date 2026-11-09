@@ -30,7 +30,7 @@ assert not copie.isIncludingPoint(Point(0.0, 0.0))
 
 `initSquare`, `initRegular`, and `initArrowTip` provide predefined shapes. `box()` calculates a bounding box; `isIncludingPoint()` tests membership; `isColliding()` and `distance()` compare two polygons. The algorithms expect convex polygons: do not assume that any concave shape will be interpreted correctly.
 
-`points()` exposes the internal points. A direct mutation of a shape used as a reference by multiple entities can affect multiple objects.
+`points()` exposes the internal points. A direct mutation of a shape used as a reference by multiple units can affect multiple objects.
 
 ## Grids
 

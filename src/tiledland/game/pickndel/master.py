@@ -13,14 +13,14 @@ class GameEngine( hacka.AbsGame ) :
         assert( type(world) == World )
         self._numberOfPlayers= numberOfPlayers
         self._model= world
-        self._model.clearEntities()
+        self._model.clearUnits()
         self._model.computeDistances()
         self._initialTic= tic
         self._tic= 0
         # Initialize Players:
         for pId in range(1, self._numberOfPlayers+1) :
             for tileId in random.choices( range(1, self._model.size()+1 ), k = numberOfCarriers ) :
-                self._model.tileAppendEntity( tileId, Entity(pId) )
+                self._model.tileAppendUnit( tileId, Unit(pId) )
         self._scores= [ 0.0 for i in range(self._numberOfPlayers+1) ]
     
     # Game interface :
@@ -77,7 +77,7 @@ class GameEngine( hacka.AbsGame ) :
         return self._scores[iPlayer]
     
     def numberOfCarriers(self, iPlayer=1):
-        return len( self._model.entities(iPlayer) )
+        return len( self._model.units(iPlayer) )
     
     def ticCounter(self):
         return self._tic
@@ -95,7 +95,7 @@ class GameEngine( hacka.AbsGame ) :
 
     def setMoveAction( self, iPlayer, iCarrier, clockDir ):
         # Security:
-        if not(self._model.isEntity(iCarrier, iPlayer) and 0 <= clockDir and clockDir <= 12):
+        if not(self._model.isUnit(iCarrier, iPlayer) and 0 <= clockDir and clockDir <= 12):
             return False
         self._model.unit(iCarrier, iPlayer).setMove(clockDir)
         return True
@@ -103,7 +103,7 @@ class GameEngine( hacka.AbsGame ) :
     def setMissionAction(self, iPlayer, iCarrier, iMission):
         # Security:
         model= self._model
-        if not( model.isEntity(iPlayer, iCarrier) and model.isMission(iMission) ) :
+        if not( model.isUnit(iPlayer, iCarrier) and model.isMission(iMission) ) :
             return False
         # Localvariable:
         carrier= model.unit(iCarrier, iPlayer)
@@ -126,9 +126,9 @@ class GameEngine( hacka.AbsGame ) :
 
     def applyMoveActions(self):
         collision= 0
-        # Visit all entities:
+        # Visit all units:
         for iPlayer in range( 1, self._numberOfPlayers+1 ):
-            for mobile in self._model.entities(iPlayer) :
+            for mobile in self._model.units(iPlayer) :
                 if mobile.move() != 0 :
                     self._model.move( mobile.tile(), mobile.move() )
                     self._scores[iPlayer]+= -1
@@ -145,7 +145,7 @@ class GameEngine( hacka.AbsGame ) :
         moves= [[]]
         for iPlayer in range( 1, self._numberOfPlayers+1 ):
             moves.append([])
-            for mobile in self._model.entities(iPlayer) :
+            for mobile in self._model.units(iPlayer) :
                 iFrom= mobile.tile()
                 iTo= self._model.clockposition( iFrom, mobile.move() )
                 moves[iPlayer].append( [iFrom, iTo] )

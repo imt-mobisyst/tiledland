@@ -317,26 +317,29 @@ class ArtistBasic(Artist):
         return self
 
 # Quick functions: 
-def openSVG(filePath, width, height, artist= ArtistBasic()):
+def openSVG(filePath, width, height, artistClass= ArtistBasic):
+    artist= artistClass()
     return artist.init(filePath, width, height, SupportSVG)
 
-def openPNG(filePath, width, height, artist= ArtistBasic()):
+def openPNG(filePath, width, height, artistClass= ArtistBasic):
+    artist= artistClass()
     from .supportCairo import SupportPNG
     return artist.init(filePath, width, height, SupportPNG)
 
-def openFile(filePath, width, height, artist= ArtistBasic()):
+def openFile(filePath, width, height, artistClass= ArtistBasic):
+    artist= artistClass()
     fileExtend= filePath.split(".")[-1]
     if fileExtend in ["png", "PNG"]:
         from .supportCairo import SupportPNG
-        artist.init( filePath, width, height, SupportPNG )
+        artist.init(filePath, width, height, SupportPNG)
     elif fileExtend in ["svg", "SVG"]:
-        artist.init( filePath, width, height, SupportSVG )
+        artist.init(filePath, width, height, SupportSVG)
     else :
         assert "'filePath' sould be .png or .svg" == False
     return artist
 
-def drawUnit( aUnit, filePath="shot-tiledland.png", width= 1600, height= 1200, artist= ArtistBasic()):
-    openFile( filePath, width, height, artist )
+def drawUnit(aUnit, filePath="shot-tiledland.png", width= 1600, height= 1200, artistClass= ArtistBasic):
+    artist= openFile(filePath, width, height, artistClass)
     
     artist.fit(aUnit)
     artist.drawUnit(aUnit)
@@ -345,8 +348,8 @@ def drawUnit( aUnit, filePath="shot-tiledland.png", width= 1600, height= 1200, a
 
     return artist
 
-def drawMap( aUnit, filePath="shot-tiledland.png", width= 1600, height= 1200, artist= ArtistBasic()):
-    openFile( filePath, width, height, artist )
+def drawMap(aUnit, filePath="shot-tiledland.png", width= 1600, height= 1200, artistClass= ArtistBasic):
+    artist= openFile(filePath, width, height, artistClass)
     
     artist.fit(aUnit)
     artist.drawMap(aUnit)

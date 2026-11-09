@@ -19,7 +19,7 @@ Save this program as `premiere_scene.py`, then execute it with `python premiere_
 ```python
 import tiledland as tild
 
-plateau = tild.Tabletop().initGrid([
+plateau = tild.Map().initGrid([
     [0, 0, 1],
     [0, -1, 0],
 ])
@@ -28,8 +28,8 @@ robot = tild.unit(
     shape=tild.Convex().initArrowTip(0.6),
     name="Robot",
 )
-plateau.tileAppendEntity(1, robot)
-tild.quickDraw(plateau, "", "premiere-scene.svg", 800, 500)
+plateau.tileAppendUnit(1, robot)
+tild.drawMap(plateau, "premiere-scene.svg", 800, 500)
 assert plateau.numberOfTiles() == 5
 assert robot.enclave() == 1
 print("Scene saved to premiere-scene.svg")
@@ -42,11 +42,11 @@ Open the SVG in a browser. Positive or zero values in the matrix designate the g
 ```python
 import tiledland as tild
 
-plateau = tild.Tabletop().initLine(3)
-robot = plateau.tileAppendEntity(1, tild.unit(name="Robot"))
+plateau = tild.Map().initLine(3)
+robot = plateau.tileAppendUnit(1, tild.unit(name="Robot"))
 plateau.tileMoveEntity(robot.enclave(), robot.index(), 2)
 assert robot.selector() == (2, 1)
-tild.quickDraw(plateau, "", "deplacement.svg", 800, 300)
+tild.drawMap(plateau, "", "deplacement.svg", 800, 300)
 ```
 
 This operation replaces the entity at the center of the target tile. It does not control the existence of an edge between the two tiles. To respect the graph, verify `plateau.isEdge(depart, arrivee)` before movement.

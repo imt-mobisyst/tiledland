@@ -4,7 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Box, Convex
-from src.tiledland import Agent, Tile, Tabletop 
+from src.tiledland import Agent, Tile, Map 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - G R I D   T O   M A P
@@ -34,14 +34,14 @@ def test_gridmap_asGrid():
 def test_long_gridmap_rectangletabletop():
     gridmap= ros.GridMap().load( "tests/rsc", "convexmap.yaml" )
     grid= gridmap.asGrid()
-    tabletop= tild.Tabletop().fromGridRectangles(grid)
+    tabletop= tild.Map().fromGridRectangles(grid)
 
     shotImg= "shot-test.svg"
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.quickDraw(tabletop)
-    tabletop.renderOn(pablo)
+    tild.drawMap(tabletop)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -53,14 +53,14 @@ def test_long_gridmap_smallTabletop():
     gridmap= ros.GridMap().load( "tests/rsc", "small-map.yaml" )
     grid= gridmap.asGrid()
 
-    tabletop= tild.Tabletop().fromGridRectangles( grid )
+    tabletop= tild.Map().fromGridRectangles( grid )
 
     shotImg= "shot-test.svg"
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.quickDraw(tabletop)
-    tabletop.renderOn(pablo)
+    tild.drawMap(tabletop)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -70,8 +70,8 @@ def test_long_gridmap_smallTabletop():
 
     tabletop.mergeAllPossible( 0.2, 2.0 )
 
-    tild.quickDraw(tabletop)
-    tabletop.renderOn(pablo)
+    tild.drawMap(tabletop)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -84,8 +84,8 @@ def test_long_gridmap_mediumTabletop_inside():
     grid= gridmap.asGrid()
     grid.filter(1, -1)
 
-    #tabletop= tild.Tabletop().fromGridRectangles( grid )
-    tabletop= tild.Tabletop()
+    #tabletop= tild.Map().fromGridRectangles( grid )
+    tabletop= tild.Map()
 
     tabletop.clear()
     tabletop._epsilon= round( grid.resolution() * 0.4, 4 )
@@ -103,7 +103,7 @@ def test_long_gridmap_mediumTabletop_inside():
         shapes= grid.makeRectangles(pixval, tileSize)
         for s in shapes :
             i+= 1
-            assert tabletop.createTile(s, palettes[0][pixval]) == i
+            assert tabletop.createTile(s, pixval) == i
 
     # Connect all elements:
     tabletop.connectAllClose( grid.resolution() )
@@ -119,8 +119,8 @@ def test_long_gridmap_mediumTabletop_inside():
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.quickDraw(tabletop)
-    tabletop.renderOn(pablo)
+    tild.drawMap(tabletop)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg )
@@ -133,14 +133,14 @@ def test_long_gridmap_mediumTabletop():
     grid= gridmap.asGrid()
     grid.filter(1, -1)
 
-    tabletop= tild.Tabletop().fromGridRectangles( grid, 4.0 )
+    tabletop= tild.Map().fromGridRectangles( grid, 4.0 )
 
     shotImg= "shot-test.svg"
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.quickDraw(tabletop)
-    tabletop.renderOn(pablo)
+    tild.drawMap(tabletop)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 
@@ -154,14 +154,14 @@ def test_gridmap_largeTabletop():
     grid= gridmap.asGrid()
     grid.filter(1, -1)
 
-    tabletop= tild.Tabletop().fromGridRectangles( grid, 4.0 )
+    tabletop= tild.Map().fromGridRectangles( grid, 4.0 )
     
     shotImg= "shot-test.svg"
     pablo= tild.artist.openSVG(shotImg, 800, 600)
     pablo.fit(tabletop)
 
-    tild.quickDraw(tabletop)
-    tabletop.renderOn(pablo)
+    tild.drawMap(tabletop)
+    pablo.drawMap(tabletop)
     pablo.flip()
 
     shotFile= open( shotImg ) 

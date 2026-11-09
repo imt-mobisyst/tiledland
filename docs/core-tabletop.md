@@ -1,6 +1,6 @@
 # Tiles and Tabletops
 
-`Tile` inherits from `Entity` and adds a list of neighbors and a collection of entities. `Tabletop` gathers these tiles and provides operations on their graph and content.
+`Tile` inherits from `Entity` and adds a list of neighbors and a collection of units. `Tabletop` gathers these tiles and provides operations on their graph and content.
 
 ## Building the Tabletop
 
@@ -43,11 +43,11 @@ plateau.connect(2, 1)
 
 ## Tile Content
 
-`tileAppendEntity(i, objet)` adds and centers the object. `entity(i, j)` finds the entity with index `j` in tile `i`. `tileRemoveEntity(i, j)` returns the removed entity or `None` if it does not exist. `tileMoveEntity(i, j, cible)` removes and then adds the object at the destination.
+`tileAppendUnit(i, objet)` adds and centers the object. `entity(i, j)` finds the entity with index `j` in tile `i`. `tileRemoveEntity(i, j)` returns the removed entity or `None` if it does not exist. `tileMoveEntity(i, j, cible)` removes and then adds the object at the destination.
 
 Indices start at **1**. Validate identifiers before accessing collections: accessors are not all validity controls and a null index may select the last element through Python indexing.
 
-`tiles()`, `entities()`, and `adjacencies()` expose modifiable internal collections. Modifying them directly can desynchronize counters or selectors; prefer model operations.
+`tiles()`, `units()`, and `adjacencies()` expose modifiable internal collections. Modifying them directly can desynchronize counters or selectors; prefer model operations.
 
 ## Clock Directions
 

@@ -66,10 +66,10 @@ def test_fast_map_str():
 
     assert "\n"+str(m)+"\n" == """
 Map:
-- Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] entities(0)
-- Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] entities(1)
+- Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[1, 3] units(0)
+- Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[1, 2] units(1)
   - Unit 1-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉
-- Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] units(0)
 """
 
 def test_fast_map_hacka():
@@ -86,10 +86,10 @@ def test_fast_map_hacka():
     print(f">>>\n{m}")
     assert '\n'+ str(m) +'\n' == """
 Map:
-- Tile 0-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] entities(0)
-- Tile 0-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] entities(0)
-- Tile 0-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] entities(0)
-- Tile 0-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] entities(0)
+- Tile 0-1 ⌊(4.5, 2.5), (5.5, 3.5)⌉ adjs[2, 3, 4] units(0)
+- Tile 0-2 ⌊(4.5, 14.5), (5.5, 15.5)⌉ adjs[1, 3, 4] units(0)
+- Tile 0-3 ⌊(0.5, 8.5), (1.5, 9.5)⌉ adjs[1, 2] units(0)
+- Tile 0-4 ⌊(8.5, 8.5), (9.5, 9.5)⌉ adjs[1, 2] units(0)
 """
 
 def test_fast_map_box():
@@ -131,9 +131,9 @@ def test_fast_map_connection():
     tild.drawMap( m, "shot-test.png", 800, 600 )
     assert "\n"+ str(m) +"\n"  == """
 Map:
-- Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] entities(0)
-- Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] entities(0)
-- Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] entities(0)
+- Tile 0-1 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[2] units(0)
+- Tile 0-2 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2, 3] units(0)
+- Tile 0-3 ⌊(1.7, -0.5), (2.7, 0.5)⌉ adjs[2] units(0)
 """
 
     assert m.tile(1).adjacencies() == [2]
@@ -179,12 +179,12 @@ def test_fast_map_withUnits():
     tild.drawMap( m, "shot-test.png", 800, 600 )
     print( f"---\n{m}.")
     assert str(m) == """Map:
-- Tile 0-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] entities(1)
+- Tile 0-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] units(1)
   - Unit 0-2 ⌊(-0.5, 0.6), (0.5, 1.6)⌉
-- Tile 0-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] entities(2)
+- Tile 0-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] units(2)
   - Unit 0-1 ⌊(0.6, 0.6), (1.6, 1.6)⌉
   - Unit 0-3 ⌊(0.6, 0.6), (1.6, 1.6)⌉
-- Tile 0-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] entities(0)"""
+- Tile 0-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] units(0)"""
 
     m.clearUnits()
 
@@ -244,13 +244,13 @@ def test_fast_map_popUnits():
     print( f"---\n{m}.")
     tild.drawMap( m, "shot-test.png", 800, 600 )
     assert str(m) == """Map:
-- Tile 0-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] entities(2)
+- Tile 0-1 ⌊(-0.5, 0.6), (0.5, 1.6)⌉ adjs[2] units(2)
   - Unit 0-2 ⌊(-0.5, 0.6), (0.5, 1.6)⌉
   - Unit 0-3 ⌊(-0.5, 0.6), (0.5, 1.6)⌉
-- Tile 0-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] entities(2)
+- Tile 0-2 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[1, 3] units(2)
   - Unit 0-1 ⌊(0.6, 0.6), (1.6, 1.6)⌉
   - Unit 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉
-- Tile 0-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] entities(0)"""
+- Tile 0-3 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[2] units(0)"""
 
     m.clearUnits()
 
@@ -273,18 +273,18 @@ def test_fast_map_moveUnits():
     print( f"---\n{m}.")
     tild.drawMap( m, "shot-test.png", 800, 600 )
     assert str(m) == """Map:
-- Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+- Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] units(2)
   - M.1 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
   - M.2 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-- Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(2)
+- Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] units(2)
   - M.3 0-0 ⌊(0.93, 2.0), (1.3, 2.4)⌉
   - M.4 0-0 ⌊(0.93, 2.0), (1.3, 2.4)⌉
-- Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
+- Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] units(1)
   - M.5 0-0 ⌊(2.03, 2.0), (2.4, 2.4)⌉
-- Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
-- Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
-- Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
-- Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+- Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] units(0)
+- Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] units(0)
+- Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] units(0)
+- Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] units(0)"""
 
     bob= m.tileRemoveUnit(2, 1)
 
@@ -294,17 +294,17 @@ def test_fast_map_moveUnits():
     print( f"---\n{m}.")
     tild.drawMap( m, "shot-test.png", 800, 600 )
     assert str(m) == """Map:
-- Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+- Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] units(2)
   - M.1 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
   - M.2 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-- Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(1)
+- Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] units(1)
   - M.4 0-0 ⌊(0.93, 2.0), (1.3, 2.4)⌉
-- Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
+- Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] units(1)
   - M.5 0-0 ⌊(2.03, 2.0), (2.4, 2.4)⌉
-- Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
-- Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
-- Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
-- Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+- Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] units(0)
+- Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] units(0)
+- Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] units(0)
+- Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] units(0)"""
     
     bob= m.tileRemoveUnit(2, 1)
 
@@ -314,16 +314,16 @@ def test_fast_map_moveUnits():
     print( f"---\n{m}.")
     tild.drawMap( m, "shot-test.png", 800, 600 )
     assert str(m) == """Map:
-- Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+- Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] units(2)
   - M.1 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
   - M.2 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-- Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
-- Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(1)
+- Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] units(0)
+- Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] units(1)
   - M.5 0-0 ⌊(2.03, 2.0), (2.4, 2.4)⌉
-- Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
-- Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
-- Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
-- Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+- Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] units(0)
+- Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] units(0)
+- Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] units(0)
+- Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] units(0)"""
 
     i= m.tileMoveUnit(3, 1, 1)
     assert i == 3
@@ -335,16 +335,16 @@ def test_fast_map_moveUnits():
     print( f"---\n{m}.")
     tild.drawMap( m, "shot-test.png", 800, 600 )
     assert str(m) == """Map:
-- Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(3)
+- Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] units(3)
   - M.1 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
   - M.2 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
   - M.5 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-- Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
-- Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(0)
-- Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(0)
-- Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
-- Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
-- Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+- Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] units(0)
+- Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] units(0)
+- Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] units(0)
+- Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] units(0)
+- Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] units(0)
+- Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] units(0)"""
 
     i= m.tileMoveUnit(1, 2, 4)
     assert i == 1
@@ -356,13 +356,13 @@ def test_fast_map_moveUnits():
     print( f"---\n{m}.")
     tild.drawMap( m, "shot-test.png", 800, 600 )
     assert str(m) == """Map:
-- Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] entities(2)
+- Tile 0-1 ⌊(-0.5, 1.7), (0.5, 2.7)⌉ adjs[2] units(2)
   - M.1 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
   - M.5 0-0 ⌊(-0.17, 2.0), (0.2, 2.4)⌉
-- Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] entities(0)
-- Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] entities(0)
-- Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] entities(1)
+- Tile 0-2 ⌊(0.6, 1.7), (1.6, 2.7)⌉ adjs[1, 3, 4] units(0)
+- Tile 0-3 ⌊(1.7, 1.7), (2.7, 2.7)⌉ adjs[2, 5] units(0)
+- Tile 0-4 ⌊(0.6, 0.6), (1.6, 1.6)⌉ adjs[2, 5, 7] units(1)
   - M.2 0-0 ⌊(0.93, 0.9), (1.3, 1.3)⌉
-- Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] entities(0)
-- Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] entities(0)
-- Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] entities(0)"""
+- Tile 0-5 ⌊(1.7, 0.6), (2.7, 1.6)⌉ adjs[3, 4] units(0)
+- Tile 0-6 ⌊(-0.5, -0.5), (0.5, 0.5)⌉ adjs[7] units(0)
+- Tile 0-7 ⌊(0.6, -0.5), (1.6, 0.5)⌉ adjs[4, 6] units(0)"""

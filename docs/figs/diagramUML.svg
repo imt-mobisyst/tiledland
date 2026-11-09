@@ -90,7 +90,7 @@
 <text text-anchor="middle" x="233.59" y="-697.3" font-family="Arial" font-size="14.00" style="">Land</text>
 <polyline fill="none" stroke="black" points="159.06,-689.1 308.13,-689.1" style=""/>
 <text text-anchor="start" x="167.06" y="-672.5" font-family="Arial" font-size="14.00" style="">- Tabletop _tabletop</text>
-<text text-anchor="start" x="167.06" y="-655.7" font-family="Arial" font-size="14.00" style="">- List _bankOfEntities</text>
+<text text-anchor="start" x="167.06" y="-655.7" font-family="Arial" font-size="14.00" style="">- List _bankOfUnits</text>
 <text text-anchor="start" x="167.06" y="-638.9" font-family="Arial" font-size="14.00" style="">- List _actors</text>
 <polyline fill="none" stroke="black" points="159.06,-630.7 308.13,-630.7" style=""/>
 <text text-anchor="start" x="167.06" y="-614.1" font-family="Arial" font-size="14.00" style="">+ appendActor()</text>

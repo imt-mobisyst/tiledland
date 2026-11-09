@@ -4,7 +4,7 @@ sys.path.insert( 1, __file__.split('tests')[0] )
 
 import src.tiledland as tild
 from src.tiledland.geometry import Point, Box, Convex
-from src.tiledland import Unit, Tile, Tabletop 
+from src.tiledland import Unit, Tile 
 
 # ------------------------------------------------------------------------ #
 #         T E S T   T I L E D L A N D - C O M P O N E N T
@@ -13,58 +13,114 @@ from src.tiledland import Unit, Tile, Tabletop
 def test_fast_tabletop_clock():
     clockAngle= [ round(x, 4) for x in tild.CLOCK_ANGLES ]
     print( clockAngle )
-    assert len(tild.tabletop.CLOCK_ANGLES) == 13
+    assert len(tild.map.CLOCK_ANGLES) == 13
     assert clockAngle == [1.5708, 1.0472, 0.5236, 0.0, -0.5236, -1.0472, -1.5708, -2.0944, -2.618, 3.1416, 2.618, 2.0944, 1.5708]
 
-    tabletop= tild.Tabletop().initHexa(
+    tabletop= tild.Map().initHexa(
         [[-1, 0, 0], 
         [0, 0, 0], 
         [-1, 0, 0]] 
     )
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
 
     bob= tild.Unit()
-    tabletop.tileAppendEntity( 4, bob )
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tabletop.tileAppendUnit( 4, bob )
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
 
     assert round( bob.orientation(), 4) == 0.0
 
-    tabletop.tileOrientEntity(4, 1, 1.2)
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tabletop.tileOrientUnit(4, 1, 1.2)
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == 1.2
 
-    tabletop.tileRotateEntity(4, 1, 0.8)
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tabletop.tileRotateUnit(4, 1, 0.8)
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == 2.0
 
-    tabletop.tileClockOrientEntity(4, 1, 7)
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tabletop.tileClockOrientUnit(4, 1, 7)
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == -2.0944
 
-    tabletop.tileRotateEntityLeft(4, 1)
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tabletop.tileRotateUnitLeft(4, 1)
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == -1.5708
     
-    tabletop.tileRotateEntityRight(4, 1)
-    tabletop.tileRotateEntityRight(4, 1)
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tabletop.tileRotateUnitRight(4, 1)
+    tabletop.tileRotateUnitRight(4, 1)
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == -2.618
 
-    tabletop.tileRotateEntityRight(4, 1)
-    tabletop.tileRotateEntityRight(4, 1)
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tabletop.tileRotateUnitRight(4, 1)
+    tabletop.tileRotateUnitRight(4, 1)
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == 2.618
     
-    tabletop.tileOrientEntity(4, 1, 387.2)
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tabletop.tileOrientUnit(4, 1, 387.2)
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == -2.3575
 
-    tabletop.tileOrientEntity(4, 1, -55.2)
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tabletop.tileOrientUnit(4, 1, -55.2)
+    tild.drawMap( tabletop, "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 4) == 1.3487
 
+
+def test_tabletop_clockNeighboring():
+    tabletop= tild.Map()
+    tileShape= Convex().fromZipped(
+        [(-1.0, 0.0), (0.0, 1.5), (1.0, 0.0), (0.0, -1.5) ]
+    )
+    tabletop.appendTile( Tile(tileShape.copy(), category= 1) )
+
+    tild.drawMap(tabletop, "shot-test.png")
+
+    assert tabletop.neighbours(1) == []
+
+    t= Tile(tileShape.copy())
+    t.setPosition( Point(1.5, 2) )
+    t.setCategory(2)
+
+    tt= tabletop.appendTile(t)
+    assert tt == t
+    assert t.position() == Point(1.5, 2)
+
+    assert str(t) == "Tile 0-2 ⌊(0.5, 0.5), (2.5, 3.5)⌉ adjs[] units(0)"
+
+    tabletop.connect( 1, t.index() )
+    tild.drawMap(tabletop, "shot-test.png")
+
+    assert str(tabletop) == """Map:
+- Tile 0-1 ⌊(-1.0, -1.5), (1.0, 1.5)⌉ adjs[2] units(0)
+- Tile 0-2 ⌊(0.5, 0.5), (2.5, 3.5)⌉ adjs[] units(0)"""
+
+    assert tabletop.neighbours(1) == [(2, (1.5, 2.0), 1)]
+    
+    t= Tile(tileShape.copy())
+    t.setPosition( Point(-1.5, 2) )
+    t.setCategory(2)
+    t= tabletop.appendTile(t)
+
+    tabletop.connect( 1, t.index() )
+
+    tild.drawMap(tabletop, "shot-test.png")
+
+    print( tabletop.neighbours(1) )
+    assert tabletop.neighbours(1) == [(2, (1.5, 2.0), 1), (3, (-1.5, 2.0), 11)]
+
+    t= tabletop.appendTile( Tile( tileShape.copy().translate(Point(1.5, -2)), category= 2) )
+    tabletop.connect( 1, t.index() )
+    t= tabletop.appendTile( Tile( tileShape.copy().translate(Point(-1.5, -2)), category= 2) )
+    tabletop.connect( 1, t.index() )
+
+    tild.drawMap(tabletop, "shot-test.png")
+
+    print( tabletop.neighbours(1) )
+    assert tabletop.neighbours(1) == [(2, (1.5, 2.0), 1), (3, (-1.5, 2.0), 11), (4, (1.5, -2.0), 5), (5, (-1.5, -2.0), 7)]
+
+    assert tabletop.tile(1).adjacencies() == [2, 3, 4, 5]
+    assert tabletop.edges() == [(1, 2), (1, 3), (1, 4), (1, 5)]
+
 def test_fast_tabletop_hexaclock():
-    tabletop= tild.Tabletop().initHexa(
+    tabletop= tild.Map().initHexa(
         [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
         [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
@@ -72,7 +128,7 @@ def test_fast_tabletop_hexaclock():
         [-1, 0, 0, 0, 0, -1, -1, -1]]  #
     )
 
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.drawMap(tabletop, "shot-test.png")
 
     print( tabletop.adjacencies(22) )
     print( tabletop.clockDirections(22) )
@@ -115,7 +171,7 @@ def test_fast_tabletop_hexaclock():
     assert( tabletop.completeClock(27)  == [27,  27, 27, 27,  27, 27, 27,  27, 27, 26,  27, 20, 27] )
 
 def test_fast_tabletop_hexamove():
-    tabletop= tild.Tabletop().initHexa(
+    tabletop= tild.Map().initHexa(
         [[0, 0, 0, -1, 0, 0, 0, 0],     #   -1   : means no cell at this selector
         [0, -1, 0, 0, 0, -1, 0, 0],     #  0 - n : give the group identifier of the cell to create.
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
@@ -126,35 +182,35 @@ def test_fast_tabletop_hexamove():
     for t in tabletop.tiles() :
         assert len( t.units() ) == 0 
     
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tild.drawMap(tabletop, "shot-test.png")
     
-    tabletop.tileAppendEntity( 10, tild.Unit() )
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    tabletop.tileAppendUnit( 10, tild.Unit() )
+    tild.drawMap(tabletop, "shot-test.png")
 
     assert len( tabletop.tile(10).units() ) == 1
     for t in tabletop.tiles() :
         if t.index() != 10 :
             assert len( t.units() ) == 0 
 
-    assert tabletop.tileClockMoveEntity(10, 1, 0) == 10
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    assert tabletop.tileClockMoveUnit(10, 1, 0) == 10
+    tild.drawMap(tabletop, "shot-test.png")
 
     assert len( tabletop.tile(10).units() ) == 1
     for t in tabletop.tiles() :
         if t.index() != 10 :
             assert len( t.units() ) == 0 
 
-    assert tabletop.tileClockMoveEntity(10, 1, 3) == 11
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    assert tabletop.tileClockMoveUnit(10, 1, 3) == 11
+    tild.drawMap(tabletop, "shot-test.png")
 
-    assert tabletop.tileClockMoveEntity(11, 1, 7) == 17
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    assert tabletop.tileClockMoveUnit(11, 1, 7) == 17
+    tild.drawMap(tabletop, "shot-test.png")
 
-    assert tabletop.tileClockMoveEntity(17, 1, 2) == 17
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    assert tabletop.tileClockMoveUnit(17, 1, 2) == 17
+    tild.drawMap(tabletop, "shot-test.png")
 
-    assert tabletop.tileClockMoveEntity(17, 1, 5) == 24
-    tild.quickDraw( tabletop, "", "shot-test.png", 800, 600 )
+    assert tabletop.tileClockMoveUnit(17, 1, 5) == 24
+    tild.drawMap(tabletop, "shot-test.png")
     
     assert len( tabletop.tile(24).units() ) == 1
     for t in tabletop.tiles() :
