@@ -17,7 +17,7 @@ class Unit(AbsShaped) :
     def copy(self):
         cpy= type(self)(
             self._outline, self._position, self._orientation, 
-            self._owner, self._category, self._index, self._name
+            self._category, self._owner, self._index, self._name
         )
         return cpy
 

@@ -13,16 +13,11 @@ class Tile(Shaped):
         self._size= 0
     
     def copy(self):
-        cpy= type(self)(
-            self._group,
-            self._refShape,
-            self._position, self._theta,
-            self._brush,
-            self._local, self._index,
-            self._name
+        cpy= type(self)( self._shape.copy(),
+            self._category, self._owner, self._index, self._name
         )
         cpy._adjacencies= [nei for nei in self._adjacencies]
-        cpy._units= [ent for ent in self._units]
+        cpy._units= [u.copy() for u in self._units]
         self._size= len(cpy._units)
 
     # Accessor:

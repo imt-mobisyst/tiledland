@@ -32,9 +32,9 @@ class Land():
         self._bankOfUnits= [model for model in bankOfUnits]
         if len(self._bankOfUnits) == 0 :
             self._bankOfUnits= [ Unit() ]
-        if tabletop is None :
+        if aMap is None :
             aMap= Map()
-        self.initTabletop(aMap)
+        self.initMap(aMap)
     
     # Initializing:
     def clear( self ):
@@ -96,7 +96,7 @@ class Land():
         return self._bankOfUnits[i]
 
 
-    # Tabletop sortcut:
+    # Map sortcut:
     def box(self):
         return self._map.box()
 
