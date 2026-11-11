@@ -3,62 +3,40 @@ from .geometry import Convex
 from .unit import Unit
 from .agent import Agent
 
-class Actor():
-    def __init__(self, index, bodies, agent):
-        assert type(bodies) is list
-        self._id= index
-        self._bodies= [b for b in bodies]
+class Interface():
+    def __init__(self, agent, unitSelectors=[]):
+        assert type(unitSelectors) is list
         self._agent= agent
+        self._unitSelectors= [(iTile, iUnit) for iTile, iUnit in unitSelectors]
     
     # accessor: 
     def agent(self):
         return self._agent
 
-    def bodies(self):
-        return self._bodies
+    def selectors(self):
+        return self._unitSelectors
 
-    def numberOfBodies(self):
-        return len(self._bodies)
+    def numberOfUnits(self):
+        return len(self._unitSelectors)
     
-    def body(self, iBody= 1):
-        return self._bodies[iBody-1]
+    def selector(self, iUnit= 1):
+        return self._unitSelectors[iUnit-1]
 
     def appendBody(self, body):
-        self._bodies.append(body)
+        self._unitSelectors.append(body)
+        return len(self._unitSelectors)
+
+    # Setters 
+    def setSelector(self, iUnit, iTile, index):
+        self._unitSelectors[iUnit-1]= (iTile, index)
         return self
 
 class Land():
-    def __init__( self, aMap= None, bankOfUnits= [] ):
-        self._bankOfUnits= [model for model in bankOfUnits]
-        if len(self._bankOfUnits) == 0 :
-            self._bankOfUnits= [ Unit() ]
+    def __init__( self, aMap= None ):
         if aMap is None :
             aMap= Map()
-        self.initMap(aMap)
-    
-    # Initializing:
-    def clear( self ):
-        self._actors= [ Actor(0, [], self) ]
-    
-    def initMap( self, aMap ):
-        self.clear()
         self._map= aMap
-        return self
-    
-    def initializeDefaultBankOfUnits(self, bankOfUnitsSize= 8, arrowtipSize= 0.8):
-        names= ['X'] + [ chr( ord('A') + i%26 ) for i in range(bankOfUnitsSize) ]
-        self._bankOfUnits= [
-            Unit( Convex().initArrowTip(arrowtipSize), owner= i, name= names[i] )
-            for i in range(bankOfUnitsSize)
-        ]
-        return self
-
-    def initializeArrowTipBankOfUnits(self, groups, arrowtipSizes, arrowtipAngles, names):
-        self._bankOfUnits= [
-            Unit( Convex().initArrowTip(s), orientation= a, owner= i, name= n )
-            for i, s, a, n in zip( groups, arrowtipSizes, arrowtipAngles, names )
-        ]
-        return self
+        self._interfaces= [ Interface(self) ]
 
     # Accessor:
     def map(self):
@@ -67,34 +45,31 @@ class Land():
     def size(self):
         return self._map.size()
 
-    def actors(self):
-        return self._actors
+    def interfaces(self):
+        return self._interfaces
 
-    def actor(self, iActor):
-        return self._actors[iActor]
+    def interface(self, iAgent):
+        return self._interfaces[iAgent]
 
     def agent(self, identifier):
-        return self._actors[identifier].agent()
+        return self.interface(identifier).agent()
 
     def agents(self):
-        return [ a.agent() for a in self.actors() ]
+        return [ itf.agent() for itf in self.interfaces() ]
 
-    def body(self, identifier, iBody=1):
-        return self._actors[identifier].body(iBody)
+    def selector(self, iAgent, iUnit=1):
+        return self.interface(identifier).selector(iUnit)
 
-    def allBodies(self):
-        bodies= []
-        for a in self.actors() : 
-            bodies+= a.bodies()
-        return bodies
+    def allUnits(self):
+        units= []
+        for itf in self.interfaces() : 
+            for iTile, iUnit in itf.selectors() : 
+                units.append( self.map().unit(iTile, iUnit) )
+        return units
 
-    def bankOfUnits( self ):
-        return self._bankOfUnits
-
-    def bankUnit( self, num=0 ):
-        i= num%(len(self._bankOfUnits))
-        return self._bankOfUnits[i]
-
+    def agentUnit(self, iAgent, iUnit):
+        iTile, index= self.interface(iAgent).selector(iUnit)
+        return self.map().unit(iTile, index)
 
     # Map sortcut:
     def box(self):
@@ -104,57 +79,55 @@ class Land():
         return self._map.tile(iTile)
 
     # Construction:
-    def appendActor(self, agent, tileIds= [], bodyIds= [] ):
-        newId= len(self._actors)
-        bodies= []
+    def appendAgent(self, agent, tileIds= [], units= [] ):
+        if not type(tileIds) is list :
+            tileIds= [tileIds]
+            units= [units]
+        iAgent= len(self._interfaces)
+        selectors= []
         i= 1
-        for bi, t in zip(bodyIds, tileIds ) :
-            body= self.bankUnit( bi ).copy()
+        for iTile, body in zip( tileIds, units ) :
+            body.setOwner(iAgent)
             body.setName( body.name() + f"-{i}" )
-            self._map.tileAppendUnit( t, body )
-            bodies.append(body)
+            index= self._map.tileAppendUnit( iTile, body )
+            selectors.append( (iTile, index) )
             i+= 1
-        self._actors.append( Actor(newId, bodies, agent) )
-        return newId
+        self._interfaces.append( Interface(agent, selectors) )
+        return iAgent
 
-    def popActorBody(self, iActor, iTile, entityNum= -1):
-            a= self.actor(iActor)
-            nextId= a.numberOfBodies()+1
-            if entityNum < 0 :
-                entityNum= iActor
-            body= self.bankUnit( entityNum ).copy()
-            body.setName( body.name() + "-" + str(nextId) )
-            self._map.tileAppendUnit( iTile, body )
-            a.appendBody(body)
-            return body
+    def agentAddUnit(self, iAgent, iTile, unit):
+        itf= self._interfaces[iAgent]
+        iUnit= len(itf._unitSelectors)+1
+        unit.setOwner(iAgent)
+        unit.setName( unit.name() + f"-{iUnit}" )
+        index= self._map.tileAppendUnit( iTile, unit )
+        itf._unitSelectors.append( (iTile, index) )
+        return (iTile, index)
+    
+    # Agent action execution :
+    def actAgentMove(self, iAgent, iUnit, clockDir):
+        iTile, index= self.interface(iAgent).selector(iUnit)
+        body= self._map.unit(iTile, index)
+        self._map.tileClockOrientUnit( iTile, index, clockDir )
+        newTile, newIndex= self._map.tileClockMoveUnit( iTile, index, clockDir )
+        self.interface(iAgent).setSelector(iUnit, newTile, newIndex)
+        return (newTile, newIndex)
 
-    def popSimpleActor(self, agent, iTile ):
-        entityNum= len(self._actors)
-        return self.appendActor( agent, [iTile], [entityNum] )
-
-    def setBankOfUnits( self, aListOfUnits ):
-        self._bankOfUnits= aListOfUnits
-        return self
-
-    # Actor action :
-    def actBodyMove(self, iActor, iBody, clockDir):
-        body= self.actor(iActor).body(iBody)
-        self._map.tileClockOrientUnit( body.enclave(), body.index(), clockDir )
-        newlocation= self._map.tileClockMoveUnit( body.enclave(), body.index(), clockDir )
-        return newlocation
-
-    def actBodyOrient(self, iActor, iBody, clockDir):
-        body= self.actor(iActor).body(iBody)
-        out= self._map.tileClockOrientUnit( body.enclave(), body.index(), clockDir )
+    def actAgentOrient(self, iAgent, iUnit, clockDir):
+        iTile, index= self.interface(iAgent).selector(iUnit)
+        body= self._map.unit(iTile, index)
+        out= self._map.tileClockOrientUnit( iTile, index, clockDir )
         return out
     
-    def actBodyRotateLeft(self, iActor, iBody, nbClockAngles= 1):
-        iTile, index= self.actor(iActor).body(iBody).selector()
+    def actAgentRotateLeft(self, iAgent, iUnit, nbClockAngles= 1):
+        iTile, index= self.interface(iAgent).selector(iUnit)
+        body= self._map.unit(iTile, index)
         out= self._map.tileRotateUnitLeft( iTile, index, CLOCK_ANGLE*nbClockAngles )
         return out
     
-    def actBodyRotateRight(self, iActor, iBody, nbClockAngles= 1):
-        iTile, index= self.actor(iActor).body(iBody).selector()
+    def actAgentRotateRight(self, iAgent, iUnit, nbClockAngles= 1):
+        iTile, index= self.interface(iAgent).selector(iUnit)
+        body= self._map.unit(iTile, index)
         out= self._map.tileRotateUnitLeft( iTile, index, -CLOCK_ANGLE*nbClockAngles )
         return out
     

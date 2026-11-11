@@ -196,10 +196,10 @@ class Map():
 
     def tileClockMoveUnit(self, iTile, iUnit, clockDir):
         iTarget= self.clockPosition(iTile, clockDir)
+        index= iUnit
         if iTarget != iTile :
-            self.tileMoveUnit( iTile, iUnit, iTarget )
-        self.tileRotateUnit( iTile, iUnit, iTarget )
-        return iTarget
+            index= self.tileMoveUnit( iTile, iUnit, iTarget )
+        return iTarget, index
 
     def tileClockOrientUnit(self, iTile, iUnit, clockDir):
         return self.tileOrientUnit( iTile, iUnit, CLOCK_ANGLES[clockDir] )

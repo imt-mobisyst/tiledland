@@ -67,3 +67,23 @@ class Unit(AbsShaped) :
     def translate(self, vector):
         self._position+= vector
         return self
+
+def listOfDefaultUnits(numberOfUnits= 8, unitSize= 0.8):
+    names= ['x'] + [ chr( ord('A') + i%26 ) for i in range(numberOfUnits) ]
+    return [
+        Unit( Convex().initArrowTip(unitSize), name= names[i] )
+        for i in range(numberOfUnits)
+    ]
+    return self
+
+def listOfArrowTipUnits(arrowtipSizes, arrowtipAngles= None, names= None):
+    s= len(arrowtipSizes)
+    if arrowtipAngles is None :
+        arrowtipAngles= [ 0.0 for i in range(s) ]
+    if names is None :
+        names= ['x'] + [ chr( ord('A') + i%26 ) for i in range(s-1) ]
+    return [
+        Unit( Convex().initArrowTip(s).rotate(a), name= n )
+        for s, a, n in zip( arrowtipSizes, arrowtipAngles, names )
+    ]
+

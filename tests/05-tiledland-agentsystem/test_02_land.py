@@ -32,13 +32,13 @@ def test_fast_land_first():
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-00.svg", mode='rb' ).read() )
 
-    land.setBankOfUnits([
+    listOfUnits= [
         tild.Unit( Convex().initArrowTip(0.6), name= "X" ),
         tild.Unit( Convex().initArrowTip(0.4), name= "E" ),
         tild.Unit( Convex().initArrowTip(0.3), name= "C" )
-    ])
+    ]
 
-    actorId= land.appendActor( tild.Agent(), [9], [1] )
+    actorId= land.appendAgent( tild.Agent(), [9], [ listOfUnits[1].copy() ] )
     assert actorId == 1  
 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
@@ -47,12 +47,13 @@ def test_fast_land_first():
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-land-01.svg", mode='rb' ).read() )
 
-    land.initializeDefaultBankOfUnits(4)
-
-    actorId= land.appendActor( tild.Agent() )
-    land.popActorBody( actorId, 3, 1 )
+    listOfUnits= tild.listOfDefaultUnits(4)
+    
+    actorId= land.appendAgent( tild.Agent() )
+    selector= land.agentAddUnit( actorId, 3, listOfUnits[1].copy() )
     
     assert actorId == 2
+    assert selector == (3, 1)
 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
     tild.drawMap( land.map(), "shot-test.svg", 800, 600 )
@@ -73,17 +74,22 @@ def test_fast_land_popActor():
 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
 
-    land.initializeArrowTipBankOfUnits( range(1, 6),
-        [0.4, 0.4, 0.2, 0.8, 0.6],
-        [0.0, 3.14, -1.57, 0.8, -2.6],
-        ["A", "B", "C", "D", "E"] )
+    bankOfUnits= tild.listOfArrowTipUnits( 
+        [0.7, 0.4, 0.4,  0.2,   0.8, 0.6],
+        [0.0, 0.0, 3.14, -1.57, 0.8, -2.6],
+        ["x", "A", "B",  "C",   "D", "E"] )
 
-    land.popSimpleActor( tild.Agent(), 3 )
-    land.popSimpleActor( tild.Agent(), 10 )
-    land.popSimpleActor( tild.Agent(), 12 )
-    land.popSimpleActor( tild.Agent(), 26 )
+    iAgent= land.appendAgent( tild.Agent(), 3, bankOfUnits[1])
 
-    land.popActorBody( 0, 15, 0 )
+    assert iAgent == 1
+    assert iAgent == land.map().tile(3).unit(1).owner()
+
+    land.appendAgent( tild.Agent(), 10, bankOfUnits[2].copy() )
+    land.appendAgent( tild.Agent(), 12, bankOfUnits[3].copy() )
+    land.appendAgent( tild.Agent(), 26, bankOfUnits[4].copy() )
+
+    land.agentAddUnit( 0, 15, bankOfUnits[0].copy() )
+    land.agentAddUnit( 3, 23, bankOfUnits[4].copy() )
 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
     tild.drawMap( land.map(), "shot-test.svg", 800, 600 )
@@ -102,43 +108,42 @@ def test_fast_land_popBis():
     )
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
 
-    land.initializeArrowTipBankOfUnits( range(3),
+    bankOfUnits= tild.listOfArrowTipUnits( 
         [0.4, 0.6, 0.6],
         [0.0, 3.14, -1.57],
-        ["X", "A", "B"] )
+        ["x", "A", "B"]
+    )
 
-    actor1= land.popSimpleActor( tild.Agent(), 15 )
+    actor1= land.appendAgent( tild.Agent(), 15, bankOfUnits[1].copy() )
 
     assert actor1 == 1
-    actor2= land.appendActor( tild.Agent() )
+    actor2= land.appendAgent( tild.Agent() )
 
     assert actor2 == 2
-    assert len( land.actor(2).bodies() ) == 0
+    assert len( land.interface(2).selectors() ) == 0
 
-    land.popActorBody( actor2, 12, 2 )
+    land.agentAddUnit( actor2, 12, bankOfUnits[2].copy() )
     
-    assert actor2 == 2
-
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
 
-    assert len( land.actors() ) == 3 
-    assert len( land.actor(0).bodies() ) == 0
-    assert len( land.actor(1).bodies() ) == 1
-    assert len( land.actor(2).bodies() ) == 1
+    assert len( land.interfaces() ) == 3 
+    assert len( land.interface(0).selectors() ) == 0
+    assert len( land.interface(1).selectors() ) == 1
+    assert len( land.interface(2).selectors() ) == 1
 
     tild.drawMap( land.map(), "shot-test.svg", 800, 600 )
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-landpop-01.svg", mode='rb' ).read() )
 
-    land.popActorBody( 0, 3, 0 )
-    land.popActorBody( 0, 26, 0 )
+    land.agentAddUnit( 0, 3, bankOfUnits[0].copy() )
+    land.agentAddUnit( 0, 26, bankOfUnits[0].copy() )
 
-    land.popActorBody( actor1, 6, 1 )
-    land.popActorBody( actor1, 10, 1 )
-    land.popActorBody( actor1, 21, 1)
+    land.agentAddUnit( actor1, 6, bankOfUnits[1].copy() )
+    land.agentAddUnit( actor1, 10, bankOfUnits[1].copy() )
+    land.agentAddUnit( actor1, 21, bankOfUnits[1].copy() )
 
-    land.popActorBody( actor2, 25, 2 )
-    land.popActorBody( actor2, 30, 2 )
+    land.agentAddUnit( actor2, 25, bankOfUnits[2].copy() )
+    land.agentAddUnit( actor2, 30, bankOfUnits[2].copy() )
 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
     tild.drawMap( land.map(), "shot-test.svg", 800, 600 )
@@ -146,14 +151,13 @@ def test_fast_land_popBis():
     assert( open( "shot-test.svg", mode='rb' ).read()
         == open( "tests/refs/05.02-landpop-02.svg", mode='rb' ).read() )
 
-    assert len( land.actors() ) == 3 
-    assert len( land.actor(0).bodies() ) == 2
-    assert len( land.actor(1).bodies() ) == 4
-    assert len( land.actor(2).bodies() ) == 3
+    assert len( land.interfaces() ) == 3 
+    assert len( land.interface(0).selectors() ) == 2
+    assert len( land.interface(1).selectors() ) == 4
+    assert len( land.interface(2).selectors() ) == 3
 
-    assert [ (b.enclave()) for b in land.actor(0).bodies() ] == [3, 26]
-    assert [ (b.enclave()) for b in land.actor(1).bodies() ] == [15, 6, 10 , 21]
-
+    assert [ (t) for t, u in land.interface(0).selectors() ] == [3, 26]
+    assert [ (t) for t, u in land.interface(1).selectors() ] == [15, 6, 10 , 21]
 
 def test_fast_land_orients():
     land= tild.Land()
@@ -163,33 +167,34 @@ def test_fast_land_orients():
         [-1, 0, 0]], 1.4
     )
 
-    land.popSimpleActor( tild.Agent(), 4 )
+    land.appendAgent( tild.Agent(), 4, tild.Unit() )
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
-    bob= land.actor(1).body(1)
+    
+    bob= land.agentUnit(1, 1)
     
     assert round( bob.orientation(), 2) == 0.0
 
-    land.actBodyOrient( 1, 1, tild.Action.DIR_W ) 
+    land.actAgentOrient( 1, 1, tild.Action.DIR_W ) 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == 3.14
     
-    land.actBodyOrient( 1, 1, tild.Action.DIR_SSE ) 
+    land.actAgentOrient( 1, 1, tild.Action.DIR_SSE ) 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -1.05
 
-    land.actBodyRotateLeft( 1, 1 ) 
+    land.actAgentRotateLeft( 1, 1 ) 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -0.52
 
-    land.actBodyRotateRight( 1, 1 ) 
+    land.actAgentRotateRight( 1, 1 ) 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -1.05
 
-    land.actBodyRotateRight( 1, 1, 4 ) 
+    land.actAgentRotateRight( 1, 1, 4 ) 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == -3.14
 
-    land.actBodyRotateRight( 1, 1, 2 ) 
+    land.actAgentRotateRight( 1, 1, 2 ) 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
     assert round( bob.orientation(), 2) == 2.09
 
@@ -202,40 +207,47 @@ def test_fast_land_moves():
         [0, 0, 0, -1, 0, 0, 0, 0],      #  
         [-1, -1, 0, 0, 0, -1, -1, -1]]  #
     )
-    land.initializeDefaultBankOfUnits()
+    bankOfUnits= tild.listOfDefaultUnits()
 
-    land.popSimpleActor( tild.Agent(), 15 )
-    land.popActorBody( 1, 29, 1 )
-    land.popSimpleActor( tild.Agent(), 6 )
-
-    tild.drawMap( land.map(), "shot-test.png", 800, 600 )
-    
-    print( str(land.actor(1).body(1)) )
-    assert land.actor(1).body(1).strIdentity() == "A-1 15-1"
-
-    assert land.actBodyMove( 1, 1, 3 ) == 16
-    tild.drawMap( land.map(), "shot-test.png", 800, 600 )
-    assert land.actor(1).body(1).strIdentity() == "A-1 16-1"
-
-    assert land.actBodyMove( 1, 1, 3 ) == 16
-    tild.drawMap( land.map(), "shot-test.png", 800, 600 )
-    assert land.actor(1).body(1).strIdentity() == "A-1 16-1"
-
-    assert land.actBodyMove( 1, 1, tild.Action.DIR_NNE ) == 9
-    tild.drawMap( land.map(), "shot-test.png", 800, 600 )
-    assert land.actor(1).body(1).strIdentity() == "A-1 9-1"
-    assert round( land.actor(1).body(1).orientation(), 2 ) == 1.05
+    land.appendAgent( tild.Agent(), 15, bankOfUnits[1].copy() )
+    land.agentAddUnit( 1, 29, bankOfUnits[1].copy() )
+    land.appendAgent( tild.Agent(), 6, bankOfUnits[2].copy() )
 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
     
-    assert land.actBodyMove( 1, 2, tild.Action.DIR_W ) == 28
-    assert land.actBodyMove( 1, 2, tild.Action.DIR_NNW ) == 22
-    assert land.actBodyMove( 1, 2, tild.Action.DIR_NNW ) == 15
-    assert land.actBodyMove( 1, 2, tild.Action.DIR_NNW ) == 8
+    print( str(land.agentUnit(1, 1)) )
+    assert land.agentUnit(1, 1).strIdentity() == "A-1 1-0"
+    assert land.interface(1).selector(1) == (15, 1)
+
+    assert land.actAgentMove( 1, 1, 3 ) == (16, 1)
+    tild.drawMap( land.map(), "shot-test.png", 800, 600 )
+    assert land.agentUnit(1, 1).strIdentity() == "A-1 1-0"
+    assert land.interface(1).selector(1) == (16, 1)
+
+    assert land.actAgentMove( 1, 1, 3 ) == (16, 1)
+    tild.drawMap( land.map(), "shot-test.png", 800, 600 )
+    assert land.agentUnit(1, 1).strIdentity() == "A-1 1-0"
+    assert land.interface(1).selector(1) == (16, 1)
+
+    assert land.actAgentMove( 1, 1, tild.Action.DIR_NNE ) == (9, 1)
+    tild.drawMap( land.map(), "shot-test.png", 800, 600 )
+    assert land.agentUnit(1, 1).strIdentity() == "A-1 1-0"
+    assert land.interface(1).selector(1) == (9, 1)
+    assert round( land.agentUnit(1, 1).orientation(), 2 ) == 1.05
+
+    tild.drawMap( land.map(), "shot-test.png", 800, 600 )
+    
+    assert land.actAgentMove( 1, 2, tild.Action.DIR_W ) == (28, 1)
+    assert land.actAgentMove( 1, 2, tild.Action.DIR_NNW ) == (22, 1)
+    assert land.actAgentMove( 1, 2, tild.Action.DIR_NNW ) == (15, 1)
+    assert land.actAgentMove( 1, 2, tild.Action.DIR_NNW ) == (8, 1)
 
     tild.drawMap( land.map(), "shot-test.png", 800, 600 )
 
-    assert land.actor(1).body(1).strIdentity() == "A-1 9-1"
-    assert land.actor(1).body(2).strIdentity() == "A-2 8-1"
-    assert land.actor(2).body(1).strIdentity() == "B-1 6-1"
+    assert land.agentUnit(1, 1).strIdentity() == "A-1 1-0"
+    assert land.interface(1).selector(1) == (9, 1)
+    assert land.agentUnit(1, 2).strIdentity() == "A-2 1-0"
+    assert land.interface(1).selector(2) == (8, 1)
+    assert land.agentUnit(2, 1).strIdentity() == "B-1 2-0"
+    assert land.interface(2).selector(1) == (6, 1)
     
