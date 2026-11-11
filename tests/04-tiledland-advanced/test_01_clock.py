@@ -192,7 +192,7 @@ def test_fast_tabletop_hexamove():
         if t.index() != 10 :
             assert len( t.units() ) == 0 
 
-    assert tabletop.tileClockMoveUnit(10, 1, 0) == 10
+    assert tabletop.tileClockMoveUnit(10, 1, 0) == (10, 1)
     tild.drawMap(tabletop, "shot-test.png")
 
     assert len( tabletop.tile(10).units() ) == 1
@@ -200,16 +200,16 @@ def test_fast_tabletop_hexamove():
         if t.index() != 10 :
             assert len( t.units() ) == 0 
 
-    assert tabletop.tileClockMoveUnit(10, 1, 3) == 11
+    assert tabletop.tileClockMoveUnit(10, 1, 3) == (11, 1)
     tild.drawMap(tabletop, "shot-test.png")
 
-    assert tabletop.tileClockMoveUnit(11, 1, 7) == 17
+    assert tabletop.tileClockMoveUnit(11, 1, 7) == (17, 1)
     tild.drawMap(tabletop, "shot-test.png")
 
-    assert tabletop.tileClockMoveUnit(17, 1, 2) == 17
+    assert tabletop.tileClockMoveUnit(17, 1, 2) == (17, 1)
     tild.drawMap(tabletop, "shot-test.png")
 
-    assert tabletop.tileClockMoveUnit(17, 1, 5) == 24
+    assert tabletop.tileClockMoveUnit(17, 1, 5) == (24, 1)
     tild.drawMap(tabletop, "shot-test.png")
     
     assert len( tabletop.tile(24).units() ) == 1
